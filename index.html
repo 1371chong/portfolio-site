@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 정원복 포트폴리오</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header id="main-nav">
+        <div class="container">
+            <h1 class="logo"><a href="#intro">PORTFOLIO</a></h1>
+            <nav>
+                <button class="menu-toggle" aria-label="메뉴 열기">
+                    <span class="hamburger-icon"></span>
+                </button>
+                <ul class="nav-list">
+                    <li><a href="#intro">Intro</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#about">About Me</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="intro" class="hero">
+        <div class="hero-content">
+            <p class="subtitle">Creative Video & Motion Graphic</p>
+            <h1 class="title">환영합니다 <br> 방문해주셔서 감사합니다</h1>
+            <a href="#portfolio" class="cta-button">포트폴리오 보러가기</a>
+        </div>
+        <div class="hero-background-media">
+            </div>
+    </section>
+
+    <section id="portfolio" class="section">
+        <div class="container">
+            <h2>🎥 포트폴리오</h2>
+            
+            <div class="portfolio-controls">
+                <div class="portfolio-filter">
+                    <button data-filter="all" class="active">All</button>
+                    <button data-filter="video">영상 (Video)</button>
+                    <button data-filter="ad">광고 (Ad)</button>
+                     <button data-filter="3d">3D (3D)</button>
+                    <button data-filter="poster">포스터 (Poster)</button>
+                    <button data-filter="contest">공모전 (Contest)</button>
+                </div>
+                <input type="text" id="portfolio-search" placeholder="작품 검색..." aria-label="포트폴리오 검색">
+            </div>
+
+            <div class="portfolio-grid">
+                
+                <article class="portfolio-item" data-category="video" data-keywords="브랜드 홍보 CF 모션 그래픽">
+                    <div class="item-overlay">
+                        <h3>브랜드 홍보 영상 A</h3>
+                        <p>#CF #모션그래픽</p>
+                        <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="view-link">자세히 보기</a>
+                    </div>
+                    <img src="assets/thumb_video_01.jpg" alt="브랜드 홍보 영상 A 썸네일">
+                </article>
+                
+                <article class="portfolio-item" data-category="ad" data-keywords="소셜 미디어 광고 기획 편집">
+                    <div class="item-overlay">
+                        <h3>소셜 미디어 광고 B</h3>
+                        <p>#단편광고 #기획 #편집</p>
+                        <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="view-link">자세히 보기</a>
+                    </div>
+                    <img src="assets/thumb_ad_02.jpg" alt="소셜 미디어 광고 B 썸네일">
+                </article>
+
+                <article class="portfolio-item" data-category="poster" data-keywords="영화 포스터 디자인 시각 그래픽">
+                    <div class="item-overlay">
+                        <h3>영화 포스터 디자인 C</h3>
+                        <p>#그래픽디자인</p>
+                        <a href="#" target="_blank" class="view-link">자세히 보기</a>
+                    </div>
+                    <img src="assets/thumb_poster_03.jpg" alt="영화 포스터 디자인 C 썸네일">
+                </article>
+
+                <article class="portfolio-item" data-category="video" data-keywords="유튜브 콘텐츠 편집 디자인">
+                    <div class="item-overlay">
+                        <h3>유튜브 콘텐츠 D</h3>
+                        <p>#콘텐츠편집 #자막디자인</p>
+                        <a href="#" target="_blank" class="view-link">자세히 보기</a>
+                    </div>
+                    <img src="assets/thumb_video_04.jpg" alt="유튜브 콘텐츠 D 썸네일">
+                </article>
+                
+            </div>
+            <p id="no-results" class="no-results-message">검색 결과가 없습니다.</p>
+        </div>
+    </section>
+
+    <section id="skills" class="section dark-bg">
+        <div class="container">
+            <h2>🛠️ Editing Skills & Programs</h2>
+            <div class="skills-grid">
+                
+                <div class="skill-item">
+                    <img src="img/icon/con_premiere.png" alt="Adobe Premiere Pro 로고">
+                    <h3>Adobe Premiere Pro</h3>
+                    <p>고급 영상 편집, 컬러 그레이딩</p>
+                </div>
+                
+                <div class="skill-item">
+                    <img src="img/icon/icon_after effects.png" alt="Adobe After Effects 로고">
+                    <h3>Adobe After Effects</h3>
+                    <p>모션 그래픽, VFX 합성, 3D</p>
+                </div>
+
+                <div class="skill-item">
+                    <img src="img/icon/icon_photoshop.png" alt="Adobe Photoshop 로고">
+                    <h3>Adobe Photoshop</h3>
+                    <p>포스터/썸네일 제작, 이미지 보정</p>
+                </div>
+
+                <div class="skill-item">
+                    <img src="img/icon/icon_Illustrator.png" alt="Adobe Illustrator 로고">
+                    <h3>Adobe Illustrator<h3>
+                    <p></p>
+                </div>
+
+                <div class="skill-item">
+                    <img src="assets/icon_davinci.png" alt="DaVinci Resolve 로고">
+                    <h3>DaVinci Resolve</h3>
+                    <p>전문 색 보정 및 오디오 작업</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section about-section">
+        <div class="container about-content">
+            <div class="profile-photo">
+                <img src="assets/profile_image.jpg" alt="프로필 사진">
+            </div>
+            <div class="profile-text">
+                <h2>🙋🏻‍♂️ About Me</h2>
+                <p>이름: 정원복</p>
+                <p>나이: 24세 (2002.04.01)</p>
+                <p>주소: 경북 칠곡군 왜관읍</p>
+                <p>학력</p>
+                <p>2015.03 ~ 2018.02 석전중학교 졸업</p>
+                <p>2018.03 ~ 2021.02 구미고등학교 부설 방송통신고등학교졸업</p>
+                <p>2021.03 ~ 2023.02 구미대학교 스마트경영과 전공</p>
+                <p>현재</p>
+                <p>2025.08 ~ 현재 (멀티미디어) 영상편집과정 수강중</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section dark-bg">
+        <div class="container">
+            <h2>📞 Contact Me</h2>
+            <p class="contact-message">함께 만들어갈 멋진 프로젝트를 기다립니다!</p>
+            <div class="contact-info">
+                <p><i class="fas fa-envelope"></i> Email: chong04041@naver.com</p>
+                <p><i class="fas fa-phone"></i> Phone: 010-3401-1371</p>
+                <p><i class="fab fa-instagram"></i> Instagram: <a href="your_instagram_link" target="_blank">@your-instagram-id</a></p>
+                <p><i class="fas fa-link"></i> Linktree: <a href="your_linktree_link" target="_blank">your-linktree</a></p>
+                <p><i class="fas fa-youtube"></i>YouTube: <a href="" target="_blank">your-youtube</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 정원복. All Rights Reserved.</p>
+            <p>본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작 되었습니다</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
