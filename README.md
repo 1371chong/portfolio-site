@@ -14,17 +14,11 @@ HTML5, CSS3, JavaScript를 사용하여 제작된 개인 영상 포트폴리오 
 
 ## 📁 파일 구조
 
-/portfolio-website/
-├── index.html        # 웹사이트의 핵심 구조 파일
-├── style.css         # 디자인 및 반응형 스타일 시트
-├── script.js         # 동적 기능 구현 스크립트
-├── README.md         # 프로젝트 설명 파일 (현재 문서)
-└── assets/           # 모든 이미지, 영상 등의 미디어 파일 폴더
-├── hero_bg.jpg
-├── profile_image.jpg
-├── icon_premiere.png
-├── thumb_video_01.jpg
-└── ...
+- index.html: 웹사이트 핵심구조 파일 
+- style.css: 디자인 및  반응형 스타일시트
+- script.js: 동적 기능 구현 스크립트
+- README.md : 프로젝트설명파일 (현재문서)
+- img: 웹사이트 이미지 파일 
 
 
 ## 🚀 시작하는 방법
