@@ -1,13 +1,15 @@
-/* 기본 설정 및 폰트 */
+/* ==========================================================================
+   글로벌 다크 무드 및 레이아웃 시스템 정의
+   ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap');
 
 :root {
-    --primary-color: #e74c3c; /* 포인트 색상: 강렬한 빨간색 */
-    --secondary-color: #2c3e50; /* 보조 색상: 다크 블루 */
-    --background-light: #f9f9f9;
-    --background-dark: #222;
-    --text-light: #fff;
-    --text-dark: #333;
+    --primary-color: #e74c3c;    /* 시네마틱 프리미어 레드 */
+    --secondary-color: #1a1c23;  /* 딥 카본 그레이 */
+    --bg-deep-dark: #0b0c10;     /* 무대 암전 블랙 */
+    --bg-card-dark: #1e2026;     /* 콘솔 컴포넌트 그레이 */
+    --text-main: #f1f2f6;
+    --text-muted: #a0aec0;
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Noto Sans KR', sans-serif;
 }
@@ -20,19 +22,20 @@
 
 html {
     scroll-behavior: smooth;
+    background-color: var(--bg-deep-dark);
 }
 
 body {
     font-family: var(--font-body);
     line-height: 1.6;
-    color: var(--text-dark);
-    background-color: var(--background-light);
+    color: var(--text-main);
+    background-color: var(--bg-deep-dark);
 }
 
 a {
     text-decoration: none;
     color: inherit;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 ul {
@@ -46,17 +49,18 @@ ul {
 }
 
 .section {
-    padding: 100px 0;
+    padding: 120px 0;
     text-align: center;
 }
 
 .section h2 {
     font-family: var(--font-heading);
     font-size: 2.8rem;
-    margin-bottom: 50px;
-    color: var(--secondary-color);
+    margin-bottom: 60px;
+    color: #fff;
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
+    letter-spacing: 1px;
 }
 
 .section h2::after {
@@ -65,30 +69,36 @@ ul {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
+    width: 60px;
     height: 3px;
     background-color: var(--primary-color);
+    border-radius: 2px;
 }
 
-.dark-bg {
-    background-color: var(--background-dark);
-    color: var(--text-light);
+/* 다크 테마 기반 하에 소개 섹션 등에 은은한 밝은 대비를 주기 위한 컴포넌트 */
+.text-light-theme {
+    background-color: #ffffff;
+    color: #222;
+}
+.text-light-theme h2 {
+    color: var(--secondary-color);
+}
+.text-light-theme .history-title {
+    color: var(--secondary-color);
+    border-bottom-color: #e2e8f0;
 }
 
-.dark-bg h2 {
-    color: var(--text-light);
-}
-.dark-bg .section h2::after {
-    background-color: var(--primary-color);
-}
-
-/* --- 헤더 및 내비게이션 --- */
+/* ==========================================================================
+   글로벌 컴포넌트 리디자인 (버전 통합 햄버거 & 탑 바)
+   ========================================================================== */
 #main-nav {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background: rgba(11, 12, 16, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     z-index: 1000;
 }
 
@@ -101,25 +111,44 @@ ul {
 
 .logo a {
     font-family: var(--font-heading);
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: var(--primary-color);
+    letter-spacing: 1px;
+    color: #fff;
 }
 
 .nav-list {
     display: flex;
-    gap: 30px;
+    gap: 35px;
 }
 
 .nav-list a {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--secondary-color);
+    color: var(--text-muted);
+    position: relative;
+    padding: 5px 0;
+}
+
+.nav-list a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
 }
 
 .nav-list a:hover {
-    color: var(--primary-color);
+    color: #fff;
+}
+
+.nav-list a:hover::after {
+    width: 100%;
 }
 
 .menu-toggle {
@@ -127,113 +156,226 @@ ul {
     background: transparent;
     border: none;
     cursor: pointer;
-    width: 30px;
-    height: 25px;
+    padding: 15px;
+    z-index: 1100;
+}
+
+.hamburger-box {
+    display: inline-block;
+    width: 24px;
+    height: 18px;
     position: relative;
 }
 
-.hamburger-icon,
-.hamburger-icon::before,
-.hamburger-icon::after {
-    content: '';
-    display: block;
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: transform 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19), top 0.3s ease;
+}
+
+.hamburger-inner {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hamburger-inner::before { content: ''; top: -7px; }
+.hamburger-inner::after { content: ''; top: 7px; }
+
+.menu-toggle.open .hamburger-inner {
+    transform: rotate(45deg);
+}
+.menu-toggle.open .hamburger-inner::before {
+    top: 0;
+    opacity: 0;
+}
+.menu-toggle.open .hamburger-inner::after {
+    top: 0;
+    transform: rotate(-90deg);
+}
+
+/* ==========================================================================
+   인트로 (시네마틱 모션 타이핑) 섹션 스타일
+   ========================================================================== */
+.intro-section {
+    position: relative;
     width: 100%;
-    height: 3px;
-    background-color: var(--primary-color);
-    transition: transform 0.3s ease;
-}
-
-.hamburger-icon::before {
-    position: absolute;
-    top: -8px;
-}
-
-.hamburger-icon::after {
-    position: absolute;
-    top: 8px;
-}
-
-/* --- 인트로 섹션 --- */
-#intro {
-    padding: 0;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    color: var(--text-light);
-    position: relative;
+    justify-content: center;
+    background-color: var(--bg-deep-dark);
     overflow: hidden;
 }
 
-.hero-background-media {
+.intro-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('assets/hero_bg.jpg') no-repeat center center/cover;
-    z-index: -1;
+    background: linear-gradient(to bottom, rgba(11, 12, 16, 0.5) 0%, var(--bg-deep-dark) 100%);
+    z-index: 2;
 }
 
-.hero-content {
-    z-index: 1;
-    animation: fadeIn 1.5s ease-out;
+.intro-container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
 }
 
-.hero-content .subtitle {
+.intro-content-box {
+    max-width: 850px;
+    margin: auto;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.intro-subtitle {
+    display: inline-block;
     font-family: var(--font-heading);
-    font-size: 1.5rem;
-    font-weight: 400;
-    letter-spacing: 5px;
-    margin-bottom: 20px;
-    opacity: 0.8;
-}
-
-.hero-content .title {
-    font-family: var(--font-heading);
-    font-size: 4rem;
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
     font-weight: 700;
-    line-height: 1.2;
+    letter-spacing: 4px;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+}
+
+.intro-title {
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    line-height: 1.4;
+    color: #fff;
     margin-bottom: 30px;
 }
 
-.cta-button {
-    display: inline-block;
-    background: var(--primary-color);
-    color: var(--text-light);
-    padding: 15px 40px;
-    border-radius: 50px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    transition: transform 0.3s ease, background 0.3s ease;
-    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+.input-cursor {
+    color: var(--primary-color);
+    animation: blink 0.8s infinite;
 }
 
-.cta-button:hover {
-    background: #c0392b;
+.intro-description {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 50px;
+    font-weight: 300;
+    word-break: keep-all;
+}
+
+.intro-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.intro-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 35px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.intro-buttons .btn-primary {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
+}
+
+.intro-buttons .btn-primary:hover {
+    background: #ff5252;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6);
+}
+
+.intro-buttons .btn-outline {
+    background: transparent;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.intro-buttons .btn-outline:hover {
+    background: #fff;
+    color: var(--bg-deep-dark);
     transform: translateY(-3px);
 }
 
-/* --- 포트폴리오 섹션 --- */
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 3;
+}
+
+.scroll-indicator .mouse {
+    width: 24px;
+    height: 38px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    position: relative;
+}
+
+.scroll-indicator .wheel {
+    width: 4px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 2px;
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scrollWheel 1.6s infinite;
+}
+
+.scroll-indicator .scroll-text {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+}
+
+/* ==========================================================================
+   포트폴리오 섹션 리디자인
+   ========================================================================== */
 .portfolio-controls {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     margin-bottom: 50px;
 }
 
+.portfolio-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
 .portfolio-filter button {
-    background: var(--background-light);
+    background: #fff;
     color: var(--secondary-color);
-    border: 3px solid var(--secondary-color);
-    padding: 10px 15px;
-    border-radius: 50px;
+    border: 1px solid #e2e8f0;
+    padding: 10px 22px;
+    border-radius: 30px;
     cursor: pointer;
-    font-weight: 700;
-    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .portfolio-filter button:hover,
@@ -241,40 +383,64 @@ ul {
     background: var(--primary-color);
     color: var(--text-light);
     border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    transform: translateY(-2px);
 }
 
 #portfolio-search {
     width: 100%;
-    max-width: 300px;
-    padding: 10px 20px;
-    border: 2px solid #ddd;
-    border-radius: 50px;
-    font-size: 1rem;
+    max-width: 280px;
+    padding: 11px 22px;
+    border: 1px solid #e2e8f0;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.3s ease;
+}
+
+#portfolio-search:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
 }
 
 .portfolio-item {
-    position: relative;
-    border-radius: 15px;
+    background: #fff;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left;
 }
 
 .portfolio-item:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-.portfolio-item img {
+.portfolio-thumb {
+    position: relative;
     width: 100%;
-    height: 300px;
+    height: 220px;
+    background: #eaedf2;
+    overflow: hidden;
+}
+
+.portfolio-thumb img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.portfolio-item:hover .portfolio-thumb img {
+    transform: scale(1.05);
 }
 
 .item-overlay {
@@ -283,10 +449,9 @@ ul {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--text-light);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     opacity: 0;
@@ -297,76 +462,235 @@ ul {
     opacity: 1;
 }
 
-.item-overlay h3 {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.item-overlay p {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin-bottom: 20px;
-}
-
 .view-link {
+    background: #fff;
+    color: #222;
+    padding: 12px 26px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.view-link:hover {
     background: var(--primary-color);
-    color: var(--text-light);
-    padding: 8px 20px;
-    border-radius: 50px;
+    color: #fff;
 }
 
-.no-results-message {
+.portfolio-info {
+    padding: 20px;
+}
+
+.portfolio-info h3 {
     font-size: 1.2rem;
-    color: #888;
-    margin-top: 40px;
-    display: none; /* JS로 제어 */
+    color: var(--secondary-color);
+    margin-bottom: 8px;
+    font-weight: 700;
 }
 
-/* --- 스킬 섹션 --- */
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
+.portfolio-info .tag {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    background: #f1f2f6;
+    padding: 3px 10px;
+    border-radius: 4px;
 }
-
-.skill-item {
-    background: #333;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-}
-
-.skill-item:hover {
-    transform: translateY(-5px);
-}
-
-.skill-item img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin-bottom: 20px;
-}
-
-/* --- 자기소개 섹션 --- */
-.about-section h2 {
-    text-align: left;
-}
-.about-content {
-    display: flex;
-    flex-wrap: wrap;
+/* ==========================================================================
+   포트폴리오 상시 노출 '보러가기' 버튼 - 주황색 코스믹 테마 리디자인
+   ========================================================================== */
+.portfolio-btn {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    /* 기본 상태: 다크 무드와 어우러지는 딥한 주황색 테두리와 배경 */
+    background: rgba(230, 126, 34, 0.1); 
+    border: 1px solid rgba(230, 126, 34, 0.4);
+    padding: 9px 18px;
+    border-radius: 50px; /* 완전한 타원형 라운드 버튼 모양으로 변경 */
+    display: inline-flex;
     align-items: center;
-    gap: 50px;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.portfolio-btn i {
+    font-size: 0.75rem;
+    color: rgba(230, 126, 34, 0.8);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* 마우스 반응형(Hover) 애니메이션 모양 추가 */
+.portfolio-btn:hover {
+    background: #e67e22; /* 마우스를 올리면 선명한 포인트 오렌지 색상으로 채워짐 */
+    border-color: #e67e22;
+    color: #fff;
+    transform: translateY(-3px); /* 버튼이 위로 가볍게 뜨는 모양 연출 */
+    /* 주황색 네온 그로우 그림자 효과 */
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4), 
+                0 0 10px rgba(230, 126, 34, 0.2);
+}
+
+.portfolio-btn:hover i {
+    color: #fff;
+    transform: translateX(3px) scale(1.1); /* 아이콘이 오른쪽으로 살짝 전진하는 모션 */
+}
+
+/* 포트폴리오 인포 영역 레이아웃 정돈 */
+.portfolio-info {
+    padding: 22px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+/* 주황색 버튼과 매칭되도록 포트폴리오 태그 색상도 은은한 주황빛으로 밸런스 조정 */
+.portfolio-info .tag {
+    font-size: 0.8rem;
+    color: #e67e22;
+    background: rgba(230, 126, 34, 0.08);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+
+/* ==========================================================================
+   스킬 섹션(Skills & Programs) 비주얼 게이지 리디자인
+   ========================================================================== */
+.skills-visual-section {
+    background-color: var(--bg-deep-dark);
+}
+
+.skills-grid-visual {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.skill-card-v {
+    background: #14151a;
+    border: 1px solid #23262f;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: left;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.skill-card-v:hover {
+    transform: translateY(-4px);
+    border-color: #fbfcff;
+}
+
+.skill-card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.skill-img-box {
+    width: 48px;
+    height: 48px;
+    background: #1e2026;
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skill-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.skill-title-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.skill-title-meta h3 {
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 700;
+    font-family: var(--font-heading);
+}
+
+.skill-percent {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.skill-desc-v {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    height: 48px; /* 한글 서술 균형 정렬용 고정고 */
+    word-break: keep-all;
+}
+
+/* 스킬 게이지 트랙 레일 */
+.skill-progress-wrapper {
+    width: 100%;
+    height: 6px;
+    background: #23262f;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.skill-progress-bar {
+    height: 100%;
+    width: 0; /* 스크롤 관측 시 자바스크립트로 전개 */
+    background: linear-gradient(90deg, var(--primary-color), #ff6b6b);
+    border-radius: 10px;
+    transition: width 1.2s cubic-bezier(0.1, 1, 0.1, 1);
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
+}
+/* ==========================================================================
+   소개 섹션 리디자인 (2단 타임라인 분리형)
+   ========================================================================== */
+.about-section {
+    background-color: #858b8a;
+}
+
+.about-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 60px;
+    text-align: center;
 }
 
 .profile-photo {
-    flex-shrink: 0;
-    width: 300px;
-    height: 300px;
-    overflow: hidden;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    border: 4px solid #ffff;
+    box-shadow: 0 8px 24px rgba(250, 250, 250, 0.12);
 }
 
 .profile-photo img {
@@ -375,41 +699,536 @@ ul {
     object-fit: cover;
 }
 
-.profile-text {
-    flex-grow: 1;
+.profile-info-basic h3 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.profile-info-basic .birth {
+    font-size: 1rem;
+    color: #ffffff;
+    font-weight: 400;
+    margin-left: 8px;
+}
+
+.profile-info-basic .location {
+    font-size: 1rem;
+    color: #faf6f6;
+}
+
+.profile-info-basic .location i {
+    color: var(--primary-color);
+    margin-right: 4px;
+}
+
+/* 2단 타임라인 구조 */
+.history-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
     text-align: left;
+    margin-top: 20px;
 }
 
-.profile-text h2 {
-    margin-bottom: 20px;
+.history-title {
+    font-size: 1.4rem;
+    color: var(--secondary-color);
+    margin-bottom: 30px;
+    border-bottom: 2px solid #ffff;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.profile-text p {
+.history-title i {
+    color: var(--primary-color);
+}
+
+.timeline {
+    position: relative;
+    border-left: 2px solid #ffffff;
+    padding-left: 25px;
+    list-style: none;
+}
+
+.timeline li {
+    position: relative;
+    margin-bottom: 35px;
+}
+
+.timeline li::before {
+    content: '';
+    position: absolute;
+    left: -32px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffff;
+    border: 3px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.timeline li:hover::before {
+    background: var(--primary-color);
+    transform: scale(1.2);
+}
+
+.timeline .date {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    font-family: var(--font-heading);
+}
+
+.timeline h4 {
     font-size: 1.1rem;
-    line-height: 1.8;
+    color: #ffffff;
+    margin-bottom: 6px;
+    font-weight: 700;
 }
 
-/* --- 연락 방법 섹션 --- */
-.contact-message {
-    font-size: 1.5rem;
+.timeline p {
+    font-size: 0.95rem;
+    color: #ffff;
+    line-height: 1.5;
+}
+
+
+/* ==========================================================================
+   연락처 섹션(Contact Me) 젠(Zen) 미니멀리즘 초깔끔 리디자인
+   ========================================================================== */
+.minimalist-contact-section {
+    background-color: #07080a; /* 더 깊은 무채색 매핑 단일화 */
+    border-top: 1px solid #14151a;
+    padding: 140px 0;
+}
+
+.minimal-contact-container {
+    max-width: 750px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* 핵심 이메일, 전화번호 한 줄 가로 대칭 배치 구조 */
+.core-contact-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 80px;
+    border-bottom: 1px solid #1e2026;
+    padding-bottom: 60px;
+}
+
+.core-contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.contact-label {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
     color: var(--primary-color);
-    margin-bottom: 40px;
+    letter-spacing: 3px;
 }
 
-.contact-info p {
+.contact-value {
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: #fff;
+    letter-spacing: -0.5px;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+/* 깔끔한 플랫 무드 하단 언더라인 이펙트 */
+.contact-value::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: #fff;
+    transition: width 0.35s ease;
+}
+
+.contact-value:hover {
+    color: #fff;
+}
+
+.contact-value:hover::after {
+    width: 100%;
+}
+
+/* 하단 에센셜 채널 텍스트 기반 가로 인라인 링크 스타일링 */
+.minimal-social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.social-line-link {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    transition: color 0.3s ease;
+}
+
+.social-line-link i {
     font-size: 1.1rem;
-    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.2);
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.contact-info a {
+.social-line-link:hover {
+    color: #fff;
+}
+
+.social-line-link:hover i {
     color: var(--primary-color);
+    transform: translateY(-2px);
 }
 
-.contact-info i {
-    color: var(--primary-color);
-    margin-right: 10px;
+/* ==========================================================================
+   미니멀 보완 및 스마트폰 반응형 미디어 레이아웃
+   ========================================================================== */
+@media (max-width: 768px) {
+    .core-contact-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        padding-bottom: 40px;
+    }
+    .core-contact-item {
+        align-items: center;
+    }
+    .contact-value {
+        font-size: 1.35rem;
+    }
+    .minimal-social-links {
+        gap: 25px;
+    }
+    .social-line-link {
+        font-size: 0.9rem;
+    }
+    .info-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .portfolio-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
+/* ==========================================================================
+   반응형 유동 보완 레이아웃 해상도
+   ========================================================================== */
+@media (max-width: 992px) {
+    .about-wrapper {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    .profile-main-card {
+        position: relative;
+        top: 0;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   유동 반응형 제어 브레이크포인트
+   ========================================================================== */
+@media (max-width: 768px) {
+    .menu-toggle { display: block; }
+    
+    .nav-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(11, 12, 16, 0.98);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        gap: 35px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px);
+        transition: all 0.4s ease;
+        z-index: 1050;
+    }
+
+    .nav-list.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-list a { font-size: 1.6rem; }
+    .history-container { grid-template-columns: 1fr; gap: 40px; }
+    .intro-buttons { flex-direction: column; align-items: center; }
+    .intro-buttons .btn { width: 100%; max-width: 280px; }
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes scrollWheel { 0%, 100% { top: 6px; opacity: 1; } 50% { top: 16px; opacity: 0.2; } }
+/* ==========================================================================
+   포트폴리오 탭메뉴 (필터 버튼) 마우스 반응 애니메이션 고도화
+   ========================================================================== */
+.portfolio-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.portfolio-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.portfolio-filter button {
+    background: #14151a; 
+    color: var(--text-muted);
+    border: 1px solid #2d3748;
+    padding: 11px 24px;
+    border-radius: 30px; /* 트렌디한 타원형 스타일 */
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden; /* 슬라이딩 이펙트 내부 한정용 */
+    z-index: 1;
+    transition: color 0.35s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* 마우스 호버 시 배경이 왼쪽에서 오른쪽으로 채워지는 모션 그래픽 애니메이션 에셋 */
+.portfolio-filter button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #cf3a2c 100%);
+    z-index: -1;
+    transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.portfolio-filter button:hover {
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+}
+
+.portfolio-filter button:hover::before {
+    left: 0;
+}
+
+/* 활성화(Active) 되었을 때 고정 스타일 */
+.portfolio-filter button.active {
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+.portfolio-filter button.active::before {
+    left: 0;
+}
+/* ==========================================================================
+   글로벌 컨테이너(Container) 및 섹션 레이아웃 고도화
+   ========================================================================== */
+
+/* 기본 컨테이너 디자인에 정밀한 레이아웃 가이드와 여백 안정성 추가 */
+.container {
+    width: 92%;
+    max-width: 1240px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+    /* 양옆에 미디어 편집 툴의 타임라인 눈금 같은 정교한 여백 밸런스 배치 */
+    padding: 0 20px;
+}
+
+/* 모든 섹션의 컨테이너 배경 뒤로 은은한 공간 입체감을 주는 백그라운드 디자인 */
+.section {
+    position: relative;
+    padding: 140px 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* 섹션별 컨테이너 내부로 진입할 때 공간을 분리해 주는 상단 선 미니멀 디자인 */
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+}
+
+/* 섹션 메인 타이틀(.container h2) 주변 구조 디자인 고도화 */
+.section h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-bottom: 70px;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+/* 타이틀 하단 장식: 프리미어 오렌지/레드 그라데이션 포인트 바 */
+.section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 45px;
+    height: 3px;
+    background: linear-gradient(90deg, #e67e22, var(--primary-color));
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(230, 126, 34, 0.3);
+}
+
+/* 비디오 포트폴리오의 아이덴티티를 살리기 위해 컨테이너 좌우측 외곽에 배치되는 시네마틱 프레임 가이드 라인 */
+@media (min-width: 1200px) {
+    .container::before,
+    .container::after {
+        content: '';
+        position: absolute;
+        top: 10%;
+        height: 80%;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.02);
+        pointer-events: none;
+    }
+    .container::before {
+        left: -10px;
+    }
+    .container::after {
+        right: -10px;
+    }
+}
+
+/* ==========================================================================
+   글로벌 컨테이너(Container) 정중앙 정렬 및 레이아웃 최적화
+   ========================================================================== */
+
+.container {
+    width: 92%;
+    max-width: 1240px;
+    /* 상하는 0, 좌우는 자동으로 여백을 분배하여 항상 브라우저의 정중앙에 위치하게 합니다 */
+    margin: 0 auto; 
+    position: relative;
+    z-index: 5;
+    padding: 0 20px;
+    
+    /* 요소들이 내부에서 중앙 정렬을 유지하거나 균형 있게 배치되도록 보장 */
+    box-sizing: border-box; 
+}
+
+/* 모든 섹션 내부의 타이틀 및 그리드가 컨테이너 안에서 뒤틀림 없이 정렬되도록 보정 */
+.section {
+    position: relative;
+    padding: 140px 0;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 섹션 내부 콘텐츠들을 가로축 기준으로 중앙 정렬 */
+    justify-content: center;
+}
+
+/* 섹션 안의 직접적인 컨테이너 블록이 깨지지 않고 100% 폭을 채우며 중앙을 잡도록 설정 */
+.section .container {
+    width: 100%;
+    max-width: 1240px;
+}
+
+/* 데스크톱 버전(1200px 이상) 좌우 시네마틱 프레임 가이드라인 위치 대칭 보정 */
+@media (min-width: 1200px) {
+    .container::before,
+    .container::after {
+        content: '';
+        position: absolute;
+        top: 10%;
+        height: 80%;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.02);
+        pointer-events: none;
+    }
+    /* 정확하게 컨테이너 경계선 좌우 대칭 위치에 고정 */
+    .container::before {
+        left: 0;
+    }
+    .container::after {
+        right: 0;
+    }
+}
+
+/* ==========================================================================
+   반응형 모바일 및 태블릿 중앙 정렬 유지
+   ========================================================================== */
+@media (max-width: 992px) {
+    .section {
+        padding: 100px 0;
+    }
+    .container {
+        width: 94%;
+        margin: 0 auto; /* 반응형 화면에서도 정중앙 유지 */
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .section {
+        padding: 80px 0;
+    }
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+}
 /* --- 푸터 --- */
 footer {
     background: #111;
@@ -417,67 +1236,4 @@ footer {
     padding: 20px 0;
     text-align: center;
     font-size: 0.9rem;
-}
-
-/* --- 반응형 디자인 --- */
-@media (max-width: 992px) {
-    .section {
-        padding: 80px 0;
-    }
-    .section h2 {
-        font-size: 2.2rem;
-    }
-    .about-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    .about-section h2 {
-        text-align: center;
-    }
-    .profile-photo {
-        width: 250px;
-        height: 250px;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-list {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        padding: 20px 0;
-        text-align: center;
-    }
-    .nav-list a {
-        padding: 15px 0;
-        border-bottom: 1px solid #eee;
-    }
-    .menu-toggle {
-        display: block;
-    }
-    .nav-list.active {
-        display: flex;
-    }
-    .hamburger-icon.open {
-        transform: rotate(45deg);
-    }
-    .hamburger-icon.open::before {
-        transform: rotate(-90deg) translate(-8px);
-    }
-    .hamburger-icon.open::after {
-        opacity: 0;
-    }
-    .hero-content .title {
-        font-size: 3rem;
-    }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
 }

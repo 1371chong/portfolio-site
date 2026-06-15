@@ -15,197 +15,355 @@
         <div class="container">
             <h1 class="logo"><a href="#intro">PORTFOLIO</a></h1>
             <nav>
-                <button class="menu-toggle" aria-label="메뉴 열기">
-                    <span class="hamburger-icon"></span>
+                <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
                 </button>
                 <ul class="nav-list">
-                    <li><a href="#intro">Home</a></li>
-                    <li><a href="#portfolio">포트폴리오</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#about">소개</a></li>
-                    <li><a href="#contact">Contact Me</a></li>
+                    <li><a href="#intro" data-text="Home">Home</a></li>
+                    <li><a href="#portfolio" data-text="Portfolio">포트폴리오</a></li>
+                    <li><a href="#skills" data-text="Skills">Skills</a></li>
+                    <li><a href="#about" data-text="About">소개</a></li>
+                    <li><a href="#contact" data-text="Contact">Contact Me</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <section id="intro" class="hero">
-        <div class="hero-content">
-            <p class="subtitle">Creative Video & Motion Graphic</p>
-            <h1 class="title">환영합니다 <br> 방문해주셔서 감사합니다</h1>
-            <a href="#portfolio" class="cta-button">포트폴리오 보러가기</a>
-        </div>
-        <div class="hero-background-media">
+    <section id="intro" class="intro-section">
+        <div class="intro-overlay"></div>
+        <div class="container intro-container">
+            <div class="intro-content-box">
+                <span class="intro-subtitle">VIDEO EDITOR & MOTION GRAPHIC DESIGNER</span>
+                <h2 class="intro-title">
+                    <span class="line-1"><span>감각적인 시선으로</span><span class="input-cursor"></span></span>
+                    <span class="line-2"><span class="typing-text"></span><span class="input-cursor">|</span></span>
+                </h2>
+                <p class="intro-description">
+                    프리미어 프로, 애프터 이펙트, 블렌더를 활용하여 가치를 더하는 고품질 영상을 기획하고 편집합니다.
+                </p>
+                <div class="intro-buttons">
+                    <a href="#portfolio" class="btn btn-primary"><i class="fas fa-play-circle"></i> 포트폴리오 보기</a>
+                    <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> 협업 문의하기</a>
+                </div>
             </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"><div class="wheel"></div></div>
+            <span class="scroll-text">SCROLL DOWN</span>
+        </div>
     </section>
 
+    <!-- 포트폴리오 섹션 (상시 버튼 노출 구조 변경) -->
     <section id="portfolio" class="section">
         <div class="container">
-            <h2>🎥 포트폴리오</h2>
-            
+            <h2>🎥 Portfolio</h2>
             <div class="portfolio-controls">
                 <div class="portfolio-filter">
                     <button data-filter="all" class="active">All</button>
                     <button data-filter="video">영상 (Video)</button>
                     <button data-filter="ad">광고 (Ad)</button>
-                     <button data-filter="3d">3D (3D)</button>
+                    <button data-filter="3d">3D (3D)</button>
                     <button data-filter="poster">포스터 (Poster)</button>
-                    <button data-filter="contest">타이틀시퀀스 (Title sequence)</button>
-                    <button data-filter="outsourcing">인트로 (intro)</button>
-                    <button data-filter="Detail">상세페이지(Detail page)</button>
+                    <button data-filter="contest">타이틀시퀀스 (Title)</button>
+                    <button data-filter="outsourcing">인트로 (Intro)</button>
+                    <button data-filter="Detail">상세페이지 (Detail)</button>
                     <button data-filter="Interview">모션 (Motion)</button>
                 </div>
                 <input type="text" id="portfolio-search" placeholder="작품 검색..." aria-label="포트폴리오 검색">
             </div>
 
             <div class="portfolio-grid">
-                
                 <article class="portfolio-item" data-category="video" data-keywords="브랜드 홍보 CF 모션 그래픽">
-                    <div class="item-overlay">
-                        <h3>브랜드 홍보 영상 A</h3>
-                        <p>#CF #모션그래픽</p>
-                        <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="view-link">자세히 보기</a>
+                    <div class="portfolio-thumb">
+                        <img src="img/icon/icon_pgte .png" alt="브랜드 홍보 영상 A 썸네일">
+                        <div class="item-overlay">
+                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
+                        </div>
                     </div>
-                    <img src="img/icon/icon_pgte .png" alt="브랜드 홍보 영상 A 썸네일">
+                    <div class="portfolio-info">
+                        <h3>브랜드 홍보 영상 A</h3>
+                        <div class="info-footer">
+                            <span class="tag">#CF #모션그래픽</span>
+                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
                 </article>
 
                 <article class="portfolio-item" data-category="contest" data-keywords="공모전 기획 편집">
-                    <div class="item-overlay">
-                        <h3>공모전참가 A</a></h3>
-                        <p>#공모전</p>
-                        <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="view-link">자세히 보기</a>
+                    <div class="portfolio-thumb">
+                        <img src="img/icon/icon_default.jpg" alt="공모전참가 A 썸네일">
+                        <div class="item-overlay">
+                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
+                        </div>
                     </div>
-                    <img src="" alt="공모전참가 A 썸네일">
+                    <div class="portfolio-info">
+                        <h3>공모전참가 A</h3>
+                        <div class="info-footer">
+                            <span class="tag">#공모전</span>
+                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
                 </article>
-                
+
                 <article class="portfolio-item" data-category="ad" data-keywords="소셜 미디어 광고 기획 편집">
-                    <div class="item-overlay">
-                        <h3>소셜 미디어 광고 B</h3>
-                        <p>#단편광고 #기획 #편집</p>
-                        <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="view-link">자세히 보기</a>
+                    <div class="portfolio-thumb">
+                        <img src="img/icon/icon_dmm.png" alt="소셜 미디어 광고 B 썸네일">
+                        <div class="item-overlay">
+                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
+                        </div>
                     </div>
-                    <img src="img/icon/icon_dmm.png" alt="소셜 미디어 광고 B 썸네일">
+                    <div class="portfolio-info">
+                        <h3>소셜 미디어 광고 B</h3>
+                        <div class="info-footer">
+                            <span class="tag">#단편광고 #기획</span>
+                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
                 </article>
 
                 <article class="portfolio-item" data-category="poster" data-keywords="영화 포스터 디자인 시각 그래픽">
-                    <div class="item-overlay">
-                        <h3>영화 포스터 디자인 C</h3>
-                        <p>#그래픽디자인</p>
-                        <a href="#" target="_blank" class="view-link">자세히 보기</a>
+                    <div class="portfolio-thumb">
+                        <img src="img/icon/icon_1917.jpg" alt="영화 포스터 디자인 C 썸네일">
+                        <div class="item-overlay">
+                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
+                        </div>
                     </div>
-                    <img src="img/icon/icon_1917.jpg" alt="영화 포스터 디자인 C 썸네일">
+                    <div class="portfolio-info">
+                        <h3>영화 포스터 디자인 C</h3>
+                        <div class="info-footer">
+                            <span class="tag">#그래픽디자인</span>
+                            <a href="#" target="_blank" class="portfolio-btn">자세히 보기 <i class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
                 </article>
 
                 <article class="portfolio-item" data-category="video" data-keywords="유튜브 콘텐츠 편집 디자인">
-                    <div class="item-overlay">
-                        <h3>유튜브 콘텐츠 D</h3>
-                        <p>#콘텐츠편집 #자막디자인</p>
-                        <a href="#" target="_blank" class="view-link">자세히 보기</a>
+                    <div class="portfolio-thumb">
+                        <img src="assets/thumb_video_04.jpg" alt="유튜브 콘텐츠 D 썸네일">
+                        <div class="item-overlay">
+                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
+                        </div>
                     </div>
-                    <img src="assets/thumb_video_04.jpg" alt="유튜브 콘텐츠 D 썸네일">
+                    <div class="portfolio-info">
+                        <h3>유튜브 콘텐츠 D</h3>
+                        <div class="info-footer">
+                            <span class="tag">#콘텐츠편집</span>
+                            <a href="#" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
                 </article>
-                
             </div>
             <p id="no-results" class="no-results-message">검색 결과가 없습니다.</p>
         </div>
     </section>
 
-    <section id="skills" class="section dark-bg">
+    <!-- 스킬 및 프로그램 섹션 (비주얼 게이지 컴포넌트 추가 리디자인) -->
+    <section id="skills" class="section skills-visual-section">
         <div class="container">
-            <h2>🛠️ Editing Skills & Programs</h2>
-            <div class="skills-grid">
+            <h2>🛠️ Skills & Programs</h2>
+            <div class="skills-grid-visual">
                 
-                <div class="skill-item">
-                    <img src="img/icon/con_premiere.png" alt="Adobe Premiere Pro 로고">
-                    <h3>Adobe Premiere Pro</h3>
-                    <p>고급 영상 편집, 컬러 그레이딩</p>
-                </div>
-                
-                <div class="skill-item">
-                    <img src="img/icon/icon_after effects.png" alt="Adobe After Effects 로고">
-                    <h3>Adobe After Effects</h3>
-                    <p>모션 그래픽, VFX 합성, 3D</p>
-                </div>
-
-                <div class="skill-item">
-                    <img src="img/icon/icon_photoshop.png" alt="Adobe Photoshop 로고">
-                    <h3>Adobe Photoshop</h3>
-                    <p>포스터/썸네일 제작, 이미지 보정</p>
+                <div class="skill-card-v" data-progress="90%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/con_premiere.png" alt="Premiere Pro"></div>
+                        <div class="skill-title-meta">
+                            <h3>Premiere Pro</h3>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">고급 컷 편집, 멀티캠 동기화, 정밀 컬러 그레이딩 및 오디오 마스터링</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
                 </div>
 
-                <div class="skill-item">
-                    <img src="img/icon/icon_Illustrator.png" alt="Adobe Illustrator 로고">
-                    <h3>Adobe Illustrator<h3>
-                    <p></p>
+                <div class="skill-card-v" data-progress="85%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_after effects.png" alt="After Effects"></div>
+                        <div class="skill-title-meta">
+                            <h3>After Effects</h3>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">키프레임 모션 그래픽, 가상 레이아웃 VFX 합성, 3D 카메라 트래킹 기술</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
                 </div>
 
-                <div class="skill-item">
-                    <img src="img/icon/icon_media encoder.png" alt="Adobe Media Encoder 로고">
-                    <h3>Media Encoder</h3>
-                    <p>강력한 렌더링작업</p>
+                <div class="skill-card-v" data-progress="80%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_photoshop.png" alt="Photoshop"></div>
+                        <div class="skill-title-meta">
+                            <h3>Photoshop</h3>
+                            <span class="skill-percent">80%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">유튜브 썸네일 브랜딩 디자인, 질감 텍스처 합성 및 소스 이미지 보정 정제</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
                 </div>
 
-                 <div class="skill-item">
-                    <img src="img/icon/icon_Blender.png" alt="Blender 로고">
-                    <h3>Blender</h3>
-                    <p>3D작업</p>
+                <div class="skill-card-v" data-progress="75%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_Illustrator.png" alt="Illustrator"></div>
+                        <div class="skill-title-meta">
+                            <h3>Illustrator</h3>
+                            <span class="skill-percent">75%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">모션 그래픽 제작용 벡터 그래픽 에셋 구축, 로고 타이포브랜딩 디자인</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
                 </div>
 
-                 <div class="skill-item">
-                    <img src="img/icon/icon_html.png" alt="html 로고">
-                    <h3>HTML</h3>
-                    <p>HTML작업</p>
+                <div class="skill-card-v" data-progress="90%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_media encoder.png" alt="Media Encoder"></div>
+                        <div class="skill-title-meta">
+                            <h3>Media Encoder</h3>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">플랫폼별 최적화 코덱 압축 렌더링 배포, 대용량 비디오 큐 인코딩 관리</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
                 </div>
 
-                 <div class="skill-item">
-                    <img src="img/icon/icon_js.png" alt="JS 로고">
-                    <h3>JS</h3>
-                    <p>JS작업</p>
+                <div class="skill-card-v" data-progress="70%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_Blender.png" alt="Blender"></div>
+                        <div class="skill-title-meta">
+                            <h3>Blender</h3>
+                            <span class="skill-percent">70%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">3D 공간 오브젝트 모델링 설계, 영상 도입부 인트로 공간 시퀀스 연출</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
                 </div>
 
-                 <div class="skill-item">
-                    <img src="img/icon/icon_css.png" alt="CSS 로고">
-                    <h3>CSS</h3>
-                    <p>CSS작업</p>
+                <div class="skill-card-v" data-progress="75%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_html.png" alt="HTML"></div>
+                        <div class="skill-title-meta">
+                            <h3>HTML5</h3>
+                            <span class="skill-percent">75%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">웹 표준 인코딩 마크업 구조 최적화, 스크린 리더 친화형 시맨틱 태그 마크업</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+
+                <div class="skill-card-v" data-progress="70%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_css.png" alt="CSS"></div>
+                        <div class="skill-title-meta">
+                            <h3>CSS3</h3>
+                            <span class="skill-percent">70%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">반응형 플랙스 그리드 설계, 웹 하드웨어 가속 트랜지션 애니메이션 모델링</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+
+                <div class="skill-card-v" data-progress="60%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_js.png" alt="JavaScript"></div>
+                        <div class="skill-title-meta">
+                            <h3>JavaScript</h3>
+                            <span class="skill-percent">60%</span>
+                        </div>
+                    </div>
+                    <p class="skill-desc-v">동적 인터랙션 모듈 구현, 비동기 Intersection API 기반 브라우저 렌더링 제어</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <section id="about" class="section about-section text-light-theme">
+        <div class="container">
+            <h2>🙋🏻‍♂️ About Me</h2>
+            <div class="about-main">
+                <div class="profile-photo">
+                    <img src="/img/profile/IMG_3015.jpg" alt="정원복 프로필 사진">
+                </div>
+                <div class="profile-info-basic">
+                    <h3>정원복 <span class="birth">2002.04.01 (24세)</span></h3>
+                    <p class="location"><i class="fas fa-map-marker-alt"></i> 경북 칠곡군 왜관읍</p>
+                </div>
+            </div>
+
+            <div class="history-container">
+                <div class="history-block">
+                    <h3 class="history-title"><i class="fas fa-graduation-cap"></i> 학력</h3>
+                    <ul class="timeline">
+                        <li>
+                            <span class="date">2021.03 ~ 2023.02</span>
+                            <h4>구미대학교</h4>
+                            <p>스마트경영과 전공 졸업</p>
+                        </li>
+                        <li>
+                            <span class="date">2018.03 ~ 2021.02</span>
+                            <h4>구미고등학교 부설 방송통신고등학교</h4>
+                            <p>졸업</p>
+                        </li>
+                        <li>
+                            <span class="date">2015.03 ~ 2018.02</span>
+                            <h4>석전중학교</h4>
+                            <p>졸업</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="history-block">
+                    <h3 class="history-title"><i class="fas fa-briefcase"></i> 경력 및 교육</h3>
+                    <ul class="timeline">
+                        <li>
+                            <span class="date">2025.08 ~ 2026.01</span>
+                            <h4>(국비)디지털 영상편집 교육 이수</h4>
+                            <p>멀티미디어 (프리미어, 애프터이펙트, 블렌더) A 과정 수료</p>
+                        </li>
+                        <li>
+                            <span class="date">현재</span>
+                            <h4>새로운 프로젝트 준비 중</h4>
+                            <p>모션 그래픽 및 광고 영상 위주의 포트폴리오 빌딩</p>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="about" class="section about-section">
-        <div class="container about-content">
-            <div class="profile-photo">
-                <img src="/img/profile/IMG_3015.jpg" alt="프로필 사진">
-            </div>
-            <div class="profile-text">
-                <h2>🙋🏻‍♂️ About Me</h2>
-                <p>이름: 정원복</p>
-                <p>나이: 24세 (2002.04.01)</p>
-                <p>주소: 경북 칠곡군 왜관읍</p>
-                <p>학력</p>
-                <p>2015.03 ~ 2018.02 석전중학교 졸업</p>
-                <p>2018.03 ~ 2021.02 구미고등학교 부설 방송통신고등학교졸업</p>
-                <p>2021.03 ~ 2023.02 구미대학교 스마트경영과 전공</p>
-                <p>- 현재 -</p>
-                <p>- 경력 -</p>
-                <p>- 교육 이수 -</p>
-                <p>2025.08 ~ 2026.01 (멀티미디어) 디지털 영상편집(프리미어, 애프터이펙트, 블랜더) A</p>
-                <p>준비중</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="section dark-bg">
+    <!-- 연락 방법 섹션 (완벽하게 깔끔하고 미니멀한 젠(Zen) 플랫 스타일로 리디자인) -->
+    <section id="contact" class="section minimalist-contact-section">
         <div class="container">
             <h2>📞 Contact Me</h2>
             <p class="contact-message">함께 만들어갈 멋진 프로젝트를 기다립니다!</p>
-            <div class="contact-info">
-                <p><i class="fas fa-envelope"></i> Email: chong04041@naver.com</p>
-                <p><i class="fas fa-phone"></i> Phone: 010-3401-1371</p>
-                <p><i class="fab fa-kakao"></i> KaKao: <a href="https://open.kakao.com/o/souSwBTh" target="_blank">오픈채팅방</a></p>
-                <p><i class="fab fa-instagram"></i> Instagram: <a href="https://www.instagram.com/jeongweonbog90/" target="_blank">@jeongwonbog90</a></p>
-                <p><i class="fas fa-link"></i> Linktree: <a href="your_linktree_link" target="_blank">your-linktree</a></p>
-                <p><i class="fas fa-youtube"></i>YouTube: <a href="" target="_blank">your-youtube</a></p>
+            
+            <div class="minimal-contact-container">
+                <!-- 상단 코어 핵심 다이렉트 컨택 -->
+                <div class="core-contact-row">
+                    <div class="core-contact-item">
+                        <span class="contact-label">EMAIL</span>
+                        <a href="mailto:chong04041@naver.com" class="contact-value">chong04041@naver.com</a>
+                    </div>
+                    <div class="core-contact-item">
+                        <span class="contact-label">PHONE</span>
+                        <a href="tel:01034011371" class="contact-value">010-3401-1371</a>
+                    </div>
+                </div>
+
+                <!-- 하단 에센셜 채널 가로 링크 서브 그리드 -->
+                <div class="minimal-social-links">
+                    <a href="https://open.kakao.com/o/souSwBTh" target="_blank" class="social-line-link">
+                        <i class="fab fa-kakao"></i> KakaoTalk
+                    </a>
+                    <a href="https://www.instagram.com/jeongweonbog90/" target="_blank" class="social-line-link">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="your_linktree_link" target="_blank" class="social-line-link">
+                        <i class="fas fa-link"></i> Linktree
+                    </a>
+                    <a href="#" target="_blank" class="social-line-link">
+                        <i class="fab fa-youtube"></i> YouTube
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -217,7 +375,7 @@
             <p>본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작 되었습니다</p>
         </div>
     </footer>
-
+    
     <script src="js/script.js"></script>
 </body>
 </html>
