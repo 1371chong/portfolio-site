@@ -1,8 +1,0 @@
-{
-  "name": "정원복 포트폴리오",
-  "description": "Video Editor & Motion Graphic Designer Portfolio",
-  "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
-}
