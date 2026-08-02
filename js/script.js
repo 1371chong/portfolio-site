@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================================================
     // 1. 언어 전환 (i18n) 시스템 및 타이핑 효과 엔진
