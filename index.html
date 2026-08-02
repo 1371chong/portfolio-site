@@ -14,19 +14,48 @@
     <header id="main-nav">
         <div class="container">
             <h1 class="logo"><a href="#intro">PORTFOLIO</a></h1>
-            <nav>
+            <nav class="nav-container">
                 <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
                     <span class="hamburger-box">
                         <span class="hamburger-inner"></span>
                     </span>
                 </button>
                 <ul class="nav-list">
-                    <li><a href="#intro" data-text="Home">Home</a></li>
-                    <li><a href="#portfolio" data-text="Portfolio">포트폴리오</a></li>
-                    <li><a href="#skills" data-text="Skills">Skills</a></li>
-                    <li><a href="#about" data-text="About">소개</a></li>
-                    <li><a href="#contact" data-text="Contact">Contact Me</a></li>
+                    <li><a href="#intro" data-text="Home" data-i18n="nav.home">Home</a></li>
+                    <li><a href="#portfolio" data-text="Portfolio" data-i18n="nav.portfolio">포트폴리오</a></li>
+                    <li><a href="#skills" data-text="Skills" data-i18n="nav.skills">Skills</a></li>
+                    <li><a href="#about" data-text="About" data-i18n="nav.about">소개</a></li>
+                    <li><a href="#testimonials" data-text="Testimonials" data-i18n="nav.testimonials">추천사</a></li>
+                    <li><a href="#contact" data-text="Contact" data-i18n="nav.contact">Contact Me</a></li>
+                    <li><a href="#faq" data-text="FAQ" data-i18n="nav.faq">FAQ</a></li>
                 </ul>
+                <div class="nav-actions">
+                    <button id="theme-toggle-btn" class="btn-theme-toggle" title="다크/라이트 모드 전환 / Toggle Theme" aria-label="테마 전환">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    <button id="lang-toggle-btn" class="btn-lang-toggle" title="언어 변경 / Change Language">
+                        <i class="fas fa-globe"></i>
+                        <span id="lang-label">EN</span>
+                    </button>
+                    <div id="auth-controls" class="auth-controls">
+                        <div id="logged-out-view" class="auth-btn-group">
+                            <button id="btn-open-login" class="btn-auth-link btn-login">
+                                <i class="fas fa-sign-in-alt"></i> <span data-i18n="nav.login">로그인</span>
+                            </button>
+                            <button id="btn-open-signup" class="btn-auth-link btn-signup">
+                                <i class="fas fa-user-plus"></i> <span data-i18n="nav.signup">회원가입</span>
+                            </button>
+                        </div>
+                        <div id="logged-in-view" class="user-profile-bar" style="display: none;">
+                            <span class="user-badge">
+                                <i class="fas fa-user-circle"></i> <span id="user-name-display">사용자</span><span data-i18n="nav.userSuffix">님</span>
+                            </span>
+                            <button id="btn-logout" class="btn-auth-link btn-logout" title="로그아웃">
+                                <i class="fas fa-sign-out-alt"></i> <span data-i18n="nav.logout">로그아웃</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -45,6 +74,7 @@
                 </p>
                 <div class="intro-buttons">
                     <a href="#portfolio" class="btn btn-primary"><i class="fas fa-play-circle"></i> 포트폴리오 보기</a>
+                    <a href="/download/company-profile.pdf" download="정원복_회사소개서.pdf" class="btn btn-download-pdf"><i class="fas fa-file-pdf"></i> 회사소개서 다운로드</a>
                     <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> 협업 문의하기</a>
                 </div>
             </div>
@@ -55,27 +85,62 @@
         </div>
     </section>
 
-    <!-- 포트폴리오 섹션 (상시 버튼 노출 구조 변경) -->
-    <section id="portfolio" class="section">
+    <!-- 포트폴리오 섹션 (리디자인된 캡슐 메뉴 & 라이브 뷰 컨트롤) -->
+    <section id="portfolio" class="section portfolio-redesign-section">
         <div class="container">
-            <h2>🎥 Portfolio</h2>
-            <div class="portfolio-controls">
-                <div class="portfolio-filter">
-                    <button data-filter="all" class="active">All</button>
-                    <button data-filter="video">영상 (Video)</button>
-                    <button data-filter="ad">광고 (Ad)</button>
-                    <button data-filter="3d">3D (3D)</button>
-                    <button data-filter="poster">포스터 (Poster)</button>
-                    <button data-filter="contest">타이틀시퀀스 (Title)</button>
-                    <button data-filter="outsourcing">인트로 (Intro)</button>
-                    <button data-filter="Detail">상세페이지 (Detail)</button>
-                    <button data-filter="Interview">모션 (Motion)</button>
+            <h2 data-i18n="portfolio.sectionTitle">🎥 Portfolio</h2>
+            <p class="section-subtitle" data-i18n="portfolio.sectionSubtitle">기획부터 편집, 모션 그래픽까지 완성도 높은 시각 예술 컬렉션입니다.</p>
+            
+            <div class="portfolio-controls-redesign">
+                <div class="portfolio-filter-bar" role="tablist" aria-label="포트폴리오 카테고리 필터">
+                    <button data-filter="all" class="filter-btn active" role="tab" aria-selected="true">
+                        <i class="fas fa-th-large"></i> <span data-i18n="portfolio.filterAll">전체</span> <span class="filter-badge" id="count-all">0</span>
+                    </button>
+                    <button data-filter="video" class="filter-btn" role="tab" aria-selected="false">
+                        <i class="fas fa-film"></i> <span data-i18n="portfolio.filterVideo">영상</span> <span class="filter-badge" id="count-video">0</span>
+                    </button>
+                    <button data-filter="ad" class="filter-btn" role="tab" aria-selected="false">
+                        <i class="fas fa-bullhorn"></i> <span data-i18n="portfolio.filterAd">광고</span> <span class="filter-badge" id="count-ad">0</span>
+                    </button>
+                    <button data-filter="3d" class="filter-btn" role="tab" aria-selected="false">
+                        <i class="fas fa-cube"></i> <span data-i18n="portfolio.filter3d">3D</span> <span class="filter-badge" id="count-3d">0</span>
+                    </button>
+                    <button data-filter="poster" class="filter-btn" role="tab" aria-selected="false">
+                        <i class="fas fa-image"></i> <span data-i18n="portfolio.filterPoster">포스터</span> <span class="filter-badge" id="count-poster">0</span>
+                    </button>
+                    <button data-filter="contest" class="filter-btn" role="tab" aria-selected="false">
+                        <i class="fas fa-trophy"></i> <span data-i18n="portfolio.filterContest">타이틀시퀀스</span> <span class="filter-badge" id="count-contest">0</span>
+                    </button>
                 </div>
-                <input type="text" id="portfolio-search" placeholder="작품 검색..." aria-label="포트폴리오 검색">
+
+                <div class="portfolio-search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="portfolio-search" placeholder="작품명 또는 키워드 검색..." aria-label="포트폴리오 검색" data-i18n-placeholder="portfolio.searchPlaceholder">
+                    <button id="search-clear-btn" class="search-clear-btn" aria-label="검색어 지우기" title="지우기">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="portfolio-status-bar">
+                <span class="results-count">
+                    <i class="fas fa-layer-group"></i> 
+                    <span id="results-count-text">총 <strong id="visible-item-count">0</strong>개의 작품을 둘러보는 중입니다.</span>
+                </span>
             </div>
 
             <div class="portfolio-grid">
-                <article class="portfolio-item" data-category="video" data-keywords="브랜드 홍보 CF 모션 그래픽">
+                <article class="portfolio-item" 
+                         data-category="video" 
+                         data-keywords="브랜드 홍보 CF 모션 그래픽"
+                         data-title="브랜드 홍보 영상 A"
+                         data-period="2주 (14일)"
+                         data-period-en="2 Weeks (14 Days)"
+                         data-tools="Premiere Pro, After Effects, Photoshop, Audition"
+                         data-desc="브랜드 아이덴티티를 효과적으로 전달하기 위해 2D/3D 모션 그래픽 기법과 다이나믹한 컷 편집을 결합한 홍보 영상입니다. 시각적 몰입감을 높이는 타이틀 트래킹과 브랜드 메인 컬러를 강조한 정밀 컬러 그레이딩이 특징입니다."
+                         data-desc-en="A promotional video combining 2D/3D motion graphics and dynamic cut editing to effectively convey brand identity. Key features include title tracking and precise color grading highlighting the primary brand color."
+                         data-tag="#CF #모션그래픽 #브랜딩"
+                         data-link="https://www.youtube.com/watch?v=your-video-id">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_pgte .png" alt="브랜드 홍보 영상 A 썸네일">
                         <div class="item-overlay">
@@ -86,12 +151,22 @@
                         <h3>브랜드 홍보 영상 A</h3>
                         <div class="info-footer">
                             <span class="tag">#CF #모션그래픽</span>
-                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="portfolio-btn btn-portfolio-detail" data-i18n="portfolio.viewDetail">자세히 보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="contest" data-keywords="공모전 기획 편집">
+                <article class="portfolio-item" 
+                         data-category="contest" 
+                         data-keywords="공모전 기획 편집 타이틀시퀀스"
+                         data-title="공모전참가 A (타이틀 시퀀스)"
+                         data-period="10일"
+                         data-period-en="10 Days"
+                         data-tools="Premiere Pro, After Effects, Illustrator"
+                         data-desc="전국 공모전 참가 및 우수상을 수상한 시퀀스 작품으로, 주제의 중후함과 웅장한 몰입감을 극대화하기 위해 커스텀 키프레임 타이틀 트랜지션 및 3D 그래픽 연출, 정밀 사운드 마스터링을 적용하였습니다."
+                         data-desc-en="An award-winning sequence project from a national competition, utilizing custom keyframe title transitions, 3D graphics, and precise sound mastering to maximize theme depth and grand immersion."
+                         data-tag="#공모전 #타이틀시퀀스"
+                         data-link="https://www.youtube.com/watch?v=your-video-id">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_default.jpg" alt="공모전참가 A 썸네일">
                         <div class="item-overlay">
@@ -101,13 +176,23 @@
                     <div class="portfolio-info">
                         <h3>공모전참가 A</h3>
                         <div class="info-footer">
-                            <span class="tag">#공모전</span>
-                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <span class="tag">#공모전 #타이틀</span>
+                            <button type="button" class="portfolio-btn btn-portfolio-detail" data-i18n="portfolio.viewDetail">자세히 보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="ad" data-keywords="소셜 미디어 광고 기획 편집">
+                <article class="portfolio-item" 
+                         data-category="ad" 
+                         data-keywords="소셜 미디어 광고 기획 편집 숏폼"
+                         data-title="소셜 미디어 광고 B"
+                         data-period="5일"
+                         data-period-en="5 Days"
+                         data-tools="Premiere Pro, After Effects, Photoshop"
+                         data-desc="모바일 숏폼 및 소셜 미디어 마케팅에 최적화된 15초/30초 고효율 광고 영상입니다. 스킵률을 낮추기 위해 시작 3초 임팩트 연출, 리드미컬한 자막 모션, 신속한 페이싱으로 잠재 고객의 이탈을 방지했습니다."
+                         data-desc-en="A highly effective 15s/30s ad video optimized for mobile short-form and social media marketing. It features an impactful 3-second opening hook, rhythmic caption motions, and fast pacing to minimize drop-offs."
+                         data-tag="#단편광고 #소셜미디어"
+                         data-link="https://www.youtube.com/watch?v=your-video-id">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_dmm.png" alt="소셜 미디어 광고 B 썸네일">
                         <div class="item-overlay">
@@ -118,12 +203,22 @@
                         <h3>소셜 미디어 광고 B</h3>
                         <div class="info-footer">
                             <span class="tag">#단편광고 #기획</span>
-                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="portfolio-btn btn-portfolio-detail" data-i18n="portfolio.viewDetail">자세히 보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="poster" data-keywords="영화 포스터 디자인 시각 그래픽">
+                <article class="portfolio-item" 
+                         data-category="poster" 
+                         data-keywords="영화 포스터 디자인 시각 그래픽 타이포그래피"
+                         data-title="영화 포스터 디자인 C"
+                         data-period="3일"
+                         data-period-en="3 Days"
+                         data-tools="Photoshop, Illustrator"
+                         data-desc="영화 및 시각 예술 행사의 시그니처 컨셉을 직관적으로 연출한 하이엔드 키아트 포스터 디자인입니다. 고해상도 이미지 합성, 디테일한 노이즈 텍스처링 및 타이포그래피 레이아웃을 완성도 높게 제작하였습니다."
+                         data-desc-en="A high-end key art poster design visually interpreting the signature concept of film and visual arts events. Produced with high-res composite art, detailed noise texturing, and refined typographic layout."
+                         data-tag="#그래픽디자인 #포스터"
+                         data-link="#">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_1917.jpg" alt="영화 포스터 디자인 C 썸네일">
                         <div class="item-overlay">
@@ -134,12 +229,22 @@
                         <h3>영화 포스터 디자인 C</h3>
                         <div class="info-footer">
                             <span class="tag">#그래픽디자인</span>
-                            <a href="#" target="_blank" class="portfolio-btn">자세히 보기 <i class="fas fa-chevron-right"></i></a>
+                            <button type="button" class="portfolio-btn btn-portfolio-detail" data-i18n="portfolio.viewDetail">자세히 보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="video" data-keywords="유튜브 콘텐츠 편집 디자인">
+                <article class="portfolio-item" 
+                         data-category="video" 
+                         data-keywords="유튜브 콘텐츠 편집 디자인 모션자막"
+                         data-title="유튜브 콘텐츠 D"
+                         data-period="4일"
+                         data-period-en="4 Days"
+                         data-tools="Premiere Pro, Photoshop, Media Encoder"
+                         data-desc="10만 회 이상의 높은 조회수를 기록한 유튜브 메인 예능/정보 콘텐츠 편집 프로젝트입니다. 오디오 음향 노이즈 밸런싱, 통발형 감각적 그래픽 자막, 컷 트랜지션 및 하이라이트 인트로 시퀀스를 총괄 기획/제작했습니다."
+                         data-desc-en="A YouTube entertainment/info content editing project reaching over 100,000 views. Features audio noise balancing, witty graphic captions, cut transitions, and highlight intro sequences."
+                         data-tag="#콘텐츠편집 #유튜브"
+                         data-link="#">
                     <div class="portfolio-thumb">
                         <img src="assets/thumb_video_04.jpg" alt="유튜브 콘텐츠 D 썸네일">
                         <div class="item-overlay">
@@ -150,7 +255,7 @@
                         <h3>유튜브 콘텐츠 D</h3>
                         <div class="info-footer">
                             <span class="tag">#콘텐츠편집</span>
-                            <a href="#" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="portfolio-btn btn-portfolio-detail" data-i18n="portfolio.viewDetail">자세히 보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
@@ -330,6 +435,185 @@
         </div>
     </section>
 
+    <!-- 회사소개서 (Company Profile) 전용 섹션 -->
+    <section id="company-profile" class="section company-profile-section">
+        <div class="container">
+            <h2>📄 회사소개서 (Company Profile)</h2>
+            <p class="profile-intro-text">정원복 비디오 에디터 & 모션그래픽 디자이너의 주요 전문 역량, 작업 프로세스 및 핵심 서비스 안내서입니다.</p>
+
+            <div class="company-profile-card">
+                <div class="profile-card-header">
+                    <div class="profile-badge"><i class="fas fa-award"></i> PORTFOLIO & PROFILE SUMMARY</div>
+                    <h3>정원복 | VIDEO EDITOR & MOTION GRAPHIC DESIGNER</h3>
+                    <p class="profile-tagline">"가치를 더하는 감각적인 컷편집과 3D 모션그래픽 전문 파이프라인"</p>
+                </div>
+
+                <div class="profile-grid-details">
+                    <div class="profile-detail-box">
+                        <h4><i class="fas fa-film"></i> 주요 제공 서비스</h4>
+                        <ul class="profile-service-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>유튜브 & SNS 마케팅 영상:</strong> 컷편집, 자막 연출, 효과음 & BGM 마스터링</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>브랜드 CF & 모션 그래픽:</strong> 2D/3D 키프레임 애니메이션, VFX 합성</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>타이틀 시퀀스 & 인트로:</strong> Blender 3D 공간 연출 및 트래킹 기술</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>비주얼 브랜딩 디자인:</strong> 썸네일, 포스터, 상세페이지 그래픽 디자인</li>
+                        </ul>
+                    </div>
+
+                    <div class="profile-detail-box">
+                        <h4><i class="fas fa-laptop-code"></i> 핵심 프로그램 스택</h4>
+                        <div class="tool-tags-container">
+                            <span class="tool-tag"><img src="img/icon/con_premiere.png" alt="Premiere Pro"> Premiere Pro <span>90%</span></span>
+                            <span class="tool-tag"><img src="img/icon/icon_after effects.png" alt="After Effects"> After Effects <span>85%</span></span>
+                            <span class="tool-tag"><img src="img/icon/icon_photoshop.png" alt="Photoshop"> Photoshop <span>80%</span></span>
+                            <span class="tool-tag"><img src="img/icon/icon_Illustrator.png" alt="Illustrator"> Illustrator <span>75%</span></span>
+                            <span class="tool-tag"><img src="img/icon/icon_media encoder.png" alt="Media Encoder"> Media Encoder <span>90%</span></span>
+                            <span class="tool-tag"><img src="img/icon/icon_Blender.png" alt="Blender"> Blender <span>70%</span></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-detail-box full-width">
+                        <h4><i class="fas fa-stream"></i> 표준 제작 프로세스</h4>
+                        <div class="process-steps-grid">
+                            <div class="step-card">
+                                <span class="step-num">01</span>
+                                <h5>기획 & 구성</h5>
+                                <p>클라이언트 요구사항 분석, 톤앤매너 및 레퍼런스 설정</p>
+                            </div>
+                            <div class="step-card">
+                                <span class="step-num">02</span>
+                                <h5>컷편집 & 믹싱</h5>
+                                <p>스토리라인 빌딩, 정밀 가공, BGM 및 오디오 싱크 동기화</p>
+                            </div>
+                            <div class="step-card">
+                                <span class="step-num">03</span>
+                                <h5>모션 & VFX</h5>
+                                <p>자막 애니메이션, 2D/3D 트래킹, 특수효과 및 트랜지션 합성</p>
+                            </div>
+                            <div class="step-card">
+                                <span class="step-num">04</span>
+                                <h5>인코딩 & 납품</h5>
+                                <p>플랫폼별 최적 코덱 인코딩, 클라이언트 피드백 반영 및 최종 납품</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-action-bar">
+                    <a href="/download/company-profile.pdf" class="btn btn-primary btn-download-action" download="정원복_회사소개서.pdf">
+                        <i class="fas fa-file-download"></i> 회사소개서 PDF 다운로드
+                    </a>
+                    <button class="btn btn-outline" id="btn-open-profile-modal">
+                        <i class="fas fa-search-plus"></i> 온라인 미리보기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 클라이언트 추천사 & 고객 후기 캐러셀 섹션 -->
+    <section id="testimonials" class="section testimonials-section">
+        <div class="container">
+            <h2 data-i18n="testimonials.title">💬 Client Testimonials</h2>
+            <p class="testimonials-intro-text" data-i18n="testimonials.subtitle">함께 진행했던 파트너 및 클라이언트분들의 소중한 협업 후기입니다.</p>
+            
+            <div class="testimonials-carousel-wrapper">
+                <button class="carousel-btn prev-btn" id="testimonial-prev" aria-label="이전 후기">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="testimonials-slider-container" id="testimonial-slider-container">
+                    <div class="testimonials-track" id="testimonial-track">
+                        <!-- Card 1 -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="client-info">
+                                    <div class="client-avatar">김</div>
+                                    <div class="client-details">
+                                        <h3 class="client-name">김도현 이사</h3>
+                                        <span class="client-company">(주)넥스트월드 미디어</span>
+                                    </div>
+                                </div>
+                                <span class="project-tag">3D 타이틀 & 브랜드 CF</span>
+                            </div>
+                            <div class="rating-stars" aria-label="5점 만점에 5점">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <blockquote class="testimonial-quote">
+                                "정원복 감독님의 3D 모션그래픽 트래킹 연출 덕분에 자사 신제품 런칭 광고 시퀀스 품질이 대기업 수준으로 격상되었습니다. 빠른 피드백 반영과 꼼꼼한 완성도에 매우 만족합니다."
+                            </blockquote>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="client-info">
+                                    <div class="client-avatar">박</div>
+                                    <div class="client-details">
+                                        <h3 class="client-name">박서연 대표</h3>
+                                        <span class="client-company">크리에이티브 스튜디오 루미너스</span>
+                                    </div>
+                                </div>
+                                <span class="project-tag">유튜브 숏폼 & 마케팅</span>
+                            </div>
+                            <div class="rating-stars" aria-label="5점 만점에 5점">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <blockquote class="testimonial-quote">
+                                "시청 몰입도를 끌어올리는 센스 있는 자막 효과음 연출과 스피디한 컷 편집이 독보적입니다. 협업 내내 소통이 투명해서 긴급 제작도 안심하고 맡길 수 있었습니다."
+                            </blockquote>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="client-info">
+                                    <div class="client-avatar">이</div>
+                                    <div class="client-details">
+                                        <h3 class="client-name">이준혁 PD</h3>
+                                        <span class="client-company">글로벌 트래블로그 채널</span>
+                                    </div>
+                                </div>
+                                <span class="project-tag">종합 편집 & 색보정</span>
+                            </div>
+                            <div class="rating-stars" aria-label="5점 만점에 5점">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <blockquote class="testimonial-quote">
+                                "시네마틱한 컬러 그레이딩과 섬세한 BGM 오디오 믹싱 덕분에 영상 반응이 기대 이상이었습니다. 다음 시즌 웹예능 프로젝트도 꼭 다시 작업하고 싶습니다."
+                            </blockquote>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="client-info">
+                                    <div class="client-avatar">최</div>
+                                    <div class="client-details">
+                                        <h3 class="client-name">최지은 팀장</h3>
+                                        <span class="client-company">에이블 컬처 마케팅팀</span>
+                                    </div>
+                                </div>
+                                <span class="project-tag">전시행사 인트로 & 타이포</span>
+                            </div>
+                            <div class="rating-stars" aria-label="5점 만점에 5점">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <blockquote class="testimonial-quote">
+                                "행사 당일 대형 LED 스크린에 상영된 모션 타이포그래피가 오프닝 몰입감을 최고조로 올려주었습니다. 기획 의도를 정확히 파악하여 결과물로 연결하는 속도가 감탄스러웠습니다."
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-btn next-btn" id="testimonial-next" aria-label="다음 후기">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="carousel-dots" id="testimonial-dots"></div>
+        </div>
+    </section>
+
     <!-- 연락 방법 섹션 (완벽하게 깔끔하고 미니멀한 젠(Zen) 플랫 스타일로 리디자인) -->
     <section id="contact" class="section minimalist-contact-section">
         <div class="container">
@@ -368,6 +652,83 @@
         </div>
     </section>
 
+    <!-- 자주 묻는 질문 FAQ 섹션 -->
+    <section id="faq" class="section faq-section">
+        <div class="container">
+            <h2>❓ FAQ (자주 묻는 질문)</h2>
+            <p class="faq-intro-text">견적 산정, 제작 소요 기간, 협업 진행 절차에 대해 자주 궁금해하시는 답변 모음입니다.</p>
+            
+            <div class="faq-accordion">
+                <div class="faq-item active">
+                    <button class="faq-question" aria-expanded="true">
+                        <span class="faq-category-badge">PRICING</span>
+                        <span class="faq-title">Q. 영상 편집 및 제작 견적은 어떻게 산정되나요?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            제작 견적은 <strong>영상의 분량(길이), 원본 소스의 유무, 자막/모션그래픽 난이도(2D/3D 연출 등), 및 희망 납품 일정</strong>을 종합적으로 고려하여 맞춤 산정됩니다.<br>
+                            문의 시 레퍼런스 영상 링크나 참고 스타일, 제작 기획안을 함께 전달해 주시면 더욱 정확하고 합리적인 견적을 빠르게 안내해 드릴 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-category-badge">TIMELINE</span>
+                        <span class="faq-title">Q. 프로젝트 제작에는 보통 얼마나 걸리나요?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            일반적인 프로젝트 유형별 작업 기간은 다음과 같습니다:
+                        </p>
+                        <ul>
+                            <li><strong>유튜브 / SNS 콘텐츠 (10분 내외):</strong> 약 2 ~ 4일 소요</li>
+                            <li><strong>3D 인트로 / 타이틀 시퀀스:</strong> 약 3 ~ 7일 소요</li>
+                            <li><strong>브랜드 CF / 종합 모션그래픽 광고:</strong> 약 5 ~ 10일 소요</li>
+                        </ul>
+                        <p>급한 일정이나 긴급 프로젝트의 경우 사전 협의를 통해 유연하게 일정을 조정하여 대응해 드립니다.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-category-badge">PROCESS</span>
+                        <span class="faq-title">Q. 협업 진행 절차와 수정 횟수 기준은 어떻게 되나요?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            협업 프로세스는 아래와 같이 투명하게 진행됩니다:
+                        </p>
+                        <ol>
+                            <li><strong>기획 및 견적 상담:</strong> 영상 방향성 및 일정/비용 협의</li>
+                            <li><strong>소스 전달 및 컷편집:</strong> 원본 영상 및 에셋 수령 후 기본 흐름 구성 (1차 컷편집본 공유)</li>
+                            <li><strong>모션/VFX & 자막 정제:</strong> 효과음, 타이포 모션, 3D 트래킹 및 믹싱 작업</li>
+                            <li><strong>피드백 반영 & 최종 납품:</strong> 2회 기본 무상 수정을 거쳐 최종 고화질 파일 전달</li>
+                        </ol>
+                        <p>※ 최초 합의된 콘셉트 범위 내에서의 세부 텍스트/타이밍 조정은 정성껏 맞춰드립니다.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span class="faq-category-badge">DELIVERY</span>
+                        <span class="faq-title">Q. 납품 파일 포맷과 원본 프로젝트 파일(Pr/Ae) 제공이 가능한가요?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            최종 결과물은 MP4(H.264 / H.265), MOV(ProRes / 알파 채널 투명 배경) 등 요청하시는 플랫폼 최적화 고화질 인코딩 규격으로 전달됩니다.<br>
+                            Premiere Pro(.prproj) 및 After Effects(.aep) 프로젝트 원본 파일 공유가 필요하신 경우, 사전 협의 옵션을 통해 원본 에셋과 함께 제공 가능합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <div class="container">
             <p>버전: V0.2.1</p>
@@ -376,6 +737,199 @@
         </div>
     </footer>
     
+    <!-- 회사소개서 온라인 미리보기 모달 -->
+    <div id="profile-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title-box">
+                    <span class="modal-badge"><i class="fas fa-file-pdf"></i> COMPANY PROFILE</span>
+                    <h3>정원복 비디오 에디터 & 모션그래픽 디자이너 회사소개서</h3>
+                </div>
+                <button class="modal-close-btn" id="btn-close-profile-modal" aria-label="모달 닫기">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="doc-sheet">
+                    <div class="doc-top-bar">
+                        <div class="doc-brand">
+                            <img src="img/logo/logo.png" alt="Logo" class="doc-logo-img">
+                            <div>
+                                <h4 class="doc-name">정 원 복</h4>
+                                <span class="doc-sub font-heading">Jeong Weonbog | Portfolio & Profile</span>
+                            </div>
+                        </div>
+                        <div class="doc-contact-quick">
+                            <span><i class="fas fa-envelope"></i> chong04041@naver.com</span>
+                            <span><i class="fas fa-phone"></i> 010-3401-1371</span>
+                        </div>
+                    </div>
+
+                    <hr class="doc-hr">
+
+                    <div class="doc-section">
+                        <h4 class="doc-sec-title"><i class="fas fa-user-tag"></i> 1. 에디터 프로필 & 전문성</h4>
+                        <p class="doc-text">
+                            영상 편집과 2D/3D 모션 그래픽 기술을 기반으로 시청자의 시선을 사로잡는 시네마틱 가치를 창출합니다.
+                            Adobe Premiere Pro, After Effects, Photoshop, Illustrator 및 Blender를 연계하여 기획부터 최종 렌더링 배포까지 신속하고 정교한 파이프라인을 구축하였습니다.
+                        </p>
+                    </div>
+
+                    <div class="doc-section">
+                        <h4 class="doc-sec-title"><i class="fas fa-concierge-bell"></i> 2. 서비스 항목 & 작업 가이드</h4>
+                        <table class="doc-spec-table">
+                            <thead>
+                                <tr>
+                                    <th>구분</th>
+                                    <th>주요 상세 내용</th>
+                                    <th>기본 소요 기간</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>유튜브 / SNS 콘텐츠</strong></td>
+                                    <td>컷편집, 멀티캠 동기화, 핵심 자막 디자인, 효과음 & BGM 마스터링, 썸네일 제작</td>
+                                    <td>2 ~ 4일</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>브랜드 CF / 광고 모션</strong></td>
+                                    <td>2D/3D 모션 그래픽, 제품 프로모션, 키프레임 애니메이션 및 VFX 합성</td>
+                                    <td>5 ~ 10일</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3D 타이틀 & 인트로</strong></td>
+                                    <td>Blender 3D 공간 오브젝트 렌더링, 타이틀 시퀀스 및 모션 연출</td>
+                                    <td>3 ~ 7일</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>디자인 / 그래픽</strong></td>
+                                    <td>영화/행사 포스터 디자인, 웹 상세페이지, 브랜딩 그래픽 에셋 디자인</td>
+                                    <td>1 ~ 3일</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="doc-section">
+                        <h4 class="doc-sec-title"><i class="fas fa-check-double"></i> 3. 보유 역량 및 소프트웨어 숙련도</h4>
+                        <div class="doc-skills-grid">
+                            <div class="doc-skill-pill"><strong>Premiere Pro:</strong> 90% (컷편집/오디오/컬러그레이딩)</div>
+                            <div class="doc-skill-pill"><strong>After Effects:</strong> 85% (모션그래픽/3D트래킹/VFX)</div>
+                            <div class="doc-skill-pill"><strong>Photoshop:</strong> 80% (썸네일/텍스처합성/그래픽)</div>
+                            <div class="doc-skill-pill"><strong>Media Encoder:</strong> 90% (인코딩/코덱최적화/배포)</div>
+                            <div class="doc-skill-pill"><strong>Blender:</strong> 70% (3D모델링/공간인트로시퀀스)</div>
+                            <div class="doc-skill-pill"><strong>Illustrator:</strong> 75% (벡터에셋/타이포브랜딩)</div>
+                        </div>
+                    </div>
+
+                    <div class="doc-section">
+                        <h4 class="doc-sec-title"><i class="fas fa-map-marked-alt"></i> 4. 협업 문의 & 연락처</h4>
+                        <div class="doc-contact-box">
+                            <p><strong>이메일:</strong> chong04041@naver.com</p>
+                            <p><strong>연락처:</strong> 010-3401-1371</p>
+                            <p><strong>카카오톡:</strong> open.kakao.com/o/souSwBTh</p>
+                            <p><strong>상주/원격:</strong> 경북 칠곡군 및 전국 재택/원격 협업 가능</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <a href="/download/company-profile.pdf" class="btn btn-primary" download="정원복_회사소개서.pdf">
+                    <i class="fas fa-download"></i> PDF 바로 다운로드
+                </a>
+                <button class="btn btn-outline" id="btn-print-doc">
+                    <i class="fas fa-print"></i> 인쇄 / PDF 저장하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 로그인 & 회원가입 팝업 모달 -->
+    <div id="auth-modal" class="modal-overlay" aria-hidden="true">
+        <div class="auth-modal-card">
+            <div class="auth-modal-header">
+                <div class="auth-tab-group">
+                    <button type="button" class="auth-tab active" id="tab-login" data-tab="login">
+                        <i class="fas fa-sign-in-alt"></i> <span data-i18n="auth.loginTab">로그인</span>
+                    </button>
+                    <button type="button" class="auth-tab" id="tab-signup" data-tab="signup">
+                        <i class="fas fa-user-plus"></i> <span data-i18n="auth.signupTab">회원가입</span>
+                    </button>
+                </div>
+                <button type="button" class="modal-close-btn" id="btn-close-auth-modal" aria-label="닫기">&times;</button>
+            </div>
+            
+            <div class="auth-modal-body">
+                <!-- 로그인 폼 -->
+                <form id="form-login" class="auth-form-panel active">
+                    <div class="auth-field-group">
+                        <label for="login-email"><i class="fas fa-envelope"></i> <span data-i18n="auth.emailLabel">이메일 주소</span></label>
+                        <input type="email" id="login-email" placeholder="example@email.com" required autocomplete="email">
+                    </div>
+                    <div class="auth-field-group">
+                        <label for="login-password"><i class="fas fa-lock"></i> <span data-i18n="auth.passwordLabel">비밀번호</span></label>
+                        <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+                    <div class="auth-meta-row">
+                        <label class="auth-checkbox">
+                            <input type="checkbox" id="login-remember" checked>
+                            <span data-i18n="auth.rememberMe">로그인 상태 유지</span>
+                        </label>
+                        <a href="#" id="btn-forgot-password" class="auth-link" data-i18n="auth.forgotPassword">비밀번호 찾기?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary auth-submit-btn">
+                        <i class="fas fa-sign-in-alt"></i> <span data-i18n="auth.loginSubmit">로그인</span>
+                    </button>
+                    
+                    <div class="auth-divider">
+                        <span data-i18n="auth.socialDivider">소셜 계정 간편 로그인</span>
+                    </div>
+
+                    <div class="social-login-grid">
+                        <button type="button" class="btn-social btn-google" id="btn-social-google">
+                            <i class="fab fa-google"></i> Google
+                        </button>
+                        <button type="button" class="btn-social btn-kakao" id="btn-social-kakao">
+                            <i class="fas fa-comment"></i> Kakao
+                        </button>
+                    </div>
+                </form>
+
+                <!-- 회원가입 폼 -->
+                <form id="form-signup" class="auth-form-panel">
+                    <div class="auth-field-group">
+                        <label for="signup-name"><i class="fas fa-user"></i> <span data-i18n="auth.nameLabel">이름 (닉네임)</span></label>
+                        <input type="text" id="signup-name" placeholder="홍길동" required autocomplete="name">
+                    </div>
+                    <div class="auth-field-group">
+                        <label for="signup-email"><i class="fas fa-envelope"></i> <span data-i18n="auth.emailLabel">이메일 주소</span></label>
+                        <input type="email" id="signup-email" placeholder="example@email.com" required autocomplete="email">
+                    </div>
+                    <div class="auth-field-group">
+                        <label for="signup-password"><i class="fas fa-lock"></i> <span data-i18n="auth.passwordLabel">비밀번호</span></label>
+                        <input type="password" id="signup-password" placeholder="6자 이상 입력" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="auth-field-group">
+                        <label for="signup-confirm"><i class="fas fa-check-circle"></i> <span data-i18n="auth.confirmPasswordLabel">비밀번호 확인</span></label>
+                        <input type="password" id="signup-confirm" placeholder="비밀번호 재입력" required minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="auth-meta-row">
+                        <label class="auth-checkbox">
+                            <input type="checkbox" id="signup-terms" required>
+                            <span data-i18n="auth.agreeTerms">이용약관 및 개인정보 처리방침 동의</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary auth-submit-btn">
+                        <i class="fas fa-user-plus"></i> <span data-i18n="auth.signupSubmit">회원가입 완료</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 메시지 컴포넌트 -->
+    <div id="auth-toast" class="auth-toast-container" aria-live="polite"></div>
+
     <script src="js/script.js"></script>
 </body>
 </html>
