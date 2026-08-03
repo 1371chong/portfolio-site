@@ -11,6 +11,13 @@
 </head>
 <body>
 
+    <!-- 커스텀 마우스 커서 (화살표 포인터) -->
+    <div class="custom-cursor-arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3L10.07 19.97L13.58 13.58L19.97 10.07L3 3Z" fill="#E74C3C" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+    </div>
+
     <header id="main-nav">
         <div class="container">
             <h1 class="logo"><a href="#intro">PORTFOLIO</a></h1>
@@ -21,12 +28,13 @@
                     </span>
                 </button>
                 <ul class="nav-list">
-                    <li><a href="#intro" data-text="Home">Home</a></li>
+                    <li><a href="#intro" data-text="Home" class="active">Home</a></li>
                     <li><a href="#portfolio" data-text="Portfolio">포트폴리오</a></li>
                     <li><a href="#pricing" data-text="Pricing">상품안내</a></li>
                     <li><a href="#skills" data-text="Skills">Skills</a></li>
                     <li><a href="#about" data-text="About">소개</a></li>
                     <li><a href="#faq" data-text="FAQ">FAQ</a></li>
+                    <li><a href="#notice" data-text="Notice">공지사항</a></li>
                     <li><a href="#contact" data-text="Contact">Contact Me</a></li>
                 </ul>
             </nav>
@@ -77,7 +85,15 @@
             </div>
 
             <div class="portfolio-grid">
-                <article class="portfolio-item" data-category="video" data-keywords="브랜드 홍보 CF 모션 그래픽">
+                <article class="portfolio-item" data-category="video" data-keywords="브랜드 홍보 CF 모션 그래픽"
+                    data-title="브랜드 홍보 영상 A"
+                    data-tag="#CF #모션그래픽"
+                    data-desc="브랜드 아이덴티티를 전달하기 위한 모션 그래픽 기반 홍보 영상입니다. 키프레임 애니메이션 및 컬러 그레이딩 작업을 수행했습니다."
+                    data-date="2026.03 (2주 소요)"
+                    data-tools="Premiere Pro, After Effects"
+                    data-contribution="기획 100%, 편집 100%"
+                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_pgte .png" alt="브랜드 홍보 영상 A 썸네일">
                         <div class="item-overlay">
@@ -88,12 +104,20 @@
                         <h3>브랜드 홍보 영상 A</h3>
                         <div class="info-footer">
                             <span class="tag">#CF #모션그래픽</span>
-                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="contest" data-keywords="공모전 기획 편집">
+                <article class="portfolio-item" data-category="contest" data-keywords="공모전 기획 편집"
+                    data-title="공모전참가 A"
+                    data-tag="#공모전"
+                    data-desc="공모전 출품을 목적으로 기획 및 제작한 영상입니다. 스토리텔링 중심의 커트 편집과 효과음 연출에 신경 썼습니다."
+                    data-date="2026.01 (1주 소요)"
+                    data-tools="Premiere Pro, Photoshop"
+                    data-contribution="편집 100%"
+                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_default.jpg" alt="공모전참가 A 썸네일">
                         <div class="item-overlay">
@@ -104,12 +128,20 @@
                         <h3>공모전참가 A</h3>
                         <div class="info-footer">
                             <span class="tag">#공모전</span>
-                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="ad" data-keywords="소셜 미디어 광고 기획 편집">
+                <article class="portfolio-item" data-category="ad" data-keywords="소셜 미디어 광고 기획 편집"
+                    data-title="소셜 미디어 광고 B"
+                    data-tag="#단편광고 #기획"
+                    data-desc="SNS 마케팅용 숏폼 템플릿 기반 광고 영상입니다. 빠른 전환 연출과 흥미 유발 요소를 고안했습니다."
+                    data-date="2025.12 (3일 소요)"
+                    data-tools="Premiere Pro, After Effects"
+                    data-contribution="기획 50%, 편집 100%"
+                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_dmm.png" alt="소셜 미디어 광고 B 썸네일">
                         <div class="item-overlay">
@@ -120,12 +152,20 @@
                         <h3>소셜 미디어 광고 B</h3>
                         <div class="info-footer">
                             <span class="tag">#단편광고 #기획</span>
-                            <a href="https://www.youtube.com/watch?v=your-video-id" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="poster" data-keywords="영화 포스터 디자인 시각 그래픽">
+                <article class="portfolio-item" data-category="poster" data-keywords="영화 포스터 디자인 시각 그래픽"
+                    data-title="영화 포스터 디자인 C"
+                    data-tag="#그래픽디자인"
+                    data-desc="포토샵과 일러스트레이터를 활용해 제작한 영화 컨셉 그래픽 포스터 아트워크 작업입니다."
+                    data-date="2025.11 (4일 소요)"
+                    data-tools="Photoshop, Illustrator"
+                    data-contribution="디자인 100%"
+                    data-img="img/icon/icon_1917.jpg"
+                    data-link="#">
                     <div class="portfolio-thumb">
                         <img src="img/icon/icon_1917.jpg" alt="영화 포스터 디자인 C 썸네일">
                         <div class="item-overlay">
@@ -136,12 +176,20 @@
                         <h3>영화 포스터 디자인 C</h3>
                         <div class="info-footer">
                             <span class="tag">#그래픽디자인</span>
-                            <a href="#" target="_blank" class="portfolio-btn">자세히 보기 <i class="fas fa-chevron-right"></i></a>
+                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
 
-                <article class="portfolio-item" data-category="video" data-keywords="유튜브 콘텐츠 편집 디자인">
+                <article class="portfolio-item" data-category="video" data-keywords="유튜브 콘텐츠 편집 디자인"
+                    data-title="유튜브 콘텐츠 D"
+                    data-tag="#콘텐츠편집"
+                    data-desc="유튜브 채널 업로드용 긴 호흡의 콘텐츠 영상 편집 작업입니다. 자막 디자인 및 사운드 리믹스를 진행했습니다."
+                    data-date="2025.10 (5일 소요)"
+                    data-tools="Premiere Pro, Photoshop"
+                    data-contribution="편집 100%"
+                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                     <div class="portfolio-thumb">
                         <img src="assets/thumb_video_04.jpg" alt="유튜브 콘텐츠 D 썸네일">
                         <div class="item-overlay">
@@ -152,7 +200,7 @@
                         <h3>유튜브 콘텐츠 D</h3>
                         <div class="info-footer">
                             <span class="tag">#콘텐츠편집</span>
-                            <a href="#" target="_blank" class="portfolio-btn">보러가기 <i class="fas fa-external-link-alt"></i></a>
+                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </article>
@@ -168,7 +216,6 @@
             <p class="pricing-subtitle">프로젝트 규모와 작업 범위에 따른 표준 제작 단가 안내입니다.</p>
 
             <div class="pricing-grid">
-                  <!--로고 제작 패키지 -->
                 <div class="pricing-card">
                     <div class="pricing-header">
                         <h3>로고제작</h3>
@@ -183,7 +230,6 @@
                     <a href="#contact" class="btn btn-primary pricing-btn">문의하기</a>
                 </div>
 
-                <!-- Basic 패키지 -->
                 <div class="pricing-card">
                     <div class="pricing-header">
                         <h3>Basic</h3>
@@ -198,7 +244,6 @@
                     <a href="#contact" class="btn btn-primary pricing-btn">문의하기</a>
                 </div>
 
-                <!-- Standard 패키지 (강조) -->
                 <div class="pricing-card featured">
                     <div class="badge">추천</div>
                     <div class="pricing-header">
@@ -215,7 +260,6 @@
                     <a href="#contact" class="btn btn-primary pricing-btn">문의하기</a>
                 </div>
 
-                <!-- Premium 패키지 -->
                 <div class="pricing-card">
                     <div class="pricing-header">
                         <h3>Premium</h3>
@@ -407,12 +451,11 @@
         </div>
     </section>
 
-    <!-- 자주하는 질문(FAQ) 섹션 추가 -->
+    <!-- 자주하는 질문(FAQ) 섹션 -->
     <section id="faq" class="section faq-section">
         <div class="container">
             <h2>❓ FAQ(자주하는 질문)</h2>
             <div class="faq-accordion">
-                
                 <div class="faq-item">
                     <button class="faq-question">
                         <span>Q. 영상 제작 문의 시 어떤 내용을 준비해야 하나요?</span>
@@ -453,7 +496,7 @@
                     </div>
                 </div>
 
-                 <div class="faq-item">
+                <div class="faq-item">
                     <button class="faq-question">
                         <span>Q. 모션그래픽분야는 제작기간 얼마나 걸리나요</span>
                         <i class="fas fa-chevron-down faq-icon"></i>
@@ -462,9 +505,57 @@
                         <p>모션그래픽분야는 <strong>3 ~ 4주</strong> 정도 소요되며, 복잡한 효과나 장면이 포함될 경우 추가 시간이 필요할 수 있습니다.</p>
                     </div>
                 </div>
-                
-
             </div>
+        </div>
+    </section>
+
+    <!-- 공지사항 섹션 (Notice Section) -->
+    <section id="notice" class="section notice-section">
+        <div class="container">
+            <h2>📢 Notice</h2>
+            <p class="notice-subtitle">포트폴리오 업데이트 및 작업 일정 관련 최신 공지사항입니다.</p>
+
+            <!-- 관리자 로그인 버튼 -->
+            <div class="notice-admin-control">
+                <button id="admin-auth-btn" class="admin-toggle-btn">
+                    <i class="fas fa-lock"></i> 관리자 로그인
+                </button>
+            </div>
+
+            <!-- 공지사항 카테고리 분할 필터 탭 -->
+            <div class="notice-filter-tabs">
+                <button class="notice-tab-btn active" data-category="all">전체</button>
+                <button class="notice-tab-btn" data-category="primary">공지</button>
+                <button class="notice-tab-btn" data-category="secondary">일정</button>
+                <button class="notice-tab-btn" data-category="info">안내</button>
+                <button class="notice-tab-btn" data-category="update">업데이트</button>
+            </div>
+
+            <!-- 공지사항 작성 폼 (관리자 전용) -->
+            <form id="notice-form" class="notice-write-box admin-only-element">
+                <div class="notice-form-header">
+                    <h3><i class="fas fa-pen"></i> 새 공지사항 작성하기 (관리자)</h3>
+                </div>
+                <div class="notice-input-row">
+                    <select id="notice-type" required>
+                        <option value="primary">공지</option>
+                        <option value="secondary">일정</option>
+                        <option value="info">안내</option>
+                        <option value="update">업데이트</option>
+                    </select>
+                    <input type="text" id="notice-author-input" placeholder="작성자 이름" value="정원복" required style="max-width: 150px;">
+                    <input type="text" id="notice-title-input" placeholder="공지사항 제목을 입력하세요..." required>
+                </div>
+                <textarea id="notice-desc-input" placeholder="공지 내용을 상세히 작성해주세요..." rows="3" required></textarea>
+                <div class="notice-form-actions">
+                    <button type="submit" class="btn btn-primary notice-submit-btn">
+                        <i class="fas fa-plus-circle"></i> 공지 등록
+                    </button>
+                </div>
+            </form>
+
+            <!-- 공지사항 리스트 영역 -->
+            <div id="notice-list" class="notice-list"></div>
         </div>
     </section>
 
@@ -503,6 +594,47 @@
             </div>
         </div>
     </section>
+
+    <!-- 프로젝트 상세보기 모달 (Modal Popup) -->
+    <div id="project-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-window" role="dialog" aria-modal="true">
+            <button class="modal-close-btn" aria-label="모달 닫기">&times;</button>
+            <div class="modal-content">
+                <div class="modal-media">
+                    <iframe id="modal-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <img id="modal-img" src="" alt="프로젝트 이미지 상세" style="display: none;">
+                </div>
+                <div class="modal-body">
+                    <div class="modal-header">
+                        <span id="modal-category" class="modal-tag">#카테고리</span>
+                        <h3 id="modal-title">프로젝트 제목</h3>
+                    </div>
+                    <p id="modal-description" class="modal-desc">
+                        프로젝트 상세 설명이 이곳에 들어갑니다.
+                    </p>
+                    <div class="modal-info-grid">
+                        <div class="info-item">
+                            <span class="info-label">작업 기간</span>
+                            <span id="modal-date" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">사용 프로그램</span>
+                            <span id="modal-tools" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">기여도</span>
+                            <span id="modal-contribution" class="info-value">-</span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <a id="modal-link" href="#" target="_blank" class="btn btn-primary modal-btn">
+                            <i class="fas fa-external-link-alt"></i> 관련 링크 바로가기
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
