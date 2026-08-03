@@ -329,8 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 9. Supabase 데이터베이스 실시간 CRUD 연동 모듈 (기본 데이터 자동 주입 기능 포함)
     // ==========================================================================
-    const SUPABASE_URL = "https://zwjggedeichljaesgiqk.supabase.co/rest/v1/"; // 🔑 본인의 Supabase Project URL 입력
-    const SUPABASE_KEY = "https://zwjggedeichljaesgiqk.supabase.co/rest/v1/notices";               // 🔑 본인의 Supabase anon/public KEY 입력
+    const SUPABASE_URL = "https://zwjggedeichljaesgiqk.supabase.co/"; // 🔑 본인의 Supabase Project URL 입력
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3amdnZWRlaWNobGphZXNnaXFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3NjU2NTIsImV4cCI6MjEwMTM0MTY1Mn0.DQ5mcKQf5tmWI2B7ESM3OMoebwLBgNwfpIxCUXNuc1A";               // 🔑 본인의 Supabase anon/public KEY 입력
     const ADMIN_PASSWORD = "1234";                              // 🔑 관리자 비밀번호
 
     // Supabase 클라이언트 연결
