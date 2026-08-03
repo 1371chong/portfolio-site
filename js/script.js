@@ -327,18 +327,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 9. 공지사항 작성/수정/삭제 및 카테고리 분할 통합 모듈
+    // 9. Supabase 데이터베이스 실시간 CRUD 연동 모듈 (기본 데이터 자동 주입 기능 포함)
     // ==========================================================================
-    const ADMIN_PASSWORD = "1234"; // 🔑 관리자 비밀번호
-    
+    const SUPABASE_URL = "https://zwjggedeichljaesgiqk.supabase.co/rest/v1/"; // 🔑 본인의 Supabase Project URL 입력
+    const SUPABASE_KEY = "https://zwjggedeichljaesgiqk.supabase.co/rest/v1/notices";               // 🔑 본인의 Supabase anon/public KEY 입력
+    const ADMIN_PASSWORD = "1234";                              // 🔑 관리자 비밀번호
+
+    // Supabase 클라이언트 연결
+    let _supabase = null;
+    if (typeof supabase !== 'undefined') {
+        _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+
     const adminAuthBtn = document.getElementById('admin-auth-btn');
     const noticeForm = document.getElementById('notice-form');
     const noticeListContainer = document.getElementById('notice-list');
     const noticeTabBtns = document.querySelectorAll('.notice-tab-btn');
 
     let currentNoticeTab = 'all';
+    let storedNotices = [];
 
-    // 관리자 로그인 상태 확인 함수
+    // 최초 DB가 비어 있을 경우 자동으로 데이터베이스에 주입할 기본 공지사항 3건
+    const defaultNoticesToSeed = [
+        {
+            type: 'update',
+            typeName: '업데이트',
+            author: '정원복',
+            title: '포트폴리오 사이트 리뉴얼 및 신규 작품 업데이트 안내',
+            desc: '시네마틱 디자인 및 인터랙션 커스텀 포인터 기능이 새롭게 업데이트되었습니다. 최신 모션그래픽 비디오 및 상세 작업 내역을 포트폴리오 메뉴에서 확인해 보세요.',
+            date: '2026.04.15'
+        },
+        {
+            type: 'secondary',
+            typeName: '일정',
+            author: '정원복',
+            title: '외주 및 프로젝트 제작 예약 일정 관련 안내',
+            desc: '신규 프로젝트 진행 시 100% 예약제로 진행되고 있습니다. 희망하시는 납품 일정보다 최소 2~3주 전 미리 문의해 주시면 신속한 기획 협의가 가능합니다.',
+            date: '2026.03.01'
+        },
+        {
+            type: 'info',
+            typeName: '안내',
+            author: '정원복',
+            title: '상업용 라이선스 에셋 및 저작권 준수 정책',
+            desc: '제작에 활용되는 모든 BGM, 폰트, SFX 효과음 및 3D 그래픽 소스는 상업적 사용 라이선스가 완전 확보된 에셋만을 사용하여 안전한 커머셜 영상을 보장해 드립니다.',
+            date: '2026.01.20'
+        }
+    ];
+
+    // 관리자 로그인 상태 확인
     function checkAdminStatus() {
         const isAdmin = sessionStorage.getItem('portfolio_admin_logged_in') === 'true';
         if (isAdmin) {
@@ -354,10 +391,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 adminAuthBtn.innerHTML = '<i class="fas fa-lock"></i> 관리자 로그인';
             }
         }
-        renderNotices();
+        fetchNoticesFromDB();
     }
 
-    // 관리자 로그인 토글
+    // 관리자 토글 버튼 이벤트 handler
     if (adminAuthBtn) {
         adminAuthBtn.addEventListener('click', () => {
             const isAdmin = sessionStorage.getItem('portfolio_admin_logged_in') === 'true';
@@ -379,44 +416,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 초기 기본 데이터
-    const defaultNotices = [
-        {
-            id: 1,
-            type: 'update',
-            typeName: '업데이트',
-            author: '정원복',
-            title: '포트폴리오 사이트 리뉴얼 및 신규 작품 업데이트 안내',
-            desc: '시네마틱 디자인 및 인터랙션 커스텀 포인터 기능이 새롭게 업데이트되었습니다. 최신 모션그래픽 비디오 및 상세 작업 내역을 포트폴리오 메뉴에서 확인해 보세요.',
-            date: '2026.04.15'
-        },
-        {
-            id: 2,
-            type: 'secondary',
-            typeName: '일정',
-            author: '정원복',
-            title: '외주 및 프로젝트 제작 예약 일정 관련 안내',
-            desc: '신규 프로젝트 진행 시 100% 예약제로 진행되고 있습니다. 희망하시는 납품 일정보다 최소 2~3주 전 미리 문의해 주시면 신속한 기획 협의가 가능합니다.',
-            date: '2026.03.01'
-        },
-        {
-            id: 3,
-            type: 'info',
-            typeName: '안내',
-            author: '정원복',
-            title: '상업용 라이선스 에셋 및 저작권 준수 정책',
-            desc: '제작에 활용되는 모든 BGM, 폰트, SFX 효과음 및 3D 그래픽 소스는 상업적 사용 라이선스가 완전 확보된 에셋만을 사용하여 안전한 커머셜 영상을 보장해 드립니다.',
-            date: '2026.01.20'
+    // 1. READ & AUTO-SEED: Supabase DB 데이터 조회 및 데이터 부재 시 기본 샘플 자동 삽입
+    async function fetchNoticesFromDB() {
+        if (!noticeListContainer) return;
+        
+        if (!_supabase) {
+            noticeListContainer.innerHTML = '<p class="no-results-message" style="display:block;">Supabase 라이브러리가 로드되지 않았습니다.</p>';
+            return;
         }
-    ];
 
-    let storedNotices = JSON.parse(localStorage.getItem('portfolio_notices'));
-    if (!storedNotices || storedNotices.length === 0) {
-        storedNotices = defaultNotices;
-        localStorage.setItem('portfolio_notices', JSON.stringify(storedNotices));
+        const { data, error } = await _supabase
+            .from('notices')
+            .select('*')
+            .order('id', { ascending: false });
+
+        if (error) {
+            console.error('Database Fetch Error:', error);
+            noticeListContainer.innerHTML = '<p class="no-results-message" style="display:block;">공지사항을 불러오는 중 오류가 발생했습니다.</p>';
+            return;
+        }
+
+        // DB에 데이터가 한 건도 없을 경우 최초 1회 기본 데이터 등록
+        if (!data || data.length === 0) {
+            const { error: seedError } = await _supabase.from('notices').insert(defaultNoticesToSeed);
+            if (!seedError) {
+                // 데이터 등록 완료 후 재조회
+                fetchNoticesFromDB();
+                return;
+            }
+        }
+
+        storedNotices = data;
+        renderNotices();
     }
 
-    // 공지사항 렌더링 함수 (수정 폼 기능 지원)
+    // 공지사항 렌더링
     function renderNotices() {
         if (!noticeListContainer) return;
         noticeListContainer.innerHTML = '';
@@ -436,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('article');
             card.className = 'notice-card';
             card.dataset.id = notice.id;
-            
+
             let badgeClass = 'badge-primary';
             if (notice.type === 'secondary') badgeClass = 'badge-secondary';
             else if (notice.type === 'info') badgeClass = 'badge-info';
@@ -449,13 +483,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             ` : '';
 
-            const authorName = notice.author || '정원복';
-
             card.innerHTML = `
                 <div class="notice-header">
                     <div class="notice-header-left">
                         <span class="notice-badge ${badgeClass}">${notice.typeName}</span>
-                        <span class="notice-author"><i class="fas fa-user-circle"></i> ${authorName}</span>
+                        <span class="notice-author"><i class="fas fa-user-circle"></i> ${notice.author || '정원복'}</span>
                         <span class="notice-date">${notice.date}</span>
                     </div>
                     ${adminActionsHtml}
@@ -468,19 +500,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (isAdmin) {
-            // 삭제 기능
+            // 2. DELETE: Supabase DB 삭제
             document.querySelectorAll('.notice-delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
+                btn.addEventListener('click', async (e) => {
                     const targetId = parseInt(e.currentTarget.dataset.id);
-                    if (confirm('이 공지사항을 삭제하시겠습니까?')) {
-                        storedNotices = storedNotices.filter(item => item.id !== targetId);
-                        localStorage.setItem('portfolio_notices', JSON.stringify(storedNotices));
-                        renderNotices();
+                    if (confirm('이 공지사항을 DB에서 영구 삭제하시겠습니까?')) {
+                        const { error } = await _supabase
+                            .from('notices')
+                            .delete()
+                            .eq('id', targetId);
+
+                        if (!error) {
+                            alert('공지사항이 정상 삭제되었습니다.');
+                            fetchNoticesFromDB();
+                        } else {
+                            alert('삭제 실패: ' + error.message);
+                        }
                     }
                 });
             });
 
-            // 수정(인라인 편집) 기능
+            // 3. UPDATE: Supabase DB 수정
             document.querySelectorAll('.notice-edit-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const targetId = parseInt(e.currentTarget.dataset.id);
@@ -490,7 +530,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const cardElement = document.querySelector(`.notice-card[data-id="${targetId}"]`);
                     if (!cardElement) return;
 
-                    // 해당 카드를 인라인 수정 폼으로 변경
                     cardElement.innerHTML = `
                         <div class="notice-edit-box">
                             <div class="notice-input-row" style="margin-bottom:0;">
@@ -500,19 +539,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <option value="info" ${noticeObj.type === 'info' ? 'selected' : ''}>안내</option>
                                     <option value="update" ${noticeObj.type === 'update' ? 'selected' : ''}>업데이트</option>
                                 </select>
-                                <input type="text" class="edit-author" value="${noticeObj.author || '정원복'}" placeholder="작성자" style="max-width:140px;">
-                                <input type="text" class="edit-title" value="${noticeObj.title}" placeholder="제목">
+                                <input type="text" class="edit-author" value="${noticeObj.author || '정원복'}" style="max-width:140px;">
+                                <input type="text" class="edit-title" value="${noticeObj.title}">
                             </div>
-                            <textarea class="edit-desc" rows="3" placeholder="내용">${noticeObj.desc}</textarea>
+                            <textarea class="edit-desc" rows="3">${noticeObj.desc}</textarea>
                             <div class="notice-edit-actions">
-                                <button class="btn-success save-edit-btn" data-id="${targetId}"><i class="fas fa-check"></i> 저장</button>
+                                <button class="btn-success save-edit-btn"><i class="fas fa-check"></i> 저장</button>
                                 <button class="btn-cancel cancel-edit-btn"><i class="fas fa-times"></i> 취소</button>
                             </div>
                         </div>
                     `;
 
-                    // 저장 처리
-                    cardElement.querySelector('.save-edit-btn').addEventListener('click', () => {
+                    cardElement.querySelector('.save-edit-btn').addEventListener('click', async () => {
                         const newType = cardElement.querySelector('.edit-type').value;
                         const newTypeName = cardElement.querySelector('.edit-type').options[cardElement.querySelector('.edit-type').selectedIndex].text;
                         const newAuthor = cardElement.querySelector('.edit-author').value.trim() || '정원복';
@@ -520,22 +558,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         const newDesc = cardElement.querySelector('.edit-desc').value.trim();
 
                         if (!newTitle || !newDesc) {
-                            alert('제목과 내용을 모두 입력해주세요.');
+                            alert('제목과 내용을 입력해주세요.');
                             return;
                         }
 
-                        noticeObj.type = newType;
-                        noticeObj.typeName = newTypeName;
-                        noticeObj.author = newAuthor;
-                        noticeObj.title = newTitle;
-                        noticeObj.desc = newDesc;
+                        const { error } = await _supabase
+                            .from('notices')
+                            .update({
+                                type: newType,
+                                typeName: newTypeName,
+                                author: newAuthor,
+                                title: newTitle,
+                                desc: newDesc
+                            })
+                            .eq('id', targetId);
 
-                        localStorage.setItem('portfolio_notices', JSON.stringify(storedNotices));
-                        renderNotices();
-                        alert('공지사항이 수정되었습니다.');
+                        if (!error) {
+                            alert('수정 사항이 DB에 반영되었습니다.');
+                            fetchNoticesFromDB();
+                        } else {
+                            alert('수정 실패: ' + error.message);
+                        }
                     });
 
-                    // 취소 처리
                     cardElement.querySelector('.cancel-edit-btn').addEventListener('click', () => {
                         renderNotices();
                     });
@@ -544,7 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 카테고리 탭 클릭
+    // 탭 이동
     noticeTabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             noticeTabBtns.forEach(b => b.classList.remove('active'));
@@ -554,14 +599,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 새 글 등록
+    // 4. CREATE: Supabase DB 데이터 삽입
     if (noticeForm) {
-        noticeForm.addEventListener('submit', (e) => {
+        noticeForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const isAdmin = sessionStorage.getItem('portfolio_admin_logged_in') === 'true';
             if (!isAdmin) {
-                alert('공지사항 작성은 관리자 권한이 필요합니다.');
+                alert('공지사항 작성 권한이 없습니다.');
                 return;
             }
 
@@ -570,29 +615,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const titleInput = document.getElementById('notice-title-input');
             const descInput = document.getElementById('notice-desc-input');
 
-            const selectedOption = typeSelect.options[typeSelect.selectedIndex];
-            
             const today = new Date();
             const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
 
             const newNotice = {
-                id: Date.now(),
                 type: typeSelect.value,
-                typeName: selectedOption.text,
+                typeName: typeSelect.options[typeSelect.selectedIndex].text,
                 author: authorInput.value.trim() || '정원복',
                 title: titleInput.value.trim(),
                 desc: descInput.value.trim(),
                 date: dateStr
             };
 
-            storedNotices.unshift(newNotice);
-            localStorage.setItem('portfolio_notices', JSON.stringify(storedNotices));
-            
-            titleInput.value = '';
-            descInput.value = '';
+            const { error } = await _supabase
+                .from('notices')
+                .insert([newNotice]);
 
-            renderNotices();
-            alert('새 공지사항이 정상적으로 등록되었습니다!');
+            if (!error) {
+                titleInput.value = '';
+                descInput.value = '';
+                alert('DB에 성공적으로 공지사항이 추가되었습니다!');
+                fetchNoticesFromDB();
+            } else {
+                alert('등록 실패: ' + error.message);
+            }
         });
     }
 
