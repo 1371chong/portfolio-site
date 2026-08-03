@@ -327,15 +327,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 9. Supabase 데이터베이스 실시간 CRUD 연동 모듈 (기본 데이터 자동 주입 기능 포함)
+    // 9. Supabase 데이터베이스 실시간 CRUD 연동 모듈
     // ==========================================================================
-    const SUPABASE_URL = "https://zwjggedeichljaesgiqk.supabase.co/"; // 🔑 본인의 Supabase Project URL 입력
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3amdnZWRlaWNobGphZXNnaXFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3NjU2NTIsImV4cCI6MjEwMTM0MTY1Mn0.DQ5mcKQf5tmWI2B7ESM3OMoebwLBgNwfpIxCUXNuc1A";               // 🔑 본인의 Supabase anon/public KEY 입력
-    const ADMIN_PASSWORD = "1234";                              // 🔑 관리자 비밀번호
+    // ⚠️ 끝에 슬래시(/)가 없어야 안전한 API 호출이 가능합니다.
+    const SUPABASE_URL = "https://zwjggedeichljaesgiqk.supabase.co"; 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3amdnZWRlaWNobGphZXNnaXFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3NjU2NTIsImV4cCI6MjEwMTM0MTY1Mn0.DQ5mcKQf5tmWI2B7ESM3OMoebwLBgNwfpIxCUXNuc1A"; 
+    const ADMIN_PASSWORD = "1234";
 
     // Supabase 클라이언트 연결
     let _supabase = null;
-    if (typeof supabase !== 'undefined') {
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
         _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 
@@ -432,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (error) {
             console.error('Database Fetch Error:', error);
-            noticeListContainer.innerHTML = '<p class="no-results-message" style="display:block;">공지사항을 불러오는 중 오류가 발생했습니다.</p>';
+            noticeListContainer.innerHTML = `<p class="no-results-message" style="display:block;">공지사항을 불러오는 중 오류가 발생했습니다: ${error.message}</p>`;
             return;
         }
 
@@ -440,13 +441,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!data || data.length === 0) {
             const { error: seedError } = await _supabase.from('notices').insert(defaultNoticesToSeed);
             if (!seedError) {
-                // 데이터 등록 완료 후 재조회
                 fetchNoticesFromDB();
                 return;
             }
         }
 
-        storedNotices = data;
+        storedNotices = data.map(item => ({
+            ...item,
+            typeName: item.typeName || item.type_name || '공지'
+        }));
         renderNotices();
     }
 
@@ -488,12 +491,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="notice-header-left">
                         <span class="notice-badge ${badgeClass}">${notice.typeName}</span>
                         <span class="notice-author"><i class="fas fa-user-circle"></i> ${notice.author || '정원복'}</span>
-                        <span class="notice-date">${notice.date}</span>
+                        <span class="notice-date">${notice.date || ''}</span>
                     </div>
                     ${adminActionsHtml}
                 </div>
-                <h3 class="notice-title">${notice.title}</h3>
-                <p class="notice-desc">${notice.desc}</p>
+                <h3 class="notice-title">${notice.title || ''}</h3>
+                <p class="notice-desc">${notice.desc || ''}</p>
             `;
 
             noticeListContainer.appendChild(card);
@@ -562,15 +565,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             return;
                         }
 
+                        const updatePayload = {
+                            type: newType,
+                            typeName: newTypeName,
+                            author: newAuthor,
+                            title: newTitle,
+                            desc: newDesc
+                        };
+
                         const { error } = await _supabase
                             .from('notices')
-                            .update({
-                                type: newType,
-                                typeName: newTypeName,
-                                author: newAuthor,
-                                title: newTitle,
-                                desc: newDesc
-                            })
+                            .update(updatePayload)
                             .eq('id', targetId);
 
                         if (!error) {
