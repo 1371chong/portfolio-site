@@ -23,8 +23,10 @@
                 <ul class="nav-list">
                     <li><a href="#intro" data-text="Home">Home</a></li>
                     <li><a href="#portfolio" data-text="Portfolio">포트폴리오</a></li>
+                    <li><a href="#pricing" data-text="Pricing">상품안내</a></li>
                     <li><a href="#skills" data-text="Skills">Skills</a></li>
                     <li><a href="#about" data-text="About">소개</a></li>
+                    <li><a href="#faq" data-text="FAQ">FAQ</a></li>
                     <li><a href="#contact" data-text="Contact">Contact Me</a></li>
                 </ul>
             </nav>
@@ -55,7 +57,7 @@
         </div>
     </section>
 
-    <!-- 포트폴리오 섹션 (상시 버튼 노출 구조 변경) -->
+    <!-- 포트폴리오 섹션 -->
     <section id="portfolio" class="section">
         <div class="container">
             <h2>🎥 Portfolio</h2>
@@ -159,7 +161,80 @@
         </div>
     </section>
 
-    <!-- 스킬 및 프로그램 섹션 (비주얼 게이지 컴포넌트 추가 리디자인) -->
+    <!-- 상품안내 / Pricing 섹션 -->
+    <section id="pricing" class="section pricing-section">
+        <div class="container">
+            <h2>💰 Pricing & Services</h2>
+            <p class="pricing-subtitle">프로젝트 규모와 작업 범위에 따른 표준 제작 단가 안내입니다.</p>
+
+            <div class="pricing-grid">
+                  <!--로고 제작 패키지 -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>로고제작</h3>
+                        <p class="price">₩ 미정 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 숏폼/릴스/쇼츠 편집 (1분 이내)</li>
+                        <li><i class="fas fa-check"></i> 기본 컷 편집 & 자막 작업</li>
+                        <li><i class="fas fa-check"></i> 상업용 BGM 및 효과음 적용</li>
+                        <li><i class="fas fa-check"></i> 무료 수정 2회 제공</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary pricing-btn">문의하기</a>
+                </div>
+
+                <!-- Basic 패키지 -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Basic</h3>
+                        <p class="price">₩ 미정 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 숏폼/릴스/쇼츠 편집 (1분 이내)</li>
+                        <li><i class="fas fa-check"></i> 기본 컷 편집 & 자막 작업</li>
+                        <li><i class="fas fa-check"></i> 상업용 BGM 및 효과음 적용</li>
+                        <li><i class="fas fa-check"></i> 무료 수정 2회 제공</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary pricing-btn">문의하기</a>
+                </div>
+
+                <!-- Standard 패키지 (강조) -->
+                <div class="pricing-card featured">
+                    <div class="badge">추천</div>
+                    <div class="pricing-header">
+                        <h3>Standard</h3>
+                        <p class="price">₩ 400,000 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 유튜브/홍보 영상 (3~5분 이내)</li>
+                        <li><i class="fas fa-check"></i> 디테일 모션 그래픽 연출</li>
+                        <li><i class="fas fa-check"></i> 색보정(Color Grading) & 음향 마스터링</li>
+                        <li><i class="fas fa-check"></i> 썸네일 1종 기본 포함</li>
+                        <li><i class="fas fa-check"></i> 무료 수정 2회 제공</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary pricing-btn">문의하기</a>
+                </div>
+
+                <!-- Premium 패키지 -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Premium</h3>
+                        <p class="price">₩ 800,000 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 브랜드 CF / 3D 아트워크 / 인트로</li>
+                        <li><i class="fas fa-check"></i> 맞춤형 기획 & 콘티/스토리보드 설계</li>
+                        <li><i class="fas fa-check"></i> 고급 3D 공간 연출 (Blender)</li>
+                        <li><i class="fas fa-check"></i> 마스터링 및 원본 프로젝트파일 협의</li>
+                        <li><i class="fas fa-check"></i> 무료 수정 3회 제공</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary pricing-btn">문의하기</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 스킬 및 프로그램 섹션 -->
     <section id="skills" class="section skills-visual-section">
         <div class="container">
             <h2>🛠️ Skills & Programs</h2>
@@ -276,6 +351,8 @@
             </div>
         </div>
     </section>
+
+    <!-- 소개 섹션 -->
     <section id="about" class="section about-section text-light-theme">
         <div class="container">
             <h2>🙋🏻‍♂️ About Me</h2>
@@ -330,14 +407,74 @@
         </div>
     </section>
 
-    <!-- 연락 방법 섹션 (완벽하게 깔끔하고 미니멀한 젠(Zen) 플랫 스타일로 리디자인) -->
+    <!-- 자주하는 질문(FAQ) 섹션 추가 -->
+    <section id="faq" class="section faq-section">
+        <div class="container">
+            <h2>❓ FAQ(자주하는 질문)</h2>
+            <div class="faq-accordion">
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Q. 영상 제작 문의 시 어떤 내용을 준비해야 하나요?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>생각하시는 <strong>참고용 레퍼런스 영상 링크</strong>, 예상 러닝타임, 작업 희망 기한, 그리고 보유하고 계신 소스(기획안, 로고, 이미지, 촬영본 등)를 알려주시면 훨씬 신속하고 정밀한 견적 상담이 가능합니다.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Q. 작업 진행 절차는 어떻게 되나요?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>일반적으로 <strong>[상담 및 일정/견적 확정] ➔ [1차 시안 전달] ➔ [수정 사항 피드백 반영] ➔ [최종 마스터링 렌더링 및 전달]</strong>의 단계를 거쳐 완성도 높은 결과물을 제작합니다.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Q. 피드백 수정 횟수 기준이 어떻게 되나요?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>기본 <strong>무료 수정 2회</strong>가 기본으로 제공됩니다. 다만 초기에 협의된 기획을 전면 수정하는 재제작이나 대규모 스크립트 변경 시에는 소정의 추가 비용이 발생할 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Q. 사용되는 음원 및 폰트의 저작권은 안전한가요?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>네, 유튜브 및 SNS 플랫폼에서 문제없이 수익 창출이 가능한 <strong>상업용 라이선스 보유 에셋</strong>과 상업적 이용 가능 폰트/음원만을 사용하여 저작권 문제없는 안전한 영상을 보장합니다.</p>
+                    </div>
+                </div>
+
+                 <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Q. 모션그래픽분야는 제작기간 얼마나 걸리나요</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>모션그래픽분야는 <strong>3 ~ 4주</strong> 정도 소요되며, 복잡한 효과나 장면이 포함될 경우 추가 시간이 필요할 수 있습니다.</p>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 연락 방법 섹션 -->
     <section id="contact" class="section minimalist-contact-section">
         <div class="container">
             <h2>📞 Contact Me</h2>
             <p class="contact-message">함께 만들어갈 멋진 프로젝트를 기다립니다!</p>
             
             <div class="minimal-contact-container">
-                <!-- 상단 코어 핵심 다이렉트 컨택 -->
                 <div class="core-contact-row">
                     <div class="core-contact-item">
                         <span class="contact-label">EMAIL</span>
@@ -349,7 +486,6 @@
                     </div>
                 </div>
 
-                <!-- 하단 에센셜 채널 가로 링크 서브 그리드 -->
                 <div class="minimal-social-links">
                     <a href="https://open.kakao.com/o/souSwBTh" target="_blank" class="social-line-link">
                         <i class="fab fa-kakao"></i> KakaoTalk

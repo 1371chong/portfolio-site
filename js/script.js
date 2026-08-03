@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (isCategoryMatch && isSearchMatch) {
                     item.style.display = 'block';
-                    // 애니메이션 관측용 show 클래스 재반응 보정
                     setTimeout(() => item.classList.add('show'), 50);
                     visibleCount++;
                 } else {
@@ -129,12 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const generalObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // 포트폴리오 카드 페이드인 처리
                 if (entry.target.classList.contains('portfolio-item')) {
                     entry.target.classList.add('show');
                     generalObserver.unobserve(entry.target);
                 }
-                // 리디자인 스킬카드 도달 시 네온 게이지 바 실시간 빌딩 연출
                 if (entry.target.classList.contains('skill-card-v')) {
                     const progressBar = entry.target.querySelector('.skill-progress-bar');
                     const progressValue = entry.target.dataset.progress;
@@ -147,14 +144,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    // 포트폴리오 아이템 관찰자 등록
     portfolioItems.forEach(item => {
         generalObserver.observe(item);
     });
 
-    // 신규 리디자인 스킬 카드 요소들 동적 관찰자 등록
     const skillCards = document.querySelectorAll('.skill-card-v');
     skillCards.forEach(card => {
         generalObserver.observe(card);
+    });
+
+    // ==========================================================================
+    // 5. FAQ 아코디언 토글 제어 엔진 (단일 열림 연출)
+    // ==========================================================================
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+        const questionBtn = item.querySelector('.faq-question');
+        
+        if (questionBtn) {
+            questionBtn.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                // 하나씩만 열리도록 기존 활성화 항목 초기화
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+
+                // 선택 항목 온/오프 상태 전환
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        }
     });
 });

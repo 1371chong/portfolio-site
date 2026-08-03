@@ -504,11 +504,10 @@ ul {
     font-size: 0.85rem;
     font-weight: 700;
     color: #fff;
-    /* 기본 상태: 다크 무드와 어우러지는 딥한 주황색 테두리와 배경 */
     background: rgba(230, 126, 34, 0.1); 
     border: 1px solid rgba(230, 126, 34, 0.4);
     padding: 9px 18px;
-    border-radius: 50px; /* 완전한 타원형 라운드 버튼 모양으로 변경 */
+    border-radius: 50px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -523,23 +522,20 @@ ul {
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
-/* 마우스 반응형(Hover) 애니메이션 모양 추가 */
 .portfolio-btn:hover {
-    background: #e67e22; /* 마우스를 올리면 선명한 포인트 오렌지 색상으로 채워짐 */
+    background: #e67e22;
     border-color: #e67e22;
     color: #fff;
-    transform: translateY(-3px); /* 버튼이 위로 가볍게 뜨는 모양 연출 */
-    /* 주황색 네온 그로우 그림자 효과 */
+    transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4), 
                 0 0 10px rgba(230, 126, 34, 0.2);
 }
 
 .portfolio-btn:hover i {
     color: #fff;
-    transform: translateX(3px) scale(1.1); /* 아이콘이 오른쪽으로 살짝 전진하는 모션 */
+    transform: translateX(3px) scale(1.1);
 }
 
-/* 포트폴리오 인포 영역 레이아웃 정돈 */
 .portfolio-info {
     padding: 22px 20px 20px 20px;
     display: flex;
@@ -555,7 +551,6 @@ ul {
     gap: 10px;
 }
 
-/* 주황색 버튼과 매칭되도록 포트폴리오 태그 색상도 은은한 주황빛으로 밸런스 조정 */
 .portfolio-info .tag {
     font-size: 0.8rem;
     color: #e67e22;
@@ -566,7 +561,6 @@ ul {
     margin: 0;
     letter-spacing: -0.3px;
 }
-
 
 /* ==========================================================================
    스킬 섹션(Skills & Programs) 비주얼 게이지 리디자인
@@ -646,11 +640,10 @@ ul {
     color: var(--text-muted);
     line-height: 1.6;
     margin-bottom: 20px;
-    height: 48px; /* 한글 서술 균형 정렬용 고정고 */
+    height: 48px;
     word-break: keep-all;
 }
 
-/* 스킬 게이지 트랙 레일 */
 .skill-progress-wrapper {
     width: 100%;
     height: 6px;
@@ -662,12 +655,13 @@ ul {
 
 .skill-progress-bar {
     height: 100%;
-    width: 0; /* 스크롤 관측 시 자바스크립트로 전개 */
+    width: 0;
     background: linear-gradient(90deg, var(--primary-color), #ff6b6b);
     border-radius: 10px;
     transition: width 1.2s cubic-bezier(0.1, 1, 0.1, 1);
     box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
 }
+
 /* ==========================================================================
    소개 섹션 리디자인 (2단 타임라인 분리형)
    ========================================================================== */
@@ -723,7 +717,6 @@ ul {
     margin-right: 4px;
 }
 
-/* 2단 타임라인 구조 */
 .history-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -799,12 +792,11 @@ ul {
     line-height: 1.5;
 }
 
-
 /* ==========================================================================
    연락처 섹션(Contact Me) 젠(Zen) 미니멀리즘 초깔끔 리디자인
    ========================================================================== */
 .minimalist-contact-section {
-    background-color: #07080a; /* 더 깊은 무채색 매핑 단일화 */
+    background-color: #07080a;
     border-top: 1px solid #14151a;
     padding: 140px 0;
 }
@@ -815,7 +807,6 @@ ul {
     text-align: center;
 }
 
-/* 핵심 이메일, 전화번호 한 줄 가로 대칭 배치 구조 */
 .core-contact-row {
     display: flex;
     justify-content: space-around;
@@ -850,7 +841,6 @@ ul {
     padding-bottom: 4px;
 }
 
-/* 깔끔한 플랫 무드 하단 언더라인 이펙트 */
 .contact-value::after {
     content: '';
     position: absolute;
@@ -870,7 +860,6 @@ ul {
     width: 100%;
 }
 
-/* 하단 에센셜 채널 텍스트 기반 가로 인라인 링크 스타일링 */
 .minimal-social-links {
     display: flex;
     justify-content: center;
@@ -938,9 +927,6 @@ ul {
     }
 }
 
-/* ==========================================================================
-   반응형 유동 보완 레이아웃 해상도
-   ========================================================================== */
 @media (max-width: 992px) {
     .about-wrapper {
         grid-template-columns: 1fr;
@@ -960,9 +946,6 @@ ul {
     }
 }
 
-/* ==========================================================================
-   유동 반응형 제어 브레이크포인트
-   ========================================================================== */
 @media (max-width: 768px) {
     .menu-toggle { display: block; }
     
@@ -1001,6 +984,7 @@ ul {
 
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes scrollWheel { 0%, 100% { top: 6px; opacity: 1; } 50% { top: 16px; opacity: 0.2; } }
+
 /* ==========================================================================
    포트폴리오 탭메뉴 (필터 버튼) 마우스 반응 애니메이션 고도화
    ========================================================================== */
@@ -1024,17 +1008,16 @@ ul {
     color: var(--text-muted);
     border: 1px solid #2d3748;
     padding: 11px 24px;
-    border-radius: 30px; /* 트렌디한 타원형 스타일 */
+    border-radius: 30px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
     position: relative;
-    overflow: hidden; /* 슬라이딩 이펙트 내부 한정용 */
+    overflow: hidden;
     z-index: 1;
     transition: color 0.35s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* 마우스 호버 시 배경이 왼쪽에서 오른쪽으로 채워지는 모션 그래픽 애니메이션 에셋 */
 .portfolio-filter button::before {
     content: '';
     position: absolute;
@@ -1057,7 +1040,6 @@ ul {
     left: 0;
 }
 
-/* 활성화(Active) 되었을 때 고정 스타일 */
 .portfolio-filter button.active {
     color: #fff;
     border-color: var(--primary-color);
@@ -1067,30 +1049,36 @@ ul {
 .portfolio-filter button.active::before {
     left: 0;
 }
+
 /* ==========================================================================
    글로벌 컨테이너(Container) 및 섹션 레이아웃 고도화
    ========================================================================== */
-
-/* 기본 컨테이너 디자인에 정밀한 레이아웃 가이드와 여백 안정성 추가 */
 .container {
     width: 92%;
     max-width: 1240px;
     margin: 0 auto;
     position: relative;
     z-index: 5;
-    /* 양옆에 미디어 편집 툴의 타임라인 눈금 같은 정교한 여백 밸런스 배치 */
     padding: 0 20px;
+    box-sizing: border-box; 
 }
 
-/* 모든 섹션의 컨테이너 배경 뒤로 은은한 공간 입체감을 주는 백그라운드 디자인 */
 .section {
     position: relative;
     padding: 140px 0;
     text-align: center;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-/* 섹션별 컨테이너 내부로 진입할 때 공간을 분리해 주는 상단 선 미니멀 디자인 */
+.section .container {
+    width: 100%;
+    max-width: 1240px;
+}
+
 .section::before {
     content: '';
     position: absolute;
@@ -1102,7 +1090,6 @@ ul {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
 }
 
-/* 섹션 메인 타이틀(.container h2) 주변 구조 디자인 고도화 */
 .section h2 {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 4vw, 2.6rem);
@@ -1115,7 +1102,6 @@ ul {
     text-transform: uppercase;
 }
 
-/* 타이틀 하단 장식: 프리미어 오렌지/레드 그라데이션 포인트 바 */
 .section h2::after {
     content: '';
     position: absolute;
@@ -1129,7 +1115,6 @@ ul {
     box-shadow: 0 2px 10px rgba(230, 126, 34, 0.3);
 }
 
-/* 비디오 포트폴리오의 아이덴티티를 살리기 위해 컨테이너 좌우측 외곽에 배치되는 시네마틱 프레임 가이드 라인 */
 @media (min-width: 1200px) {
     .container::before,
     .container::after {
@@ -1141,99 +1126,221 @@ ul {
         background: rgba(255, 255, 255, 0.02);
         pointer-events: none;
     }
-    .container::before {
-        left: -10px;
-    }
-    .container::after {
-        right: -10px;
-    }
+    .container::before { left: 0; }
+    .container::after { right: 0; }
 }
 
-/* ==========================================================================
-   글로벌 컨테이너(Container) 정중앙 정렬 및 레이아웃 최적화
-   ========================================================================== */
-
-.container {
-    width: 92%;
-    max-width: 1240px;
-    /* 상하는 0, 좌우는 자동으로 여백을 분배하여 항상 브라우저의 정중앙에 위치하게 합니다 */
-    margin: 0 auto; 
-    position: relative;
-    z-index: 5;
-    padding: 0 20px;
-    
-    /* 요소들이 내부에서 중앙 정렬을 유지하거나 균형 있게 배치되도록 보장 */
-    box-sizing: border-box; 
-}
-
-/* 모든 섹션 내부의 타이틀 및 그리드가 컨테이너 안에서 뒤틀림 없이 정렬되도록 보정 */
-.section {
-    position: relative;
-    padding: 140px 0;
-    text-align: center;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 섹션 내부 콘텐츠들을 가로축 기준으로 중앙 정렬 */
-    justify-content: center;
-}
-
-/* 섹션 안의 직접적인 컨테이너 블록이 깨지지 않고 100% 폭을 채우며 중앙을 잡도록 설정 */
-.section .container {
-    width: 100%;
-    max-width: 1240px;
-}
-
-/* 데스크톱 버전(1200px 이상) 좌우 시네마틱 프레임 가이드라인 위치 대칭 보정 */
-@media (min-width: 1200px) {
-    .container::before,
-    .container::after {
-        content: '';
-        position: absolute;
-        top: 10%;
-        height: 80%;
-        width: 1px;
-        background: rgba(255, 255, 255, 0.02);
-        pointer-events: none;
-    }
-    /* 정확하게 컨테이너 경계선 좌우 대칭 위치에 고정 */
-    .container::before {
-        left: 0;
-    }
-    .container::after {
-        right: 0;
-    }
-}
-
-/* ==========================================================================
-   반응형 모바일 및 태블릿 중앙 정렬 유지
-   ========================================================================== */
 @media (max-width: 992px) {
-    .section {
-        padding: 100px 0;
-    }
-    .container {
-        width: 94%;
-        margin: 0 auto; /* 반응형 화면에서도 정중앙 유지 */
-        padding: 0 15px;
-    }
+    .section { padding: 100px 0; }
+    .container { width: 94%; margin: 0 auto; padding: 0 15px; }
 }
 
 @media (max-width: 576px) {
-    .section {
-        padding: 80px 0;
-    }
-    .container {
-        width: 100%;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
+    .section { padding: 80px 0; }
+    .container { width: 100%; margin: 0 auto; padding: 0 20px; }
 }
-/* --- 푸터 --- */
+
 footer {
     background: #111;
     color: #888;
     padding: 20px 0;
     text-align: center;
     font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   자주하는 질문 (FAQ) 섹션 전용 신규 스타일
+   ========================================================================== */
+.faq-section {
+    background-color: var(--bg-deep-dark);
+}
+
+.faq-accordion {
+    max-width: 850px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.faq-item {
+    background: #14151a;
+    border: 1px solid #23262f;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: rgba(230, 126, 34, 0.5);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 22px 25px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    text-align: left;
+    gap: 15px;
+    transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+    color: #e67e22;
+}
+
+.faq-icon {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s ease;
+}
+
+.faq-item.active {
+    border-color: #e67e22;
+    box-shadow: 0 4px 20px rgba(230, 126, 34, 0.15);
+}
+
+.faq-item.active .faq-question {
+    color: #e67e22;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+    color: #e67e22;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 25px;
+    transition: max-height 0.35s cubic-bezier(0, 1, 0, 1), padding 0.35s ease;
+    background: #181a20;
+    border-top: 1px solid transparent;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 500px;
+    padding: 20px 25px 25px 25px;
+    border-top-color: #23262f;
+}
+
+.faq-answer p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0;
+    word-break: keep-all;
+}
+
+.faq-answer strong {
+    color: #fff;
+}
+
+/* ==========================================================================
+   상품 안내 및 가격 (Pricing) 섹션 전용 스타일
+   ========================================================================== */
+.pricing-section {
+    background-color: var(--bg-card-dark);
+}
+
+.pricing-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-top: -40px;
+    margin-bottom: 50px;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    align-items: stretch;
+}
+
+.pricing-card {
+    background: #14151a;
+    border: 1px solid #23262f;
+    border-radius: 16px;
+    padding: 40px 30px;
+    text-align: left;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-card:hover {
+    transform: translateY(-8px);
+    border-color: #e67e22;
+    box-shadow: 0 10px 30px rgba(230, 126, 34, 0.2);
+}
+
+.pricing-card.featured {
+    border-color: var(--primary-color);
+    background: #181a20;
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.2);
+}
+
+.pricing-card.featured .badge {
+    position: absolute;
+    top: -15px;
+    right: 25px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+}
+
+.pricing-header h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    font-family: var(--font-heading);
+    margin-bottom: 10px;
+}
+
+.pricing-header .price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e67e22;
+    margin-bottom: 25px;
+    font-family: var(--font-heading);
+}
+
+.pricing-features {
+    list-style: none;
+    margin-bottom: 35px;
+    flex-grow: 1;
+}
+
+.pricing-features li {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pricing-features li i {
+    color: var(--primary-color);
+    font-size: 0.85rem;
+}
+
+.pricing-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
 }
