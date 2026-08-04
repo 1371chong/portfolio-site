@@ -1681,3 +1681,7 @@ footer {
         scroll-behavior: auto !important;
     }
 }
+/* 점검 화면(z-index: 99999) 위로 관리자 로그인 모달이 뜨도록 설정 */
+#admin-auth-modal {
+    z-index: 100000 !important;
+}
