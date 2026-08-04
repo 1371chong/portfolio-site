@@ -993,53 +993,76 @@ body.hovered .custom-cursor-arrow .cursor-ring {
 }
 
 /* ==========================================================================
-   10. FAQ 섹션
+   10. FAQ 섹션 스타일 개편
    ========================================================================== */
 .faq-accordion {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 
 .faq-item {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
-    will-change: transform, opacity;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.faq-item:hover {
+    border-color: rgba(231, 76, 60, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .faq-question {
     width: 100%;
-    padding: 20px;
+    padding: 22px 24px;
     background: none;
     border: none;
     color: #fff;
     text-align: left;
-    font-size: 1rem;
+    font-size: 1.02rem;
+    font-weight: 600;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    gap: 15px;
+}
+
+.faq-question span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.faq-icon {
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+    color: var(--primary-color);
 }
 
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
-    background: #0d0e12;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s ease;
+    background: #0e1015;
     color: var(--text-sub);
-    padding: 0 20px;
-    font-size: 0.9rem;
+    padding: 0 24px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    border-top: 1px solid transparent;
 }
 
 .faq-item.active .faq-answer {
-    max-height: 200px;
-    padding: 20px;
-}
-
-.faq-item.active .faq-icon {
-    transform: rotate(180deg);
+    max-height: 250px;
+    padding: 22px 24px;
+    border-top-color: rgba(45, 55, 72, 0.5);
 }
 
 /* ==========================================================================
