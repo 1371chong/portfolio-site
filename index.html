@@ -40,10 +40,35 @@
                     <li><a href="#notice" data-text="Notice">공지사항</a></li>
                     <li><a href="#contact" data-text="Contact">Contact Me</a></li>
                 </ul>
-                <!-- 헤더 상단 이동된 관리자 로그인 버튼 -->
-                <button id="admin-auth-btn" class="admin-toggle-btn nav-admin-btn">
-                    <i class="fas fa-lock"></i> 관리자 로그인
-                </button>
+                <!-- 관리자 버튼 영역 -->
+                <div class="admin-nav-group" style="display: flex; gap: 8px; align-items: center; position: relative;">
+                    <!-- 비로그인 시 표시되는 로그인 버튼 -->
+                    <button id="admin-login-trigger-btn" class="admin-toggle-btn nav-admin-btn">
+                        <i class="fas fa-lock"></i> 관리자 로그인
+                    </button>
+
+                    <!-- 로그인 시 표시되는 관리자모드 드롭다운 메뉴 및 로그아웃 버튼 -->
+                    <div id="admin-mode-dropdown-wrapper" style="display: none; position: relative;">
+                        <button id="admin-mode-btn" class="admin-toggle-btn nav-admin-btn" style="background: #2c3e50;">
+                            <i class="fas fa-cog"></i> 관리자 모드 <i class="fas fa-chevron-down" style="font-size: 0.75rem; margin-left: 4px;"></i>
+                        </button>
+                        <div id="admin-menu-dropdown" style="display: none; position: absolute; top: 110%; right: 0; background: #1e2026; border: 1px solid #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 170px; z-index: 100; overflow: hidden;">
+                            <button id="admin-menu-add-pf" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-plus" style="color: #3498db;"></i> 포트폴리오 추가
+                            </button>
+                            <button id="admin-menu-add-notice" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-bullhorn" style="color: #2ecc71;"></i> 공지사항 추가
+                            </button>
+                            <button id="admin-menu-add-history" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-history" style="color: #f1c40f;"></i> 연혁 추가
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="admin-logout-btn" class="admin-toggle-btn nav-admin-btn admin-only-element" style="display: none; background: rgba(231, 76, 60, 0.85);">
+                        <i class="fas fa-sign-out-alt"></i> 로그아웃
+                    </button>
+                </div>
             </nav>
         </div>
     </header>
@@ -63,7 +88,6 @@
                 <div class="intro-buttons">
                     <a href="#portfolio" class="btn btn-primary"><i class="fas fa-play-circle"></i> 포트폴리오 보기</a>
                     <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> 협업 문의하기</a>
-                    <!-- 공지사항 보러가기 버튼 -->
                     <a href="#notice" class="btn btn-notice"><i class="fas fa-bullhorn"></i> 공지사항 보러가기</a>
                 </div>
             </div>
@@ -78,6 +102,46 @@
     <section id="portfolio" class="section">
         <div class="container">
             <h2>🎥 Portfolio</h2>
+
+            <!-- 포트폴리오 작성 폼 (관리자 전용) -->
+            <form id="portfolio-form" class="notice-write-box admin-only-element" style="margin-bottom: 40px; display: none;">
+                <div class="notice-form-header">
+                    <h3><i class="fas fa-plus-circle"></i> 새 포트폴리오 추가 (관리자 DB 연동)</h3>
+                </div>
+                <div class="notice-input-row">
+                    <select id="pf-category" required>
+                        <option value="video">영상 (Video)</option>
+                        <option value="ad">광고 (Ad)</option>
+                        <option value="3d">3D (3D)</option>
+                        <option value="poster">포스터 (Poster)</option>
+                        <option value="contest">타이틀시퀀스 (Title)</option>
+                        <option value="outsourcing">인트로 (Intro)</option>
+                        <option value="Detail">상세페이지 (Detail)</option>
+                        <option value="Interview">모션 (Motion)</option>
+                    </select>
+                    <input type="text" id="pf-title" placeholder="작품 제목을 입력하세요..." required style="flex: 2;">
+                    <input type="text" id="pf-tag" placeholder="태그 (예: #CF #모션그래픽)" required style="flex: 1;">
+                </div>
+                <div class="notice-input-row">
+                    <input type="text" id="pf-thumb" placeholder="썸네일 이미지 경로 (예: img/icon/icon_default.jpg)" required style="flex: 1;">
+                    <input type="url" id="pf-youtube" placeholder="유튜브 링크 (예: https://www.youtube.com/watch?v=...)" style="flex: 1;">
+                </div>
+                <div class="notice-input-row">
+                    <input type="text" id="pf-date" placeholder="작업 기간 (예: 2026.04 (2주 소요))" style="flex: 1;">
+                    <input type="text" id="pf-tools" placeholder="사용 프로그램 (예: Premiere Pro, After Effects)" style="flex: 1;">
+                    <input type="text" id="pf-contribution" placeholder="기여도 (예: 기획 100%, 편집 100%)" style="flex: 1;">
+                </div>
+                <div class="notice-input-row">
+                    <input type="text" id="pf-keywords" placeholder="검색 키워드 (예: 브랜드 홍보 CF 모션 그래픽)">
+                </div>
+                <textarea id="pf-desc" placeholder="작품 상세 설명을 상세히 작성해주세요..." rows="3" required></textarea>
+                <div class="notice-form-actions">
+                    <button type="submit" class="btn btn-primary notice-submit-btn">
+                        <i class="fas fa-plus-circle"></i> 포트폴리오 DB 등록
+                    </button>
+                </div>
+            </form>
+
             <div class="portfolio-controls">
                 <div class="portfolio-filter">
                     <button data-filter="all" class="active">All</button>
@@ -93,127 +157,7 @@
                 <input type="text" id="portfolio-search" placeholder="작품 검색..." aria-label="포트폴리오 검색">
             </div>
 
-            <div class="portfolio-grid">
-                <article class="portfolio-item" data-category="video" data-keywords="브랜드 홍보 CF 모션 그래픽"
-                    data-title="브랜드 홍보 영상 A"
-                    data-tag="#CF #모션그래픽"
-                    data-desc="브랜드 아이덴티티를 전달하기 위한 모션 그래픽 기반 홍보 영상입니다. 키프레임 애니메이션 및 컬러 그레이딩 작업을 수행했습니다."
-                    data-date="2026.03 (2주 소요)"
-                    data-tools="Premiere Pro, After Effects"
-                    data-contribution="기획 100%, 편집 100%"
-                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                    <div class="portfolio-thumb">
-                        <img src="img/icon/icon_pgte .png" alt="브랜드 홍보 영상 A 썸네일">
-                        <div class="item-overlay">
-                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>브랜드 홍보 영상 A</h3>
-                        <div class="info-footer">
-                            <span class="tag">#CF #모션그래픽</span>
-                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="portfolio-item" data-category="contest" data-keywords="공모전 기획 편집"
-                    data-title="공모전참가 A"
-                    data-tag="#공모전"
-                    data-desc="공모전 출품을 목적으로 기획 및 제작한 영상입니다. 스토리텔링 중심의 커트 편집과 효과음 연출에 신경 썼습니다."
-                    data-date="2026.01 (1주 소요)"
-                    data-tools="Premiere Pro, Photoshop"
-                    data-contribution="편집 100%"
-                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                    <div class="portfolio-thumb">
-                        <img src="img/icon/icon_default.jpg" alt="공모전참가 A 썸네일">
-                        <div class="item-overlay">
-                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>공모전참가 A</h3>
-                        <div class="info-footer">
-                            <span class="tag">#공모전</span>
-                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="portfolio-item" data-category="ad" data-keywords="소셜 미디어 광고 기획 편집"
-                    data-title="소셜 미디어 광고 B"
-                    data-tag="#단편광고 #기획"
-                    data-desc="SNS 마케팅용 숏폼 템플릿 기반 광고 영상입니다. 빠른 전환 연출과 흥미 유발 요소를 고안했습니다."
-                    data-date="2025.12 (3일 소요)"
-                    data-tools="Premiere Pro, After Effects"
-                    data-contribution="기획 50%, 편집 100%"
-                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                    <div class="portfolio-thumb">
-                        <img src="img/icon/icon_dmm.png" alt="소셜 미디어 광고 B 썸네일">
-                        <div class="item-overlay">
-                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>소셜 미디어 광고 B</h3>
-                        <div class="info-footer">
-                            <span class="tag">#단편광고 #기획</span>
-                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="portfolio-item" data-category="poster" data-keywords="영화 포스터 디자인 시각 그래픽"
-                    data-title="영화 포스터 디자인 C"
-                    data-tag="#그래픽디자인"
-                    data-desc="포토샵과 일러스트레이터를 활용해 제작한 영화 컨셉 그래픽 포스터 아트워크 작업입니다."
-                    data-date="2025.11 (4일 소요)"
-                    data-tools="Photoshop, Illustrator"
-                    data-contribution="디자인 100%"
-                    data-img="img/icon/icon_1917.jpg"
-                    data-link="#">
-                    <div class="portfolio-thumb">
-                        <img src="img/icon/icon_1917.jpg" alt="영화 포스터 디자인 C 썸네일">
-                        <div class="item-overlay">
-                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>영화 포스터 디자인 C</h3>
-                        <div class="info-footer">
-                            <span class="tag">#그래픽디자인</span>
-                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="portfolio-item" data-category="video" data-keywords="유튜브 콘텐츠 편집 디자인"
-                    data-title="유튜브 콘텐츠 D"
-                    data-tag="#콘텐츠편집"
-                    data-desc="유튜브 채널 업로드용 긴 호흡의 콘텐츠 영상 편집 작업입니다. 자막 디자인 및 사운드 리믹스를 진행했습니다."
-                    data-date="2025.10 (5일 소요)"
-                    data-tools="Premiere Pro, Photoshop"
-                    data-contribution="편집 100%"
-                    data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                    data-link="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
-                    <div class="portfolio-thumb">
-                        <img src="assets/thumb_video_04.jpg" alt="유튜브 콘텐츠 D 썸네일">
-                        <div class="item-overlay">
-                            <span class="zoom-icon"><i class="fas fa-search-plus"></i></span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>유튜브 콘텐츠 D</h3>
-                        <div class="info-footer">
-                            <span class="tag">#콘텐츠편집</span>
-                            <button type="button" class="portfolio-btn open-modal">상세보기 <i class="fas fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </article>
-            </div>
+            <div class="portfolio-grid"></div>
             <p id="no-results" class="no-results-message">검색 결과가 없습니다.</p>
         </div>
     </section>
@@ -419,42 +363,38 @@
                 </div>
             </div>
 
+            <!-- 연혁 등록 폼 (관리자 전용) -->
+            <form id="history-form" class="notice-write-box admin-only-element" style="margin-top: 30px; margin-bottom: 30px; display: none;">
+                <div class="notice-form-header">
+                    <h3><i class="fas fa-history"></i> 새 연혁 추가 (관리자 DB 연동)</h3>
+                </div>
+                <div class="notice-input-row">
+                    <select id="history-group-type" required style="max-width: 150px;">
+                        <option value="edu">학력 (Education)</option>
+                        <option value="exp">경력 및 교육 (Experience)</option>
+                    </select>
+                    <input type="text" id="history-date" placeholder="기간 (예: 2025.08 ~ 2026.01)" required style="flex: 1;">
+                    <input type="text" id="history-title" placeholder="기관명 / 타이틀 (예: 구미대학교)" required style="flex: 2;">
+                </div>
+                <div class="notice-input-row">
+                    <input type="text" id="history-desc" placeholder="상세 내용 (예: 스마트경영과 전공 졸업)" required style="flex: 1;">
+                </div>
+                <div class="notice-form-actions">
+                    <button type="submit" class="btn btn-primary notice-submit-btn">
+                        <i class="fas fa-plus-circle"></i> 연혁 DB 등록
+                    </button>
+                </div>
+            </form>
+
             <div class="history-container">
                 <div class="history-block">
                     <h3 class="history-title"><i class="fas fa-graduation-cap"></i> 학력</h3>
-                    <ul class="timeline">
-                        <li>
-                            <span class="date">2021.03 ~ 2023.02</span>
-                            <h4>구미대학교</h4>
-                            <p>스마트경영과 전공 졸업</p>
-                        </li>
-                        <li>
-                            <span class="date">2018.03 ~ 2021.02</span>
-                            <h4>구미고등학교 부설 방송통신고등학교</h4>
-                            <p>졸업</p>
-                        </li>
-                        <li>
-                            <span class="date">2015.03 ~ 2018.02</span>
-                            <h4>석전중학교</h4>
-                            <p>졸업</p>
-                        </li>
-                    </ul>
+                    <ul id="history-edu-list" class="timeline"></ul>
                 </div>
 
                 <div class="history-block">
                     <h3 class="history-title"><i class="fas fa-briefcase"></i> 경력 및 교육</h3>
-                    <ul class="timeline">
-                        <li>
-                            <span class="date">2025.08 ~ 2026.01</span>
-                            <h4>(국비)디지털 영상편집 교육 이수</h4>
-                            <p>멀티미디어 (프리미어, 애프터이펙트, 블렌더) A 과정 수료</p>
-                        </li>
-                        <li>
-                            <span class="date">현재</span>
-                            <h4>새로운 프로젝트 준비 중</h4>
-                            <p>포트폴리오 제작준비중</p>
-                        </li>
-                    </ul>
+                    <ul id="history-exp-list" class="timeline"></ul>
                 </div>
             </div>
         </div>
@@ -524,7 +464,6 @@
             <h2>📢 Notice</h2>
             <p class="notice-subtitle">포트폴리오 업데이트 및 작업 일정 관련 최신 공지사항입니다.</p>
 
-            <!-- 공지사항 카테고리 분할 필터 탭 -->
             <div class="notice-filter-tabs">
                 <button class="notice-tab-btn active" data-category="all">전체</button>
                 <button class="notice-tab-btn" data-category="primary">공지</button>
@@ -534,7 +473,7 @@
             </div>
 
             <!-- 공지사항 작성 폼 (관리자 전용) -->
-            <form id="notice-form" class="notice-write-box admin-only-element">
+            <form id="notice-form" class="notice-write-box admin-only-element" style="display: none;">
                 <div class="notice-form-header">
                     <h3><i class="fas fa-pen"></i> 새 공지사항 작성하기 (관리자)</h3>
                 </div>
@@ -556,7 +495,6 @@
                 </div>
             </form>
 
-            <!-- 공지사항 리스트 영역 -->
             <div id="notice-list" class="notice-list"></div>
         </div>
     </section>
