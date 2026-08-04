@@ -24,7 +24,7 @@
     <header id="main-nav">
         <div class="container">
             <h1 class="logo"><a href="#intro">PORTFOLIO</a></h1>
-            <nav>
+            <nav class="nav-wrapper">
                 <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
                     <span class="hamburger-box">
                         <span class="hamburger-inner"></span>
@@ -40,6 +40,10 @@
                     <li><a href="#notice" data-text="Notice">공지사항</a></li>
                     <li><a href="#contact" data-text="Contact">Contact Me</a></li>
                 </ul>
+                <!-- 헤더 상단 이동된 관리자 로그인 버튼 -->
+                <button id="admin-auth-btn" class="admin-toggle-btn nav-admin-btn">
+                    <i class="fas fa-lock"></i> 관리자 로그인
+                </button>
             </nav>
         </div>
     </header>
@@ -59,6 +63,8 @@
                 <div class="intro-buttons">
                     <a href="#portfolio" class="btn btn-primary"><i class="fas fa-play-circle"></i> 포트폴리오 보기</a>
                     <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> 협업 문의하기</a>
+                    <!-- 공지사항 보러가기 버튼 -->
+                    <a href="#notice" class="btn btn-notice"><i class="fas fa-bullhorn"></i> 공지사항 보러가기</a>
                 </div>
             </div>
         </div>
@@ -518,13 +524,6 @@
             <h2>📢 Notice</h2>
             <p class="notice-subtitle">포트폴리오 업데이트 및 작업 일정 관련 최신 공지사항입니다.</p>
 
-            <!-- 관리자 로그인 버튼 -->
-            <div class="notice-admin-control">
-                <button id="admin-auth-btn" class="admin-toggle-btn">
-                    <i class="fas fa-lock"></i> 관리자 로그인
-                </button>
-            </div>
-
             <!-- 공지사항 카테고리 분할 필터 탭 -->
             <div class="notice-filter-tabs">
                 <button class="notice-tab-btn active" data-category="all">전체</button>
@@ -634,6 +633,56 @@
                             <i class="fas fa-external-link-alt"></i> 관련 링크 바로가기
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 공지사항 상세보기 전용 모달 (Notice Modal Popup) -->
+    <div id="notice-detail-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-window notice-modal-window" role="dialog" aria-modal="true">
+            <button class="modal-close-btn notice-modal-close" aria-label="모달 닫기">&times;</button>
+            <div class="modal-content">
+                <div class="notice-modal-body">
+                    <div class="notice-modal-header">
+                        <div class="notice-modal-meta">
+                            <span id="notice-modal-badge" class="notice-badge badge-primary">공지</span>
+                            <span id="notice-modal-author" class="notice-author"><i class="fas fa-user-circle"></i> 정원복</span>
+                            <span id="notice-modal-date" class="notice-date">2026.04.15</span>
+                        </div>
+                        <h3 id="notice-modal-title" class="notice-modal-title">공지사항 제목</h3>
+                    </div>
+                    <div class="notice-modal-divider"></div>
+                    <div id="notice-modal-desc" class="notice-modal-desc">
+                        공지사항 상세 본문 내용이 출력됩니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 관리자 비밀번호 로그인 전용 모달 (Admin Auth Modal) -->
+    <div id="admin-auth-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-window admin-modal-window" role="dialog" aria-modal="true">
+            <button class="modal-close-btn admin-modal-close" aria-label="모달 닫기">&times;</button>
+            <div class="modal-content">
+                <div class="admin-modal-body">
+                    <div class="admin-modal-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>관리자 인증</h3>
+                    <p class="admin-modal-desc">관리자 전용 기능 이용을 위해 비밀번호를 입력해주세요.</p>
+                    
+                    <form id="admin-login-form" class="admin-login-form">
+                        <div class="password-input-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" id="admin-pw-input" placeholder="비밀번호 입력..." autocomplete="current-password" required>
+                        </div>
+                        <p id="admin-auth-error" class="admin-auth-error"></p>
+                        <button type="submit" class="btn btn-primary admin-submit-btn">
+                            <i class="fas fa-sign-in-alt"></i> 로그인
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

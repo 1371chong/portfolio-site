@@ -157,6 +157,12 @@ body.hovered .custom-cursor-arrow svg path {
     color: #fff;
 }
 
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .nav-list {
     display: flex;
     gap: 24px;
@@ -191,6 +197,23 @@ body.hovered .custom-cursor-arrow svg path {
 
 .nav-list a.active::after {
     width: 100%;
+}
+
+.nav-admin-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-admin-btn:hover {
+    color: #fff;
+    border-color: var(--primary-color);
+    background: rgba(231, 76, 60, 0.1);
 }
 
 .menu-toggle {
@@ -312,6 +335,7 @@ body.hovered .custom-cursor-arrow svg path {
     display: flex;
     justify-content: center;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .intro-buttons .btn {
@@ -347,6 +371,19 @@ body.hovered .custom-cursor-arrow svg path {
     background: #fff;
     color: var(--bg-deep-dark);
     transform: translateY(-3px);
+}
+
+.intro-buttons .btn-notice {
+    background: rgba(230, 126, 34, 0.15);
+    color: #e67e22;
+    border: 2px solid #e67e22;
+}
+
+.intro-buttons .btn-notice:hover {
+    background: #e67e22;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
 }
 
 .scroll-indicator {
@@ -408,42 +445,69 @@ body.hovered .custom-cursor-arrow svg path {
 }
 
 .portfolio-filter button {
-    background: #fff;
-    color: var(--secondary-color);
-    border: 1px solid #e2e8f0;
-    padding: 10px 22px;
+    background: #14151a; 
+    color: var(--text-muted);
+    border: 1px solid #2d3748;
+    padding: 11px 24px;
     border-radius: 30px;
     cursor: pointer;
-    font-weight: 500;
-    font-size: 0.95rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: color 0.35s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
-.portfolio-filter button:hover,
-.portfolio-filter button.active {
-    background: var(--primary-color);
+.portfolio-filter button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #cf3a2c 100%);
+    z-index: -1;
+    transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.portfolio-filter button:hover {
     color: #fff;
     border-color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+}
+
+.portfolio-filter button:hover::before {
+    left: 0;
+}
+
+.portfolio-filter button.active {
+    color: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+.portfolio-filter button.active::before {
+    left: 0;
 }
 
 #portfolio-search {
     width: 100%;
     max-width: 280px;
     padding: 11px 22px;
-    border: 1px solid #e2e8f0;
+    background: #14151a;
+    color: #fff;
+    border: 1px solid #2d3748;
     border-radius: 30px;
     font-size: 0.95rem;
     outline: none;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
     transition: all 0.3s ease;
 }
 
 #portfolio-search:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
 }
 
 .portfolio-grid {
@@ -453,24 +517,26 @@ body.hovered .custom-cursor-arrow svg path {
 }
 
 .portfolio-item {
-    background: #fff;
+    background: #14151a;
+    border: 1px solid #23262f;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     text-align: left;
 }
 
 .portfolio-item:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-color);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .portfolio-thumb {
     position: relative;
     width: 100%;
     height: 220px;
-    background: #eaedf2;
+    background: #1e2026;
     overflow: hidden;
     cursor: pointer;
 }
@@ -555,7 +621,7 @@ body.hovered .custom-cursor-arrow svg path {
 
 .portfolio-info h3 {
     font-size: 1.2rem;
-    color: var(--secondary-color);
+    color: #fff;
     font-weight: 700;
 }
 
@@ -705,7 +771,7 @@ body.hovered .custom-cursor-arrow svg path {
     height: 160px;
     border-radius: 50%;
     overflow: hidden;
-    border: 4px solid #ffff;
+    border: 4px solid #ffffff;
     box-shadow: 0 8px 24px rgba(250, 250, 250, 0.12);
 }
 
@@ -751,7 +817,7 @@ body.hovered .custom-cursor-arrow svg path {
     font-size: 1.4rem;
     color: var(--secondary-color);
     margin-bottom: 30px;
-    border-bottom: 2px solid #ffff;
+    border-bottom: 2px solid #ffffff;
     padding-bottom: 10px;
     display: flex;
     align-items: center;
@@ -782,7 +848,7 @@ body.hovered .custom-cursor-arrow svg path {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #ffff;
+    background: #ffffff;
     border: 3px solid var(--primary-color);
     transition: all 0.3s ease;
 }
@@ -810,7 +876,7 @@ body.hovered .custom-cursor-arrow svg path {
 
 .timeline p {
     font-size: 0.95rem;
-    color: #ffff;
+    color: #ffffff;
     line-height: 1.5;
 }
 
@@ -925,14 +991,6 @@ body.hovered .custom-cursor-arrow svg path {
     margin-bottom: 25px;
 }
 
-/* 관리자 모드 컨트롤 바 */
-.notice-admin-control {
-    max-width: 850px;
-    margin: 0 auto 15px auto;
-    display: flex;
-    justify-content: flex-end;
-}
-
 .admin-toggle-btn {
     background: #1a1c23;
     border: 1px solid #2d3748;
@@ -959,7 +1017,6 @@ body.hovered .custom-cursor-arrow svg path {
     border-color: var(--primary-color);
 }
 
-/* 카테고리 분할 필터 탭 */
 .notice-filter-tabs {
     display: flex;
     justify-content: center;
@@ -989,7 +1046,6 @@ body.hovered .custom-cursor-arrow svg path {
     box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
 }
 
-/* 관리자 전용 숨김 처리 규칙 */
 .admin-only-element {
     display: none !important;
 }
@@ -998,7 +1054,6 @@ body.admin-mode .admin-only-element {
     display: block !important;
 }
 
-/* 글쓰기 입력 폼 스타일 */
 .notice-write-box {
     max-width: 850px;
     margin: 0 auto 40px auto;
@@ -1079,7 +1134,6 @@ body.admin-mode .admin-only-element {
     cursor: pointer;
 }
 
-/* 공지사항 카드 리스트 */
 .notice-list {
     max-width: 850px;
     margin: 0 auto;
@@ -1095,6 +1149,7 @@ body.admin-mode .admin-only-element {
     border-radius: 16px;
     padding: 30px;
     position: relative;
+    cursor: pointer;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -1201,9 +1256,40 @@ body.admin-mode .admin-only-element {
     line-height: 1.6;
     word-break: keep-all;
     white-space: pre-line;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* 실시간 인라인 편집 폼 UI */
+.notice-footer-action {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.notice-detail-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.notice-detail-btn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
 .notice-edit-box {
     display: flex;
     flex-direction: column;
@@ -1250,72 +1336,6 @@ body.admin-mode .admin-only-element {
     cursor: pointer;
     font-weight: 700;
     font-size: 0.85rem;
-}
-
-/* ==========================================================================
-   협력사 (Partners & Clients) 섹션
-   ========================================================================== */
-.partners-section {
-    background-color: var(--bg-card-dark);
-}
-
-.partners-subtitle {
-    color: var(--text-muted);
-    font-size: 1rem;
-    margin-top: -40px;
-    margin-bottom: 50px;
-}
-
-.partners-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 25px;
-}
-
-.partner-card {
-    background: #14151a;
-    border: 1px solid #23262f;
-    border-radius: 16px;
-    padding: 30px 20px;
-    text-align: center;
-    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
-}
-
-.partner-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--primary-color);
-    box-shadow: 0 10px 30px rgba(231, 76, 60, 0.15);
-}
-
-.partner-logo-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.partner-icon {
-    font-size: 2.2rem;
-    color: #e67e22;
-    transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.partner-card:hover .partner-icon {
-    color: var(--primary-color);
-    transform: scale(1.1);
-}
-
-.partner-name {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #fff;
-}
-
-.partner-role {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    word-break: keep-all;
 }
 
 /* ==========================================================================
@@ -1521,7 +1541,7 @@ body.admin-mode .admin-only-element {
 }
 
 /* ==========================================================================
-   프로젝트 상세 모달 스타일
+   모달 팝업 스타일 (프로젝트/공지사항/관리자 모달 공통)
    ========================================================================== */
 .modal-overlay {
     position: fixed;
@@ -1685,6 +1705,149 @@ body.admin-mode .admin-only-element {
     font-weight: 700;
 }
 
+/* 공지사항 전용 상세보기 모달 */
+.notice-modal-window {
+    max-width: 650px;
+    padding: 0;
+}
+
+.notice-modal-body {
+    padding: 40px 35px;
+    text-align: left;
+}
+
+.notice-modal-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.notice-modal-title {
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.4;
+    word-break: keep-all;
+}
+
+.notice-modal-divider {
+    width: 100%;
+    height: 1px;
+    background: #23262f;
+    margin: 20px 0;
+}
+
+.notice-modal-desc {
+    font-size: 1rem;
+    color: #d1d5db;
+    line-height: 1.8;
+    white-space: pre-line;
+    word-break: keep-all;
+}
+
+/* 관리자 로그인 모달 (Admin Auth Modal) */
+.admin-modal-window {
+    max-width: 420px;
+    padding: 0;
+    overflow: hidden;
+    background: #14151a;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 15px 40px rgba(231, 76, 60, 0.25);
+}
+
+.admin-modal-body {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.admin-modal-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(231, 76, 60, 0.15);
+    border: 1px solid rgba(231, 76, 60, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+}
+
+.admin-modal-icon i {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+}
+
+.admin-modal-body h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.admin-modal-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    word-break: keep-all;
+}
+
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.password-input-group {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-group .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.password-input-group input {
+    width: 100%;
+    background: #1e2026;
+    border: 1px solid #2d3748;
+    color: #fff;
+    padding: 12px 16px 12px 45px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.password-input-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+}
+
+.admin-auth-error {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    margin: -5px 0 5px 0;
+    display: none;
+    text-align: left;
+}
+
+.admin-submit-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 0;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
 /* ==========================================================================
    글로벌 레이아웃 & 미디어 쿼리
    ========================================================================== */
@@ -1750,53 +1913,6 @@ body.admin-mode .admin-only-element {
     box-shadow: 0 2px 10px rgba(230, 126, 34, 0.3);
 }
 
-.portfolio-filter button {
-    background: #14151a; 
-    color: var(--text-muted);
-    border: 1px solid #2d3748;
-    padding: 11px 24px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    transition: color 0.35s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.35s ease, box-shadow 0.35s ease;
-}
-
-.portfolio-filter button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--primary-color) 0%, #cf3a2c 100%);
-    z-index: -1;
-    transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.portfolio-filter button:hover {
-    color: #fff;
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
-}
-
-.portfolio-filter button:hover::before {
-    left: 0;
-}
-
-.portfolio-filter button.active {
-    color: #fff;
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-}
-
-.portfolio-filter button.active::before {
-    left: 0;
-}
-
 @media (max-width: 991px) {
     .nav-list {
         gap: 15px;
@@ -1809,6 +1925,16 @@ body.admin-mode .admin-only-element {
 @media (max-width: 768px) {
     .menu-toggle { display: block; }
     
+    .nav-wrapper {
+        gap: 10px;
+    }
+
+    .nav-admin-btn {
+        margin-right: 45px; 
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+
     .nav-list {
         display: flex;
         flex-direction: column;
@@ -1881,6 +2007,8 @@ body.admin-mode .admin-only-element {
     .modal-body { padding: 20px; }
     .modal-header h3 { font-size: 1.3rem; }
     .modal-info-grid { grid-template-columns: 1fr; }
+    .notice-modal-body { padding: 30px 20px; }
+    .admin-modal-body { padding: 30px 20px; }
 }
 
 @keyframes blink { 50% { opacity: 0; } }

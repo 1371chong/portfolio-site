@@ -248,8 +248,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ==========================================================================
+    // 6-B. 공지사항 상세보기 모달 제어 엔진
+    // ==========================================================================
+    const noticeModalOverlay = document.getElementById('notice-detail-modal');
+    const noticeModalCloseBtn = document.querySelector('.notice-modal-close');
+    const noticeModalBadge = document.getElementById('notice-modal-badge');
+    const noticeModalAuthor = document.getElementById('notice-modal-author');
+    const noticeModalDate = document.getElementById('notice-modal-date');
+    const noticeModalTitle = document.getElementById('notice-modal-title');
+    const noticeModalDesc = document.getElementById('notice-modal-desc');
+
+    function openNoticeModal(noticeObj) {
+        if (!noticeModalOverlay) return;
+
+        let badgeClass = 'badge-primary';
+        if (noticeObj.type === 'secondary') badgeClass = 'badge-secondary';
+        else if (noticeObj.type === 'info') badgeClass = 'badge-info';
+        else if (noticeObj.type === 'update') badgeClass = 'badge-update';
+
+        noticeModalBadge.className = `notice-badge ${badgeClass}`;
+        noticeModalBadge.textContent = noticeObj.typeName || '공지';
+        noticeModalAuthor.innerHTML = `<i class="fas fa-user-circle"></i> ${noticeObj.author || '정원복'}`;
+        noticeModalDate.textContent = noticeObj.date || '';
+        noticeModalTitle.textContent = noticeObj.title || '';
+        noticeModalDesc.textContent = noticeObj.desc || '';
+
+        noticeModalOverlay.classList.add('active');
+        noticeModalOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeNoticeModal() {
+        if (!noticeModalOverlay || !noticeModalOverlay.classList.contains('active')) return;
+        noticeModalOverlay.classList.remove('active');
+        noticeModalOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = 'auto';
+    }
+
+    if (noticeModalCloseBtn) noticeModalCloseBtn.addEventListener('click', closeNoticeModal);
+    if (noticeModalOverlay) {
+        noticeModalOverlay.addEventListener('click', (e) => {
+            if (e.target === noticeModalOverlay) closeNoticeModal();
+        });
+    }
+
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
+        if (e.key === 'Escape') {
+            closeModal();
+            closeNoticeModal();
+            closeAdminModal();
+        }
     });
 
     // ==========================================================================
@@ -327,20 +376,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 9. Supabase 데이터베이스 실시간 CRUD 연동 모듈
+    // 9. Supabase 데이터베이스 실시간 CRUD 연동 및 관리자 모달 모듈
     // ==========================================================================
-    // ⚠️ 끝에 슬래시(/)가 없어야 안전한 API 호출이 가능합니다.
     const SUPABASE_URL = "https://zwjggedeichljaesgiqk.supabase.co"; 
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3amdnZWRlaWNobGphZXNnaXFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3NjU2NTIsImV4cCI6MjEwMTM0MTY1Mn0.DQ5mcKQf5tmWI2B7ESM3OMoebwLBgNwfpIxCUXNuc1A"; 
-    const ADMIN_PASSWORD = "1234";
+    const ADMIN_PASSWORD = "051700";
 
-    // Supabase 클라이언트 연결
     let _supabase = null;
     if (typeof supabase !== 'undefined' && supabase.createClient) {
         _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 
     const adminAuthBtn = document.getElementById('admin-auth-btn');
+    const adminAuthModal = document.getElementById('admin-auth-modal');
+    const adminModalCloseBtn = document.querySelector('.admin-modal-close');
+    const adminLoginForm = document.getElementById('admin-login-form');
+    const adminPwInput = document.getElementById('admin-pw-input');
+    const adminAuthError = document.getElementById('admin-auth-error');
+
     const noticeForm = document.getElementById('notice-form');
     const noticeListContainer = document.getElementById('notice-list');
     const noticeTabBtns = document.querySelectorAll('.notice-tab-btn');
@@ -348,7 +401,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentNoticeTab = 'all';
     let storedNotices = [];
 
-    // 최초 DB가 비어 있을 경우 자동으로 데이터베이스에 주입할 기본 공지사항 3건
     const defaultNoticesToSeed = [
         {
             type: 'update',
@@ -376,14 +428,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    // 관리자 로그인 상태 확인
+    function openAdminModal() {
+        if (!adminAuthModal) return;
+        adminPwInput.value = '';
+        if (adminAuthError) adminAuthError.style.display = 'none';
+        adminAuthModal.classList.add('active');
+        adminAuthModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => adminPwInput.focus(), 100);
+    }
+
+    function closeAdminModal() {
+        if (!adminAuthModal || !adminAuthModal.classList.contains('active')) return;
+        adminAuthModal.classList.remove('active');
+        adminAuthModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = 'auto';
+    }
+
+    if (adminModalCloseBtn) adminModalCloseBtn.addEventListener('click', closeAdminModal);
+    if (adminAuthModal) {
+        adminAuthModal.addEventListener('click', (e) => {
+            if (e.target === adminAuthModal) closeAdminModal();
+        });
+    }
+
     function checkAdminStatus() {
         const isAdmin = sessionStorage.getItem('portfolio_admin_logged_in') === 'true';
         if (isAdmin) {
             document.body.classList.add('admin-mode');
             if (adminAuthBtn) {
                 adminAuthBtn.classList.add('logged-in');
-                adminAuthBtn.innerHTML = '<i class="fas fa-unlock"></i> 관리자 로그아웃';
+                adminAuthBtn.innerHTML = '<i class="fas fa-unlock"></i> 로그아웃';
             }
         } else {
             document.body.classList.remove('admin-mode');
@@ -395,7 +470,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchNoticesFromDB();
     }
 
-    // 관리자 토글 버튼 이벤트 handler
     if (adminAuthBtn) {
         adminAuthBtn.addEventListener('click', () => {
             const isAdmin = sessionStorage.getItem('portfolio_admin_logged_in') === 'true';
@@ -405,19 +479,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('관리자 모드에서 로그아웃 되었습니다.');
                 checkAdminStatus();
             } else {
-                const inputPw = prompt('관리자 비밀번호를 입력하세요:');
-                if (inputPw === ADMIN_PASSWORD) {
-                    sessionStorage.setItem('portfolio_admin_logged_in', 'true');
-                    alert('관리자로 인증되었습니다.');
-                    checkAdminStatus();
-                } else if (inputPw !== null) {
-                    alert('비밀번호가 올바르지 않습니다.');
-                }
+                openAdminModal();
             }
         });
     }
 
-    // 1. READ & AUTO-SEED: Supabase DB 데이터 조회 및 데이터 부재 시 기본 샘플 자동 삽입
+    if (adminLoginForm) {
+        adminLoginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputPw = adminPwInput.value.trim();
+
+            if (inputPw === ADMIN_PASSWORD) {
+                sessionStorage.setItem('portfolio_admin_logged_in', 'true');
+                closeAdminModal();
+                checkAdminStatus();
+                alert('관리자로 로그인되었습니다.');
+            } else {
+                if (adminAuthError) {
+                    adminAuthError.textContent = '비밀번호가 올바르지 않습니다.';
+                    adminAuthError.style.display = 'block';
+                }
+                adminPwInput.select();
+            }
+        });
+    }
+
     async function fetchNoticesFromDB() {
         if (!noticeListContainer) return;
         
@@ -437,7 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // DB에 데이터가 한 건도 없을 경우 최초 1회 기본 데이터 등록
         if (!data || data.length === 0) {
             const { error: seedError } = await _supabase.from('notices').insert(defaultNoticesToSeed);
             if (!seedError) {
@@ -453,7 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderNotices();
     }
 
-    // 공지사항 렌더링
     function renderNotices() {
         if (!noticeListContainer) return;
         noticeListContainer.innerHTML = '';
@@ -497,15 +581,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <h3 class="notice-title">${notice.title || ''}</h3>
                 <p class="notice-desc">${notice.desc || ''}</p>
+                <div class="notice-footer-action">
+                    <button type="button" class="notice-detail-btn"><i class="fas fa-expand-alt"></i> 자세히 보기</button>
+                </div>
             `;
+
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.notice-actions') || e.target.closest('.notice-edit-box')) return;
+                openNoticeModal(notice);
+            });
 
             noticeListContainer.appendChild(card);
         });
 
         if (isAdmin) {
-            // 2. DELETE: Supabase DB 삭제
             document.querySelectorAll('.notice-delete-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
                     const targetId = parseInt(e.currentTarget.dataset.id);
                     if (confirm('이 공지사항을 DB에서 영구 삭제하시겠습니까?')) {
                         const { error } = await _supabase
@@ -523,9 +615,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            // 3. UPDATE: Supabase DB 수정
             document.querySelectorAll('.notice-edit-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     const targetId = parseInt(e.currentTarget.dataset.id);
                     const noticeObj = storedNotices.find(item => item.id === targetId);
                     if (!noticeObj) return;
@@ -553,7 +645,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     `;
 
-                    cardElement.querySelector('.save-edit-btn').addEventListener('click', async () => {
+                    cardElement.querySelector('.save-edit-btn').addEventListener('click', async (e) => {
+                        e.stopPropagation();
                         const newType = cardElement.querySelector('.edit-type').value;
                         const newTypeName = cardElement.querySelector('.edit-type').options[cardElement.querySelector('.edit-type').selectedIndex].text;
                         const newAuthor = cardElement.querySelector('.edit-author').value.trim() || '정원복';
@@ -586,7 +679,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
-                    cardElement.querySelector('.cancel-edit-btn').addEventListener('click', () => {
+                    cardElement.querySelector('.cancel-edit-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
                         renderNotices();
                     });
                 });
@@ -594,7 +688,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 탭 이동
     noticeTabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             noticeTabBtns.forEach(b => b.classList.remove('active'));
@@ -604,7 +697,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. CREATE: Supabase DB 데이터 삽입
     if (noticeForm) {
         noticeForm.addEventListener('submit', async (e) => {
             e.preventDefault();
