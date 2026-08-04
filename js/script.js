@@ -570,16 +570,17 @@
                 var isHidden = window.getComputedStyle(popupConfigForm).display === 'none';
                 popupConfigForm.style.setProperty('display', isHidden ? 'block' : 'none', 'important');
                 
-                var saved = SafeStorage.getItem('site_popup_config');
-                if (saved) {
-                    try {
-                        var cfg = JSON.parse(saved);
-                        document.getElementById('popup-is-active').checked = !!cfg.active;
-                        document.getElementById('popup-title-input').value = cfg.title || '';
-                        document.getElementById('popup-img-input').value = cfg.img || '';
-                        document.getElementById('popup-link-input').value = cfg.link || '';
-                        document.getElementById('popup-desc-input').value = cfg.desc || '';
-                    } catch(e) {}
+                if (_supabase) {
+                    _supabase.from('site_settings').select('value').eq('key', 'popup_config').then(function(res) {
+                        if (res.data && res.data.length > 0) {
+                            var cfg = res.data[0].value;
+                            document.getElementById('popup-is-active').checked = !!cfg.active;
+                            document.getElementById('popup-title-input').value = cfg.title || '';
+                            document.getElementById('popup-img-input').value = cfg.img || '';
+                            document.getElementById('popup-link-input').value = cfg.link || '';
+                            document.getElementById('popup-desc-input').value = cfg.desc || '';
+                        }
+                    });
                 }
 
                 var noticeSection = document.getElementById('notice');
@@ -593,15 +594,16 @@
                 var isHidden = window.getComputedStyle(maintenanceConfigForm).display === 'none';
                 maintenanceConfigForm.style.setProperty('display', isHidden ? 'block' : 'none', 'important');
 
-                var saved = SafeStorage.getItem('site_maint_config');
-                if (saved) {
-                    try {
-                        var cfg = JSON.parse(saved);
-                        document.getElementById('maint-is-active').checked = !!cfg.active;
-                        document.getElementById('maint-title-input').value = cfg.title || '';
-                        document.getElementById('maint-period-input').value = cfg.period || '';
-                        document.getElementById('maint-desc-input').value = cfg.desc || '';
-                    } catch(e) {}
+                if (_supabase) {
+                    _supabase.from('site_settings').select('value').eq('key', 'maintenance_config').then(function(res) {
+                        if (res.data && res.data.length > 0) {
+                            var cfg = res.data[0].value;
+                            document.getElementById('maint-is-active').checked = !!cfg.active;
+                            document.getElementById('maint-title-input').value = cfg.title || '';
+                            document.getElementById('maint-period-input').value = cfg.period || '';
+                            document.getElementById('maint-desc-input').value = cfg.desc || '';
+                        }
+                    });
                 }
 
                 var noticeSection = document.getElementById('notice');
@@ -1097,7 +1099,7 @@
         }
 
         // ==========================================================================
-        // 13. 팝업 공지 및 점검 모드 제어 로직
+        // 13. 팝업 공지 및 점검 모드 제어 로직 (Supabase DB 연동)
         // ==========================================================================
 
         if (popupConfigForm) {
@@ -1111,10 +1113,21 @@
                     desc: document.getElementById('popup-desc-input').value.trim()
                 };
                 
-                SafeStorage.setItem('site_popup_config', JSON.stringify(popupData));
-                showToast('팝업 공지 설정이 저장되었습니다.', 'success');
-                popupConfigForm.style.setProperty('display', 'none', 'important');
-                applyPopupConfig();
+                if (!_supabase) { alert('데이터베이스 연결을 확인해주세요.'); return; }
+
+                _supabase.from('site_settings').upsert({
+                    key: 'popup_config',
+                    value: popupData,
+                    updated_at: new Date()
+                }).then(function(res) {
+                    if (!res.error) {
+                        showToast('팝업 공지 설정이 DB에 저장되었습니다.', 'success');
+                        popupConfigForm.style.setProperty('display', 'none', 'important');
+                        applyPopupConfig();
+                    } else {
+                        alert('저장 실패: ' + res.error.message);
+                    }
+                });
             });
         }
 
@@ -1128,18 +1141,30 @@
                     desc: document.getElementById('maint-desc-input').value.trim()
                 };
                 
-                SafeStorage.setItem('site_maint_config', JSON.stringify(maintData));
-                showToast('점검 모드 설정이 저장되었습니다.', 'success');
-                maintenanceConfigForm.style.setProperty('display', 'none', 'important');
-                applyMaintenanceConfig();
+                if (!_supabase) { alert('데이터베이스 연결을 확인해주세요.'); return; }
+
+                _supabase.from('site_settings').upsert({
+                    key: 'maintenance_config',
+                    value: maintData,
+                    updated_at: new Date()
+                }).then(function(res) {
+                    if (!res.error) {
+                        showToast('점검 모드 설정이 DB에 저장되었습니다.', 'success');
+                        maintenanceConfigForm.style.setProperty('display', 'none', 'important');
+                        applyMaintenanceConfig();
+                    } else {
+                        alert('저장 실패: ' + res.error.message);
+                    }
+                });
             });
         }
 
         function applyPopupConfig() {
-            var raw = SafeStorage.getItem('site_popup_config');
-            if (!raw) return;
-            try {
-                var config = JSON.parse(raw);
+            if (!_supabase) return;
+            _supabase.from('site_settings').select('value').eq('key', 'popup_config').then(function(res) {
+                if (res.error || !res.data || res.data.length === 0) return;
+                var config = res.data[0].value;
+                
                 var popupModal = document.getElementById('main-popup-modal');
                 var hideToday = localStorage.getItem('popup_hide_until');
                 var now = new Date().getTime();
@@ -1156,14 +1181,15 @@
                     if (descEl) descEl.textContent = config.desc || '';
                     popupModal.classList.add('active');
                 }
-            } catch(e) {}
+            });
         }
 
         function applyMaintenanceConfig() {
-            var raw = SafeStorage.getItem('site_maint_config');
-            if (!raw) return;
-            try {
-                var config = JSON.parse(raw);
+            if (!_supabase) return;
+            _supabase.from('site_settings').select('value').eq('key', 'maintenance_config').then(function(res) {
+                if (res.error || !res.data || res.data.length === 0) return;
+                var config = res.data[0].value;
+                
                 var maintScreen = document.getElementById('maintenance-screen');
                 var isAdmin = SafeStorage.getItem('portfolio_admin_logged_in') === 'true';
 
@@ -1179,7 +1205,7 @@
                 } else if (maintScreen) {
                     maintScreen.style.display = 'none';
                 }
-            } catch(e) {}
+            });
         }
 
         var mainPopupCloseBtn = document.getElementById('main-popup-close-btn');
