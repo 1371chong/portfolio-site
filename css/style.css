@@ -408,7 +408,7 @@ body.hovered .custom-cursor-arrow .cursor-ring {
 }
 
 /* ==========================================================================
-   6. 이미지 스타일 적용 탭 메뉴 & 검색창 UI (Floating Pill & Search UI)
+   6. 이미지 스타일 적용 탭 메뉴 & One UI 8 검색창 UI (Floating Pill & Search UI)
    ========================================================================== */
 .portfolio-controls {
     display: flex;
@@ -486,14 +486,34 @@ body.hovered .custom-cursor-arrow .cursor-ring {
     font-size: 0.95rem;
 }
 
+/* One UI 8 스타일 알약 검색바 */
 .search-wrapper {
     position: relative;
     display: flex;
     align-items: center;
-    min-width: 260px;
+    width: 100%;
+    max-width: 320px;
+    height: 48px;
+    background-color: #14161d;
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.search-wrapper i {
+.search-wrapper:hover {
+    border-color: #4a5568;
+    background-color: #181a22;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.search-wrapper:focus-within {
+    background-color: #181a22;
+    border-color: var(--primary-color, #007aff);
+    box-shadow: 0 0 18px rgba(231, 76, 60, 0.3);
+}
+
+.search-wrapper i.fa-search {
     position: absolute;
     left: 18px;
     color: var(--text-sub);
@@ -502,17 +522,20 @@ body.hovered .custom-cursor-arrow .cursor-ring {
     transition: color var(--transition-fast);
 }
 
+.search-wrapper:focus-within i.fa-search {
+    color: var(--primary-color);
+}
+
 #portfolio-search {
     width: 100%;
-    background: #14161d;
-    border: 1px solid var(--border-color);
-    color: #fff;
-    padding: 11px 20px 11px 44px;
-    border-radius: 50px;
-    font-size: 0.88rem;
+    height: 100%;
+    background: transparent;
+    border: none;
     outline: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    color: #fff;
+    padding-left: 46px;
+    padding-right: 42px;
+    font-size: 0.88rem;
 }
 
 #portfolio-search::placeholder {
@@ -520,19 +543,37 @@ body.hovered .custom-cursor-arrow .cursor-ring {
     font-size: 0.85rem;
 }
 
-#portfolio-search:hover {
-    border-color: #4a5568;
-    background: #181a22;
+/* One UI 8 실시간 지우기(X) 버튼 */
+.clear-btn {
+    position: absolute;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #2d3748;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    color: #a0aec0;
 }
 
-#portfolio-search:focus {
-    border-color: var(--primary-color);
-    background: #181a22;
-    box-shadow: 0 0 18px rgba(231, 76, 60, 0.3);
+.clear-btn.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
-.search-wrapper:focus-within i {
-    color: var(--primary-color);
+.clear-btn:hover {
+    background: #4a5568;
+    color: #fff;
+}
+
+.clear-btn i {
+    font-size: 0.75rem;
 }
 
 .portfolio-grid {
