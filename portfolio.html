@@ -127,8 +127,8 @@
                         <option value="contest">타이틀시퀀스 (Title)</option>
                         <option value="outsourcing">인트로 (Intro)</option>
                         <option value="Detail">상세페이지 (Detail)</option>
-                        <option value="Interview">키네틱 타이포그래피 ("Kinetic Typography)</option>
-                        <option value="Interview">모션 (Motion)</option>
+                        <option value="Kinetic Typography">키네틱 타이포그래피 (Kinetic Typography)</option>
+                        <option value="Motion">모션 (Motion)</option>
                     </select>
                     <input type="text" id="pf-title" placeholder="작품 제목을 입력하세요..." required style="flex: 2;">
                     <input type="text" id="pf-tag" placeholder="태그 (예: #CF #모션그래픽)" required style="flex: 1;">
@@ -167,9 +167,13 @@
                     <button data-filter="Motion"><i class="fas fa-running"></i> 모션</button>
                 </div>
                 
+                <!-- One UI 8 스타일 검색바 및 실시간 지우기(X) 버튼 적용 영역 -->
                 <div class="search-wrapper">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="portfolio-search" placeholder="작품명 또는 키워드 검색..." aria-label="포트폴리오 검색">
+                    <input type="text" id="portfolio-search" placeholder="작품명 또는 키워드 검색..." aria-label="포트폴리오 검색" autocomplete="off">
+                    <button type="button" id="clearBtn" class="clear-btn" aria-label="검색어 지우기">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
 
@@ -255,6 +259,32 @@
     </footer>
     
     <script src="js/script.js"></script>
+
+    <!-- One UI 8 검색바 지우기(X) 버튼 연동 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('portfolio-search');
+            const clearBtn = document.getElementById('clearBtn');
+
+            if (searchInput && clearBtn) {
+                searchInput.addEventListener('input', function(e) {
+                    const query = e.target.value.trim();
+                    if (query.length > 0) {
+                        clearBtn.classList.add('visible');
+                    } else {
+                        clearBtn.classList.remove('visible');
+                    }
+                });
+
+                clearBtn.addEventListener('click', function() {
+                    searchInput.value = '';
+                    clearBtn.classList.remove('visible');
+                    searchInput.focus();
+                    searchInput.dispatchEvent(new Event('input'));
+                });
+            }
+        });
+    </script>
 
     <!-- URL 파라미터 기반 필터 자동 적용 스크립트 -->
     <script>
