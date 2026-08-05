@@ -432,6 +432,7 @@
         var adminMenuAddPf = document.getElementById('admin-menu-add-pf');
         var adminMenuAddNotice = document.getElementById('admin-menu-add-notice');
         var adminMenuAddHistory = document.getElementById('admin-menu-add-history');
+        var adminMenuAddPricing = document.getElementById('admin-menu-add-pricing'); // 상품 추가 메뉴
         var adminMenuPopupConfig = document.getElementById('admin-menu-popup-config');
         var adminMenuMaintenanceConfig = document.getElementById('admin-menu-maintenance-config');
 
@@ -450,6 +451,7 @@
         var historyEduList = document.getElementById('history-edu-list');
         var historyExpList = document.getElementById('history-exp-list');
 
+        var pricingForm = document.getElementById('pricing-form'); // 요금제 상품 등록 폼
         var popupConfigForm = document.getElementById('popup-config-form');
         var maintenanceConfigForm = document.getElementById('maintenance-config-form');
 
@@ -457,6 +459,7 @@
         var storedNotices = [];
         var storedPortfolios = [];
         var storedHistories = [];
+        var storedPricing = [];
 
         function openAdminModal() {
             if (!adminAuthModal) return;
@@ -502,12 +505,14 @@
             if (portfolioForm) portfolioForm.style.setProperty('display', 'none', 'important');
             if (noticeForm) noticeForm.style.setProperty('display', 'none', 'important');
             if (historyForm) historyForm.style.setProperty('display', 'none', 'important');
+            if (pricingForm) pricingForm.style.setProperty('display', 'none', 'important');
             if (popupConfigForm) popupConfigForm.style.setProperty('display', 'none', 'important');
             if (maintenanceConfigForm) maintenanceConfigForm.style.setProperty('display', 'none', 'important');
 
             fetchPortfoliosFromDB();
             fetchNoticesFromDB();
             fetchHistoriesFromDB();
+            fetchPricingFromDB();
             applyPopupConfig();
             applyMaintenanceConfig();
         }
@@ -564,50 +569,83 @@
             });
         }
 
-        if (adminMenuPopupConfig && popupConfigForm) {
-            adminMenuPopupConfig.addEventListener('click', function() {
+        // 상품 추가 버튼 클릭 이벤트 처리
+        if (adminMenuAddPricing) {
+            adminMenuAddPricing.addEventListener('click', function() {
                 adminMenuDropdown.style.display = 'none';
+                if (pricingForm) {
+                    var isHidden = window.getComputedStyle(pricingForm).display === 'none';
+                    pricingForm.style.setProperty('display', isHidden ? 'block' : 'none', 'important');
+                    if (isHidden && pricingForm.scrollIntoView) {
+                        pricingForm.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        }
+
+        if (adminMenuPopupConfig && popupConfigForm) {
+            adminMenuPopupConfig.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (adminMenuDropdown) adminMenuDropdown.style.display = 'none';
+                
                 var isHidden = window.getComputedStyle(popupConfigForm).display === 'none';
                 popupConfigForm.style.setProperty('display', isHidden ? 'block' : 'none', 'important');
                 
-                if (_supabase) {
+                if (isHidden && popupConfigForm.scrollIntoView) {
+                    popupConfigForm.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                if (_supabase && isHidden) {
                     _supabase.from('site_settings').select('value').eq('key', 'popup_config').then(function(res) {
                         if (res.data && res.data.length > 0) {
                             var cfg = res.data[0].value;
-                            document.getElementById('popup-is-active').checked = !!cfg.active;
-                            document.getElementById('popup-title-input').value = cfg.title || '';
-                            document.getElementById('popup-img-input').value = cfg.img || '';
-                            document.getElementById('popup-link-input').value = cfg.link || '';
-                            document.getElementById('popup-desc-input').value = cfg.desc || '';
+                            var activeEl = document.getElementById('popup-is-active');
+                            var titleEl = document.getElementById('popup-title-input');
+                            var imgEl = document.getElementById('popup-img-input');
+                            var linkEl = document.getElementById('popup-link-input');
+                            var descEl = document.getElementById('popup-desc-input');
+
+                            if (activeEl) activeEl.checked = !!cfg.active;
+                            if (titleEl) titleEl.value = cfg.title || '';
+                            if (imgEl) imgEl.value = cfg.img || '';
+                            if (linkEl) linkEl.value = cfg.link || '';
+                            if (descEl) descEl.value = cfg.desc || '';
                         }
                     });
                 }
-
-                var noticeSection = document.getElementById('notice');
-                if (noticeSection) noticeSection.scrollIntoView({ behavior: 'smooth' });
             });
         }
 
         if (adminMenuMaintenanceConfig && maintenanceConfigForm) {
-            adminMenuMaintenanceConfig.addEventListener('click', function() {
-                adminMenuDropdown.style.display = 'none';
+            adminMenuMaintenanceConfig.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (adminMenuDropdown) adminMenuDropdown.style.display = 'none';
+
                 var isHidden = window.getComputedStyle(maintenanceConfigForm).display === 'none';
                 maintenanceConfigForm.style.setProperty('display', isHidden ? 'block' : 'none', 'important');
 
-                if (_supabase) {
+                if (isHidden && maintenanceConfigForm.scrollIntoView) {
+                    maintenanceConfigForm.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                if (_supabase && isHidden) {
                     _supabase.from('site_settings').select('value').eq('key', 'maintenance_config').then(function(res) {
                         if (res.data && res.data.length > 0) {
                             var cfg = res.data[0].value;
-                            document.getElementById('maint-is-active').checked = !!cfg.active;
-                            document.getElementById('maint-title-input').value = cfg.title || '';
-                            document.getElementById('maint-period-input').value = cfg.period || '';
-                            document.getElementById('maint-desc-input').value = cfg.desc || '';
+                            var activeEl = document.getElementById('maint-is-active');
+                            var titleEl = document.getElementById('maint-title-input');
+                            var periodEl = document.getElementById('maint-period-input');
+                            var descEl = document.getElementById('maint-desc-input');
+
+                            if (activeEl) activeEl.checked = !!cfg.active;
+                            if (titleEl) titleEl.value = cfg.title || '';
+                            if (periodEl) periodEl.value = cfg.period || '';
+                            if (descEl) descEl.value = cfg.desc || '';
                         }
                     });
                 }
-
-                var noticeSection = document.getElementById('notice');
-                if (noticeSection) noticeSection.scrollIntoView({ behavior: 'smooth' });
             });
         }
 
@@ -920,7 +958,153 @@
         }
 
         // ==========================================================================
-        // 12. 공지사항 DB CRUD
+        // 11-B. 상품(Pricing) Supabase DB CRUD (동일 디자인 카드 구조 및 연락 섹션 이동 적용)
+        // ==========================================================================
+        function fetchPricingFromDB() {
+            var pricingGrid = document.querySelector('.pricing-grid');
+            if (!pricingGrid || !_supabase) return;
+            
+            _supabase.from('pricing').select('*').order('id', { ascending: true }).then(function(res) {
+                if (res.error) { console.error('Pricing Fetch Error:', res.error); return; }
+                if (res.data && res.data.length > 0) {
+                    storedPricing = res.data;
+                    renderPricing();
+                }
+            });
+        }
+
+        function renderPricing() {
+            var pricingGrid = document.querySelector('.pricing-grid');
+            if (!pricingGrid || storedPricing.length === 0) return;
+            
+            pricingGrid.innerHTML = '';
+            var isAdmin = SafeStorage.getItem('portfolio_admin_logged_in') === 'true';
+
+            storedPricing.forEach(function(item) {
+                var card = document.createElement('div');
+                var isFeatured = item.is_featured;
+                
+                card.className = 'pricing-card' + (isFeatured ? ' featured' : '');
+                card.setAttribute('data-id', item.id);
+                card.style.position = 'relative';
+
+                var adminActionHtml = isAdmin ? '\
+                    <div class="pricing-admin-controls" style="position: absolute; top: 12px; right: 12px; z-index: 10; display: flex; gap: 5px;">\
+                        <button class="pricing-edit-btn" data-id="' + item.id + '" style="background: rgba(52,152,219,0.9); color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer;"><i class="fas fa-edit"></i> 수정</button>\
+                        <button class="pricing-delete-btn" data-id="' + item.id + '" style="background: rgba(231,76,60,0.9); color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer;"><i class="fas fa-trash-alt"></i> 삭제</button>\
+                    </div>\
+                ' : '';
+
+                var badgeHtml = isFeatured ? '<div class="badge"><i class="fas fa-star"></i> 추천 요금제</div>' : '';
+                
+                var featuresHtml = '';
+                var featuresArr = typeof item.features === 'string' ? item.features.split('\n') : (item.features || []);
+                featuresArr.forEach(function(feat) {
+                    if (feat.trim()) {
+                        featuresHtml += '<li><i class="fas fa-check-circle"></i> ' + feat.trim() + '</li>';
+                    }
+                });
+
+                card.innerHTML = adminActionHtml + badgeHtml + '\
+                    <div class="pricing-header">\
+                        <h3>' + (item.title || '') + '</h3>\
+                        <p class="price">' + (item.price || '') + '</p>\
+                    </div>\
+                    <ul class="pricing-features">\
+                        ' + featuresHtml + '\
+                    </ul>\
+                    <a href="index.html#contact" class="btn btn-pricing-action' + (isFeatured ? ' featured-btn' : '') + '">\
+                        <span>문의하기</span> <i class="fas fa-arrow-right"></i>\
+                    </a>\
+                ';
+                pricingGrid.appendChild(card);
+            });
+
+            if (isAdmin) {
+                Array.prototype.forEach.call(document.querySelectorAll('.pricing-delete-btn'), function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        var targetId = parseInt(e.currentTarget.getAttribute('data-id'));
+                        if (confirm('해당 요금제 상품을 삭제하시겠습니까?')) {
+                            _supabase.from('pricing').delete().eq('id', targetId).then(function(res) {
+                                if (!res.error) { showToast('상품이 삭제되었습니다.', 'success'); fetchPricingFromDB(); }
+                            });
+                        }
+                    });
+                });
+
+                Array.prototype.forEach.call(document.querySelectorAll('.pricing-edit-btn'), function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        var targetId = parseInt(e.currentTarget.getAttribute('data-id'));
+                        var pricingObj = storedPricing.filter(function(item) { return item.id === targetId; })[0];
+                        if (!pricingObj) return;
+
+                        var cardElement = document.querySelector('.pricing-card[data-id="' + targetId + '"]');
+                        if (!cardElement) return;
+
+                        cardElement.innerHTML = '\
+                            <div class="pricing-edit-box" style="display:flex; flex-direction:column; gap:10px; padding:5px;">\
+                                <h4 style="color:#fff; font-size:1rem; margin-bottom:4px;"><i class="fas fa-edit"></i> 상품 수정</h4>\
+                                <input type="text" class="edit-pricing-title" value="' + pricingObj.title + '" placeholder="상품명" style="background:#1e2026; color:#fff; border:1px solid #2d3748; padding:8px 12px; border-radius:6px; font-size:0.9rem;">\
+                                <input type="text" class="edit-pricing-price" value="' + pricingObj.price + '" placeholder="가격" style="background:#1e2026; color:#fff; border:1px solid #2d3748; padding:8px 12px; border-radius:6px; font-size:0.9rem;">\
+                                <textarea class="edit-pricing-features" placeholder="포함 사항 (줄바꿈 입력)" rows="4" style="background:#1e2026; color:#fff; border:1px solid #2d3748; padding:8px 12px; border-radius:6px; font-size:0.9rem; resize:vertical;">' + pricingObj.features + '</textarea>\
+                                <label style="color:#a0aec0; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:6px;">\
+                                    <input type="checkbox" class="edit-pricing-featured" ' + (pricingObj.is_featured ? 'checked' : '') + '> 추천 요금제 강조 여부\
+                                </label>\
+                                <div style="display:flex; gap:6px; justify-content:flex-end; margin-top:8px;">\
+                                    <button type="button" class="save-pricing-edit-btn" style="background:#2ecc71; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.85rem; cursor:pointer;">저장</button>\
+                                    <button type="button" class="cancel-pricing-edit-btn" style="background:#7f8c8d; color:#fff; border:none; padding:6px 14px; border-radius:6px; font-size:0.85rem; cursor:pointer;">취소</button>\
+                                </div>\
+                            </div>\
+                        ';
+
+                        cardElement.querySelector('.save-pricing-edit-btn').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            var newTitle = cardElement.querySelector('.edit-pricing-title').value.trim();
+                            var newPrice = cardElement.querySelector('.edit-pricing-price').value.trim();
+                            var newFeatures = cardElement.querySelector('.edit-pricing-features').value.trim();
+                            var newIsFeatured = cardElement.querySelector('.edit-pricing-featured').checked;
+
+                            if (!newTitle || !newPrice) { alert('상품명과 가격을 입력해주세요.'); return; }
+
+                            var updatePayload = { title: newTitle, price: newPrice, features: newFeatures, is_featured: newIsFeatured };
+                            _supabase.from('pricing').update(updatePayload).eq('id', targetId).then(function(res) {
+                                if (!res.error) { showToast('상품 정보가 수정되었습니다.', 'success'); fetchPricingFromDB(); }
+                            });
+                        });
+
+                        cardElement.querySelector('.cancel-pricing-edit-btn').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            renderPricing();
+                        });
+                    });
+                });
+            }
+        }
+
+        if (pricingForm) {
+            pricingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var title = document.getElementById('pricing-title-input').value.trim();
+                var price = document.getElementById('pricing-price-input').value.trim();
+                var features = document.getElementById('pricing-features-input').value.trim();
+                var is_featured = document.getElementById('pricing-featured-input').checked;
+
+                var newPricingObj = { title: title, price: price, features: features, is_featured: is_featured };
+                _supabase.from('pricing').insert([newPricingObj]).then(function(res) {
+                    if (!res.error) {
+                        pricingForm.reset();
+                        pricingForm.style.setProperty('display', 'none', 'important');
+                        showToast('새로운 상품이 성공적으로 등록되었습니다!', 'success');
+                        fetchPricingFromDB();
+                    } else { alert('등록 실패: ' + res.error.message); }
+                });
+            });
+        }
+
+        // ==========================================================================
+        // 12. 공지사항 DB CRUD (카테고리 자동 감지 및 필터링 기능 통합)
         // ==========================================================================
         function fetchNoticesFromDB() {
             if (!noticeListContainer || !_supabase) return;
@@ -929,6 +1113,13 @@
                 storedNotices = (res.data || []).map(function(item) {
                     return Object.assign({}, item, { typeName: item.typeName || item.type_name || '공지' });
                 });
+                
+                // body 태그에 data-notice-category가 정의되어 있는 경우 해당 탭으로 자동 필터링
+                var bodyCategory = document.body.getAttribute('data-notice-category');
+                if (bodyCategory) {
+                    currentNoticeTab = bodyCategory;
+                }
+
                 renderNotices();
             });
         }
@@ -1229,4 +1420,175 @@
 
         checkAdminStatus();
     });
+
+    // ==========================================================================
+    // 14. 메가 드롭다운 및 공지사항 페이지 연동 로직
+    // ==========================================================================
+    var megaFilterLinks = document.querySelectorAll('.mega-filter-link');
+    Array.prototype.forEach.call(megaFilterLinks, function(link) {
+        link.addEventListener('click', function(e) {
+            var filterValue = link.getAttribute('data-filter');
+            var targetBtn = document.querySelector('.portfolio-filter button[data-filter="' + filterValue + '"]');
+            if (targetBtn) targetBtn.click();
+        });
+    });
+
+    var megaNoticeLinks = document.querySelectorAll('.mega-notice-link');
+    Array.prototype.forEach.call(megaNoticeLinks, function(link) {
+        link.addEventListener('click', function(e) {
+            var catValue = link.getAttribute('data-category');
+            var targetTab = document.querySelector('.notice-tab-btn[data-category="' + catValue + '"]');
+            if (targetTab) targetTab.click();
+        });
+    });
+
+    var openNoticePageBtn = document.getElementById('open-notice-page-btn');
+    var noticePageView = document.getElementById('notice-page-view');
+    var noticePageCloseBtn = document.querySelector('.notice-page-close-btn');
+    var noticePageListContainer = document.getElementById('notice-page-list-container');
+    var noticePageTabBtns = document.querySelectorAll('.notice-page-tab-btn');
+    var currentNoticePageTab = 'all';
+
+    function renderNoticePageList() {
+        if (!noticePageListContainer) return;
+        noticePageListContainer.innerHTML = '';
+
+        var filtered = storedNotices.filter(function(item) {
+            return currentNoticePageTab === 'all' || item.type === currentNoticePageTab;
+        });
+
+        if (filtered.length === 0) {
+            noticePageListContainer.innerHTML = '<p style="text-align:center; color:var(--text-sub); padding:40px;">등록된 공지사항이 없습니다.</p>';
+            return;
+        }
+
+        filtered.forEach(function(notice) {
+            var div = document.createElement('div');
+            div.style.cssText = 'background:var(--bg-card); border:1px solid var(--border-color); padding:16px 20px; border-radius:10px; cursor:pointer; transition:all 0.2s ease;';
+            div.innerHTML = '\
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.8rem; color:var(--text-sub);">\
+                    <span><strong style="color:var(--primary-color);">[' + (notice.typeName || '공지') + ']</strong> ' + (notice.author || '정원복') + '</span>\
+                    <span>' + (notice.date || '') + '</span>\
+                </div>\
+                <h4 style="color:#fff; font-size:1.05rem; margin-bottom:6px;">' + (notice.title || '') + '</h4>\
+                <p style="color:var(--text-sub); font-size:0.9len; line-height:1.5;">' + (notice.desc || '') + '</p>\
+            ';
+            div.addEventListener('click', function() {
+                openNoticeModal(notice);
+            });
+            noticePageListContainer.appendChild(div);
+        });
+    }
+
+    if (openNoticePageBtn && noticePageView) {
+        openNoticePageBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            noticePageView.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderNoticePageList();
+        });
+    }
+
+    if (noticePageCloseBtn && noticePageView) {
+        noticePageCloseBtn.addEventListener('click', function() {
+            noticePageView.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        noticePageView.addEventListener('click', function(e) {
+            if (e.target === noticePageView) {
+                noticePageView.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+
+    Array.prototype.forEach.call(noticePageTabBtns, function(btn) {
+        btn.addEventListener('click', function() {
+            Array.prototype.forEach.call(noticePageTabBtns, function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            currentNoticePageTab = btn.getAttribute('data-category');
+            renderNoticePageList();
+        });
+    });
+    
+    // 포트폴리오 전용 페이지 모달 및 기능 로직
+    var openPortfolioPageBtn = document.getElementById('open-portfolio-page-btn');
+    var portfolioPageView = document.getElementById('portfolio-page-view');
+    var portfolioPageCloseBtn = document.querySelector('.portfolio-page-close-btn');
+    var portfolioPageGridContainer = document.getElementById('portfolio-page-grid-container');
+    var portfolioPageFilterBtns = document.querySelectorAll('.portfolio-page-filter-btn');
+    var currentPortfolioPageFilter = 'all';
+
+    function renderPortfolioPageGrid() {
+        if (!portfolioPageGridContainer) return;
+        portfolioPageGridContainer.innerHTML = '';
+
+        var filtered = storedPortfolios.filter(function(item) {
+            if (!item.isVisible && !isAdminLoggedIn) return false;
+            return currentPortfolioPageFilter === 'all' || item.category === currentPortfolioPageFilter;
+        });
+
+        if (filtered.length === 0) {
+            portfolioPageGridContainer.innerHTML = '<p style="grid-column: 1 / -1; text-align:center; color:var(--text-sub); padding:40px;">등록된 포트폴리오가 없습니다.</p>';
+            return;
+        }
+
+        filtered.forEach(function(item) {
+            var card = document.createElement('div');
+            card.className = 'portfolio-item show';
+            card.innerHTML = '\
+                <div class="portfolio-thumb">\
+                    <img src="' + (item.thumb || 'img/icon/icon_default.jpg') + '" alt="' + item.title + '" onerror="this.src=\'img/icon/icon_default.jpg\'">\
+                </div>\
+                <div class="portfolio-info">\
+                    <h3>' + item.title + '</h3>\
+                    <div class="info-footer">\
+                        <span class="tag">' + (item.tag || '#포트폴리오') + '</span>\
+                        <button class="portfolio-btn detail-view-btn" data-id="' + item.id + '">상세보기 <i class="fas fa-arrow-right"></i></button>\
+                    </div>\
+                </div>\
+            ';
+            
+            card.querySelector('.detail-view-btn').addEventListener('click', function() {
+                openProjectModal(item);
+            });
+            card.querySelector('.portfolio-thumb').addEventListener('click', function() {
+                openProjectModal(item);
+            });
+
+            portfolioPageGridContainer.appendChild(card);
+        });
+    }
+
+    if (openPortfolioPageBtn && portfolioPageView) {
+        openPortfolioPageBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            portfolioPageView.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderPortfolioPageGrid();
+        });
+    }
+
+    if (noticePageCloseBtn && noticePageView) {
+        noticePageCloseBtn.addEventListener('click', function() {
+            noticePageView.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        noticePageView.addEventListener('click', function(e) {
+            if (e.target === noticePageView) {
+                noticePageView.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+
+    Array.prototype.forEach.call(portfolioPageFilterBtns, function(btn) {
+        btn.addEventListener('click', function() {
+            Array.prototype.forEach.call(portfolioPageFilterBtns, function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            currentPortfolioPageFilter = btn.getAttribute('data-filter');
+            renderPortfolioPageGrid();
+        });
+    });
+
 })();

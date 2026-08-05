@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 정원복 - 공지사항 (안내)</title>
+    <link rel="icon" href="img/logo/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body data-notice-category="info">
+    <div id="toast-container"></div>
+    <div class="custom-cursor-arrow"><div class="cursor-dot"></div><div class="cursor-ring"></div></div>
+
+    <header id="main-nav">
+        <div class="container">
+            <h1 class="logo"><a href="index.html">PORTFOLIO</a></h1>
+            <nav class="nav-wrapper">
+                <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false"><span class="hamburger-box"><span class="hamburger-inner"></span></span></button>
+                <ul class="nav-list">
+                    <li><a href="index.html" data-text="Home">Home</a></li>
+                    <li class="dropdown-parent">
+                        <a href="portfolio.html" data-text="Portfolio">포트폴리오 <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 3px;"></i></a>
+                        <div class="mega-dropdown">
+                            <div class="mega-dropdown-container">
+                                <div class="mega-dropdown-column">
+                                    <h4>포트폴리오 카테고리</h4>
+                                    <ul>
+                                        <li><a href="portfolio.html?filter=all"><i class="fas fa-border-all"></i> 전체 보기</a></li>
+                                        <li><a href="portfolio.html?filter=video"><i class="fas fa-video"></i> 영상</a></li>
+                                        <li><a href="portfolio.html?filter=ad"><i class="fas fa-ad"></i> 광고</a></li>
+                                        <li><a href="portfolio.html?filter=3d"><i class="fas fa-cube"></i> 3D</a></li>
+                                        <li><a href="portfolio.html?filter=poster"><i class="fas fa-image"></i> 포스터</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-dropdown-column">
+                                    <h4>전용 페이지 및 상세</h4>
+                                    <ul>
+                                        <li><a href="portfolio.html"><i class="fas fa-folder-open"></i> 포트폴리오 메인 페이지</a></li>
+                                        <li><a href="portfolio.html?filter=contest"><i class="fas fa-heading"></i> 타이틀시퀀스</a></li>
+                                        <li><a href="portfolio.html?filter=outsourcing"><i class="fas fa-play"></i> 인트로</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="index.html#pricing" data-text="Pricing">상품안내</a></li>
+                    <li><a href="index.html#skills" data-text="Skills">Skills</a></li>
+                    <li><a href="index.html#about" data-text="About">소개</a></li>
+                    <li><a href="index.html#faq" data-text="FAQ">FAQ</a></li>
+                    <li class="dropdown-parent">
+                        <a href="notice.html" data-text="Notice" class="active">공지사항 <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 3px;"></i></a>
+                        <div class="mega-dropdown notice-mega">
+                            <div class="mega-dropdown-container" style="grid-template-columns: 1fr;">
+                                <div class="mega-dropdown-column">
+                                    <h4>공지사항 카테고리 페이지</h4>
+                                    <ul>
+                                        <li><a href="notice.html"><i class="fas fa-th-large"></i> 전체 공지</a></li>
+                                        <li><a href="notice-primary.html"><i class="fas fa-bullhorn"></i> 공지</a></li>
+                                        <li><a href="notice-secondary.html"><i class="fas fa-calendar-alt"></i> 일정</a></li>
+                                        <li><a href="notice-info.html"><i class="fas fa-info-circle"></i> 안내</a></li>
+                                        <li><a href="notice-update.html"><i class="fas fa-sync-alt"></i> 업데이트</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="index.html#contact" data-text="Contact">Contact Me</a></li>
+                </ul>
+                <div class="admin-nav-group" style="display: flex; gap: 8px; align-items: center; position: relative;">
+                    <button id="admin-login-trigger-btn" class="admin-toggle-btn nav-admin-btn"><i class="fas fa-lock"></i> 관리자 로그인</button>
+                    <div id="admin-mode-dropdown-wrapper" style="display: none; position: relative;">
+                        <button id="admin-mode-btn" class="admin-toggle-btn nav-admin-btn" style="background: #2c3e50;"><i class="fas fa-cog"></i> 관리자 모드 <i class="fas fa-chevron-down" style="font-size: 0.75rem; margin-left: 4px;"></i></button>
+                        <div id="admin-menu-dropdown" style="display: none; position: absolute; top: 110%; right: 0; background: #1e2026; border: 1px solid #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 170px; z-index: 100; overflow: hidden;">
+                            <button id="admin-menu-add-notice" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;"><i class="fas fa-bullhorn" style="color: #2ecc71;"></i> 공지사항 추가</button>
+                        </div>
+                    </div>
+                    <button id="admin-logout-btn" class="admin-toggle-btn nav-admin-btn admin-only-element" style="display: none; background: rgba(231, 76, 60, 0.85);"><i class="fas fa-sign-out-alt"></i> 로그아웃</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="section" style="padding-top: 140px; min-height: 80vh;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2>📢 공지사항 (안내)</h2>
+                    <p style="color: var(--text-sub); font-size: 0.95rem;">서비스 및 이용 관련 안내 사항 모음입니다.</p>
+                </div>
+                <a href="index.html" class="btn btn-hero btn-hero-outline" style="padding: 10px 20px; font-size: 0.88rem;"><i class="fas fa-home"></i> 메인 홈으로</a>
+            </div>
+
+            <div class="notice-filter-tabs">
+                <a href="notice.html" class="notice-tab-btn"><i class="fas fa-th-large"></i> 전체</a>
+                <a href="notice-primary.html" class="notice-tab-btn"><i class="fas fa-bullhorn"></i> 공지</a>
+                <a href="notice-secondary.html" class="notice-tab-btn"><i class="fas fa-calendar-alt"></i> 일정</a>
+                <a href="notice-info.html" class="notice-tab-btn active"><i class="fas fa-info-circle"></i> 안내</a>
+                <a href="notice-update.html" class="notice-tab-btn"><i class="fas fa-sync-alt"></i> 업데이트</a>
+            </div>
+
+            <div id="notice-list" class="notice-list-grid"></div>
+        </div>
+    </section>
+
+    <!-- 모달 레이어 -->
+    <div id="notice-detail-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-window notice-modal-window" role="dialog" aria-modal="true">
+            <button class="modal-close-btn notice-modal-close" aria-label="모달 닫기">&times;</button>
+            <div class="modal-content">
+                <div class="notice-modal-body">
+                    <div class="notice-modal-header">
+                        <div class="notice-modal-meta">
+                            <span id="notice-modal-badge" class="notice-badge badge-primary">공지</span>
+                            <span id="notice-modal-author" class="notice-author"><i class="fas fa-user-circle"></i> 정원복</span>
+                            <span id="notice-modal-date" class="notice-date">2026.04.15</span>
+                        </div>
+                        <h3 id="notice-modal-title" class="notice-modal-title">공지사항 제목</h3>
+                    </div>
+                    <div class="notice-modal-divider"></div>
+                    <div id="notice-modal-desc" class="notice-modal-desc">공지사항 상세 본문 내용이 출력됩니다.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="admin-auth-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-window admin-modal-window" role="dialog" aria-modal="true">
+            <button class="modal-close-btn admin-modal-close" aria-label="모달 닫기">&times;</button>
+            <div class="modal-content">
+                <div class="admin-modal-body">
+                    <div class="admin-modal-icon-box"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="admin-modal-title">Admin Console Access</h3>
+                    <form id="admin-login-form" class="admin-login-form">
+                        <div class="password-input-group"><i class="fas fa-key input-icon"></i><input type="password" id="admin-pw-input" placeholder="관리자 비밀번호 입력..." required></div>
+                        <p id="admin-auth-error" class="admin-auth-error"></p>
+                        <button type="submit" class="btn btn-primary admin-submit-btn"><i class="fas fa-lock-open"></i> 인증 및 로그온</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container"><p>&copy; 2026 정원복. All Rights Reserved.</p></div>
+    </footer>
+    <script src="js/script.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                if (typeof currentNoticeTab !== 'undefined') {
+                    currentNoticeTab = 'info';
+                    if (typeof renderNotices === 'function') renderNotices();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 정원복 - 소개 (About Me)</title>
+    <link rel="icon" href="img/logo/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div class="custom-cursor-arrow"><div class="cursor-dot"></div><div class="cursor-ring"></div></div>
+
+    <header id="main-nav">
+        <div class="container">
+            <h1 class="logo"><a href="index.html">PORTFOLIO</a></h1>
+            <nav class="nav-wrapper">
+                <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+                <ul class="nav-list">
+                    <li><a href="index.html" data-text="Home">Home</a></li>
+                    <li><a href="portfolio.html" data-text="Portfolio">포트폴리오</a></li>
+                    <li><a href="pricing.html" data-text="Pricing">상품안내</a></li>
+                    <li><a href="skills.html" data-text="Skills">Skills</a></li>
+                    <li><a href="about.html" data-text="About" class="active">소개</a></li>
+                    <li><a href="faq.html" data-text="FAQ">FAQ</a></li>
+                    <li><a href="notice.html" data-text="Notice">공지사항</a></li>
+                    <li><a href="contact.html" data-text="Contact">Contact Me</a></li>
+                </ul>
+                <div class="admin-nav-group" style="display: flex; gap: 8px; align-items: center; position: relative;">
+                    <button id="admin-login-trigger-btn" class="admin-toggle-btn nav-admin-btn">
+                        <i class="fas fa-lock"></i> 관리자 로그인
+                    </button>
+
+                    <div id="admin-mode-dropdown-wrapper" style="display: none; position: relative;">
+                        <button id="admin-mode-btn" class="admin-toggle-btn nav-admin-btn" style="background: #2c3e50;">
+                            <i class="fas fa-cog"></i> 관리자 모드 <i class="fas fa-chevron-down" style="font-size: 0.75rem; margin-left: 4px;"></i>
+                        </button>
+                        <!-- 역할 추가 버튼들이 포함되도록 수정된 드롭다운 메뉴 영역 -->
+                        <div id="admin-menu-dropdown" style="display: none; position: absolute; top: 110%; right: 0; background: #1e2026; border: 1px solid #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 180px; z-index: 100; overflow: hidden;">
+                            <button id="admin-menu-add-pf" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-plus-circle" style="color: #3498db;"></i> 포트폴리오 추가
+                            </button>
+                            <button id="admin-menu-add-notice" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-bullhorn" style="color: #2ecc71;"></i> 공지사항 추가
+                            </button>
+                            <button id="admin-menu-add-history" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-history" style="color: #9b59b6;"></i> 연혁 추가
+                            </button>
+                            <button id="admin-menu-popup-config" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-window-restore" style="color: #e67e22;"></i> 팝업 공지 설정
+                            </button>
+                            <button id="admin-menu-maintenance-config" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-tools" style="color: #e74c3c;"></i> 점검 모드 설정
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="admin-logout-btn" class="admin-toggle-btn nav-admin-btn admin-only-element" style="display: none; background: rgba(231, 76, 60, 0.85);">
+                        <i class="fas fa-sign-out-alt"></i> 로그아웃
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="section about-section" style="padding-top: 140px; min-height: 80vh;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2>🙋🏻‍♂️ About Me</h2>
+                    <p style="color: #a0aec0; margin-top: 5px;">영상 디자이너 정원복의 프로필 및 연혁 정보입니다.</p>
+                </div>
+                <a href="index.html" class="btn btn-hero btn-hero-outline" style="padding: 10px 20px; font-size: 0.88rem;"><i class="fas fa-home"></i> 메인 홈으로</a>
+            </div>
+            
+            <div class="about-card-wrapper">
+                <div class="about-main-card">
+                    <div class="profile-photo-wrapper">
+                        <div class="profile-photo">
+                            <img src="/img/profile/IMG_3015.jpg" alt="정원복 프로필 사진">
+                        </div>
+                        <span class="profile-status-tag"><i class="fas fa-check-circle"></i> Work Available</span>
+                    </div>
+                    <div class="profile-info-details">
+                        <h3 class="profile-name">정원복 <span class="birth">2002.04.01 (24세)</span></h3>
+                        <p class="profile-role">Video Editor & Motion Graphic Designer</p>
+                        <p class="profile-bio">
+                            영상 기획부터 촬영, 컷편집, 2D/3D 모션 그래픽, 색보정 및 마스터링까지 원스톱으로 제작이 가능한 영상 디자이너입니다. 감각적인 비주얼 아트워크와 유연한 커뮤니케이션으로 브랜드의 메시지를 선명하게 전달합니다.
+                        </p>
+                        <div class="profile-meta-chips">
+                            <span><i class="fas fa-map-marker-alt"></i> 경북 칠곡군 왜관읍</span>
+                            <span><i class="fas fa-envelope"></i> chong04041@naver.com</span>
+                            <span><i class="fas fa-phone-alt"></i> 010-3401-1371</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 연혁 등록 폼 (관리자 전용) -->
+            <form id="history-form" class="notice-write-box admin-only-element" style="margin-top: 30px; margin-bottom: 30px; display: none;">
+                <div class="notice-form-header">
+                    <h3><i class="fas fa-history"></i> 새 연혁 추가 (관리자 DB 연동)</h3>
+                </div>
+                <div class="notice-input-row">
+                    <select id="history-group-type" required style="max-width: 150px;">
+                        <option value="edu">학력 (Education)</option>
+                        <option value="exp">경력 및 교육 (Experience)</option>
+                    </select>
+                    <input type="text" id="history-date" placeholder="기간 (예: 2025.08 ~ 2026.01)" required style="flex: 1;">
+                    <input type="text" id="history-title" placeholder="기관명 / 타이틀 (예: 구미대학교)" required style="flex: 2;">
+                </div>
+                <div class="notice-input-row">
+                    <input type="text" id="history-desc" placeholder="상세 내용 (예: 스마트경영과 전공 졸업)" required style="flex: 1;">
+                </div>
+                <div class="notice-form-actions">
+                    <button type="submit" class="btn btn-primary notice-submit-btn">
+                        <i class="fas fa-plus-circle"></i> 연혁 DB 등록
+                    </button>
+                </div>
+            </form>
+
+            <div class="history-container" style="margin-top: 40px;">
+                <div class="history-block">
+                    <h3 class="history-title"><i class="fas fa-graduation-cap"></i> 학력</h3>
+                    <ul id="history-edu-list" class="timeline"></ul>
+                </div>
+                <div class="history-block">
+                    <h3 class="history-title"><i class="fas fa-briefcase"></i> 경력 및 교육</h3>
+                    <ul id="history-exp-list" class="timeline"></ul>
+                </div>
+            </div>
+
+            <!-- 관리자 전용: 팝업 공지 및 점검 모드 설정 폼 -->
+            <div style="margin-top: 40px;">
+                <!-- 팝업 공지 설정 폼 -->
+                <form id="popup-config-form" style="display: none; background: #14151a; border: 1px solid #2d3748; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-window-restore" style="color: #e67e22;"></i> 팝업 공지 설정</h3>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <label style="color: #a0aec0; font-size: 0.9rem; cursor: pointer;">
+                            <input type="checkbox" id="popup-is-active" style="margin-right: 6px;"> 팝업 공지 활성화 사용
+                        </label>
+                        <input type="text" id="popup-title-input" placeholder="팝업 제목 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <input type="text" id="popup-img-input" placeholder="팝업 이미지 URL 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <input type="text" id="popup-link-input" placeholder="클릭 시 이동할 링크 URL 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <textarea id="popup-desc-input" placeholder="팝업 상세 내용 입력..." rows="3" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem; resize: vertical;"></textarea>
+                        <div style="text-align: right;">
+                            <button type="submit" style="background: #e67e22; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">설정 저장</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 점검 모드 설정 폼 -->
+                <form id="maintenance-config-form" style="display: none; background: #14151a; border: 1px solid #2d3748; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-tools" style="color: #e74c3c;"></i> 점검 모드 설정</h3>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <label style="color: #a0aec0; font-size: 0.9rem; cursor: pointer;">
+                            <input type="checkbox" id="maint-is-active" style="margin-right: 6px;"> 서비스 점검 모드 활성화 (활성화 시 방문객 접속 차단)
+                        </label>
+                        <input type="text" id="maint-title-input" placeholder="점검 화면 제목 (예: 서비스 점검 중입니다)" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <input type="text" id="maint-period-input" placeholder="점검 기간 (예: 2026.08.06 02:00 ~ 06:00)" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <textarea id="maint-desc-input" placeholder="점검 안내 상세 내용 입력..." rows="3" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem; resize: vertical;"></textarea>
+                        <div style="text-align: right;">
+                            <button type="submit" style="background: #e74c3c; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">설정 저장</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 관리자 비밀번호 로그인 모달 -->
+    <div id="admin-auth-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-window admin-modal-window" role="dialog" aria-modal="true">
+            <button class="modal-close-btn admin-modal-close" aria-label="모달 닫기">&times;</button>
+            <div class="modal-content">
+                <div class="admin-modal-body">
+                    <div class="admin-modal-icon-box">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="admin-modal-title">Admin Console Access</h3>
+                    <p class="admin-modal-desc">시스템 관리자 인증을 완료하면 데이터 관리 모드가 활성화됩니다.</p>
+                    
+                    <form id="admin-login-form" class="admin-login-form">
+                        <div class="password-input-group">
+                            <i class="fas fa-key input-icon"></i>
+                            <input type="password" id="admin-pw-input" placeholder="관리자 비밀번호 입력..." autocomplete="current-password" required>
+                        </div>
+                        <p id="admin-auth-error" class="admin-auth-error"></p>
+                        <button type="submit" class="btn btn-primary admin-submit-btn">
+                            <i class="fas fa-lock-open"></i> 인증 및 로그온
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>버전: V0.2.1</p>
+            <p>&copy; 2026 정원복. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>

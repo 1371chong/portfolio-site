@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 정원복 - 상품안내</title>
+    <link rel="icon" href="img/logo/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Supabase JS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+    <!-- 토스트 알림 컨테이너 -->
+    <div id="toast-container"></div>
+
+    <!-- 커스텀 마우스 커서 -->
+    <div class="custom-cursor-arrow">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <!-- 상단 네비게이션바 -->
+    <header id="main-nav">
+        <div class="container">
+            <h1 class="logo"><a href="index.html">PORTFOLIO</a></h1>
+            <nav class="nav-wrapper">
+                <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+                <ul class="nav-list">
+                    <li><a href="index.html" data-text="Home">Home</a></li>
+                    
+                    <!-- 메가 드롭다운이 적용된 포트폴리오 메뉴 -->
+                    <li class="dropdown-parent">
+                        <a href="portfolio.html" data-text="Portfolio">포트폴리오 <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 3px;"></i></a>
+                        <div class="mega-dropdown">
+                            <div class="mega-dropdown-container">
+                                <div class="mega-dropdown-column">
+                                    <h4>포트폴리오 카테고리</h4>
+                                    <ul>
+                                        <li><a href="portfolio.html?filter=all"><i class="fas fa-border-all"></i> 전체 보기</a></li>
+                                        <li><a href="portfolio.html?filter=video"><i class="fas fa-video"></i> 영상</a></li>
+                                        <li><a href="portfolio.html?filter=ad"><i class="fas fa-ad"></i> 광고</a></li>
+                                        <li><a href="portfolio.html?filter=3d"><i class="fas fa-cube"></i> 3D</a></li>
+                                        <li><a href="portfolio.html?filter=poster"><i class="fas fa-image"></i> 포스터</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-dropdown-column">
+                                    <h4>전용 페이지 및 상세</h4>
+                                    <ul>
+                                        <li><a href="portfolio.html"><i class="fas fa-folder-open"></i> 포트폴리오 메인 페이지</a></li>
+                                        <li><a href="portfolio.html?filter=contest"><i class="fas fa-heading"></i> 타이틀시퀀스</a></li>
+                                        <li><a href="portfolio.html?filter=outsourcing"><i class="fas fa-play"></i> 인트로</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li><a href="pricing.html" data-text="Pricing" class="active">상품안내</a></li>
+                    <li><a href="index.html#skills" data-text="Skills">Skills</a></li>
+                    <li><a href="index.html#about" data-text="About">소개</a></li>
+                    <li><a href="index.html#faq" data-text="FAQ">FAQ</a></li>
+
+                    <!-- 독립된 공지사항 페이지로 연결되는 메뉴 -->
+                    <li class="dropdown-parent">
+                        <a href="notice.html" data-text="Notice">공지사항 <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 3px;"></i></a>
+                        <div class="mega-dropdown notice-mega">
+                            <div class="mega-dropdown-container">
+                                <div class="mega-dropdown-column">
+                                    <h4>공지사항 카테고리</h4>
+                                    <ul>
+                                        <li><a href="notice.html"><i class="fas fa-th-large"></i> 전체 공지</a></li>
+                                        <li><a href="notice-primary.html"><i class="fas fa-bullhorn"></i> 공지</a></li>
+                                        <li><a href="notice-secondary.html"><i class="fas fa-calendar-alt"></i> 일정</a></li>
+                                        <li><a href="notice-info.html"><i class="fas fa-info-circle"></i> 안내</a></li>
+                                        <li><a href="notice-update.html"><i class="fas fa-sync-alt"></i> 업데이트</a></li>
+                                    </ul>
+                                </div>
+                                <div class="mega-dropdown-column">
+                                    <h4>전용 페이지</h4>
+                                    <ul>
+                                        <li><a href="notice.html"><i class="fas fa-newspaper"></i> 공지사항 페이지</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li><a href="index.html#contact" data-text="Contact">Contact Me</a></li>
+                </ul>
+                <div class="admin-nav-group" style="display: flex; gap: 8px; align-items: center; position: relative;">
+                    <button id="admin-login-trigger-btn" class="admin-toggle-btn nav-admin-btn">
+                        <i class="fas fa-lock"></i> 관리자 로그인
+                    </button>
+
+                    <div id="admin-mode-dropdown-wrapper" style="display: none; position: relative;">
+                        <button id="admin-mode-btn" class="admin-toggle-btn nav-admin-btn" style="background: #2c3e50;">
+                            <i class="fas fa-cog"></i> 관리자 모드 <i class="fas fa-chevron-down" style="font-size: 0.75rem; margin-left: 4px;"></i>
+                        </button>
+                        <!-- 관리자 모드 드롭다운 메뉴 (상품 추가 버튼 포함) -->
+                        <div id="admin-menu-dropdown" style="display: none; position: absolute; top: 110%; right: 0; background: #1e2026; border: 1px solid #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 180px; z-index: 100; overflow: hidden;">
+                            <button id="admin-menu-add-pricing" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-tags" style="color: #2ecc71;"></i> 상품 추가
+                            </button>
+                            <button id="admin-menu-popup-config" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-window-restore" style="color: #e67e22;"></i> 팝업 공지 설정
+                            </button>
+                            <button id="admin-menu-maintenance-config" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-tools" style="color: #e74c3c;"></i> 점검 모드 설정
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="admin-logout-btn" class="admin-toggle-btn nav-admin-btn admin-only-element" style="display: none; background: rgba(231, 76, 60, 0.85);">
+                        <i class="fas fa-sign-out-alt"></i> 로그아웃
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 상품안내 / Pricing 전용 페이지 본문 섹션 -->
+    <section class="section pricing-section" style="padding-top: 140px; min-height: 80vh;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2>💰 Pricing & Services</h2>
+                    <p class="pricing-subtitle" style="margin-bottom: 0;">프로젝트 규모와 작업 범위에 따른 표준 제작 단가 안내입니다.</p>
+                </div>
+                <a href="index.html" class="btn btn-hero btn-hero-outline" style="padding: 10px 20px; font-size: 0.88rem;"><i class="fas fa-home"></i> 메인 홈으로</a>
+            </div>
+
+            <!-- 관리자 전용: 새 상품(Pricing) 등록 폼 -->
+            <form id="pricing-form" class="notice-write-box admin-only-element" style="margin-bottom: 30px; display: none; background: #14151a; border: 1px solid #2d3748; padding: 25px; border-radius: 12px;">
+                <div class="notice-form-header" style="margin-bottom: 15px;">
+                    <h3 style="color: #fff; font-size: 1.1rem;"><i class="fas fa-tags" style="color: #2ecc71;"></i> 새 요금제 상품 추가 (DB 연동)</h3>
+                </div>
+                <div class="notice-input-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                    <input type="text" id="pricing-title-input" placeholder="상품명 (예: Standard)" required style="flex: 1; background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                    <input type="text" id="pricing-price-input" placeholder="가격 (예: ₩ 400,000 ~)" required style="flex: 1; background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                </div>
+                <div class="notice-input-row" style="margin-bottom: 10px;">
+                    <textarea id="pricing-features-input" placeholder="포함 사항 (줄바꿈으로 여러 항목 입력)" rows="4" required style="width: 100%; background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem; resize: vertical;"></textarea>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                    <label style="color: #a0aec0; font-size: 0.9rem; cursor: pointer;">
+                        <input type="checkbox" id="pricing-featured-input" style="margin-right: 6px;"> 추천 요금제 (강조 카드 디자인 적용) 강조 여부
+                    </label>
+                </div>
+                <div style="text-align: right;">
+                    <button type="submit" class="btn btn-primary" style="background: #2ecc71; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                        <i class="fas fa-plus-circle"></i> 상품 DB 등록
+                    </button>
+                </div>
+            </form>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>로고제작</h3>
+                        <p class="price">₩ 미정 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check-circle"></i> 브랜딩 맞춤형 심볼/타이포 로고</li>
+                        <li><i class="fas fa-check-circle"></i> 고해상도 AI/PNG 파일 제공</li>
+                        <li><i class="fas fa-check-circle"></i> 가이드라인 및 모션 연출 가이드</li>
+                        <li><i class="fas fa-check-circle"></i> 무료 수정 2회 제공</li>
+                    </ul>
+                    <a href="contact.html#contact" class="btn btn-pricing-action">
+                        <span>문의하기</span> <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Basic</h3>
+                        <p class="price">₩ 미정 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check-circle"></i> 숏폼/릴스/쇼츠 편집 (1분 이내)</li>
+                        <li><i class="fas fa-check-circle"></i> 기본 컷 편집 & 자막 작업</li>
+                        <li><i class="fas fa-check-circle"></i> 상업용 BGM 및 효과음 적용</li>
+                        <li><i class="fas fa-check-circle"></i> 무료 수정 2회 제공</li>
+                    </ul>
+                    <a href="contact.html#contact" class="btn btn-pricing-action">
+                        <span>문의하기</span> <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="badge"><i class="fas fa-star"></i> 추천 요금제</div>
+                    <div class="pricing-header">
+                        <h3>Standard</h3>
+                        <p class="price">₩ 400,000 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check-circle"></i> 유튜브/홍보 영상 (3~5분 이내)</li>
+                        <li><i class="fas fa-check-circle"></i> 디테일 모션 그래픽 연출</li>
+                        <li><i class="fas fa-check-circle"></i> 색보정(Color Grading) & 음향 마스터링</li>
+                        <li><i class="fas fa-check-circle"></i> 썸네일 1종 기본 포함</li>
+                        <li><i class="fas fa-check-circle"></i> 무료 수정 2회 제공</li>
+                    </ul>
+                    <a href="contact.html#contact" class="btn btn-pricing-action featured-btn">
+                        <span>문의하기</span> <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Premium</h3>
+                        <p class="price">₩ 800,000 ~</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check-circle"></i> 브랜드 CF / 3D 아트워크 / 인트로</li>
+                        <li><i class="fas fa-check-circle"></i> 맞춤형 기획 & 콘티/스토리보드 설계</li>
+                        <li><i class="fas fa-check-circle"></i> 고급 3D 공간 연출 (Blender)</li>
+                        <li><i class="fas fa-check-circle"></i> 마스터링 및 원본 프로젝트파일 협의</li>
+                        <li><i class="fas fa-check-circle"></i> 무료 수정 3회 제공</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-pricing-action">
+                        <span>문의하기</span> <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 관리자 전용: 팝업 공지 및 점검 모드 설정 폼 영역 -->
+            <div style="margin-top: 40px;">
+                <!-- 팝업 공지 설정 폼 -->
+                <form id="popup-config-form" style="display: none; background: #14151a; border: 1px solid #2d3748; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-window-restore" style="color: #e67e22;"></i> 팝업 공지 설정</h3>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <label style="color: #a0aec0; font-size: 0.9rem; cursor: pointer;">
+                            <input type="checkbox" id="popup-is-active" style="margin-right: 6px;"> 팝업 공지 활성화 사용
+                        </label>
+                        <input type="text" id="popup-title-input" placeholder="팝업 제목 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <input type="text" id="popup-img-input" placeholder="팝업 이미지 URL 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <input type="text" id="popup-link-input" placeholder="클릭 시 이동할 링크 URL 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <textarea id="popup-desc-input" placeholder="팝업 상세 내용 입력..." rows="3" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem; resize: vertical;"></textarea>
+                        <div style="text-align: right;">
+                            <button type="submit" style="background: #e67e22; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">설정 저장</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 점검 모드 설정 폼 -->
+                <form id="maintenance-config-form" style="display: none; background: #14151a; border: 1px solid #2d3748; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-tools" style="color: #e74c3c;"></i> 점검 모드 설정</h3>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <label style="color: #a0aec0; font-size: 0.9rem; cursor: pointer;">
+                            <input type="checkbox" id="maint-is-active" style="margin-right: 6px;"> 서비스 점검 모드 활성화 (활성화 시 방문객 접속 차단)
+                        </label>
+                        <input type="text" id="maint-title-input" placeholder="점검 화면 제목 (예: 서비스 점검 중입니다)" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <input type="text" id="maint-period-input" placeholder="점검 기간 (예: 2026.08.06 02:00 ~ 06:00)" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
+                        <textarea id="maint-desc-input" placeholder="점검 안내 상세 내용 입력..." rows="3" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem; resize: vertical;"></textarea>
+                        <div style="text-align: right;">
+                            <button type="submit" style="background: #e74c3c; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">설정 저장</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 관리자 비밀번호 로그인 모달 -->
+    <div id="admin-auth-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-window admin-modal-window" role="dialog" aria-modal="true">
+            <button class="modal-close-btn admin-modal-close" aria-label="모달 닫기">&times;</button>
+            <div class="modal-content">
+                <div class="admin-modal-body">
+                    <div class="admin-modal-icon-box">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="admin-modal-title">Admin Console Access</h3>
+                    <p class="admin-modal-desc">시스템 관리자 인증을 완료하면 데이터 관리 모드가 활성화됩니다.</p>
+                    
+                    <form id="admin-login-form" class="admin-login-form">
+                        <div class="password-input-group">
+                            <i class="fas fa-key input-icon"></i>
+                            <input type="password" id="admin-pw-input" placeholder="관리자 비밀번호 입력..." autocomplete="current-password" required>
+                        </div>
+                        <p id="admin-auth-error" class="admin-auth-error"></p>
+                        <button type="submit" class="btn btn-primary admin-submit-btn">
+                            <i class="fas fa-lock-open"></i> 인증 및 로그온
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>버전: V0.2.1</p>
+            <p>&copy; 2026 정원복. All Rights Reserved.</p>
+            <p>본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작 되었습니다</p>
+        </div>
+    </footer>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 정원복 - Skills & Programs</title>
+    <link rel="icon" href="img/logo/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div class="custom-cursor-arrow"><div class="cursor-dot"></div><div class="cursor-ring"></div></div>
+
+    <header id="main-nav">
+        <div class="container">
+            <h1 class="logo"><a href="index.html">PORTFOLIO</a></h1>
+            <nav class="nav-wrapper">
+                <ul class="nav-list">
+                    <li><a href="index.html" data-text="Home">Home</a></li>
+                    <li><a href="portfolio.html" data-text="Portfolio">포트폴리오</a></li>
+                    <li><a href="pricing.html" data-text="Pricing">상품안내</a></li>
+                    <li><a href="skills.html" data-text="Skills" class="active">Skills</a></li>
+                    <li><a href="about.html" data-text="About">소개</a></li>
+                    <li><a href="index.html#faq" data-text="FAQ">FAQ</a></li>
+                    <li><a href="notice.html" data-text="Notice">공지사항</a></li>
+                    <li><a href="contact.html" data-text="Contact">Contact Me</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="section skills-visual-section" style="padding-top: 140px; min-height: 80vh;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2>🛠️ Skills & Programs</h2>
+                    <p style="color: #a0aec0; margin-top: 5px;">사용 가능한 전문 프로그램 및 기술 스택 숙련도 안내입니다.</p>
+                </div>
+                <a href="index.html" class="btn btn-hero btn-hero-outline" style="padding: 10px 20px; font-size: 0.88rem;"><i class="fas fa-home"></i> 메인 홈으로</a>
+            </div>
+
+            <div class="skills-grid-visual">
+                <div class="skill-card-v" data-progress="90%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/con_premiere.png" alt="Premiere Pro"></div>
+                        <div class="skill-title-meta"><h3>Premiere Pro</h3><span class="skill-percent">90%</span></div>
+                    </div>
+                    <p class="skill-desc-v">고급 컷 편집, 멀티캠 동기화, 정밀 컬러 그레이딩 및 오디오 마스터링</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="85%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_after effects.png" alt="After Effects"></div>
+                        <div class="skill-title-meta"><h3>After Effects</h3><span class="skill-percent">85%</span></div>
+                    </div>
+                    <p class="skill-desc-v">키프레임 모션 그래픽, 가상 레이아웃 VFX 합성, 3D 카메라 트래킹 기술</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="80%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_photoshop.png" alt="Photoshop"></div>
+                        <div class="skill-title-meta"><h3>Photoshop</h3><span class="skill-percent">80%</span></div>
+                    </div>
+                    <p class="skill-desc-v">유튜브 썸네일 브랜딩 디자인, 질감 텍스처 합성 및 소스 이미지 보정 정제</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="75%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_Illustrator.png" alt="Illustrator"></div>
+                        <div class="skill-title-meta"><h3>Illustrator</h3><span class="skill-percent">75%</span></div>
+                    </div>
+                    <p class="skill-desc-v">모션 그래픽 제작용 벡터 그래픽 에셋 구축, 로고 타이포브랜딩 디자인</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="90%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_media encoder.png" alt="Media Encoder"></div>
+                        <div class="skill-title-meta"><h3>Media Encoder</h3><span class="skill-percent">90%</span></div>
+                    </div>
+                    <p class="skill-desc-v">플랫폼별 최적화 코덱 압축 렌더링 배포, 대용량 비디오 큐 인코딩 관리</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="70%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_Blender.png" alt="Blender"></div>
+                        <div class="skill-title-meta"><h3>Blender</h3><span class="skill-percent">70%</span></div>
+                    </div>
+                    <p class="skill-desc-v">3D 공간 오브젝트 모델링 설계, 영상 도입부 인트로 공간 시퀀스 연출</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="75%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_html.png" alt="HTML"></div>
+                        <div class="skill-title-meta"><h3>HTML5</h3><span class="skill-percent">75%</span></div>
+                    </div>
+                    <p class="skill-desc-v">웹 표준 인코딩 마크업 구조 최적화, 스크린 리더 친화형 시맨틱 태그 마크업</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="70%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_css.png" alt="CSS"></div>
+                        <div class="skill-title-meta"><h3>CSS3</h3><span class="skill-percent">70%</span></div>
+                    </div>
+                    <p class="skill-desc-v">반응형 플랙스 그리드 설계, 웹 하드웨어 가속 트랜지션 애니메이션 모델링</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+                <div class="skill-card-v" data-progress="60%">
+                    <div class="skill-card-header">
+                        <div class="skill-img-box"><img src="img/icon/icon_js.png" alt="JavaScript"></div>
+                        <div class="skill-title-meta"><h3>JavaScript</h3><span class="skill-percent">60%</span></div>
+                    </div>
+                    <p class="skill-desc-v">동적 인터랙션 모듈 구현, 비동기 Intersection API 기반 브라우저 렌더링 제어</p>
+                    <div class="skill-progress-wrapper"><div class="skill-progress-bar"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>버전: V0.2.1</p>
+            <p>&copy; 2026 정원복. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>
