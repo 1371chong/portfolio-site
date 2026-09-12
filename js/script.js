@@ -101,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
       cursorBlur.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
     });
 
-    // 버튼, 카드 등 인터랙티브 요소 마우스 오버 시 커서 반응 효과
     document.querySelectorAll('.hover-target').forEach(target => {
       target.addEventListener('mouseenter', () => {
         document.body.classList.add('cursor-hover');
@@ -136,18 +135,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 5. ScrollSpy
+  // 5. ScrollSpy (헤더 & TOC 하이라이팅)
   const sections = document.querySelectorAll('section');
+  const tocLinks = document.querySelectorAll('.toc-link');
+
   window.addEventListener('scroll', () => {
     let current = '';
     sections.forEach(section => {
-      const sectionTop = section.offsetTop - 120;
+      const sectionTop = section.offsetTop - 150;
       if (window.pageYOffset >= sectionTop) {
         current = section.getAttribute('id');
       }
     });
 
     navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
+
+    tocLinks.forEach(link => {
       link.classList.remove('active');
       if (link.getAttribute('href') === `#${current}`) {
         link.classList.add('active');
@@ -267,10 +275,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 12. 비디오 라이트박스 및 상세 모달
+  // 12. 인터랙티브 이력서 다운로드 / 미리보기 모달
+  const btnPreviewResume = document.getElementById('btn-preview-resume');
+  const resumeModal = document.getElementById('resume-modal');
+  const resumeModalClose = document.querySelector('.resume-modal-close');
+  const btnCopyResumeLink = document.getElementById('btn-copy-resume-link');
+
+  if (btnPreviewResume && resumeModal) {
+    btnPreviewResume.addEventListener('click', () => {
+      resumeModal.classList.add('active');
+    });
+  }
+
+  if (resumeModalClose) {
+    resumeModalClose.addEventListener('click', () => {
+      resumeModal.classList.remove('active');
+    });
+  }
+
+  if (resumeModal) {
+    resumeModal.addEventListener('click', (e) => {
+      if (e.target === resumeModal) resumeModal.classList.remove('active');
+    });
+  }
+
+  if (btnCopyResumeLink) {
+    btnCopyResumeLink.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.origin + '#resume');
+      alert('이력서 주소가 클립보드에 복사되었습니다.');
+    });
+  }
+
+  // 13. 비디오 라이트박스 및 상세 모달
   const videoModal = document.getElementById('video-modal');
   const modalIframe = document.getElementById('modal-iframe');
-  const modalClose = document.querySelector('.modal-close');
+  const modalClose = document.querySelector('#video-modal .modal-close');
   
   const modalTag = document.getElementById('modal-tag');
   const modalTitle = document.getElementById('modal-title');
