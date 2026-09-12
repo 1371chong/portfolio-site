@@ -7,7 +7,6 @@
   padding: 0;
 }
 
-/* 기본 다크 테마 변수 */
 :root {
   --bg-color: #0b0c10;
   --header-bg: rgba(11, 12, 16, 0.85);
@@ -22,7 +21,6 @@
   --transition-smooth: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* 라이트 테마 변수 (Light Mode) */
 body.light-mode {
   --bg-color: #f5f6fa;
   --header-bg: rgba(245, 246, 250, 0.88);
@@ -81,8 +79,71 @@ ul { list-style: none; }
 }
 
 /* =========================================
-   2. Header & Navigation + Theme Switcher
+   TOC (Table of Contents) 플로팅 목차
    ========================================= */
+.toc-container {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem;
+  z-index: 900;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  width: 170px;
+}
+
+.toc-header {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.5px;
+}
+
+.toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toc-link {
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.25s ease;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+}
+
+.toc-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  opacity: 0.6;
+}
+
+.toc-link:hover,
+.toc-link.active {
+  color: var(--accent);
+  background: rgba(255, 71, 71, 0.1);
+  transform: translateX(-3px);
+}
+
+.toc-link.active .toc-num {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* Header */
 header {
   position: fixed;
   top: 0;
@@ -96,11 +157,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: padding 0.4s var(--transition-smooth), 
-              background 0.4s var(--transition-smooth), 
-              backdrop-filter 0.4s var(--transition-smooth),
-              border-color 0.4s var(--transition-smooth),
-              box-shadow 0.4s var(--transition-smooth);
+  transition: padding 0.4s var(--transition-smooth), background 0.4s var(--transition-smooth), backdrop-filter 0.4s var(--transition-smooth), border-color 0.4s var(--transition-smooth), box-shadow 0.4s var(--transition-smooth);
 }
 
 header.scrolled {
@@ -128,7 +185,22 @@ header.scrolled {
   gap: 1rem;
 }
 
-/* 테마 스위처 버튼 */
+.btn-quick-resume {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  box-shadow: 0 0 10px var(--accent-glow);
+  transition: all 0.3s ease;
+}
+
+.btn-quick-resume:hover {
+  transform: translateY(-2px);
+  background: #e03838;
+}
+
 .theme-toggle-btn {
   background: var(--pill-bg);
   border: 1px solid var(--border);
@@ -156,13 +228,13 @@ body.light-mode .icon-light { display: inline-block; color: #f1c40f; }
 
 .nav-menu ul {
   display: flex;
-  gap: 1.8rem;
+  gap: 1.4rem;
   align-items: center;
 }
 
 .nav-link {
   position: relative;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-sub);
   font-weight: 500;
   padding: 0.4rem 0;
@@ -233,9 +305,6 @@ body.light-mode .icon-light { display: inline-block; color: #f1c40f; }
 .hamburger-btn.open span:nth-child(2) { opacity: 0; }
 .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* =========================================
-   3. Container & Section Base
-   ========================================= */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -274,9 +343,7 @@ section { margin-bottom: 7rem; }
   border-radius: 2px;
 }
 
-/* =========================================
-   4. Hero Slider Section
-   ========================================= */
+/* Hero Section */
 .hero-section {
   position: relative;
   padding: 3rem 0 2rem;
@@ -312,11 +379,7 @@ section { margin-bottom: 7rem; }
   margin-bottom: 2.5rem;
 }
 
-.hero-slider-track {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
+.hero-slider-track { width: 100%; height: 100%; position: relative; }
 
 .hero-slide {
   position: absolute;
@@ -332,10 +395,7 @@ section { margin-bottom: 7rem; }
   padding: 0 4rem;
 }
 
-.hero-slide.active {
-  opacity: 1;
-  visibility: visible;
-}
+.hero-slide.active { opacity: 1; visibility: visible; }
 
 .slide-bg {
   position: absolute;
@@ -396,10 +456,7 @@ section { margin-bottom: 7rem; }
   box-shadow: 0 4px 15px var(--accent-glow);
 }
 
-.slide-btn:hover {
-  background: #e03838;
-  transform: translateY(-2px);
-}
+.slide-btn:hover { background: #e03838; transform: translateY(-2px); }
 
 .slider-nav-btn {
   position: absolute;
@@ -479,9 +536,7 @@ section { margin-bottom: 7rem; }
 .ticker-track span { color: var(--accent); margin: 0 0.5rem; }
 @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-/* =========================================
-   5. Skills Section
-   ========================================= */
+/* Skills Section */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -519,8 +574,84 @@ section { margin-bottom: 7rem; }
 }
 
 /* =========================================
-   6. Portfolio Controls & Segmented Control
+   함께한 브랜드 섹션 (가상 브랜드 & 한국어 적용)
    ========================================= */
+.brands-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+.brands-header {
+  margin-bottom: 2.5rem;
+}
+
+.sub-subtitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #3b82f6;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.brands-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.6rem;
+}
+
+.brands-notice {
+  font-size: 0.95rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.brands-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.brand-item {
+  color: var(--text-sub);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  opacity: 0.75;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: var(--card-bg);
+  padding: 0.8rem 1.6rem;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+}
+
+.brand-item:hover {
+  opacity: 1;
+  color: var(--text-main);
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 71, 71, 0.15);
+}
+
+.brand-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-text i {
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+/* Portfolio Section */
 .portfolio-header {
   display: flex;
   justify-content: space-between;
@@ -632,9 +763,7 @@ section { margin-bottom: 7rem; }
 .search-pill-box input:focus { border-color: var(--accent); }
 .search-icon { position: absolute; left: 1rem; color: var(--text-sub); font-size: 0.9rem; pointer-events: none; }
 
-/* =========================================
-   7. Portfolio Grid & List + Meta Badges
-   ========================================= */
+/* Portfolio Grid & List */
 .horizontal-scroll-wrapper.grid-view {
   overflow-x: auto;
   padding-bottom: 1.5rem;
@@ -769,8 +898,143 @@ section { margin-bottom: 7rem; }
 .meta-item i { color: var(--accent); margin-right: 4px; }
 
 /* =========================================
-   8. Modal Detail Styles
+   인터랙티브 이력서 섹션
    ========================================= */
+.resume-card {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--pill-bg) 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.resume-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--accent);
+  background: rgba(255, 71, 71, 0.15);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  margin-bottom: 0.8rem;
+}
+
+.resume-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+
+.resume-desc {
+  color: var(--text-sub);
+  font-size: 0.95rem;
+  margin-bottom: 1.8rem;
+}
+
+.resume-features {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.feature-item i { color: #2ecc71; }
+
+.resume-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-resume-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px var(--accent-glow);
+  transition: all 0.3s ease;
+}
+
+.btn-resume-primary:hover { background: #e03838; transform: translateY(-2px); }
+
+.btn-resume-secondary {
+  background: var(--pill-bg);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 0.8rem 1.6rem;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-resume-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+.btn-resume-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  padding: 0.8rem 1.4rem;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-resume-outline:hover { color: var(--text-main); border-color: var(--text-main); }
+
+/* Resume Paper Modal */
+.resume-modal-content {
+  max-width: 700px;
+  background: #ffffff !important;
+  color: #1e1e2d !important;
+  padding: 2.5rem;
+}
+
+.resume-modal-close {
+  color: #1e1e2d !important;
+  background: rgba(0,0,0,0.1) !important;
+}
+
+.resume-modal-close:hover { background: var(--accent) !important; color: #fff !important; }
+
+.resume-preview-paper {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.paper-header h2 { font-size: 1.8rem; font-weight: 800; color: #111; }
+.paper-header p { font-size: 1rem; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem; }
+.paper-contact { font-size: 0.85rem; color: #666; }
+.paper-divider { margin: 1.2rem 0; border: 0; border-top: 2px solid #eee; }
+.paper-section { margin-bottom: 1.4rem; }
+.paper-section h3 { font-size: 1rem; font-weight: 800; color: #333; margin-bottom: 0.5rem; letter-spacing: 1px; }
+.paper-section p, .paper-section li { font-size: 0.9rem; color: #444; line-height: 1.6; }
+.paper-section ul { padding-left: 1.2rem; list-style: disc; }
+
+/* Modal Detail Base */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -873,9 +1137,7 @@ section { margin-bottom: 7rem; }
 
 .modal-project-desc { color: var(--text-sub); font-size: 0.95rem; line-height: 1.7; }
 
-/* =========================================
-   9. Process, FAQ, About, Order & Footer
-   ========================================= */
+/* Process, FAQ, About, Order & Footer */
 .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
 .process-step { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: border-color 0.3s, background 0.4s ease; }
 .process-step:hover { border-color: var(--accent); }
@@ -1004,7 +1266,96 @@ footer {
 .footer-notice { font-size: 0.82rem; color: var(--text-sub); opacity: 0.8; }
 .footer-copy { font-weight: 600; color: var(--text-main); }
 
+/* Custom Interactive Effects */
+body.cursor-hover .custom-cursor-blur {
+  width: 65px;
+  height: 65px;
+  background-color: rgba(255, 71, 71, 0.35);
+  border-color: #ffffff;
+  backdrop-filter: blur(2px);
+  opacity: 0.6;
+}
+
+body.cursor-hover .custom-cursor-dot {
+  transform: translate(-50%, -50%) scale(1.8);
+  background-color: #ffffff;
+}
+
+.video-mask-container {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.video-mask-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.video-mask-text {
+  position: relative;
+  z-index: 2;
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #ff6b00;
+  background: var(--bg-color);
+  mix-blend-mode: screen;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+body.light-mode .video-mask-text { background: var(--bg-color); }
+
+.hero-slide .slide-bg.zoom-effect {
+  transform: scale(1.2);
+  transition: transform 7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hero-slide.active .slide-bg.zoom-effect { transform: scale(1); }
+
+.zoom-card {
+  transition: transform 0.4s var(--transition-smooth), box-shadow 0.4s var(--transition-smooth), border-color 0.3s ease !important;
+}
+
+.zoom-card:hover {
+  transform: translateY(-10px) scale(1.03) !important;
+  box-shadow: 0 15px 35px rgba(255, 71, 71, 0.25);
+  border-color: var(--accent) !important;
+}
+
+.img-zoom-wrapper img {
+  transition: transform 0.6s var(--transition-smooth) !important;
+}
+
+.zoom-card:hover .img-zoom-wrapper img {
+  transform: scale(1.12) !important;
+}
+
 /* Responsive */
+@media (max-width: 1350px) {
+  .toc-container { display: none; }
+}
+
 @media (max-width: 768px) {
   .hamburger-btn { display: flex; }
   
@@ -1040,110 +1391,7 @@ footer {
   .profile-container { flex-direction: column; text-align: center; }
   
   .custom-cursor-dot, .custom-cursor-blur { display: none; }
-}
-
-/* =========================================
-   10. Custom Interactive Effects (Added & Updated)
-   ========================================= */
-
-/* A. 커서 인터랙션 (Cursor Interactive Animation) */
-body.cursor-hover .custom-cursor-blur {
-  width: 65px;
-  height: 65px;
-  background-color: rgba(255, 71, 71, 0.35);
-  border-color: #ffffff;
-  backdrop-filter: blur(2px);
-  opacity: 0.6;
-}
-
-body.cursor-hover .custom-cursor-dot {
-  transform: translate(-50%, -50%) scale(1.8);
-  background-color: #ffffff;
-}
-
-/* B. 비디오 텍스트 마스킹 (Text Masking with Video) - 주황색 적용 */
-.video-mask-container {
-  position: relative;
-  width: 100%;
-  height: 120px;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.video-mask-bg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-}
-
-.video-mask-text {
-  position: relative;
-  z-index: 2;
-  font-size: 4rem;
-  font-weight: 900;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #ff6b00; /* 주황색 지정 */
-  background: var(--bg-color);
-  mix-blend-mode: screen;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin: 0;
-  transition: background 0.4s ease, color 0.4s ease;
-}
-
-body.light-mode .video-mask-text {
-  background: var(--bg-color);
-}
-
-/* C. 트랜지션 & 줌 효과 (Transition & Zoom Effect) */
-.hero-slide .slide-bg.zoom-effect {
-  transform: scale(1.2);
-  transition: transform 7s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.hero-slide.active .slide-bg.zoom-effect {
-  transform: scale(1);
-}
-
-.zoom-card {
-  transition: transform 0.4s var(--transition-smooth), box-shadow 0.4s var(--transition-smooth), border-color 0.3s ease !important;
-}
-
-.zoom-card:hover {
-  transform: translateY(-10px) scale(1.03) !important;
-  box-shadow: 0 15px 35px rgba(255, 71, 71, 0.25);
-  border-color: var(--accent) !important;
-}
-
-.img-zoom-wrapper img {
-  transition: transform 0.6s var(--transition-smooth) !important;
-}
-
-.zoom-card:hover .img-zoom-wrapper img {
-  transform: scale(1.12) !important;
-}
-
-/* 반응형 처리 */
-@media (max-width: 768px) {
-  .video-mask-container {
-    height: 80px;
-  }
-  .video-mask-text {
-    font-size: 2.2rem;
-    letter-spacing: 2px;
-  }
+  .video-mask-container { height: 80px; }
+  .video-mask-text { font-size: 2.2rem; letter-spacing: 2px; }
+  .brands-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 }
