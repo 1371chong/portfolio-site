@@ -15,11 +15,32 @@
   <div class="custom-cursor-dot"></div>
   <div class="custom-cursor-blur"></div>
 
+  <!-- TOC (Table of Contents) 플로팅 목차 -->
+  <aside class="toc-container" id="toc">
+    <div class="toc-header">
+      <i class="fa-solid fa-list-ul"></i> 목차 (TOC)
+    </div>
+    <ul class="toc-list">
+      <li><a href="#home" class="toc-link active"><span class="toc-num">01</span> 홈</a></li>
+      <li><a href="#skills" class="toc-link"><span class="toc-num">02</span> 스킬</a></li>
+      <li><a href="#brands" class="toc-link"><span class="toc-num">03</span> 함께한 브랜드</a></li>
+      <li><a href="#portfolio" class="toc-link"><span class="toc-num">04</span> 포트폴리오</a></li>
+      <li><a href="#resume" class="toc-link"><span class="toc-num">05</span> 이력서</a></li>
+      <li><a href="#process" class="toc-link"><span class="toc-num">06</span> 프로세스</a></li>
+      <li><a href="#faq" class="toc-link"><span class="toc-num">07</span> FAQ</a></li>
+      <li><a href="#about" class="toc-link"><span class="toc-num">08</span> 소개</a></li>
+      <li><a href="#contact" class="toc-link"><span class="toc-num">09</span> 연락처</a></li>
+    </ul>
+  </aside>
+
   <!-- Header Navigation -->
   <header id="header">
     <div class="logo"><a href="#home" class="hover-target">JWB STUDIO</a></div>
     
     <div class="header-right-group">
+      <!-- 이력서 바로가기 버튼 -->
+      <a href="#resume" class="btn-quick-resume hover-target"><i class="fa-solid fa-file-arrow-down"></i> 이력서</a>
+
       <!-- 테마 토글 버튼 -->
       <button id="theme-toggle" class="theme-toggle-btn hover-target" aria-label="테마 변경">
         <i class="fa-solid fa-moon icon-dark"></i>
@@ -37,7 +58,9 @@
       <ul>
         <li><a href="#home" class="nav-link hover-target">Home</a></li>
         <li><a href="#skills" class="nav-link hover-target">스킬</a></li>
+        <li><a href="#brands" class="nav-link hover-target">브랜드</a></li>
         <li><a href="#portfolio" class="nav-link hover-target">포트폴리오</a></li>
+        <li><a href="#resume" class="nav-link hover-target">이력서</a></li>
         <li><a href="#process" class="nav-link hover-target">프로세스</a></li>
         <li><a href="#faq" class="nav-link hover-target">FAQ</a></li>
         <li><a href="#about" class="nav-link hover-target">소개</a></li>
@@ -64,7 +87,6 @@
       <div class="hero-slider-container">
         <div class="hero-slider-track">
 
-          <!-- 슬라이드 1: 4번 톤앤매너 반영 -->
           <div class="hero-slide active">
             <div class="slide-bg zoom-effect" style="background-image: linear-gradient(90deg, rgba(11,12,16,0.85) 0%, rgba(11,12,16,0.3) 100%), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1400&q=80');"></div>
             <div class="slide-content">
@@ -146,7 +168,7 @@
           <div class="skill-header">
             <img src="img/icon/icon_photoshop.png" alt="photoshop" class="skill-icon">
             <div class="skill-title-group">
-              <span class="skill-name">photoshop</span>
+              <span class="skill-name">Photoshop</span>
               <span class="skill-percent">85%</span>
             </div>
           </div>
@@ -211,7 +233,25 @@
       </div>
     </section>
 
-    <!-- 3. 포트폴리오 영역 -->
+    <!-- 3. 함께한 브랜드 섹션 (가상 한국어 브랜드 2개 & 안내 문구 적용) -->
+    <section id="brands" class="brands-section scroll-reveal">
+      <div class="brands-header">
+        <span class="sub-subtitle">협업 브랜드</span>
+        <h2 class="brands-title">함께한 브랜드</h2>
+        <p class="brands-notice">아직 함께한 브랜드가 없습니다.</p>
+      </div>
+
+      <div class="brands-grid">
+        <div class="brand-item hover-target" title="가상 브랜드 1">
+          <span class="brand-text"><i class="fa-solid fa-cube"></i> 루미너스 스튜디오</span>
+        </div>
+        <div class="brand-item hover-target" title="가상 브랜드 2">
+          <span class="brand-text"><i class="fa-solid fa-layer-group"></i> 크리에이티브 랩</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 포트폴리오 영역 -->
     <section id="portfolio" class="scroll-trigger-portfolio">
       <div class="portfolio-header">
         <div>
@@ -317,7 +357,46 @@
       </div>
     </section>
 
-    <!-- 4. 제작 프로세스 영역 -->
+    <!-- 5. 인터랙티브 이력서 섹션 -->
+    <section id="resume" class="scroll-reveal">
+      <h2 class="section-title">인터랙티브 이력서 (Resume)</h2>
+      <div class="resume-card">
+        <div class="resume-header">
+          <div class="resume-badge">INTERACTIVE RESUME</div>
+          <h3 class="resume-title">정원복 | Media Creator &amp; Visual Director</h3>
+          <p class="resume-desc">모션 그래픽, 3D 연출, 웹 인터랙티브 개발 스펙트럼이 담긴 최신 이력서입니다.</p>
+        </div>
+
+        <div class="resume-features">
+          <div class="feature-item">
+            <i class="fa-solid fa-check-circle"></i>
+            <span>PDF / 이미지 즉시 다운로드 지원</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-check-circle"></i>
+            <span>프로젝트 핵심 역량 및 타임라인 수록</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-check-circle"></i>
+            <span>실시간 포트폴리오 웹 링크 포함</span>
+          </div>
+        </div>
+
+        <div class="resume-actions">
+          <button id="btn-preview-resume" class="btn-resume-primary hover-target">
+            <i class="fa-regular fa-eye"></i> 이력서 미리보기
+          </button>
+          <a href="#" id="btn-download-pdf" class="btn-resume-secondary hover-target">
+            <i class="fa-solid fa-file-pdf"></i> PDF 다운로드
+          </a>
+          <button id="btn-copy-resume-link" class="btn-resume-outline hover-target">
+            <i class="fa-solid fa-link"></i> 링크 복사
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 제작 프로세스 영역 -->
     <section id="process" class="scroll-reveal">
       <h2 class="section-title">제작 프로세스 (Process)</h2>
       <div class="process-grid">
@@ -349,7 +428,7 @@
       </div>
     </section>
 
-    <!-- 5. 자주하는 질문 (FAQ) -->
+    <!-- 7. 자주하는 질문 (FAQ) -->
     <section id="faq" class="scroll-reveal">
       <h2 class="section-title">자주하는 질문 (FAQ)</h2>
       <div class="faq-list">
@@ -401,11 +480,10 @@
       </div>
     </section>
 
-    <!-- 6. 소개 영역 (About JWB STUDIO - 4번 톤 반영) -->
+    <!-- 8. 소개 영역 (About JWB STUDIO) -->
     <section id="about" class="scroll-reveal">
       <h2 class="section-title">소개 (About)</h2>
       
-      <!-- JWB STUDIO 브랜드 비전 카드 (4번 톤 적용) -->
       <div class="detail-box" style="margin-bottom: 2rem; border-color: var(--accent);">
         <span class="card-tag" style="font-size: 0.85rem; margin-bottom: 0.8rem;">ABOUT JWB STUDIO</span>
         <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; color: var(--text-main);">
@@ -464,7 +542,7 @@
       </div>
     </section>
 
-    <!-- 7. 제작 의뢰 안내 영역 -->
+    <!-- 9. 제작 의뢰 안내 영역 -->
     <section id="order" class="scroll-reveal">
       <h2 class="section-title">제작 의뢰 (Work With Me)</h2>
       <div class="order-card">
@@ -480,7 +558,7 @@
       </div>
     </section>
 
-    <!-- 8. 연락처 영역 -->
+    <!-- 10. 연락처 영역 -->
     <section id="contact" class="scroll-reveal">
       <h2 class="section-title">연락처 (Contact)</h2>
       <div class="contact-card">
@@ -504,6 +582,42 @@
       </div>
     </section>
 
+  </div>
+
+  <!-- 이력서 미리보기 인터랙티브 모달 -->
+  <div id="resume-modal" class="modal-overlay">
+    <div class="modal-content resume-modal-content">
+      <button class="modal-close resume-modal-close hover-target">&times;</button>
+      <div class="resume-preview-wrapper">
+        <div class="resume-preview-paper">
+          <div class="paper-header">
+            <h2>정 원 복 (Jeong Wonbok)</h2>
+            <p>Media Creator &amp; Motion Graphics Designer</p>
+            <div class="paper-contact">
+              <span>Email: chong04041@naver.com</span> | <span>Phone: 010-3401-1371</span>
+            </div>
+          </div>
+          <hr class="paper-divider">
+          <div class="paper-section">
+            <h3>SUMMARY</h3>
+            <p>After Effects, Blender, C4D 기반의 3D 아트워크 및 모션 그래픽 연출 특화 크리에이터. HTML5/CSS3/JS 기반의 인터랙티브 미디어 포트폴리오 사이트 자체 제작 능력 보유.</p>
+          </div>
+          <div class="paper-section">
+            <h3>SKILLS</h3>
+            <p><strong>Video &amp; 3D:</strong> After Effects, Premiere Pro, Blender, Cinema 4D, Photoshop, Illustrator</p>
+            <p><strong>Web &amp; Code:</strong> HTML5, CSS3, JavaScript, Supabase, GitHub Pages</p>
+          </div>
+          <div class="paper-section">
+            <h3>EXPERIENCE &amp; PROJECTS</h3>
+            <p><strong>JWB STUDIO Director</strong> (2026.01 - Present)</p>
+            <ul>
+              <li>모션 그래픽 3D 타이틀 씬 및 프로모션 필름 제작 외주 프로젝트 총괄</li>
+              <li>인터랙티브 웹쇼릴 개발 및 톤앤매너 디자인 수립</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 비디오 라이트박스 및 상세 모달 -->
