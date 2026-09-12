@@ -1,260 +1,545 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎬 정원복 포트폴리오</title>
-    <link rel="icon" href="img/logo/logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- Supabase JS Client SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정원복 포트폴리오 | Media &amp; Motion Graphics</title>
+  <link rel="icon" href="img/logo/logo.png">
+  <!-- FontAwesome 아이콘 라이브러리 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- 토스트 알림 컨테이너 (로그인/로그아웃 알림용) -->
-    <div id="toast-container"></div>
+  <!-- 커스텀 마우스 커서 -->
+  <div class="custom-cursor-dot"></div>
+  <div class="custom-cursor-blur"></div>
 
-    <!-- 커스텀 마우스 커서 -->
-    <div class="custom-cursor-arrow">
-        <div class="cursor-dot"></div>
-        <div class="cursor-ring"></div>
+  <!-- Header Navigation -->
+  <header id="header">
+    <div class="logo"><a href="#home" class="hover-target">JWB STUDIO</a></div>
+    
+    <div class="header-right-group">
+      <!-- 테마 토글 버튼 -->
+      <button id="theme-toggle" class="theme-toggle-btn hover-target" aria-label="테마 변경">
+        <i class="fa-solid fa-moon icon-dark"></i>
+        <i class="fa-solid fa-sun icon-light"></i>
+      </button>
+
+      <button class="hamburger-btn hover-target" aria-label="메뉴 열기">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
 
-    <header id="main-nav">
-        <div class="container">
-            <h1 class="logo"><a href="index.html">PORTFOLIO</a></h1>
-            <nav class="nav-wrapper">
-                <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
-                    <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
-                    </span>
-                </button>
-                <ul class="nav-list">
-                    <li><a href="index.html" data-text="Home" class="active">Home</a></li>
-                    
-                    <!-- 메가 드롭다운이 적용된 포트폴리오 메뉴 -->
-                    <li class="dropdown-parent">
-                        <a href="portfolio.html" data-text="Portfolio">포트폴리오 <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 3px;"></i></a>
-                        <div class="mega-dropdown">
-                            <div class="mega-dropdown-container">
-                                <div class="mega-dropdown-column">
-                                    <h4>포트폴리오 카테고리</h4>
-                                    <ul>
-                                        <li><a href="portfolio.html?filter=all"><i class="fas fa-border-all"></i> 전체 보기</a></li>
-                                        <li><a href="portfolio.html?filter=video"><i class="fas fa-video"></i> 영상</a></li>
-                                        <li><a href="portfolio.html?filter=ad"><i class="fas fa-ad"></i> 광고</a></li>
-                                        <li><a href="portfolio.html?filter=3d"><i class="fas fa-cube"></i> 3D</a></li>
-                                        <li><a href="portfolio.html?filter=poster"><i class="fas fa-image"></i> 포스터</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-dropdown-column">
-                                    <h4>전용 페이지 및 상세</h4>
-                                    <ul>
-                                        <li><a href="portfolio.html"><i class="fas fa-folder-open"></i> 포트폴리오 메인 페이지</a></li>
-                                        <li><a href="portfolio.html?filter=contest"><i class="fas fa-heading"></i> 타이틀시퀀스</a></li>
-                                        <li><a href="portfolio.html?filter=outsourcing"><i class="fas fa-play"></i> 인트로</a></li>
-                                        <li><a href="portfolio.html?filter=Kinetic Typography"><i class="fa-solid fa-font"></i> 카네틱 타이포그래피</a></li>
-                                        <li><a href="portfolio.html?filter=Motion"><i class="fa-solid fa-flask"></i> 모션</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#home" class="nav-link hover-target">Home</a></li>
+        <li><a href="#skills" class="nav-link hover-target">스킬</a></li>
+        <li><a href="#portfolio" class="nav-link hover-target">포트폴리오</a></li>
+        <li><a href="#process" class="nav-link hover-target">프로세스</a></li>
+        <li><a href="#faq" class="nav-link hover-target">FAQ</a></li>
+        <li><a href="#about" class="nav-link hover-target">소개</a></li>
+        <li><a href="#order" class="nav-link highlight-menu hover-target">제작 의뢰</a></li>
+        <li><a href="#contact" class="nav-link hover-target">연락처</a></li>
+      </ul>
+    </nav>
+  </header>
 
-                    <!-- 각 독립 페이지로 연결되는 탭 메뉴 -->
-                    <li><a href="pricing.html" data-text="Pricing">상품안내</a></li>
-                    <li><a href="skills.html" data-text="Skills">Skills</a></li>
-                    <li><a href="about.html" data-text="About">소개</a></li>
-                    <li><a href="faq.html" data-text="FAQ">FAQ</a></li>
+  <div class="container">
 
-                    <!-- 독립된 공지사항 페이지로 연결되는 메뉴 -->
-                    <li class="dropdown-parent">
-                        <a href="notice.html" data-text="Notice">공지사항 <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 3px;"></i></a>
-                        <div class="mega-dropdown notice-mega">
-                            <div class="mega-dropdown-container">
-                                <div class="mega-dropdown-column">
-                                    <h4>공지사항 카테고리</h4>
-                                    <ul>
-                                        <li><a href="notice.html?category=all"><i class="fas fa-th-large"></i> 전체 공지</a></li>
-                                        <li><a href="notice-primary.html?category=primary"><i class="fas fa-bullhorn"></i> 공지</a></li>
-                                        <li><a href="notice-secondary.html?category=secondary"><i class="fas fa-calendar-alt"></i> 일정</a></li>
-                                        <li><a href="notice-info.html?category=info"><i class="fas fa-info-circle"></i> 안내</a></li>
-                                        <li><a href="notice-update.html?category=update"><i class="fas fa-sync-alt"></i> 업데이트</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-dropdown-column">
-                                    <h4>전용 페이지</h4>
-                                    <ul>
-                                        <li><a href="notice.html"><i class="fas fa-newspaper"></i> 공지사항 페이지</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+    <!-- 1. Home / 비디오 텍스트 마스킹 + 트랜지션 줌 슬라이더 -->
+    <section id="home" class="hero-section">
+      <div class="motion-bg-glow"></div>
 
-                    <li><a href="contact.html" data-text="Contact">Contact Me</a></li>
-                </ul>
-                <div class="admin-nav-group" style="display: flex; gap: 8px; align-items: center; position: relative;">
-                    <button id="admin-login-trigger-btn" class="admin-toggle-btn nav-admin-btn">
-                        <i class="fas fa-lock"></i> 관리자 로그인
-                    </button>
+      <!-- 비디오 텍스트 마스킹 -->
+      <div class="video-mask-container">
+        <video autoplay loop muted playsinline class="video-mask-bg">
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-in-dark-background-42934-large.mp4" type="video/mp4">
+        </video>
+        <h1 class="video-mask-text">JWB STUDIO</h1>
+      </div>
 
-                    <div id="admin-mode-dropdown-wrapper" style="display: none; position: relative;">
-                        <button id="admin-mode-btn" class="admin-toggle-btn nav-admin-btn" style="background: #2c3e50;">
-                            <i class="fas fa-cog"></i> 관리자 모드 <i class="fas fa-chevron-down" style="font-size: 0.75rem; margin-left: 4px;"></i>
-                        </button>
-                        <div id="admin-menu-dropdown" style="display: none; position: absolute; top: 110%; right: 0; background: #1e2026; border: 1px solid #2d3748; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 170px; z-index: 100; overflow: hidden;">
-                            <button id="admin-menu-popup-config" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #2d3748; display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-window-restore" style="color: #e67e22;"></i> 팝업 공지 설정
-                            </button>
-                            <button id="admin-menu-maintenance-config" style="width: 100%; text-align: left; padding: 10px 14px; background: none; border: none; color: #fff; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-tools" style="color: #e74c3c;"></i> 점검 모드 설정
-                            </button>
-                        </div>
-                    </div>
+      <div class="hero-slider-container">
+        <div class="hero-slider-track">
 
-                    <button id="admin-logout-btn" class="admin-toggle-btn nav-admin-btn admin-only-element" style="display: none; background: rgba(231, 76, 60, 0.85);">
-                        <i class="fas fa-sign-out-alt"></i> 로그아웃
-                    </button>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <section id="intro" class="intro-section" style="min-height: 90vh; display: flex; align-items: center;">
-        <div class="intro-overlay"></div>
-        <div class="container intro-container">
-            <div class="intro-content-box">
-                <span class="intro-subtitle">VIDEO EDITOR & MOTION GRAPHIC DESIGNER</span>
-                <h2 class="intro-title">
-                    <span class="line-1"><span>감각적인 시선으로</span><span class="input-cursor"></span></span>
-                    <span class="line-2"><span class="typing-text"></span><span class="input-cursor">|</span></span>
-                </h2>
-                <p class="intro-description">
-                    프리미어 프로, 애프터 이펙트, 블렌더를 활용하여 가치를 더하는 고품질 영상을 기획하고 편집합니다.
-                </p>
-                <div class="intro-buttons">
-                    <a href="portfolio.html" class="btn btn-hero btn-hero-primary"><i class="fas fa-play-circle"></i> 포트폴리오 보기</a>
-                    <a href="contact.html" class="btn btn-hero btn-hero-outline"><i class="fas fa-paper-plane"></i> 협업 문의하기</a>
-                    <a href="notice.html" class="btn btn-hero btn-hero-notice"><i class="fas fa-bullhorn"></i> 공지사항 보러가기</a>
-                </div>
+          <!-- 슬라이드 1: 4번 톤앤매너 반영 -->
+          <div class="hero-slide active">
+            <div class="slide-bg zoom-effect" style="background-image: linear-gradient(90deg, rgba(11,12,16,0.85) 0%, rgba(11,12,16,0.3) 100%), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1400&q=80');"></div>
+            <div class="slide-content">
+              <span class="slide-badge">JWB STUDIO</span>
+              <h1 class="slide-title">감각적인 컷 연출부터<br><span class="highlight">인터랙티브 웹 연동까지</span></h1>
+              <p class="slide-desc">JWB STUDIO는 모션 그래픽, 3D 비주얼, 웹 인터랙티브 미디어를 아우르는 종합 비주얼 스튜디오입니다.</p>
+              <a href="#portfolio" class="slide-btn hover-target">작품 둘러보기 <i class="fa-solid fa-arrow-right"></i></a>
             </div>
+          </div>
+
+          <div class="hero-slide">
+            <div class="slide-bg zoom-effect" style="background-image: linear-gradient(90deg, rgba(11,12,16,0.85) 0%, rgba(11,12,16,0.3) 100%), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1400&q=80');"></div>
+            <div class="slide-content">
+              <span class="slide-badge">3D ARTWORK &amp; VFX</span>
+              <h1 class="slide-title">상상을 현실로 구현하는<br><span class="highlight">3D 비주얼 아키텍처</span></h1>
+              <p class="slide-desc">브랜드 홍보 필름부터 타이틀 씬 연출까지 디테일한 비주얼을 제작합니다.</p>
+              <a href="#order" class="slide-btn hover-target">제작 의뢰하기 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="hero-slide">
+            <div class="slide-bg zoom-effect" style="background-image: linear-gradient(90deg, rgba(11,12,16,0.85) 0%, rgba(11,12,16,0.3) 100%), url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1400&q=80');"></div>
+            <div class="slide-content">
+              <span class="slide-badge">INTERACTIVE WEB</span>
+              <h1 class="slide-title">웹 공간에서 구현되는<br><span class="highlight">인터랙티브 미디어</span></h1>
+              <p class="slide-desc">HTML5, CSS3, JavaScript 기술을 접목한 독창적인 포트폴리오 사이트 구축.</p>
+              <a href="#about" class="slide-btn hover-target">디렉터 소개 <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+
         </div>
+
+        <button class="slider-nav-btn prev-btn hover-target" aria-label="이전 슬라이드"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="slider-nav-btn next-btn hover-target" aria-label="다음 슬라이드"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <div class="slider-dots">
+          <span class="dot active hover-target" data-index="0"></span>
+          <span class="dot hover-target" data-index="1"></span>
+          <span class="dot hover-target" data-index="2"></span>
+        </div>
+      </div>
+
+      <div class="scrolling-ticker">
+        <div class="ticker-track">
+          <span>JWB STUDIO</span> • <span>AFTER EFFECTS</span> • <span>BLENDER 3D</span> • <span>CINEMA 4D</span> • <span>ILLUSTRATOR</span> • <span>PHOTOSHOP</span> • 
+          <span>JWB STUDIO</span> • <span>AFTER EFFECTS</span> • <span>BLENDER 3D</span> • <span>CINEMA 4D</span> • <span>ILLUSTRATOR</span> • <span>PHOTOSHOP</span> • 
+        </div>
+      </div>
     </section>
 
-    <!-- 관리자 비밀번호 로그인 모달 -->
-    <div id="admin-auth-modal" class="modal-overlay" aria-hidden="true">
-        <div class="modal-window admin-modal-window" role="dialog" aria-modal="true">
-            <button class="modal-close-btn admin-modal-close" aria-label="모달 닫기">&times;</button>
-            <div class="modal-content">
-                <div class="admin-modal-body">
-                    <div class="admin-modal-icon-box">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="admin-modal-title">Admin Console Access</h3>
-                    <p class="admin-modal-desc">시스템 관리자 인증을 완료하면 데이터 관리 모드가 활성화됩니다.</p>
-                    
-                    <form id="admin-login-form" class="admin-login-form">
-                        <div class="password-input-group">
-                            <i class="fas fa-key input-icon"></i>
-                            <input type="password" id="admin-pw-input" placeholder="관리자 비밀번호 입력..." autocomplete="current-password" required>
-                        </div>
-                        <p id="admin-auth-error" class="admin-auth-error"></p>
-                        <button type="submit" class="btn btn-primary admin-submit-btn">
-                            <i class="fas fa-lock-open"></i> 인증 및 로그온
-                        </button>
-                    </form>
-                </div>
+    <!-- 2. 스킬 영역 -->
+    <section id="skills" class="scroll-reveal">
+      <h2 class="section-title">스킬 (Skills)</h2>
+      <div class="skills-grid">
+        
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="img/icon/icon_after effects.png" alt="After Effects" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">After Effects</span>
+              <span class="skill-percent">90%</span>
             </div>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="90%"></div></div>
         </div>
-    </div>
 
-    <!-- 메인 팝업 공지 사용자 모달 -->
-    <div id="main-popup-modal" class="modal-overlay" aria-hidden="true" style="z-index: 2500;">
-        <div class="modal-window" style="max-width: 450px; padding: 0; overflow: hidden; border: 1px solid #333;">
-            <div style="position: relative; background: #14151a;">
-                <a id="main-popup-link" href="#" target="_blank" style="display: block;">
-                    <img id="main-popup-img" src="" alt="팝업 공지" style="width: 100%; display: block; max-height: 400px; object-fit: cover;">
-                </a>
-                <div style="padding: 20px; text-align: left;">
-                    <h3 id="main-popup-title" style="color: #fff; font-size: 1.2rem; margin-bottom: 8px;"></h3>
-                    <p id="main-popup-desc" style="color: #a0aec0; font-size: 0.9rem; line-height: 1.5; white-space: pre-line;"></p>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #1e2026; padding: 12px 20px; border-top: 1px solid #2d3748;">
-                    <label style="color: #a0aec0; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                        <input type="checkbox" id="popup-hide-today" style="cursor: pointer;"> 오늘 하루 보지 않기
-                    </label>
-                    <button id="main-popup-close-btn" style="background: #e74c3c; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; font-weight: bold;">닫기</button>
-                </div>
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="img/icon/con_premiere.png" alt="Premiere Pro" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">Photoshop</span>
+              <span class="skill-percent">80%</span>
             </div>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="85%"></div></div>
         </div>
-    </div>
 
-    <!-- 서비스 점검 화면 Overlay -->
-    <div id="maintenance-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0b0c10; z-index: 99999; justify-content: center; align-items: center; text-align: center; padding: 20px;">
-        <div style="max-width: 550px; background: #14151a; border: 1px solid #23262f; padding: 40px 30px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);">
-            <div style="width: 70px; height: 70px; background: rgba(231, 76, 60, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; border: 1px solid rgba(231, 76, 60, 0.4);">
-                <i class="fas fa-tools" style="font-size: 2rem; color: #e74c3c;"></i>
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="img/icon/icon_photoshop.png" alt="Photoshop" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">Photoshop</span>
+              <span class="skill-percent">85%</span>
             </div>
-            <h2 id="maint-view-title" style="color: #fff; font-size: 1.8rem; margin-bottom: 15px; font-weight: 700;">서비스 점검 중입니다</h2>
-            <div id="maint-view-period" style="background: #1e2026; color: #e67e22; font-weight: bold; padding: 10px 16px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; display: inline-block;">
-                점검 시간: 안내된 시간이 없습니다.
-            </div>
-            <p id="maint-view-desc" style="color: #a0aec0; font-size: 0.95rem; line-height: 1.7; white-space: pre-line; word-break: keep-all; margin-bottom: 30px;"></p>
-            
-            <button id="maint-admin-login-btn" style="background: transparent; border: 1px solid #2d3748; color: #7f8c8d; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; cursor: pointer;">
-                <i class="fas fa-lock"></i> 관리자 로그인
-            </button>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="85%"></div></div>
         </div>
-    </div>
 
-    <!-- [추가됨] 관리자 전용 설정 폼 영역 (팝업 공지 및 점검 모드 설정) -->
-    <div class="container" style="margin: 30px auto;">
-        <!-- 팝업 공지 설정 폼 -->
-        <form id="popup-config-form" style="display: none; background: #14151a; border: 1px solid #2d3748; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
-            <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-window-restore" style="color: #e67e22;"></i> 팝업 공지 설정</h3>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <label style="color: #a0aec0; font-size: 0.9rem; cursor: pointer;">
-                    <input type="checkbox" id="popup-is-active" style="margin-right: 6px;"> 팝업 공지 활성화 사용
-                </label>
-                <input type="text" id="popup-title-input" placeholder="팝업 제목 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
-                <input type="text" id="popup-img-input" placeholder="팝업 이미지 URL 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
-                <input type="text" id="popup-link-input" placeholder="클릭 시 이동할 링크 URL 입력..." style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
-                <textarea id="popup-desc-input" placeholder="팝업 상세 내용 입력..." rows="3" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem; resize: vertical;"></textarea>
-                <div style="text-align: right;">
-                    <button type="submit" style="background: #e67e22; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">설정 저장</button>
-                </div>
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="img/icon/icon_Illustrator.png" alt="Illustrator" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">Illustrator</span>
+              <span class="skill-percent">85%</span>
             </div>
-        </form>
-
-        <!-- 점검 모드 설정 폼 -->
-        <form id="maintenance-config-form" style="display: none; background: #14151a; border: 1px solid #2d3748; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
-            <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-tools" style="color: #e74c3c;"></i> 점검 모드 설정</h3>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <label style="color: #a0aec0; font-size: 0.9rem; cursor: pointer;">
-                    <input type="checkbox" id="maint-is-active" style="margin-right: 6px;"> 서비스 점검 모드 활성화 (활성화 시 방문객 접속 차단)
-                </label>
-                <input type="text" id="maint-title-input" placeholder="점검 화면 제목 (예: 서비스 점검 중입니다)" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
-                <input type="text" id="maint-period-input" placeholder="점검 기간 (예: 2026.08.06 02:00 ~ 06:00)" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem;">
-                <textarea id="maint-desc-input" placeholder="점검 안내 상세 내용 입력..." rows="3" style="background: #1e2026; color: #fff; border: 1px solid #2d3748; padding: 10px; border-radius: 6px; font-size: 0.9rem; resize: vertical;"></textarea>
-                <div style="text-align: right;">
-                    <button type="submit" style="background: #e74c3c; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer;">설정 저장</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>버전: V0.2.1</p>
-            <p>&copy; 2026 정원복. All Rights Reserved.</p>
-            <p>본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작 되었습니다</p>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="85%"></div></div>
         </div>
-    </footer>
-    
-    <script src="js/script.js"></script>
+
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="img/icon/icon_Blender.png" alt="Blender" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">Blender (3D)</span>
+              <span class="skill-percent">80%</span>
+            </div>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="80%"></div></div>
+        </div>
+
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="img/icon/con_C4D.png" alt="Cinema 4D" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">Cinema 4D (C4D)</span>
+              <span class="skill-percent">75%</span>
+            </div>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="75%"></div></div>
+        </div>
+
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">HTML5 / CSS3 / JS</span>
+              <span class="skill-percent">80%</span>
+            </div>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="80%"></div></div>
+        </div>
+
+        <div class="skill-card hover-target">
+          <div class="skill-header">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="skill-icon">
+            <div class="skill-title-group">
+              <span class="skill-name">Supabase &amp; GitHub</span>
+              <span class="skill-percent">80%</span>
+            </div>
+          </div>
+          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="80%"></div></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. 포트폴리오 영역 -->
+    <section id="portfolio" class="scroll-trigger-portfolio">
+      <div class="portfolio-header">
+        <div>
+          <h2 class="section-title">포트폴리오 (Portfolio)</h2>
+          <p class="scroll-hint">← 좌우 스크롤 또는 뷰 스위치 아이콘을 눌러 목록 모드로 변경하세요 →</p>
+        </div>
+
+        <div class="view-mode-switcher">
+          <button class="view-btn active hover-target" data-view="grid" title="카드 그리드 뷰">
+            <i class="fa-solid fa-border-all"></i>
+          </button>
+          <button class="view-btn hover-target" data-view="list" title="카드 리스트 뷰">
+            <i class="fa-solid fa-list"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="portfolio-controls">
+        <div class="segmented-control">
+          <button class="segment-btn active hover-target" data-filter="all">
+            <i class="fa-solid fa-border-all"></i> <span>All</span>
+          </button>
+          <button class="segment-btn hover-target" data-filter="video" title="영상 편집"><i class="fa-solid fa-video"></i></button>
+          <button class="segment-btn hover-target" data-filter="ad" title="광고 / 프로모션"><i class="fa-solid fa-rectangle-ad"></i></button>
+          <button class="segment-btn hover-target" data-filter="3d" title="3D 아트워크"><i class="fa-solid fa-cube"></i></button>
+          <button class="segment-btn hover-target" data-filter="graphic" title="그래픽 / 이미지"><i class="fa-regular fa-image"></i></button>
+          <button class="segment-btn hover-target" data-filter="typo" title="타이포그래피"><i class="fa-solid fa-heading"></i></button>
+          <button class="segment-btn hover-target" data-filter="motion" title="모션 그래픽"><i class="fa-solid fa-play"></i></button>
+          <button class="segment-btn hover-target" data-filter="web" title="웹 / 인터랙티브"><i class="fa-solid fa-file-lines"></i></button>
+          <button class="segment-btn hover-target" data-filter="vfx" title="VFX / 씬"><i class="fa-solid fa-person-running"></i></button>
+        </div>
+
+        <div class="search-pill-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="portfolio-search" placeholder="작품명 또는 키워드 검색...">
+        </div>
+      </div>
+
+      <div id="portfolio-wrapper" class="horizontal-scroll-wrapper grid-view">
+        <div class="horizontal-portfolio-list">
+          
+          <div class="portfolio-card trigger-item hover-target zoom-card" 
+               data-category="motion 3d" 
+               data-video-id="dQw4w9WgXcQ"
+               data-duration="2주 소요 (14일)"
+               data-tools="After Effects, Blender, Cinema 4D">
+            <div class="card-thumb-box img-zoom-wrapper">
+              <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="3D 타이틀 씬" loading="lazy">
+              <div class="play-overlay"><span>VIEW DETAIL</span></div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">모션 / 3D</span>
+              <h3 class="card-title">3D 타이틀 씬 모션 연출</h3>
+              <p class="card-desc">After Effects, Blender, C4D를 활용한 3D 아트워크 연출 영상입니다.</p>
+              <div class="card-meta">
+                <span class="meta-item"><i class="fa-regular fa-clock"></i> 2주</span>
+                <span class="meta-item"><i class="fa-solid fa-wrench"></i> Ae, Blender, C4D</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="portfolio-card trigger-item hover-target zoom-card" 
+               data-category="video ad" 
+               data-video-id="dQw4w9WgXcQ"
+               data-duration="1주 소요 (7일)"
+               data-tools="After Effects, Photoshop, Premiere Pro">
+            <div class="card-thumb-box img-zoom-wrapper">
+              <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="브랜드 홍보 필름" loading="lazy">
+              <div class="play-overlay"><span>VIEW DETAIL</span></div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">영상 편집 / 광고</span>
+              <h3 class="card-title">브랜드 홍보 필름</h3>
+              <p class="card-desc">감각적인 컷 전환 기법 및 예능/프로모션 편집 프로젝트입니다.</p>
+              <div class="card-meta">
+                <span class="meta-item"><i class="fa-regular fa-clock"></i> 1주</span>
+                <span class="meta-item"><i class="fa-solid fa-wrench"></i> Ae, Ps, Premiere</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="portfolio-card trigger-item hover-target zoom-card" 
+               data-category="web graphic" 
+               data-video-id="dQw4w9WgXcQ"
+               data-duration="3주 소요 (21일)"
+               data-tools="HTML5, CSS3, JavaScript, Illustrator">
+            <div class="card-thumb-box img-zoom-wrapper">
+              <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="인터랙티브 웹쇼릴" loading="lazy">
+              <div class="play-overlay"><span>VIEW DETAIL</span></div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">웹 / 인터랙티브</span>
+              <h3 class="card-title">인터랙티브 웹쇼릴</h3>
+              <p class="card-desc">JavaScript 및 애니메이션 효과를 활용한 미디어 포트폴리오 사이트입니다.</p>
+              <div class="card-meta">
+                <span class="meta-item"><i class="fa-regular fa-clock"></i> 3주</span>
+                <span class="meta-item"><i class="fa-solid fa-wrench"></i> HTML/CSS/JS, Ai</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 제작 프로세스 영역 -->
+    <section id="process" class="scroll-reveal">
+      <h2 class="section-title">제작 프로세스 (Process)</h2>
+      <div class="process-grid">
+        <div class="process-step hover-target">
+          <div class="step-num">01</div>
+          <h3 class="step-title">기획 및 리서치</h3>
+          <p class="step-desc">프로젝트 목적 분석, 타깃 시청자 설정 및 톤앤매너·레퍼런스를 확정합니다.</p>
+        </div>
+        <div class="process-step hover-target">
+          <div class="step-num">02</div>
+          <h3 class="step-title">스토리보드 &amp; 콘셉트 시안</h3>
+          <p class="step-desc">시각화 작업 전 스토리보드 구성과 주요 키 컷의 2D/3D 스타일 프레임을 제작합니다.</p>
+        </div>
+        <div class="process-step hover-target">
+          <div class="step-num">03</div>
+          <h3 class="step-title">3D/모션 제작 &amp; 컴포지팅</h3>
+          <p class="step-desc">Blender/C4D 모델링, After Effects 키프레임 모션, VFX 특수효과 작업을 진행합니다.</p>
+        </div>
+        <div class="process-step hover-target">
+          <div class="step-num">04</div>
+          <h3 class="step-title">종합 편집 &amp; 사운드</h3>
+          <p class="step-desc">컬러 그래딩(색보정), 타이포그래피 모션 연출, BGM 및 효과음 믹싱으로 완성도를 높입니다.</p>
+        </div>
+        <div class="process-step hover-target">
+          <div class="step-num">05</div>
+          <h3 class="step-title">피드백 반영 &amp; 최종 납품</h3>
+          <p class="step-desc">클라이언트 피드백을 수렴하여 디테일을 보완한 후 최적화된 매체별 포맷으로 전달합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 자주하는 질문 (FAQ) -->
+    <section id="faq" class="scroll-reveal">
+      <h2 class="section-title">자주하는 질문 (FAQ)</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question hover-target">
+            <span>Q. 영상 제작 문의 절차는 어떻게 되나요?</span>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            레퍼런스 영상 및 요구사항 전달 → 일정 및 견적 확정 → 1차 시안 제작 → 피드백 및 수정 → 최종 납품 순으로 진행됩니다.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question hover-target">
+            <span>Q. 작업 기간은 통상 어느 정도 소요되나요?</span>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            영상 종류 및 3D/모션 그래픽 포함 여부에 따라 상이하며, 일반적인 숏폼/프로모션 영상은 1~2주 내외로 소요됩니다.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question hover-target">
+            <span>Q. 웹 디자인/인터랙티브 관련 제작도 함께 가능한가요?</span>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            네, HTML/CSS/JavaScript 기반의 포트폴리오 페이지 구축 및 비디오 연동 인터랙티브 웹 사이트 제작도 지원합니다.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question hover-target">
+            <span>Q. 피드백 및 수정 작업은 몇 회까지 가능한가요?</span>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            기본적으로 1차 시안 제공 후 2회까지 무상 수정을 지원해 드립니다. 다만 기획이나 전체 컷 구성 자체가 변경되는 대규모 수정의 경우 추가 비용이 발생할 수 있습니다.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question hover-target">
+            <span>Q. 프로젝트 원본 파일(AEP, BLEND 등)도 함께 제공되나요?</span>
+            <span class="faq-toggle">▼</span>
+          </div>
+          <div class="faq-answer">
+            기본 납품 항목은 최종 결과물 영상 파일(MP4, MOV 등)입니다. After Effects(AEP)나 Blender(BLEND) 등의 원본 프로젝트 파일은 별도의 라이선스 협의 및 작업비 추가를 통해 함께 받으실 수 있습니다.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 소개 영역 (About JWB STUDIO - 4번 톤 반영) -->
+    <section id="about" class="scroll-reveal">
+      <h2 class="section-title">소개 (About)</h2>
+      
+      <!-- JWB STUDIO 브랜드 비전 카드 (4번 톤 적용) -->
+      <div class="detail-box" style="margin-bottom: 2rem; border-color: var(--accent);">
+        <span class="card-tag" style="font-size: 0.85rem; margin-bottom: 0.8rem;">ABOUT JWB STUDIO</span>
+        <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; color: var(--text-main);">
+          "감각적인 컷 연출부터 인터랙티브 웹 연동까지."
+        </h3>
+        <p style="color: var(--text-sub); font-size: 1rem; line-height: 1.7; word-break: keep-all;">
+          <strong>JWB STUDIO</strong>는 사진 및 프로모션 영상 편집, 3D 타이틀 연출, 웹 인터랙티브 미디어를 아우르는 종합 비주얼 크리에이티브 스튜디오입니다. 기획 단계의 스토리보드부터 최종 컴포지팅까지, 브랜드의 가치를 시각적으로 극대화하는 핵심 미디어 파트너로 성장해 나가고 있습니다.
+        </p>
+      </div>
+
+      <div class="profile-container">
+        <div class="profile-img-box">
+          <img src="img/profile/IMG_3015.jpg" alt="정원복 프로필 사진" class="profile-img hover-target" loading="lazy">
+        </div>
+        <div class="profile-info">
+          <p class="about-intro">
+            안녕하세요, 모션 그래픽과 비주얼 연출을 바탕으로 미디어 콘텐츠를 제작하는 영상 크리에이터 정원복입니다. After Effects, Photoshop, Illustrator, Blender, Cinema 4D를 활용한 감각적인 영상 제작부터 웹 인터랙티브 요소 구현까지 폭넓은 작업 스펙트럼을 보유하고 있습니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="about-details-grid">
+        <div class="detail-box">
+          <h3 class="detail-title">학력</h3>
+          <ul class="detail-list">
+            <li><span class="detail-date">2018.02</span><span class="detail-text">석전중학교 졸업</span></li>
+            <li><span class="detail-date">2021.02</span><span class="detail-text">구미고등학교 부설방송통신고등학교 졸업</span></li>
+            <li><span class="detail-date">2023.02</span><span class="detail-text">구미대학교 경영학 전문학사</span></li>
+            <li><span class="detail-date">2026</span><span class="detail-text">사회복지학 전공 과정 이수 중</span></li>
+          </ul>
+        </div>
+
+        <div class="detail-box">
+          <h3 class="detail-title">교육 및 수료</h3>
+          <ul class="detail-list">
+            <li><span class="detail-date">2026.08</span><span class="detail-text">청년취업지원 진로 프로그램 (CAP+) 수료</span></li>
+            <li><span class="detail-date">2026.07</span><span class="detail-text">국민취업지원제도 이수 및 취업 역량 강화 과정</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="detail-title" style="margin-top: 2rem;">연혁</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2026.01 - 현재</div>
+          <div class="timeline-content">비디오 디렉팅 및 모션 그래픽 외주 프로젝트 진행</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2025.08</div>
+          <div class="timeline-content">인터랙티브 웹 포트폴리오 및 영상 데이터베이스 구축</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2024.03</div>
+          <div class="timeline-content">모션 그래픽 및 3D 비주얼 아키텍처 연구 시작</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. 제작 의뢰 안내 영역 -->
+    <section id="order" class="scroll-reveal">
+      <h2 class="section-title">제작 의뢰 (Work With Me)</h2>
+      <div class="order-card">
+        <div class="order-info">
+          <h3 class="order-heading">새로운 영상 프로젝트를 고민 중이신가요?</h3>
+          <p class="order-subtext">
+            브랜드 홍보, 모션 그래픽, 타이틀 씬 연출 등 필요하신 영상의 레퍼런스나 아이디어가 있다면 언제든지 문의해 주세요. 빠른 검토 후 맞춤형 견적과 일정을 제안해 드립니다.
+          </p>
+        </div>
+        <div class="order-action">
+          <a href="#contact" class="order-btn hover-target">외주 문의하기</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. 연락처 영역 -->
+    <section id="contact" class="scroll-reveal">
+      <h2 class="section-title">연락처 (Contact)</h2>
+      <div class="contact-card">
+        <p class="contact-desc">
+          외주 의뢰 및 기타 협업 문의는 아래 연락처, 이메일, 또는 오픈채팅으로 편하게 전달해주시기 바랍니다.
+        </p>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <span class="contact-label"><i class="fa-regular fa-envelope"></i> 이메일</span>
+            <span class="contact-value"><a href="mailto:chong04041@naver.com" class="hover-target">chong04041@naver.com</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label"><i class="fa-solid fa-phone"></i> 연락처</span>
+            <span class="contact-value">010-3401-1371</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label"><i class="fa-solid fa-comment"></i> 카카오톡 오픈채팅</span>
+            <span class="contact-value"><a href="https://open.kakao.com/o/your_openchat_id" target="_blank" rel="noopener" class="hover-target">오픈채팅으로 문의하기</a></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 비디오 라이트박스 및 상세 모달 -->
+  <div id="video-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close hover-target">&times;</button>
+      <div class="modal-video-wrapper">
+        <iframe id="modal-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+      <div class="modal-info-box">
+        <div class="modal-header-group">
+          <span id="modal-tag" class="card-tag">카테고리</span>
+          <h3 id="modal-title" class="modal-project-title">작품 제목</h3>
+        </div>
+        
+        <div class="modal-detail-grid">
+          <div class="modal-detail-item">
+            <span class="modal-label"><i class="fa-regular fa-clock"></i> 제작 기간</span>
+            <span id="modal-duration" class="modal-value">0주 소요</span>
+          </div>
+          <div class="modal-detail-item">
+            <span class="modal-label"><i class="fa-solid fa-wrench"></i> 사용 툴</span>
+            <div id="modal-tools" class="tools-badge-group"></div>
+          </div>
+        </div>
+
+        <p id="modal-desc" class="modal-project-desc">작품 상세 설명이 들어가는 공간입니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer-notice">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
+    <p class="footer-copy">&copy; 2026 JWB STUDIO. All rights reserved.</p>
+  </footer>
+
+  <script src="js/script.js"></script>
 </body>
 </html>
