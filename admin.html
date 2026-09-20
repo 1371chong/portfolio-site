@@ -7,6 +7,8 @@
   <link rel="icon" href="img/logo/logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <!-- Supabase JS SDK CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .admin-container { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; }
     .admin-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2.5rem; }
@@ -99,15 +101,16 @@
   </div>
 
   <script>
-    // ★ 구글 앱스 스크립트 웹 앱 URL을 입력하세요
-    const GOOGLE_APP_URL = '여기에_발급받은_구글_웹앱_URL을_붙여넣으세요';
+    // ★ 본인의 Supabase 프로젝트 정보 입력
+    const SUPABASE_URL = 'https://본인의프로젝트주소.supabase.co';
+    const SUPABASE_ANON_KEY = '본인의_ANON_PUBLIC_KEY를_여기에_입력하세요';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const adminLoginOverlay = document.getElementById('admin-login-overlay');
     const adminDashboard = document.getElementById('admin-dashboard');
 
-    // 페이지 로드 시 관리자 세션 체크
     function checkAdminAuth() {
-      const isAdmin = sessionStorage.getItem('jwb_admin_auth'); // localStorage 대신 세션 스토리지 사용으로 충돌 방지
+      const isAdmin = sessionStorage.getItem('jwb_admin_auth');
       if (isAdmin === 'true') {
         adminLoginOverlay.classList.remove('active');
         adminDashboard.style.display = 'block';
@@ -120,11 +123,9 @@
 
     checkAdminAuth();
 
-    // 관리자 로그인 처리 (비밀번호: admin1234)
     document.getElementById('admin-login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const pw = document.getElementById('admin-pw').value;
-      
       if (pw === 'admin1234') {
         sessionStorage.setItem('jwb_admin_auth', 'true');
         checkAdminAuth();
@@ -133,7 +134,6 @@
       }
     });
 
-    // 관리자 로그아웃
     const logoutBtn = document.getElementById('admin-logout-btn');
     if (logoutBtn) {
       logoutBtn.addEventListener('click', () => {
@@ -142,26 +142,25 @@
       });
     }
 
-    // 회원 목록 불러오기
+    // 회원 목록 불러오기 (Supabase)
     async function loadAdminData() {
       try {
-        const res = await fetch(`${GOOGLE_APP_URL}?type=users`).then(r => r.json());
+        const { data: users, error } = await supabase.from('users').select('*');
         const userListBody = document.getElementById('admin-user-list');
         userListBody.innerHTML = '';
         
-        if (!res || res.length === 0) {
+        if (error || !users || users.length === 0) {
           userListBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">등록된 회원이 없습니다.</td></tr>';
           return;
         }
 
-        res.forEach(user => {
-          if (!user['아이디']) return;
+        users.forEach(user => {
           userListBody.innerHTML += `
             <tr>
-              <td>${user['아이디']}</td>
-              <td>${user['이름']}</td>
-              <td>${user['마케팅동의'] === 'true' ? '동의' : '미동의'}</td>
-              <td>${user['가입일시'] || '-'}</td>
+              <td>${user.userid}</td>
+              <td>${user.username}</td>
+              <td>${user.marketing ? '동의' : '미동의'}</td>
+              <td>${user.created_at || '-'}</td>
             </tr>
           `;
         });
@@ -170,33 +169,25 @@
       }
     }
 
-    // 공지사항 등록
+    // 공지사항 등록 (Supabase)
     document.getElementById('admin-notice-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const title = document.getElementById('notice-title').value;
       const content = document.getElementById('notice-content').value;
+      const date = new Date().toLocaleDateString();
 
-      const formData = new URLSearchParams();
-      formData.append('action', 'addNotice');
-      formData.append('title', title);
-      formData.append('content', content);
-      formData.append('date', new Date().toLocaleDateString());
+      const { error } = await supabase.from('notices').insert([{ title, content, date }]);
 
-      try {
-        const response = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData });
-        const result = await response.json();
-        if(result.result === 'success') {
-          alert('공지사항이 성공적으로 등록되었습니다.');
-          document.getElementById('admin-notice-form').reset();
-        } else {
-          alert('등록에 실패했습니다.');
-        }
-      } catch (err) {
-        alert('서버 통신 중 오류가 발생했습니다.');
+      if (!error) {
+        alert('공지사항이 성공적으로 등록되었습니다.');
+        document.getElementById('admin-notice-form').reset();
+      } else {
+        alert('등록에 실패했습니다.');
+        console.error(error);
       }
     });
 
-    // 포트폴리오 등록
+    // 포트폴리오 등록 (Supabase)
     document.getElementById('admin-portfolio-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const title = document.getElementById('pf-title').value;
@@ -206,26 +197,14 @@
       const tools = document.getElementById('pf-tools').value;
       const desc = document.getElementById('pf-desc').value;
 
-      const formData = new URLSearchParams();
-      formData.append('action', 'addPortfolio');
-      formData.append('title', title);
-      formData.append('category', category);
-      formData.append('link', link);
-      formData.append('thumb', thumb);
-      formData.append('tools', tools);
-      formData.append('desc', desc);
+      const { error } = await supabase.from('portfolios').insert([{ title, category, link, thumb, tools, desc }]);
 
-      try {
-        const response = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData });
-        const result = await response.json();
-        if(result.result === 'success') {
-          alert('포트폴리오가 성공적으로 등록되었습니다.');
-          document.getElementById('admin-portfolio-form').reset();
-        } else {
-          alert('등록에 실패했습니다.');
-        }
-      } catch (err) {
-        alert('서버 통신 중 오류가 발생했습니다.');
+      if (!error) {
+        alert('포트폴리오가 성공적으로 등록되었습니다.');
+        document.getElementById('admin-portfolio-form').reset();
+      } else {
+        alert('등록에 실패했습니다.');
+        console.error(error);
       }
     });
   </script>
