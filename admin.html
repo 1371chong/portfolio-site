@@ -61,7 +61,7 @@
 
       <h3 style="margin-top:2rem; font-size:1.1rem; color:var(--text-main);">등록된 공지사항 목록</h3>
       <table class="admin-table">
-        <thead><tr><th>제목</th><th>등록일</th><th>관리</th></tr></thead>
+        <thead><tr><th>ID</th><th>제목</th><th>등록일</th><th>관리</th></tr></thead>
         <tbody id="admin-notice-list"></tbody>
       </table>
     </div>
@@ -97,7 +97,7 @@
 
       <h3 style="margin-top:2rem; font-size:1.1rem; color:var(--text-main);">등록된 포트폴리오 목록</h3>
       <table class="admin-table">
-        <thead><tr><th>제목</th><th>카테고리</th><th>작업시간</th><th>관리</th></tr></thead>
+        <thead><tr><th>ID</th><th>제목</th><th>카테고리</th><th>관리</th></tr></thead>
         <tbody id="admin-portfolio-list"></tbody>
       </table>
     </div>
@@ -165,11 +165,11 @@
       // 2. 공지사항 관리 목록
       const { data: notices } = await supabaseClient.from('notices').select('*').order('id', { ascending: false });
       const noticeList = document.getElementById('admin-notice-list');
-      noticeList.innerHTML = notices?.length ? '' : '<tr><td colspan="3" style="text-align:center;">등록된 공지가 없습니다.</td></tr>';
+      noticeList.innerHTML = notices?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 공지가 없습니다.</td></tr>';
       notices?.forEach(n => {
-        const safeTitle = n.title.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeContent = n.content.replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
-        noticeList.innerHTML += `<tr><td>${n.title}</td><td>${n.date}</td><td>
+        const safeTitle = (n.title || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+        const safeContent = (n.content || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
+        noticeList.innerHTML += `<tr><td>${n.id}</td><td>${n.title}</td><td>${n.date}</td><td>
           <button class="action-btn btn-edit" onclick="editNotice(${n.id}, '${safeTitle}', '${safeContent}')">수정</button>
           <button class="action-btn btn-delete" onclick="deleteNotice(${n.id})">삭제</button>
         </td></tr>`;
@@ -188,7 +188,7 @@
         const safeTools = (p.tools || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
         const safeDesc = (p.desc || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
 
-        pfList.innerHTML += `<tr><td>${p.title}</td><td>${p.category_name || p.category}</td><td>${p.work_time || '-'}</td><td>
+        pfList.innerHTML += `<tr><td>${p.id}</td><td>${p.title}</td><td>${p.category_name || p.category}</td><td>
           <button class="action-btn btn-edit" onclick="editPortfolio(${p.id}, '${safeTitle}', '${p.category}', '${safeCategoryName}', '${safeWorkTime}', '${safeLink}', '${safeThumb}', '${safeTools}', '${safeDesc}')">수정</button>
           <button class="action-btn btn-delete" onclick="deletePortfolio(${p.id})">삭제</button>
         </td></tr>`;
@@ -204,13 +204,17 @@
       const date = new Date().toLocaleDateString();
 
       if (id && id.trim() !== "") {
-        const { error } = await supabaseClient.from('notices').update({ title, content }).eq('id', Number(id));
+        console.log("공지 수정 시도 ID:", id);
+        const { data, error } = await supabaseClient.from('notices').update({ title, content }).eq('id', Number(id)).select();
+        console.log("수정 결과:", data, error);
         if (!error) alert('공지사항이 수정되었습니다.');
-        else { alert('수정에 실패했습니다.'); console.error(error); }
+        else { alert('수정에 실패했습니다: ' + error.message); }
       } else {
-        const { error } = await supabaseClient.from('notices').insert([{ title, content, date }]);
+        console.log("공지 신규 등록 시도");
+        const { data, error } = await supabaseClient.from('notices').insert([{ title, content, date }]).select();
+        console.log("등록 결과:", data, error);
         if (!error) alert('공지사항이 등록되었습니다.');
-        else { alert('등록에 실패했습니다.'); console.error(error); }
+        else { alert('등록에 실패했습니다: ' + error.message); }
       }
       resetNoticeForm();
       loadAdminData();
@@ -233,13 +237,13 @@
     };
 
     window.deleteNotice = async (id) => {
-      if (confirm('정말 이 공지사항을 삭제하시겠습니까?')) {
+      if (confirm(`공지 ID [${id}]번을 정말 삭제하시겠습니까?`)) {
         const { error } = await supabaseClient.from('notices').delete().eq('id', Number(id));
         if (!error) {
           alert('삭제되었습니다.');
           loadAdminData();
         } else {
-          alert('삭제에 실패했습니다.');
+          alert('삭제에 실패했습니다: ' + error.message);
           console.error(error);
         }
       }
@@ -261,13 +265,17 @@
       };
 
       if (id && id.trim() !== "") {
-        const { error } = await supabaseClient.from('portfolios').update(payload).eq('id', Number(id));
+        console.log("포트폴리오 수정 시도 ID:", id);
+        const { data, error } = await supabaseClient.from('portfolios').update(payload).eq('id', Number(id)).select();
+        console.log("수정 결과:", data, error);
         if (!error) alert('포트폴리오가 수정되었습니다.');
-        else { alert('수정에 실패했습니다.'); console.error(error); }
+        else { alert('수정에 실패했습니다: ' + error.message); }
       } else {
-        const { error } = await supabaseClient.from('portfolios').insert([payload]);
+        console.log("포트폴리오 신규 등록 시도");
+        const { data, error } = await supabaseClient.from('portfolios').insert([payload]).select();
+        console.log("등록 결과:", data, error);
         if (!error) alert('포트폴리오가 등록되었습니다.');
-        else { alert('등록에 실패했습니다.'); console.error(error); }
+        else { alert('등록에 실패했습니다: ' + error.message); }
       }
       resetPortfolioForm();
       loadAdminData();
@@ -296,13 +304,13 @@
     };
 
     window.deletePortfolio = async (id) => {
-      if (confirm('정말 이 포트폴리오를 삭제하시겠습니까?')) {
+      if (confirm(`포트폴리오 ID [${id}]번을 정말 삭제하시겠습니까?`)) {
         const { error } = await supabaseClient.from('portfolios').delete().eq('id', Number(id));
         if (!error) {
           alert('삭제되었습니다.');
           loadAdminData();
         } else {
-          alert('삭제에 실패했습니다.');
+          alert('삭제에 실패했습니다: ' + error.message);
           console.error(error);
         }
       }
