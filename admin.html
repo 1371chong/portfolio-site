@@ -131,13 +131,12 @@
 
   <script>
     const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const adminLoginOverlay = document.getElementById('admin-login-overlay');
     const adminDashboard = document.getElementById('admin-dashboard');
 
-    // ★ 로컬 스토리지 기반 관리자 비밀번호 관리 (기본값: admin1234)
     if (!localStorage.getItem('jwb_admin_pw')) {
       localStorage.setItem('jwb_admin_pw', 'admin1234');
     }
@@ -154,7 +153,7 @@
     }
     checkAdminAuth();
 
-    // 관리자 로그인 처리 (코드/스토리지에 저장된 비밀번호와 대조)
+    // 관리자 로그인 처리 (성공 알림 추가)
     document.getElementById('admin-login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const pwInput = document.getElementById('admin-pw').value;
@@ -162,6 +161,7 @@
 
       if (pwInput === currentAdminPw) {
         sessionStorage.setItem('jwb_admin_auth', 'true');
+        alert('관리자로 로그인되었습니다!');
         checkAdminAuth();
       } else {
         alert('관리자 비밀번호가 일치하지 않습니다.');
@@ -173,7 +173,7 @@
       location.reload();
     });
 
-    // 관리자 비밀번호 직접 변경 처리
+    // 관리자 비밀번호 변경 처리
     const adminPwChangeForm = document.getElementById('admin-pw-change-form');
     if (adminPwChangeForm) {
       adminPwChangeForm.addEventListener('submit', (e) => {
@@ -191,7 +191,6 @@
           return alert('새로운 비밀번호가 서로 일치하지 않습니다.');
         }
 
-        // 새로운 비밀번호로 스토리지 업데이트
         localStorage.setItem('jwb_admin_pw', newPw);
         alert('관리자 비밀번호가 성공적으로 변경되었습니다. 보안을 위해 다시 로그인해 주세요.');
         sessionStorage.removeItem('jwb_admin_auth');
@@ -201,7 +200,6 @@
 
     async function loadAdminData() {
       try {
-        // 1. 회원 목록 (Supabase DB 연동)
         const { data: users } = await supabaseClient.from('users').select('*');
         const userList = document.getElementById('admin-user-list');
         userList.innerHTML = users?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 회원이 없습니다.</td></tr>';
@@ -209,7 +207,6 @@
           userList.innerHTML += `<tr><td>${u.userid}</td><td>${u.username}</td><td>${u.marketing ? '동의' : '미동의'}</td><td>${u.created_at || '-'}</td></tr>`;
         });
 
-        // 2. 공지사항 관리 목록
         const { data: notices } = await supabaseClient.from('notices').select('*');
         if (notices) notices.sort((a, b) => b.id - a.id);
         const noticeList = document.getElementById('admin-notice-list');
@@ -223,7 +220,6 @@
           </td></tr>`;
         });
 
-        // 3. 포트폴리오 관리 목록
         const { data: portfolios } = await supabaseClient.from('portfolios').select('*');
         if (portfolios) portfolios.sort((a, b) => b.id - a.id);
         const pfList = document.getElementById('admin-portfolio-list');
@@ -247,7 +243,6 @@
       }
     }
 
-    // 공지사항 등록 및 수정 처리
     document.getElementById('admin-notice-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('notice-id').value;
@@ -300,7 +295,6 @@
       }
     };
 
-    // 포트폴리오 등록 및 수정 처리
     document.getElementById('admin-portfolio-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('pf-id').value;
