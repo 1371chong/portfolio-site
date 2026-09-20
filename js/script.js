@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 공지사항 데이터 불러오기 (Supabase)
+  // 공지사항 데이터 불러오기 (Supabase) 및 상세 모달 연동
   async function loadNotices() {
     const list = document.getElementById('notice-list');
     if(!list) return;
@@ -507,8 +507,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       notices.forEach(item => {
+        const safeTitle = (item.title || '').replace(/'/g, "\\'");
+        const safeDate = item.date || '';
+        const safeContent = (item.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+
         list.innerHTML += `
-          <li class="jwb-post-item hover-target" style="cursor: pointer;" onclick="openNoticeModal('${item.title.replace(/'/g, "\\'")}', '${item.date}', '${item.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">
+          <li class="jwb-post-item hover-target" style="cursor: pointer;" onclick="openNoticeModal('${safeTitle}', '${safeDate}', '${safeContent}')">
             <div class="jwb-post-header">
               <span class="jwb-post-title">${item.title}</span>
               <span class="jwb-post-meta">관리자 | ${item.date}</span>
@@ -533,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
     noticeModal.classList.add('active');
   };
 
-  // 포트폴리오 데이터 불러오기 (Supabase)
+  // 포트폴리오 데이터 불러오기 (Supabase) - 작업시간, 카테고리명 반영
   function getYoutubeId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
@@ -561,14 +565,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="portfolio-card dynamic-portfolio-card trigger-item hover-target zoom-card" 
                data-category="${item.category}" data-video-id="${videoId}"
                style="opacity: 0; transform: scale(0.9) translateY(30px);">
-            <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${item.title.replace(/'/g, "\\'")}', '${item.tools}', '${item.desc.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">
+            <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${(item.title || '').replace(/'/g, "\\'")}', '${item.tools}', '${(item.desc || '').replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">
               <img src="${thumbUrl}" alt="포트폴리오 썸네일">
               <div class="play-overlay"><span>VIEW DETAIL</span></div>
             </div>
             <div class="card-info">
               <span class="card-tag">${categoryName}</span>
               <h3 class="card-title">${item.title}</h3>
-              <p class="card-desc">${item.desc.substring(0, 40)}...</p>
+              <p class="card-desc">${(item.desc || '').substring(0, 40)}...</p>
               <div class="card-meta">
                 <span class="meta-item"><i class="fa-solid fa-wrench"></i> ${item.tools}</span>
                 ${workTime}
@@ -578,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         pfContainer.insertAdjacentHTML('beforeend', cardHTML);
       });
-      filterPortfolio(); 
+      if(typeof filterPortfolio === 'function') filterPortfolio(); 
     } catch(e) { console.error('포트폴리오 로드 실패'); }
   }
 
