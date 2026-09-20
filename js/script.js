@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 0. 다크 / 라이트 테마 전환 토글 (Theme Switcher)
+  // 0. 다크 / 라이트 테마 전환 토글
   const themeToggleBtn = document.getElementById('theme-toggle');
   const savedTheme = localStorage.getItem('theme');
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', handleHeaderScroll, { passive: true });
   handleHeaderScroll();
 
-  // 2. 히어로 자동 캐러셀 슬라이더 로직
+  // 2. 히어로 자동 캐러셀 슬라이더
   const slides = document.querySelectorAll('.hero-slide');
   const prevBtn = document.querySelector('.prev-btn');
   const nextBtn = document.querySelector('.next-btn');
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
       slide.classList.remove('active');
       if (dots[i]) dots[i].classList.remove('active');
     });
-
     currentSlide = (index + slides.length) % slides.length;
     slides[currentSlide].classList.add('active');
     if (dots[currentSlide]) dots[currentSlide].classList.add('active');
@@ -50,30 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function nextSlide() { showSlide(currentSlide + 1); }
   function prevSlide() { showSlide(currentSlide - 1); }
+  function startAutoSlide() { stopAutoSlide(); slideInterval = setInterval(nextSlide, 5000); }
+  function stopAutoSlide() { if (slideInterval) clearInterval(slideInterval); }
 
-  function startAutoSlide() {
-    stopAutoSlide();
-    slideInterval = setInterval(nextSlide, 5000);
-  }
-
-  function stopAutoSlide() {
-    if (slideInterval) clearInterval(slideInterval);
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-      startAutoSlide();
-    });
-  }
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-      startAutoSlide();
-    });
-  }
-
+  if (nextBtn) { nextBtn.addEventListener('click', () => { nextSlide(); startAutoSlide(); }); }
+  if (prevBtn) { prevBtn.addEventListener('click', () => { prevSlide(); startAutoSlide(); }); }
   dots.forEach(dot => {
     dot.addEventListener('click', (e) => {
       const index = parseInt(e.target.getAttribute('data-index'));
@@ -87,10 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderContainer.addEventListener('mouseenter', stopAutoSlide);
     sliderContainer.addEventListener('mouseleave', startAutoSlide);
   }
-
   startAutoSlide();
 
-  // 3. 커스텀 마우스 커서 & 호버 인터랙션 (Cursor Interaction)
+  // 3. 커스텀 마우스 커서
   const cursorDot = document.querySelector('.custom-cursor-dot');
   const cursorBlur = document.querySelector('.custom-cursor-blur');
 
@@ -100,21 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
       cursorDot.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
       cursorBlur.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
     });
-
     document.querySelectorAll('.hover-target').forEach(target => {
-      target.addEventListener('mouseenter', () => {
-        document.body.classList.add('cursor-hover');
-      });
-      target.addEventListener('mouseleave', () => {
-        document.body.classList.remove('cursor-hover');
-      });
+      target.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
     });
   }
 
-  // 4. 모바일 햄버거 메뉴
+  // 4. 햄버거 메뉴 및 ScrollSpy
   const hamburgerBtn = document.querySelector('.hamburger-btn');
   const navMenu = document.querySelector('.nav-menu');
   const navLinks = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('section');
+  const tocLinks = document.querySelectorAll('.toc-link');
 
   if (hamburgerBtn && navMenu) {
     hamburgerBtn.addEventListener('click', () => {
@@ -128,42 +104,29 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       if (hamburgerBtn) hamburgerBtn.classList.remove('open');
       if (navMenu) navMenu.classList.remove('active');
-
       const targetId = link.getAttribute('href');
       const targetSection = document.querySelector(targetId);
       if (targetSection) targetSection.scrollIntoView({ behavior: 'smooth' });
     });
   });
 
-  // 5. ScrollSpy (헤더 & TOC 하이라이팅)
-  const sections = document.querySelectorAll('section');
-  const tocLinks = document.querySelectorAll('.toc-link');
-
   window.addEventListener('scroll', () => {
     let current = '';
     sections.forEach(section => {
       const sectionTop = section.offsetTop - 150;
-      if (window.pageYOffset >= sectionTop) {
-        current = section.getAttribute('id');
-      }
+      if (window.pageYOffset >= sectionTop) { current = section.getAttribute('id'); }
     });
-
     navLinks.forEach(link => {
       link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
+      if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
     });
-
     tocLinks.forEach(link => {
       link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
+      if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
     });
   }, { passive: true });
 
-  // 6. 일반 섹션 페이드인 Observer
+  // 5. 일반 섹션 페이드인 Observer
   const scrollReveals = document.querySelectorAll('.scroll-reveal');
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -177,25 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, { threshold: 0.15 });
-
   scrollReveals.forEach(el => revealObserver.observe(el));
 
-  // 7. 포트폴리오 스태거 모션
-  const triggerItems = document.querySelectorAll('.trigger-item');
-  const portfolioObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        triggerItems.forEach((item, index) => {
-          setTimeout(() => { item.classList.add('triggered'); }, index * 150);
-        });
-      }
-    });
-  }, { threshold: 0.2 });
-
-  const portfolioSection = document.querySelector('.scroll-trigger-portfolio');
-  if (portfolioSection) portfolioObserver.observe(portfolioSection);
-
-  // 8. 카드 그리드 / 리스트 뷰 스위치
+  // 6. 뷰 모드 전환 (그리드/리스트)
   const viewBtns = document.querySelectorAll('.view-btn');
   const portfolioWrapper = document.getElementById('portfolio-wrapper');
 
@@ -203,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       viewBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
       const viewMode = btn.getAttribute('data-view');
       if (viewMode === 'list') {
         portfolioWrapper.classList.remove('grid-view');
@@ -215,19 +161,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 9. 세그먼트 필터 & 검색
+  // 7. 세그먼트 필터 & 검색 (페이드인 모션 적용)
   const segmentBtns = document.querySelectorAll('.segment-btn');
   const searchInput = document.getElementById('portfolio-search');
   let currentFilter = 'all';
 
   function filterPortfolio() {
     const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    let visibleIndex = 0;
 
-    triggerItems.forEach(card => {
+    document.querySelectorAll('.portfolio-card').forEach(card => {
       const categories = card.getAttribute('data-category') || '';
       const title = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
       const desc = card.querySelector('.card-desc')?.textContent.toLowerCase() || '';
-
       const matchesFilter = (currentFilter === 'all') || categories.includes(currentFilter);
       const matchesSearch = !searchText || title.includes(searchText) || desc.includes(searchText);
 
@@ -236,7 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           card.style.opacity = '1';
           card.style.transform = 'scale(1) translateY(0)';
-        }, 10);
+        }, 50 + (visibleIndex * 80)); 
+        visibleIndex++;
       } else {
         card.style.opacity = '0';
         card.style.transform = 'scale(0.9) translateY(20px)';
@@ -253,12 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
       filterPortfolio();
     });
   });
+  if (searchInput) searchInput.addEventListener('input', filterPortfolio);
 
-  if (searchInput) {
-    searchInput.addEventListener('input', filterPortfolio);
-  }
-
-  // 10. 가로 스크롤 마우스 휠 지원
+  // 8. 가로 스크롤 마우스 휠 지원
   if (portfolioWrapper) {
     portfolioWrapper.addEventListener('wheel', (e) => {
       if (portfolioWrapper.classList.contains('grid-view') && e.deltaY !== 0) {
@@ -268,100 +212,331 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: false });
   }
 
-  // 11. FAQ 아코디언 토글
+  // 9. FAQ 토글
   document.querySelectorAll('.faq-question').forEach(q => {
-    q.addEventListener('click', () => {
-      q.parentElement.classList.toggle('active');
-    });
+    q.addEventListener('click', () => { q.parentElement.classList.toggle('active'); });
   });
 
-  // 12. 인터랙티브 이력서 다운로드 / 미리보기 모달
-  const btnPreviewResume = document.getElementById('btn-preview-resume');
-  const resumeModal = document.getElementById('resume-modal');
-  const resumeModalClose = document.querySelector('.resume-modal-close');
-  const btnCopyResumeLink = document.getElementById('btn-copy-resume-link');
-
-  if (btnPreviewResume && resumeModal) {
-    btnPreviewResume.addEventListener('click', () => {
-      resumeModal.classList.add('active');
-    });
-  }
-
-  if (resumeModalClose) {
-    resumeModalClose.addEventListener('click', () => {
-      resumeModal.classList.remove('active');
-    });
-  }
-
-  if (resumeModal) {
-    resumeModal.addEventListener('click', (e) => {
-      if (e.target === resumeModal) resumeModal.classList.remove('active');
-    });
-  }
-
-  if (btnCopyResumeLink) {
-    btnCopyResumeLink.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.origin + '#resume');
-      alert('이력서 주소가 클립보드에 복사되었습니다.');
-    });
-  }
-
-  // 13. 비디오 라이트박스 및 상세 모달
+  // 10. 비디오 라이트박스 제어
   const videoModal = document.getElementById('video-modal');
   const modalIframe = document.getElementById('modal-iframe');
   const modalClose = document.querySelector('#video-modal .modal-close');
-  
-  const modalTag = document.getElementById('modal-tag');
-  const modalTitle = document.getElementById('modal-title');
-  const modalDuration = document.getElementById('modal-duration');
-  const modalTools = document.getElementById('modal-tools');
-  const modalDesc = document.getElementById('modal-desc');
-
-  triggerItems.forEach(card => {
-    card.addEventListener('click', () => {
-      const videoId = card.getAttribute('data-video-id');
-      const duration = card.getAttribute('data-duration') || '미정';
-      const tools = card.getAttribute('data-tools') || '';
-      const tag = card.querySelector('.card-tag')?.textContent || '';
-      const title = card.querySelector('.card-title')?.textContent || '';
-      const desc = card.querySelector('.card-desc')?.textContent || '';
-
-      if (videoId) {
-        modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-        
-        if (modalTag) modalTag.textContent = tag;
-        if (modalTitle) modalTitle.textContent = title;
-        if (modalDuration) modalDuration.textContent = duration;
-        if (modalDesc) modalDesc.textContent = desc;
-
-        if (modalTools) {
-          modalTools.innerHTML = '';
-          const toolList = tools.split(',').map(t => t.trim());
-          toolList.forEach(tool => {
-            if (tool) {
-              const badge = document.createElement('span');
-              badge.className = 'tool-badge';
-              badge.textContent = tool;
-              modalTools.appendChild(badge);
-            }
-          });
-        }
-
-        videoModal.classList.add('active');
-      }
-    });
-  });
 
   const closeModal = () => {
     if (videoModal) videoModal.classList.remove('active');
     if (modalIframe) modalIframe.src = '';
   };
-
   if (modalClose) modalClose.addEventListener('click', closeModal);
-  if (videoModal) {
-    videoModal.addEventListener('click', (e) => {
-      if (e.target === videoModal) closeModal();
+  if (videoModal) videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeModal(); });
+
+
+  /* =========================================================
+     ★ 인증 (회원가입/로그인/아이디·비번찾기) 및 DB 연동 영역
+     ========================================================= */
+  
+  // ★ 여기에 앱스 스크립트 웹 앱 URL을 붙여넣으세요!
+  const GOOGLE_APP_URL = 'https://script.google.com/macros/s/AKfycbwOwTpjzJu0jerW8TlTC2Os9Qpuiwq4XeRQ0gWKYeFWirVhPEdP6ALMwUUod1x5lME/exec';
+
+  // 비밀번호 해시화
+  async function hashPassword(password) {
+    const msgUint8 = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  let currentUser = localStorage.getItem('jwb_user') || null;
+
+  const authModal = document.getElementById('auth-modal');
+  const btnLoginModal = document.getElementById('btn-login-modal');
+  const btnLogout = document.getElementById('btn-logout');
+  const userGreeting = document.getElementById('user-greeting');
+  
+  const loginViewArea = document.getElementById('login-view-area');
+  const signupViewArea = document.getElementById('signup-view-area');
+  const findIdViewArea = document.getElementById('find-id-view-area');
+  const findPwViewArea = document.getElementById('find-pw-view-area');
+  
+  const btnGoSignup = document.getElementById('go-to-signup');
+  const btnGoFindId = document.getElementById('go-to-find-id');
+  const btnGoFindPw = document.getElementById('go-to-find-pw');
+  const btnsGoLogin = document.querySelectorAll('.go-to-login-btn');
+
+  // UI 상태 갱신
+  function updateAuthUI() {
+    if (currentUser) {
+      if (btnLoginModal) btnLoginModal.style.display = 'none';
+      if (btnLogout) btnLogout.style.display = 'inline-block';
+      if (userGreeting) {
+        userGreeting.style.display = 'inline-block';
+        userGreeting.textContent = `${currentUser}님 환영합니다`;
+      }
+    } else {
+      if (btnLoginModal) btnLoginModal.style.display = 'inline-block';
+      if (btnLogout) btnLogout.style.display = 'none';
+      if (userGreeting) userGreeting.style.display = 'none';
+    }
+  }
+  updateAuthUI();
+
+  // 모든 뷰 숨기기 유틸 함수
+  function hideAllAuthViews() {
+    loginViewArea.style.display = 'none';
+    signupViewArea.style.display = 'none';
+    findIdViewArea.style.display = 'none';
+    findPwViewArea.style.display = 'none';
+  }
+
+  // 모달 열기/닫기 및 뷰 전환
+  if(btnLoginModal) btnLoginModal.addEventListener('click', () => {
+    hideAllAuthViews();
+    loginViewArea.style.display = 'block';
+    authModal.classList.add('active');
+  });
+  
+  document.querySelector('.auth-modal-close').addEventListener('click', () => authModal.classList.remove('active'));
+  authModal.addEventListener('click', (e) => { if(e.target === authModal) authModal.classList.remove('active'); });
+
+  if(btnGoSignup) btnGoSignup.addEventListener('click', () => { hideAllAuthViews(); signupViewArea.style.display = 'block'; });
+  if(btnGoFindId) btnGoFindId.addEventListener('click', () => { hideAllAuthViews(); findIdViewArea.style.display = 'block'; });
+  if(btnGoFindPw) btnGoFindPw.addEventListener('click', () => { hideAllAuthViews(); findPwViewArea.style.display = 'block'; });
+  
+  btnsGoLogin.forEach(btn => {
+    btn.addEventListener('click', () => { hideAllAuthViews(); loginViewArea.style.display = 'block'; });
+  });
+
+  // 로그아웃
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      localStorage.removeItem('jwb_user');
+      currentUser = null;
+      updateAuthUI();
+      alert('성공적으로 로그아웃 되었습니다.');
     });
   }
+
+  // 전체 약관 동의 체크 로직
+  const termAll = document.getElementById('term-all');
+  const termItems = document.querySelectorAll('.term-item');
+
+  if (termAll) {
+    termAll.addEventListener('change', (e) => { termItems.forEach(term => term.checked = e.target.checked); });
+    termItems.forEach(term => {
+      term.addEventListener('change', () => { termAll.checked = Array.from(termItems).every(t => t.checked); });
+    });
+  }
+
+  // 회원가입 처리 로직
+  const signupForm = document.getElementById('signup-form');
+  if (signupForm) {
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('signup-id').value;
+      const pw = document.getElementById('signup-pw').value;
+      const name = document.getElementById('signup-name').value;
+      
+      const term1 = document.getElementById('term-1').checked;
+      const term2 = document.getElementById('term-2').checked;
+      const term3 = document.getElementById('term-3').checked;
+      const term4 = document.getElementById('term-4').checked;
+
+      if (!term1 || !term2 || !term3) return alert('필수 약관에 모두 동의하셔야 합니다.');
+
+      const hashedPassword = await hashPassword(pw);
+      const formData = new URLSearchParams();
+      formData.append('action', 'signup');
+      formData.append('userid', id);
+      formData.append('password', hashedPassword);
+      formData.append('username', name);
+      formData.append('marketing', term4);
+
+      try {
+        await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData });
+        alert('회원가입 완료! 이제 로그인 해주세요.');
+        signupForm.reset();
+        hideAllAuthViews();
+        loginViewArea.style.display = 'block';
+      } catch (err) { alert('오류가 발생했습니다.'); }
+    });
+  }
+
+  // 로그인 처리 로직
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('login-id').value;
+      const pw = document.getElementById('login-pw').value;
+
+      const hashedPassword = await hashPassword(pw);
+      const formData = new URLSearchParams();
+      formData.append('action', 'login');
+      formData.append('userid', id);
+      formData.append('password', hashedPassword);
+
+      try {
+        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
+        if (res.result === 'success') {
+          currentUser = res.username;
+          localStorage.setItem('jwb_user', currentUser);
+          authModal.classList.remove('active');
+          loginForm.reset();
+          updateAuthUI();
+        } else {
+          alert('아이디나 비밀번호가 일치하지 않습니다.');
+        }
+      } catch(e) { console.error(e); alert('오류가 발생했습니다.'); }
+    });
+  }
+
+  // 아이디 찾기 처리 로직
+  const findIdForm = document.getElementById('find-id-form');
+  if (findIdForm) {
+    findIdForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('find-id-name').value;
+      const formData = new URLSearchParams();
+      formData.append('action', 'findId');
+      formData.append('username', name);
+
+      try {
+        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
+        if (res.result === 'success') {
+          alert(`회원님의 아이디는 [ ${res.userid} ] 입니다.`);
+          hideAllAuthViews();
+          loginViewArea.style.display = 'block';
+        } else {
+          alert('일치하는 회원 정보가 없습니다.');
+        }
+      } catch(err) { alert('서버와 통신 중 오류가 발생했습니다.'); }
+    });
+  }
+
+  // 비밀번호 찾기 처리 로직
+  const findPwForm = document.getElementById('find-pw-form');
+  if (findPwForm) {
+    findPwForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('find-pw-id').value;
+      const name = document.getElementById('find-pw-name').value;
+      const formData = new URLSearchParams();
+      formData.append('action', 'findPw');
+      formData.append('userid', id);
+      formData.append('username', name);
+
+      try {
+        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
+        if (res.result === 'success') {
+          alert(`임시 비밀번호가 발급되었습니다: [ ${res.tempPw} ]\n\n로그인 후 반드시 비밀번호를 변경해 주세요.`);
+          hideAllAuthViews();
+          loginViewArea.style.display = 'block';
+        } else {
+          alert('입력하신 정보와 일치하는 계정이 없습니다.');
+        }
+      } catch(err) { alert('서버와 통신 중 오류가 발생했습니다.'); }
+    });
+  }
+
+  // 공지사항 데이터 불러오기
+  async function loadNotices() {
+    const list = document.getElementById('notice-list');
+    if(!list) return;
+    try {
+      const res = await fetch(`${GOOGLE_APP_URL}?type=notice`).then(r => r.json());
+      list.innerHTML = '';
+      if (res.length === 0) return list.innerHTML = '<li style="text-align:center;">등록된 공지사항이 없습니다.</li>';
+      
+      res.reverse().forEach(item => {
+        if(!item['ID']) return;
+        list.innerHTML += `
+          <li class="jwb-post-item">
+            <div class="jwb-post-header">
+              <span class="jwb-post-title">${item['제목']}</span>
+              <span class="jwb-post-meta">관리자 | ${item['날짜']}</span>
+            </div>
+            <div class="jwb-post-content">${item['내용']}</div>
+          </li>
+        `;
+      });
+    } catch (e) { list.innerHTML = '<li style="text-align:center;">서버와 연결할 수 없습니다.</li>'; }
+  }
+
+  // 포트폴리오 데이터 불러오기
+  function getYoutubeId(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  }
+  
+  const pfContainer = document.getElementById('portfolio-list-container');
+  
+  async function loadPortfolios() {
+    if(!pfContainer) return;
+    document.querySelectorAll('.dynamic-portfolio-card').forEach(el => el.remove());
+
+    try {
+      const res = await fetch(`${GOOGLE_APP_URL}?type=portfolio`).then(r => r.json());
+      res.reverse().forEach(item => {
+        if(!item['ID']) return;
+        
+        const videoId = getYoutubeId(item['링크'] || '');
+        let thumbUrl = 'img/default_thumb.jpg';
+        if (item['썸네일'] && item['썸네일'].trim() !== '') {
+          thumbUrl = item['썸네일'];
+        } else if (videoId) {
+          thumbUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        }
+
+        const cardHTML = `
+          <div class="portfolio-card dynamic-portfolio-card trigger-item hover-target zoom-card" 
+               data-category="${item['카테고리']}" data-video-id="${videoId}"
+               style="opacity: 0; transform: scale(0.9) translateY(30px);">
+            <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${item['제목']}', '${item['툴']}', '${item['설명'].replace(/\n/g, '\\n')}')">
+              <img src="${thumbUrl}" alt="포트폴리오 썸네일">
+              <div class="play-overlay"><span>VIEW DETAIL</span></div>
+            </div>
+            <div class="card-info">
+              <span class="card-tag">NEW</span>
+              <h3 class="card-title">${item['제목']}</h3>
+              <p class="card-desc">${item['설명'].substring(0, 40)}...</p>
+              <div class="card-meta">
+                <span class="meta-item"><i class="fa-solid fa-wrench"></i> ${item['툴']}</span>
+              </div>
+            </div>
+          </div>
+        `;
+        pfContainer.insertAdjacentHTML('beforeend', cardHTML);
+      });
+      // filterPortfolio() 함수가 전역 혹은 상단에 정의되어 있어야 함
+      if(typeof filterPortfolio === 'function') filterPortfolio(); 
+    } catch(e) { console.error('포트폴리오 로드 실패'); }
+  }
+
+  window.openPortfolioModal = function(videoId, title, tools, desc) {
+    const videoModal = document.getElementById('video-modal');
+    const modalIframe = document.getElementById('modal-iframe');
+    
+    if(videoId) {
+      modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      modalIframe.style.display = 'block';
+    } else {
+      modalIframe.src = '';
+      modalIframe.style.display = 'none';
+    }
+    
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-desc').textContent = desc;
+    
+    const toolsContainer = document.getElementById('modal-tools');
+    toolsContainer.innerHTML = '';
+    tools.split(',').forEach(tool => {
+      if(tool.trim()) toolsContainer.innerHTML += `<span class="tool-badge">${tool.trim()}</span>`;
+    });
+    
+    videoModal.classList.add('active');
+  };
+
+  loadNotices();
+  loadPortfolios();
 
 });
