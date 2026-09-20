@@ -3,278 +3,231 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>관리자 페이지 | JWB STUDIO</title>
+  <title>JWB STUDIO | 관리자 페이지 (Admin)</title>
   <link rel="icon" href="img/logo/logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* 관리자 페이지 전용 스타일 */
-    body { background-color: var(--bg-color); }
-    
-    .admin-wrapper { display: flex; min-height: 100vh; padding-top: 70px; }
-    
-    /* 1. 관리자 로그인 뷰 */
-    #admin-login-view {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg-color); z-index: 2000;
-      display: flex; justify-content: center; align-items: center;
-    }
-    .admin-login-box {
-      background: var(--card-bg); border: 1px solid var(--accent);
-      border-radius: 16px; padding: 3rem 2.5rem; width: 100%; max-width: 400px;
-      box-shadow: 0 10px 40px rgba(255, 71, 71, 0.15); text-align: center;
-    }
-
-    /* 2. 관리자 대시보드 레이아웃 */
-    .admin-sidebar {
-      width: 250px; background: var(--card-bg); border-right: 1px solid var(--border);
-      padding: 2rem 1rem; position: fixed; height: calc(100vh - 70px);
-    }
-    .admin-menu { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-    .admin-menu-item {
-      padding: 0.8rem 1rem; border-radius: 8px; color: var(--text-sub); cursor: pointer;
-      font-weight: 600; transition: all 0.2s; display: flex; align-items: center; gap: 10px;
-    }
-    .admin-menu-item:hover { background: var(--card-hover); color: var(--text-main); }
-    .admin-menu-item.active { background: rgba(255, 71, 71, 0.15); color: var(--accent); border-left: 3px solid var(--accent); }
-
-    .admin-content {
-      flex: 1; margin-left: 250px; padding: 2rem 3rem; overflow-y: auto;
-    }
-    .admin-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    
-    /* 3. 데이터 테이블 */
-    .admin-table-wrapper {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 12px; overflow: hidden;
-    }
-    .admin-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .admin-table th { background: var(--pill-bg); padding: 1rem; color: var(--text-main); font-weight: 700; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-    .admin-table td { padding: 1rem; border-bottom: 1px solid var(--border); color: var(--text-sub); font-size: 0.9rem; vertical-align: middle; }
-    .admin-table tr:hover { background: var(--card-hover); }
-    .admin-table tr:last-child td { border-bottom: none; }
-    
-    .action-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: 0.2s; margin-right: 5px; }
-    .action-btn.edit:hover { border-color: #3498db; color: #3498db; }
-    .action-btn.delete:hover { border-color: var(--accent); color: var(--accent); }
-    
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .admin-container { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .admin-section { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2.5rem; }
+    .admin-section h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 0.5rem; }
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+    .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; }
+    .admin-table th { color: var(--text-sub); font-weight: 700; background: var(--pill-bg); }
   </style>
 </head>
-<body>
+<body class="dark-mode">
 
-  <!-- 헤더 (공통) -->
-  <header id="header" class="scrolled">
-    <div class="logo"><a href="index.html">JWB STUDIO <span style="color:var(--text-sub); font-size:0.8rem;">| ADMIN</span></a></div>
-    <div class="header-right-group">
-      <a href="index.html" class="btn-resume-outline"><i class="fa-solid fa-house"></i> 메인페이지로 넘어가기</a>
-      <button id="btn-admin-logout" class="jwb-btn" style="display:none; padding: 0.4rem 0.9rem;"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</button>
-    </div>
-  </header>
-
-  <!-- 1. 관리자 로그인 뷰 -->
-  <div id="admin-login-view">
-    <div class="admin-login-box">
-      <i class="fa-solid fa-lock" style="font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;"></i>
-      <h2 style="margin-bottom: 1.5rem;">관리자 로그인</h2>
-      <form id="admin-login-form" class="jwb-board-form">
-        <input type="text" id="admin-id" placeholder="관리자 아이디" required>
-        <input type="password" id="admin-pw" placeholder="관리자 비밀번호" required>
-        <button type="submit" class="jwb-btn" style="width:100%; justify-content:center; margin-top:10px;">접속하기</button>
+  <!-- 관리자 로그인 전용 모달 -->
+  <div id="admin-login-overlay" class="modal-overlay active" style="z-index: 3000;">
+    <div class="modal-content" style="max-width: 380px; padding: 2.5rem; background: var(--card-bg);">
+      <h2 style="margin-bottom: 1.5rem; text-align:center; color:var(--text-main);">관리자 인증</h2>
+      <p style="font-size:0.85rem; color:var(--text-sub); text-align:center; margin-bottom:15px;">관리자 비밀번호를 입력해 주세요.</p>
+      <form id="admin-login-form">
+        <input type="password" id="admin-pw" placeholder="관리자 비밀번호 (admin1234)" required style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+        <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">로그인</button>
       </form>
+      <div style="margin-top: 15px; text-align: center;">
+        <button type="button" onclick="location.href='index.html'" style="background:none; border:none; color:var(--text-sub); cursor:pointer; font-size:0.85rem;">← 메인으로 돌아가기</button>
+      </div>
     </div>
   </div>
 
-  <!-- 2. 관리자 대시보드 (로그인 성공 시 노출) -->
-  <div id="admin-dashboard-view" class="admin-wrapper" style="display: none;">
-    <!-- 사이드바 -->
-    <aside class="admin-sidebar">
-      <ul class="admin-menu">
-        <li class="admin-menu-item active" data-target="tab-notice"><i class="fa-solid fa-bullhorn"></i> 공지사항 관리</li>
-        <li class="admin-menu-item" data-target="tab-portfolio"><i class="fa-solid fa-video"></i> 포트폴리오 관리</li>
-        <li class="admin-menu-item" data-target="tab-users"><i class="fa-solid fa-users"></i> 회원 관리 (준비중)</li>
-      </ul>
-    </aside>
+  <!-- 관리자 대시보드 본문 -->
+  <div id="admin-dashboard" class="admin-container" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 900; color: var(--text-main);">JWB STUDIO ADMIN</h1>
+      <div style="display: flex; gap: 10px;">
+        <button id="admin-logout-btn" class="btn-resume-outline hover-target" style="border-color: var(--accent); color: var(--accent);">관리자 로그아웃</button>
+        <button onclick="location.href='index.html'" class="btn-resume-outline hover-target">포트폴리오로 이동</button>
+      </div>
+    </div>
 
-    <!-- 메인 컨텐츠 영역 -->
-    <main class="admin-content">
-      
-      <!-- 탭 1: 공지사항 관리 -->
-      <section id="tab-notice" class="tab-content active">
-        <div class="admin-header-flex">
-          <h2 class="section-title" style="margin:0;">공지사항 관리</h2>
-          <button class="jwb-btn" onclick="openAdminModal('notice')"><i class="fa-solid fa-pen-to-square"></i> 새 공지사항 등록</button>
-        </div>
-        <div class="admin-table-wrapper">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th style="width: 10%;">ID</th>
-                <th style="width: 50%;">제목</th>
-                <th style="width: 20%;">작성일</th>
-                <th style="width: 20%;">관리</th>
-              </tr>
-            </thead>
-            <tbody id="admin-notice-list">
-              <!-- 데이터 예시 -->
-              <tr>
-                <td>3</td>
-                <td style="color:var(--text-main); font-weight:600;">홈페이지 리뉴얼 안내</td>
-                <td>2026-09-20</td>
-                <td>
-                  <button class="action-btn edit">수정</button>
-                  <button class="action-btn delete">삭제</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- 탭 2: 포트폴리오 관리 -->
-      <section id="tab-portfolio" class="tab-content">
-        <div class="admin-header-flex">
-          <h2 class="section-title" style="margin:0;">포트폴리오 관리</h2>
-          <button class="jwb-btn" onclick="openAdminModal('portfolio')"><i class="fa-solid fa-folder-plus"></i> 새 작품 등록</button>
-        </div>
-        <div class="admin-table-wrapper">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th style="width: 10%;">ID</th>
-                <th style="width: 15%;">카테고리</th>
-                <th style="width: 35%;">작품명</th>
-                <th style="width: 20%;">업로드일</th>
-                <th style="width: 20%;">관리</th>
-              </tr>
-            </thead>
-            <tbody id="admin-portfolio-list">
-              <!-- 데이터 예시 -->
-              <tr>
-                <td>12</td>
-                <td><span class="card-tag" style="margin:0;">motion</span></td>
-                <td style="color:var(--text-main); font-weight:600;">브랜드 프로모션 타이틀</td>
-                <td>2026-09-18</td>
-                <td>
-                  <button class="action-btn edit">수정</button>
-                  <button class="action-btn delete">삭제</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- 탭 3: 회원 관리 -->
-      <section id="tab-users" class="tab-content">
-        <div class="admin-header-flex">
-          <h2 class="section-title" style="margin:0;">가입 회원 목록</h2>
-        </div>
-        <div class="admin-table-wrapper" style="padding: 3rem; text-align: center; color: var(--text-sub);">
-          <i class="fa-solid fa-person-digging" style="font-size: 3rem; margin-bottom: 1rem; color: var(--border);"></i>
-          <p>회원 관리 기능은 추후 백엔드(Supabase 또는 Google Apps Script) 연동 후 활성화됩니다.</p>
-        </div>
-      </section>
-      
-    </main>
-  </div>
-
-  <!-- 데이터 입력 모달 폼 (공지사항 / 포트폴리오 겸용) -->
-  <div id="admin-data-modal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 600px; padding: 2.5rem;">
-      <button class="modal-close hover-target" onclick="closeAdminModal()">&times;</button>
-      <h2 id="admin-modal-title" style="margin-bottom: 1.5rem; color:var(--text-main);">데이터 등록</h2>
-      
-      <form id="admin-data-form" class="jwb-board-form">
-        <!-- 공통 요소 -->
-        <input type="text" id="input-title" placeholder="제목 (작품명)" required>
-        
-        <!-- 포트폴리오 전용 요소 (공지사항일 땐 숨김) -->
-        <div id="portfolio-inputs" style="display:none;">
-          <input type="text" id="input-category" placeholder="카테고리 (예: video, 3d, motion)" style="margin-top: 10px;">
-          <input type="text" id="input-link" placeholder="유튜브 영상 링크 URL" style="margin-top: 10px;">
-          <!-- ★ 추가된 썸네일 이미지 URL 입력칸 -->
-          <input type="text" id="input-thumb" placeholder="직접 등록할 썸네일 이미지 URL (선택, 미입력 시 유튜브 자동 적용)" style="margin-top: 10px; border-color: var(--accent);">
-          <input type="text" id="input-tools" placeholder="사용 툴 (예: After Effects, Blender)" style="margin-top: 10px;">
-        </div>
-
-        <!-- 공통 내용 -->
-        <textarea id="input-desc" placeholder="내용 또는 상세 설명" rows="5" required style="margin-top: 10px;"></textarea>
-        
-        <div style="display: flex; gap: 10px; margin-top: 15px;">
-          <button type="button" class="btn-resume-outline" onclick="closeAdminModal()" style="flex:1; justify-content:center;">취소</button>
-          <button type="submit" class="jwb-btn" style="flex:1; justify-content:center;">저장하기</button>
-        </div>
+    <!-- 1. 공지사항 등록 -->
+    <div class="admin-section">
+      <h2><i class="fa-solid fa-bullhorn"></i> 공지사항 등록</h2>
+      <form id="admin-notice-form" class="jwb-board-form">
+        <input type="text" id="notice-title" placeholder="공지사항 제목" required>
+        <textarea id="notice-content" placeholder="공지사항 내용" rows="4" required></textarea>
+        <button type="submit" class="jwb-btn">공지 등록</button>
       </form>
+    </div>
+
+    <!-- 2. 포트폴리오 등록 -->
+    <div class="admin-section">
+      <h2><i class="fa-solid fa-film"></i> 포트폴리오 등록</h2>
+      <form id="admin-portfolio-form" class="jwb-board-form">
+        <input type="text" id="pf-title" placeholder="작품 제목" required>
+        <select id="pf-category" style="width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);" required>
+          <option value="">카테고리 선택</option>
+          <option value="video">영상 편집 (video)</option>
+          <option value="ad">광고 / 프로모션 (ad)</option>
+          <option value="3d">3D 아트워크 (3d)</option>
+          <option value="graphic">그래픽 / 이미지 (graphic)</option>
+          <option value="typo">타이포그래피 (typo)</option>
+          <option value="motion">모션 그래픽 (motion)</option>
+          <option value="web">웹 / 인터랙티브 (web)</option>
+          <option value="vfx">VFX / 씬 (vfx)</option>
+        </select>
+        <input type="text" id="pf-link" placeholder="유튜브 링크 또는 영상 URL" required>
+        <input type="text" id="pf-thumb" placeholder="커스텀 썸네일 이미지 URL (선택사항)">
+        <input type="text" id="pf-tools" placeholder="사용 툴 (예: After Effects, Blender)" required>
+        <textarea id="pf-desc" placeholder="작품 상세 설명" rows="3" required></textarea>
+        <button type="submit" class="jwb-btn">포트폴리오 등록</button>
+      </form>
+    </div>
+
+    <!-- 3. 회원 목록 조회 -->
+    <div class="admin-section">
+      <h2><i class="fa-solid fa-users"></i> 회원 목록 조회</h2>
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>아이디</th>
+              <th>이름</th>
+              <th>마케팅 동의</th>
+              <th>가입일시</th>
+            </tr>
+          </thead>
+          <tbody id="admin-user-list">
+            <tr><td colspan="4" style="text-align: center; color: var(--text-sub);">회원 정보를 불러오는 중...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <script>
-    // 1. 관리자 로그인 로직 (퍼블리싱용 더미 로직)
-    const loginForm = document.getElementById('admin-login-form');
-    const loginView = document.getElementById('admin-login-view');
-    const dashboardView = document.getElementById('admin-dashboard-view');
-    const btnLogout = document.getElementById('btn-admin-logout');
+    // ★ 구글 앱스 스크립트 웹 앱 URL을 입력하세요
+    const GOOGLE_APP_URL = '여기에_발급받은_구글_웹앱_URL을_붙여넣으세요';
 
-    loginForm.addEventListener('submit', (e) => {
+    const adminLoginOverlay = document.getElementById('admin-login-overlay');
+    const adminDashboard = document.getElementById('admin-dashboard');
+
+    // 페이지 로드 시 관리자 세션 체크
+    function checkAdminAuth() {
+      const isAdmin = sessionStorage.getItem('jwb_admin_auth'); // localStorage 대신 세션 스토리지 사용으로 충돌 방지
+      if (isAdmin === 'true') {
+        adminLoginOverlay.classList.remove('active');
+        adminDashboard.style.display = 'block';
+        loadAdminData();
+      } else {
+        adminLoginOverlay.classList.add('active');
+        adminDashboard.style.display = 'none';
+      }
+    }
+
+    checkAdminAuth();
+
+    // 관리자 로그인 처리 (비밀번호: admin1234)
+    document.getElementById('admin-login-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const id = document.getElementById('admin-id').value;
       const pw = document.getElementById('admin-pw').value;
       
-      // 관리자 초기 계정
-      if(id === 'admin' && pw === '1234') {
-        loginView.style.display = 'none';
-        dashboardView.style.display = 'flex';
-        btnLogout.style.display = 'inline-block';
+      if (pw === 'admin1234') {
+        sessionStorage.setItem('jwb_admin_auth', 'true');
+        checkAdminAuth();
       } else {
-        alert('관리자 정보가 일치하지 않습니다.');
+        alert('관리자 비밀번호가 일치하지 않습니다.');
       }
     });
 
-    btnLogout.addEventListener('click', () => {
-      loginView.style.display = 'flex';
-      dashboardView.style.display = 'none';
-      btnLogout.style.display = 'none';
-      loginForm.reset();
-    });
-
-    // 2. 탭 전환 로직
-    const menuItems = document.querySelectorAll('.admin-menu-item');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    menuItems.forEach(menu => {
-      menu.addEventListener('click', () => {
-        menuItems.forEach(m => m.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active'));
-        
-        menu.classList.add('active');
-        const target = menu.getAttribute('data-target');
-        document.getElementById(target).classList.add('active');
+    // 관리자 로그아웃
+    const logoutBtn = document.getElementById('admin-logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        sessionStorage.removeItem('jwb_admin_auth');
+        location.reload();
       });
+    }
+
+    // 회원 목록 불러오기
+    async function loadAdminData() {
+      try {
+        const res = await fetch(`${GOOGLE_APP_URL}?type=users`).then(r => r.json());
+        const userListBody = document.getElementById('admin-user-list');
+        userListBody.innerHTML = '';
+        
+        if (!res || res.length === 0) {
+          userListBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">등록된 회원이 없습니다.</td></tr>';
+          return;
+        }
+
+        res.forEach(user => {
+          if (!user['아이디']) return;
+          userListBody.innerHTML += `
+            <tr>
+              <td>${user['아이디']}</td>
+              <td>${user['이름']}</td>
+              <td>${user['마케팅동의'] === 'true' ? '동의' : '미동의'}</td>
+              <td>${user['가입일시'] || '-'}</td>
+            </tr>
+          `;
+        });
+      } catch (err) {
+        console.error('회원 목록 로드 실패', err);
+      }
+    }
+
+    // 공지사항 등록
+    document.getElementById('admin-notice-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('notice-title').value;
+      const content = document.getElementById('notice-content').value;
+
+      const formData = new URLSearchParams();
+      formData.append('action', 'addNotice');
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('date', new Date().toLocaleDateString());
+
+      try {
+        const response = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData });
+        const result = await response.json();
+        if(result.result === 'success') {
+          alert('공지사항이 성공적으로 등록되었습니다.');
+          document.getElementById('admin-notice-form').reset();
+        } else {
+          alert('등록에 실패했습니다.');
+        }
+      } catch (err) {
+        alert('서버 통신 중 오류가 발생했습니다.');
+      }
     });
 
-    // 3. 모달 제어 로직
-    const adminModal = document.getElementById('admin-data-modal');
-    const portfolioInputs = document.getElementById('portfolio-inputs');
-    const modalTitle = document.getElementById('admin-modal-title');
+    // 포트폴리오 등록
+    document.getElementById('admin-portfolio-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('pf-title').value;
+      const category = document.getElementById('pf-category').value;
+      const link = document.getElementById('pf-link').value;
+      const thumb = document.getElementById('pf-thumb').value;
+      const tools = document.getElementById('pf-tools').value;
+      const desc = document.getElementById('pf-desc').value;
 
-    function openAdminModal(type) {
-      document.getElementById('admin-data-form').reset();
-      if(type === 'portfolio') {
-        modalTitle.textContent = '새 포트폴리오 등록';
-        portfolioInputs.style.display = 'block';
-      } else {
-        modalTitle.textContent = '새 공지사항 등록';
-        portfolioInputs.style.display = 'none';
+      const formData = new URLSearchParams();
+      formData.append('action', 'addPortfolio');
+      formData.append('title', title);
+      formData.append('category', category);
+      formData.append('link', link);
+      formData.append('thumb', thumb);
+      formData.append('tools', tools);
+      formData.append('desc', desc);
+
+      try {
+        const response = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData });
+        const result = await response.json();
+        if(result.result === 'success') {
+          alert('포트폴리오가 성공적으로 등록되었습니다.');
+          document.getElementById('admin-portfolio-form').reset();
+        } else {
+          alert('등록에 실패했습니다.');
+        }
+      } catch (err) {
+        alert('서버 통신 중 오류가 발생했습니다.');
       }
-      adminModal.classList.add('active');
-    }
-
-    function closeAdminModal() {
-      adminModal.classList.remove('active');
-    }
+    });
   </script>
 </body>
 </html>
