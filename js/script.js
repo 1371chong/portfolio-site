@@ -494,18 +494,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 공지사항 데이터 불러오기 (Supabase) 및 상세 모달 연동
+  // 공지사항 데이터 불러오기 (Supabase) - 404 에러 방지용 정렬 수정
   async function loadNotices() {
     const list = document.getElementById('notice-list');
     if(!list) return;
     try {
-      const { data: notices, error } = await supabase.from('notices').select('*').order('id', { ascending: false });
+      const { data: notices, error } = await supabase.from('notices').select('*');
       list.innerHTML = '';
       
       if (error || !notices || notices.length === 0) {
         return list.innerHTML = '<li style="text-align:center; padding:15px; color:var(--text-sub);">등록된 공지사항이 없습니다.</li>';
       }
       
+      notices.sort((a, b) => b.id - a.id);
+
       notices.forEach(item => {
         const safeTitle = (item.title || '').replace(/'/g, "\\'");
         const safeDate = item.date || '';
@@ -537,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     noticeModal.classList.add('active');
   };
 
-  // 포트폴리오 데이터 불러오기 (Supabase) - 작업시간, 카테고리명 반영
+  // 포트폴리오 데이터 불러오기 (Supabase) - 404 에러 방지용 정렬 수정
   function getYoutubeId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
@@ -551,9 +553,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.dynamic-portfolio-card').forEach(el => el.remove());
 
     try {
-      const { data: portfolios, error } = await supabase.from('portfolios').select('*').order('id', { ascending: false });
+      const { data: portfolios, error } = await supabase.from('portfolios').select('*');
       
       if (error || !portfolios) return;
+
+      portfolios.sort((a, b) => b.id - a.id);
 
       portfolios.forEach(item => {
         const videoId = getYoutubeId(item.link || '');
