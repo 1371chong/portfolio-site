@@ -22,7 +22,7 @@
 </head>
 <body class="dark-mode">
 
-  <!-- 관리자 로그인 전용 모달 -->
+  <!-- 관리자 로그인 전용 모달 (비밀번호만 입력) -->
   <div id="admin-login-overlay" class="modal-overlay active" style="z-index: 3000;">
     <div class="modal-content" style="max-width: 380px; padding: 2.5rem; background: var(--card-bg);">
       <h2 style="margin-bottom: 1.5rem; text-align:center; color:var(--text-main);">관리자 인증</h2>
@@ -156,7 +156,7 @@
     }
     checkAdminAuth();
 
-    // 관리자 로그인 처리 (Supabase DB 연동: userid = 'admin')
+    // 관리자 로그인 처리 (비밀번호만 입력받아 DB의 'admin' 계정과 검증)
     document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const pwInput = document.getElementById('admin-pw').value;
@@ -174,7 +174,7 @@
           sessionStorage.setItem('jwb_admin_auth', 'true');
           checkAdminAuth();
         } else {
-          alert('관리자 비밀번호가 일치하지 않습니다. (Supabase users 테이블에 id: admin 계정이 있는지 확인해주세요)');
+          alert('관리자 비밀번호가 일치하지 않습니다.');
         }
       } catch (err) {
         alert('로그인 오류 발생: ' + err.message);
