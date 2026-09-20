@@ -119,8 +119,8 @@
   </div>
 
   <script>
-    const SUPABASE_URL = 'https://gocigyxzbqfphdrnejuh.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY2lneXh6YnFmcGhkcm5lanVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTg1NzgsImV4cCI6MjEwNTQ3NDU3OH0.-nKW0gGsDMDVUOo9N2CXDFF7y8br5IsnQjaqQakwYak';
+    const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const adminLoginOverlay = document.getElementById('admin-login-overlay');
@@ -154,45 +154,51 @@
     });
 
     async function loadAdminData() {
-      // 1. 회원 목록
-      const { data: users } = await supabaseClient.from('users').select('*');
-      const userList = document.getElementById('admin-user-list');
-      userList.innerHTML = users?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 회원이 없습니다.</td></tr>';
-      users?.forEach(u => {
-        userList.innerHTML += `<tr><td>${u.userid}</td><td>${u.username}</td><td>${u.marketing ? '동의' : '미동의'}</td><td>${u.created_at || '-'}</td></tr>`;
-      });
+      try {
+        // 1. 회원 목록
+        const { data: users } = await supabaseClient.from('users').select('*');
+        const userList = document.getElementById('admin-user-list');
+        userList.innerHTML = users?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 회원이 없습니다.</td></tr>';
+        users?.forEach(u => {
+          userList.innerHTML += `<tr><td>${u.userid}</td><td>${u.username}</td><td>${u.marketing ? '동의' : '미동의'}</td><td>${u.created_at || '-'}</td></tr>`;
+        });
 
-      // 2. 공지사항 관리 목록
-      const { data: notices } = await supabaseClient.from('notices').select('*').order('id', { ascending: false });
-      const noticeList = document.getElementById('admin-notice-list');
-      noticeList.innerHTML = notices?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 공지가 없습니다.</td></tr>';
-      notices?.forEach(n => {
-        const safeTitle = (n.title || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeContent = (n.content || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
-        noticeList.innerHTML += `<tr><td>${n.id}</td><td>${n.title}</td><td>${n.date}</td><td>
-          <button class="action-btn btn-edit" onclick="editNotice(${n.id}, '${safeTitle}', '${safeContent}')">수정</button>
-          <button class="action-btn btn-delete" onclick="deleteNotice(${n.id})">삭제</button>
-        </td></tr>`;
-      });
+        // 2. 공지사항 관리 목록
+        const { data: notices } = await supabaseClient.from('notices').select('*');
+        if (notices) notices.sort((a, b) => b.id - a.id);
+        const noticeList = document.getElementById('admin-notice-list');
+        noticeList.innerHTML = notices?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 공지가 없습니다.</td></tr>';
+        notices?.forEach(n => {
+          const safeTitle = (n.title || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+          const safeContent = (n.content || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
+          noticeList.innerHTML += `<tr><td>${n.id}</td><td>${n.title}</td><td>${n.date}</td><td>
+            <button class="action-btn btn-edit" onclick="editNotice(${n.id}, '${safeTitle}', '${safeContent}')">수정</button>
+            <button class="action-btn btn-delete" onclick="deleteNotice(${n.id})">삭제</button>
+          </td></tr>`;
+        });
 
-      // 3. 포트폴리오 관리 목록
-      const { data: portfolios } = await supabaseClient.from('portfolios').select('*').order('id', { ascending: false });
-      const pfList = document.getElementById('admin-portfolio-list');
-      pfList.innerHTML = portfolios?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 작품이 없습니다.</td></tr>';
-      portfolios?.forEach(p => {
-        const safeTitle = (p.title || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeCategoryName = (p.category_name || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeWorkTime = (p.work_time || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeLink = (p.link || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeThumb = (p.thumb || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeTools = (p.tools || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-        const safeDesc = (p.desc || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
+        // 3. 포트폴리오 관리 목록
+        const { data: portfolios } = await supabaseClient.from('portfolios').select('*');
+        if (portfolios) portfolios.sort((a, b) => b.id - a.id);
+        const pfList = document.getElementById('admin-portfolio-list');
+        pfList.innerHTML = portfolios?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 작품이 없습니다.</td></tr>';
+        portfolios?.forEach(p => {
+          const safeTitle = (p.title || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+          const safeCategoryName = (p.category_name || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+          const safeWorkTime = (p.work_time || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+          const safeLink = (p.link || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+          const safeThumb = (p.thumb || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+          const safeTools = (p.tools || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+          const safeDesc = (p.desc || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
 
-        pfList.innerHTML += `<tr><td>${p.id}</td><td>${p.title}</td><td>${p.category_name || p.category}</td><td>
-          <button class="action-btn btn-edit" onclick="editPortfolio(${p.id}, '${safeTitle}', '${p.category}', '${safeCategoryName}', '${safeWorkTime}', '${safeLink}', '${safeThumb}', '${safeTools}', '${safeDesc}')">수정</button>
-          <button class="action-btn btn-delete" onclick="deletePortfolio(${p.id})">삭제</button>
-        </td></tr>`;
-      });
+          pfList.innerHTML += `<tr><td>${p.id}</td><td>${p.title}</td><td>${p.category_name || p.category}</td><td>
+            <button class="action-btn btn-edit" onclick="editPortfolio(${p.id}, '${safeTitle}', '${p.category}', '${safeCategoryName}', '${safeWorkTime}', '${safeLink}', '${safeThumb}', '${safeTools}', '${safeDesc}')">수정</button>
+            <button class="action-btn btn-delete" onclick="deletePortfolio(${p.id})">삭제</button>
+          </td></tr>`;
+        });
+      } catch (err) {
+        console.error("데이터 로드 중 에러 발생:", err);
+      }
     }
 
     // 공지사항 등록 및 수정 처리
@@ -203,21 +209,21 @@
       const content = document.getElementById('notice-content').value;
       const date = new Date().toLocaleDateString();
 
-      if (id && id.trim() !== "") {
-        console.log("공지 수정 시도 ID:", id);
-        const { data, error } = await supabaseClient.from('notices').update({ title, content }).eq('id', Number(id)).select();
-        console.log("수정 결과:", data, error);
-        if (!error) alert('공지사항이 수정되었습니다.');
-        else { alert('수정에 실패했습니다: ' + error.message); }
-      } else {
-        console.log("공지 신규 등록 시도");
-        const { data, error } = await supabaseClient.from('notices').insert([{ title, content, date }]).select();
-        console.log("등록 결과:", data, error);
-        if (!error) alert('공지사항이 등록되었습니다.');
-        else { alert('등록에 실패했습니다: ' + error.message); }
+      try {
+        if (id && id.trim() !== "") {
+          const { error } = await supabaseClient.from('notices').update({ title, content }).eq('id', id);
+          if (!error) alert('공지사항이 수정되었습니다.');
+          else alert('수정에 실패했습니다: ' + error.message);
+        } else {
+          const { error } = await supabaseClient.from('notices').insert([{ title, content, date }]);
+          if (!error) alert('공지사항이 등록되었습니다.');
+          else alert('등록에 실패했습니다: ' + error.message);
+        }
+        resetNoticeForm();
+        loadAdminData();
+      } catch (err) {
+        alert('네트워크 통신 오류 발생: ' + err.message);
       }
-      resetNoticeForm();
-      loadAdminData();
     });
 
     window.editNotice = (id, title, content) => {
@@ -238,13 +244,12 @@
 
     window.deleteNotice = async (id) => {
       if (confirm(`공지 ID [${id}]번을 정말 삭제하시겠습니까?`)) {
-        const { error } = await supabaseClient.from('notices').delete().eq('id', Number(id));
+        const { error } = await supabaseClient.from('notices').delete().eq('id', id);
         if (!error) {
           alert('삭제되었습니다.');
           loadAdminData();
         } else {
           alert('삭제에 실패했습니다: ' + error.message);
-          console.error(error);
         }
       }
     };
@@ -264,21 +269,21 @@
         desc: document.getElementById('pf-desc').value
       };
 
-      if (id && id.trim() !== "") {
-        console.log("포트폴리오 수정 시도 ID:", id);
-        const { data, error } = await supabaseClient.from('portfolios').update(payload).eq('id', Number(id)).select();
-        console.log("수정 결과:", data, error);
-        if (!error) alert('포트폴리오가 수정되었습니다.');
-        else { alert('수정에 실패했습니다: ' + error.message); }
-      } else {
-        console.log("포트폴리오 신규 등록 시도");
-        const { data, error } = await supabaseClient.from('portfolios').insert([payload]).select();
-        console.log("등록 결과:", data, error);
-        if (!error) alert('포트폴리오가 등록되었습니다.');
-        else { alert('등록에 실패했습니다: ' + error.message); }
+      try {
+        if (id && id.trim() !== "") {
+          const { error } = await supabaseClient.from('portfolios').update(payload).eq('id', id);
+          if (!error) alert('포트폴리오가 수정되었습니다.');
+          else alert('수정에 실패했습니다: ' + error.message);
+        } else {
+          const { error } = await supabaseClient.from('portfolios').insert([payload]);
+          if (!error) alert('포트폴리오가 등록되었습니다.');
+          else alert('등록에 실패했습니다: ' + error.message);
+        }
+        resetPortfolioForm();
+        loadAdminData();
+      } catch (err) {
+        alert('네트워크 통신 오류 발생: ' + err.message);
       }
-      resetPortfolioForm();
-      loadAdminData();
     });
 
     window.editPortfolio = (id, title, category, categoryName, workTime, link, thumb, tools, desc) => {
@@ -305,13 +310,12 @@
 
     window.deletePortfolio = async (id) => {
       if (confirm(`포트폴리오 ID [${id}]번을 정말 삭제하시겠습니까?`)) {
-        const { error } = await supabaseClient.from('portfolios').delete().eq('id', Number(id));
+        const { error } = await supabaseClient.from('portfolios').delete().eq('id', id);
         if (!error) {
           alert('삭제되었습니다.');
           loadAdminData();
         } else {
           alert('삭제에 실패했습니다: ' + error.message);
-          console.error(error);
         }
       }
     };
