@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ★ 본인의 Supabase 프로젝트 정보 입력
+  const SUPABASE_URL = 'https://gocigyxzbqfphdrnejuh.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY2lneXh6YnFmcGhkcm5lanVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTg1NzgsImV4cCI6MjEwNTQ3NDU3OH0.-nKW0gGsDMDVUOo9N2CXDFF7y8br5IsnQjaqQakwYak';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   // 0. 다크 / 라이트 테마 전환 토글
   const themeToggleBtn = document.getElementById('theme-toggle');
   const savedTheme = localStorage.getItem('theme');
@@ -231,13 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* =========================================================
-     ★ 인증 (회원가입/로그인/아이디·비번찾기/회원탈퇴) 및 DB 연동 영역
+     ★ Supabase 인증 및 데이터 연동 영역
      ========================================================= */
-  
-  // ★ 여기에 앱스 스크립트 웹 앱 URL을 붙여넣으세요!
-  const GOOGLE_APP_URL = 'https://script.google.com/macros/s/AKfycbw7XP6bgR6Uu-_aLp7LNp-jG3vzX9xDYTaDbqe7xRuo4X6outc8Iwz-tYjaeNUVfpk/exec';
 
-  // 비밀번호 해시화
   async function hashPassword(password) {
     const msgUint8 = new TextEncoder().encode(password);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
@@ -263,7 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnGoFindPw = document.getElementById('go-to-find-pw');
   const btnsGoLogin = document.querySelectorAll('.go-to-login-btn');
 
-  // UI 상태 갱신
   function updateAuthUI() {
     if (currentUser) {
       if (btnLoginModal) btnLoginModal.style.display = 'none';
@@ -282,7 +282,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateAuthUI();
 
-  // 모든 뷰 숨기기 유틸 함수
   function hideAllAuthViews() {
     if (loginViewArea) loginViewArea.style.display = 'none';
     if (signupViewArea) signupViewArea.style.display = 'none';
@@ -290,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (findPwViewArea) findPwViewArea.style.display = 'none';
   }
 
-  // 모달 열기/닫기 및 뷰 전환
   if(btnLoginModal) btnLoginModal.addEventListener('click', () => {
     hideAllAuthViews();
     if (loginViewArea) loginViewArea.style.display = 'block';
@@ -319,29 +317,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 회원탈퇴
+  // 회원탈퇴 (Supabase)
   if (btnWithdraw) {
     btnWithdraw.addEventListener('click', async () => {
       if (!currentUser) return;
       if (!confirm(`정말 ${currentUser} 계정을 탈퇴하시겠습니까?\n탈퇴 시 회원 정보가 영구적으로 삭제됩니다.`)) return;
 
-      const formData = new URLSearchParams();
-      formData.append('action', 'withdraw');
-      formData.append('username', currentUser);
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('username', currentUser);
 
-      try {
-        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
-        if (res.result === 'success') {
-          alert('회원탈퇴가 정상적으로 처리되었습니다.');
-          localStorage.removeItem('jwb_user');
-          currentUser = null;
-          updateAuthUI();
-        } else {
-          alert('회원탈퇴 처리에 실패했습니다.');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('서버와 통신 중 오류가 발생했습니다.');
+      if (!error) {
+        alert('회원탈퇴가 정상적으로 처리되었습니다.');
+        localStorage.removeItem('jwb_user');
+        currentUser = null;
+        updateAuthUI();
+      } else {
+        alert('회원탈퇴 처리에 실패했습니다.');
+        console.error(error);
       }
     });
   }
@@ -357,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 회원가입 처리 로직
+  // 회원가입 처리 (Supabase)
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
     signupForm.addEventListener('submit', async (e) => {
@@ -373,25 +367,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!term1 || !term2 || !term3) return alert('필수 약관에 모두 동의하셔야 합니다.');
 
-      const hashedPassword = await hashPassword(pw);
-      const formData = new URLSearchParams();
-      formData.append('action', 'signup');
-      formData.append('userid', id);
-      formData.append('password', hashedPassword);
-      formData.append('username', name);
-      formData.append('marketing', term4);
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('*')
+        .eq('userid', id)
+        .single();
 
-      try {
-        await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData });
+      if (existingUser) {
+        return alert('이미 존재하는 아이디입니다.');
+      }
+
+      const hashedPassword = await hashPassword(pw);
+      const date = new Date().toLocaleString();
+
+      const { error } = await supabase
+        .from('users')
+        .insert([{ userid: id, password: hashedPassword, username: name, marketing: term4, created_at: date }]);
+
+      if (!error) {
         alert('회원가입 완료! 이제 로그인 해주세요.');
         signupForm.reset();
         hideAllAuthViews();
         loginViewArea.style.display = 'block';
-      } catch (err) { alert('오류가 발생했습니다.'); }
+      } else {
+        alert('오류가 발생했습니다.');
+        console.error(error);
+      }
     });
   }
 
-  // 로그인 처리 로직
+  // 로그인 처리 (Supabase)
   const loginForm = document.getElementById('login-form');
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -400,99 +405,113 @@ document.addEventListener('DOMContentLoaded', () => {
       const pw = document.getElementById('login-pw').value;
 
       const hashedPassword = await hashPassword(pw);
-      const formData = new URLSearchParams();
-      formData.append('action', 'login');
-      formData.append('userid', id);
-      formData.append('password', hashedPassword);
 
-      try {
-        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
-        if (res.result === 'success') {
-          currentUser = res.username;
-          localStorage.setItem('jwb_user', currentUser);
-          authModal.classList.remove('active');
-          loginForm.reset();
-          updateAuthUI();
-        } else {
-          alert('아이디나 비밀번호가 일치하지 않습니다.');
-        }
-      } catch(e) { console.error(e); alert('오류가 발생했습니다.'); }
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('userid', id)
+        .eq('password', hashedPassword)
+        .single();
+
+      if (!error && data) {
+        currentUser = data.username;
+        localStorage.setItem('jwb_user', currentUser);
+        authModal.classList.remove('active');
+        loginForm.reset();
+        updateAuthUI();
+      } else {
+        alert('아이디나 비밀번호가 일치하지 않습니다.');
+      }
     });
   }
 
-  // 아이디 찾기 처리 로직
+  // 아이디 찾기 (Supabase)
   const findIdForm = document.getElementById('find-id-form');
   if (findIdForm) {
     findIdForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('find-id-name').value;
-      const formData = new URLSearchParams();
-      formData.append('action', 'findId');
-      formData.append('username', name);
 
-      try {
-        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
-        if (res.result === 'success') {
-          alert(`회원님의 아이디는 [ ${res.userid} ] 입니다.`);
-          hideAllAuthViews();
-          loginViewArea.style.display = 'block';
-        } else {
-          alert('일치하는 회원 정보가 없습니다.');
-        }
-      } catch(err) { alert('서버와 통신 중 오류가 발생했습니다.'); }
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', name)
+        .single();
+
+      if (!error && data) {
+        alert(`회원님의 아이디는 [ ${data.userid} ] 입니다.`);
+        hideAllAuthViews();
+        loginViewArea.style.display = 'block';
+      } else {
+        alert('일치하는 회원 정보가 없습니다.');
+      }
     });
   }
 
-  // 비밀번호 찾기 처리 로직
+  // 비밀번호 찾기 (임시 비밀번호 발급) (Supabase)
   const findPwForm = document.getElementById('find-pw-form');
   if (findPwForm) {
     findPwForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('find-pw-id').value;
       const name = document.getElementById('find-pw-name').value;
-      const formData = new URLSearchParams();
-      formData.append('action', 'findPw');
-      formData.append('userid', id);
-      formData.append('username', name);
 
-      try {
-        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
-        if (res.result === 'success') {
-          alert(`임시 비밀번호가 발급되었습니다: [ ${res.tempPw} ]\n\n로그인 후 반드시 비밀번호를 변경해 주세요.`);
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('userid', id)
+        .eq('username', name)
+        .single();
+
+      if (!error && data) {
+        const tempPw = Math.floor(100000 + Math.random() * 900000).toString();
+        const hashedTempPw = await hashPassword(tempPw);
+
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({ password: hashedTempPw })
+          .eq('userid', id);
+
+        if (!updateError) {
+          alert(`임시 비밀번호가 발급되었습니다: [ ${tempPw} ]\n\n로그인 후 반드시 비밀번호를 변경해 주세요.`);
           hideAllAuthViews();
           loginViewArea.style.display = 'block';
         } else {
-          alert('입력하신 정보와 일치하는 계정이 없습니다.');
+          alert('임시 비밀번호 발급 중 오류가 발생했습니다.');
         }
-      } catch(err) { alert('서버와 통신 중 오류가 발생했습니다.'); }
+      } else {
+        alert('입력하신 정보와 일치하는 계정이 없습니다.');
+      }
     });
   }
 
-  // 공지사항 데이터 불러오기
+  // 공지사항 데이터 불러오기 (Supabase)
   async function loadNotices() {
     const list = document.getElementById('notice-list');
     if(!list) return;
     try {
-      const res = await fetch(`${GOOGLE_APP_URL}?type=notice`).then(r => r.json());
+      const { data: notices, error } = await supabase.from('notices').select('*').order('id', { ascending: false });
       list.innerHTML = '';
-      if (res.length === 0) return list.innerHTML = '<li style="text-align:center;">등록된 공지사항이 없습니다.</li>';
       
-      res.reverse().forEach(item => {
-        if(!item['ID']) return;
+      if (error || !notices || notices.length === 0) {
+        return list.innerHTML = '<li style="text-align:center;">등록된 공지사항이 없습니다.</li>';
+      }
+      
+      notices.forEach(item => {
         list.innerHTML += `
           <li class="jwb-post-item">
             <div class="jwb-post-header">
-              <span class="jwb-post-title">${item['제목']}</span>
-              <span class="jwb-post-meta">관리자 | ${item['날짜']}</span>
+              <span class="jwb-post-title">${item.title}</span>
+              <span class="jwb-post-meta">관리자 | ${item.date}</span>
             </div>
-            <div class="jwb-post-content">${item['내용']}</div>
+            <div class="jwb-post-content">${item.content}</div>
           </li>
         `;
       });
     } catch (e) { list.innerHTML = '<li style="text-align:center;">서버와 연결할 수 없습니다.</li>'; }
   }
 
-  // 포트폴리오 데이터 불러오기
+  // 포트폴리오 데이터 불러오기 (Supabase)
   function getYoutubeId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
@@ -506,32 +525,33 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.dynamic-portfolio-card').forEach(el => el.remove());
 
     try {
-      const res = await fetch(`${GOOGLE_APP_URL}?type=portfolio`).then(r => r.json());
-      res.reverse().forEach(item => {
-        if(!item['ID']) return;
-        
-        const videoId = getYoutubeId(item['링크'] || '');
+      const { data: portfolios, error } = await supabase.from('portfolios').select('*').order('id', { ascending: false });
+      
+      if (error || !portfolios) return;
+
+      portfolios.forEach(item => {
+        const videoId = getYoutubeId(item.link || '');
         let thumbUrl = 'img/default_thumb.jpg';
-        if (item['썸네일'] && item['썸네일'].trim() !== '') {
-          thumbUrl = item['썸네일'];
+        if (item.thumb && item.thumb.trim() !== '') {
+          thumbUrl = item.thumb;
         } else if (videoId) {
           thumbUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
         }
 
         const cardHTML = `
           <div class="portfolio-card dynamic-portfolio-card trigger-item hover-target zoom-card" 
-               data-category="${item['카테고리']}" data-video-id="${videoId}"
+               data-category="${item.category}" data-video-id="${videoId}"
                style="opacity: 0; transform: scale(0.9) translateY(30px);">
-            <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${item['제목']}', '${item['툴']}', '${item['설명'].replace(/\n/g, '\\n')}')">
+            <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${item.title}', '${item.tools}', '${item.desc.replace(/\n/g, '\\n')}')">
               <img src="${thumbUrl}" alt="포트폴리오 썸네일">
               <div class="play-overlay"><span>VIEW DETAIL</span></div>
             </div>
             <div class="card-info">
               <span class="card-tag">NEW</span>
-              <h3 class="card-title">${item['제목']}</h3>
-              <p class="card-desc">${item['설명'].substring(0, 40)}...</p>
+              <h3 class="card-title">${item.title}</h3>
+              <p class="card-desc">${item.desc.substring(0, 40)}...</p>
               <div class="card-meta">
-                <span class="meta-item"><i class="fa-solid fa-wrench"></i> ${item['툴']}</span>
+                <span class="meta-item"><i class="fa-solid fa-wrench"></i> ${item.tools}</span>
               </div>
             </div>
           </div>
