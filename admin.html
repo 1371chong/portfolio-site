@@ -22,7 +22,7 @@
 </head>
 <body class="dark-mode">
 
-  <!-- 관리자 로그인 전용 모달 (비밀번호만 입력) -->
+  <!-- 관리자 로그인 전용 모달 -->
   <div id="admin-login-overlay" class="modal-overlay active" style="z-index: 3000;">
     <div class="modal-content" style="max-width: 380px; padding: 2.5rem; background: var(--card-bg);">
       <h2 style="margin-bottom: 1.5rem; text-align:center; color:var(--text-main);">관리자 인증</h2>
@@ -137,11 +137,9 @@
     const adminLoginOverlay = document.getElementById('admin-login-overlay');
     const adminDashboard = document.getElementById('admin-dashboard');
 
-    async function hashPassword(password) {
-      const msgUint8 = new TextEncoder().encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    // ★ 로컬 스토리지 기반 관리자 비밀번호 관리 (기본값: admin1234)
+    if (!localStorage.getItem('jwb_admin_pw')) {
+      localStorage.setItem('jwb_admin_pw', 'admin1234');
     }
 
     function checkAdminAuth() {
@@ -156,28 +154,17 @@
     }
     checkAdminAuth();
 
-    // 관리자 로그인 처리 (비밀번호만 입력받아 DB의 'admin' 계정과 검증)
-    document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+    // 관리자 로그인 처리 (코드/스토리지에 저장된 비밀번호와 대조)
+    document.getElementById('admin-login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const pwInput = document.getElementById('admin-pw').value;
+      const currentAdminPw = localStorage.getItem('jwb_admin_pw');
 
-      try {
-        const hashedPassword = await hashPassword(pwInput);
-        const { data, error } = await supabaseClient
-          .from('users')
-          .select('*')
-          .eq('userid', 'admin')
-          .eq('password', hashedPassword)
-          .single();
-
-        if (!error && data) {
-          sessionStorage.setItem('jwb_admin_auth', 'true');
-          checkAdminAuth();
-        } else {
-          alert('관리자 비밀번호가 일치하지 않습니다.');
-        }
-      } catch (err) {
-        alert('로그인 오류 발생: ' + err.message);
+      if (pwInput === currentAdminPw) {
+        sessionStorage.setItem('jwb_admin_auth', 'true');
+        checkAdminAuth();
+      } else {
+        alert('관리자 비밀번호가 일치하지 않습니다.');
       }
     });
 
@@ -186,54 +173,35 @@
       location.reload();
     });
 
-    // 관리자 비밀번호 변경 처리
+    // 관리자 비밀번호 직접 변경 처리
     const adminPwChangeForm = document.getElementById('admin-pw-change-form');
     if (adminPwChangeForm) {
-      adminPwChangeForm.addEventListener('submit', async (e) => {
+      adminPwChangeForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const currentPw = document.getElementById('admin-current-pw').value;
         const newPw = document.getElementById('admin-new-pw').value;
         const newPwCheck = document.getElementById('admin-new-pw-check').value;
+        const storedPw = localStorage.getItem('jwb_admin_pw');
+
+        if (currentPw !== storedPw) {
+          return alert('현재 관리자 비밀번호가 올바르지 않습니다.');
+        }
 
         if (newPw !== newPwCheck) {
           return alert('새로운 비밀번호가 서로 일치하지 않습니다.');
         }
 
-        try {
-          const hashedCurrentPw = await hashPassword(currentPw);
-          const { data, error } = await supabaseClient
-            .from('users')
-            .select('*')
-            .eq('userid', 'admin')
-            .eq('password', hashedCurrentPw)
-            .single();
-
-          if (error || !data) {
-            return alert('현재 관리자 비밀번호가 올바르지 않습니다.');
-          }
-
-          const hashedNewPw = await hashPassword(newPw);
-          const { error: updateError } = await supabaseClient
-            .from('users')
-            .update({ password: hashedNewPw })
-            .eq('userid', 'admin');
-
-          if (!updateError) {
-            alert('관리자 비밀번호가 성공적으로 변경되었습니다. 다시 로그인해 주세요.');
-            sessionStorage.removeItem('jwb_admin_auth');
-            location.reload();
-          } else {
-            alert('비밀번호 변경 실패: ' + updateError.message);
-          }
-        } catch (err) {
-          alert('처리 중 오류가 발생했습니다.');
-        }
+        // 새로운 비밀번호로 스토리지 업데이트
+        localStorage.setItem('jwb_admin_pw', newPw);
+        alert('관리자 비밀번호가 성공적으로 변경되었습니다. 보안을 위해 다시 로그인해 주세요.');
+        sessionStorage.removeItem('jwb_admin_auth');
+        location.reload();
       });
     }
 
     async function loadAdminData() {
       try {
-        // 1. 회원 목록
+        // 1. 회원 목록 (Supabase DB 연동)
         const { data: users } = await supabaseClient.from('users').select('*');
         const userList = document.getElementById('admin-user-list');
         userList.innerHTML = users?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 회원이 없습니다.</td></tr>';
