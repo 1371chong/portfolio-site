@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================= */
   
   // ★ 여기에 앱스 스크립트 웹 앱 URL을 붙여넣으세요!
-  const GOOGLE_APP_URL = '여기에_발급받은_구글_웹앱_URL을_붙여넣으세요';
+  const GOOGLE_APP_URL = 'https://script.google.com/macros/s/AKfycbwOwTpjzJu0jerW8TlTC2Os9Qpuiwq4XeRQ0gWKYeFWirVhPEdP6ALMwUUod1x5lME/exec';
 
   // 비밀번호 해시화
   async function hashPassword(password) {
