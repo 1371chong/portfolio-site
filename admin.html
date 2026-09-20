@@ -104,7 +104,9 @@
     // ★ 본인의 Supabase 프로젝트 정보 입력
     const SUPABASE_URL = 'https://gocigyxzbqfphdrnejuh.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY2lneXh6YnFmcGhkcm5lanVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTg1NzgsImV4cCI6MjEwNTQ3NDU3OH0.-nKW0gGsDMDVUOo9N2CXDFF7y8br5IsnQjaqQakwYak';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // 중복 선언 방지를 위한 안전한 클라이언트 초기화
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const adminLoginOverlay = document.getElementById('admin-login-overlay');
     const adminDashboard = document.getElementById('admin-dashboard');
@@ -145,7 +147,7 @@
     // 회원 목록 불러오기 (Supabase)
     async function loadAdminData() {
       try {
-        const { data: users, error } = await supabase.from('users').select('*');
+        const { data: users, error } = await supabaseClient.from('users').select('*');
         const userListBody = document.getElementById('admin-user-list');
         userListBody.innerHTML = '';
         
@@ -176,7 +178,7 @@
       const content = document.getElementById('notice-content').value;
       const date = new Date().toLocaleDateString();
 
-      const { error } = await supabase.from('notices').insert([{ title, content, date }]);
+      const { error } = await supabaseClient.from('notices').insert([{ title, content, date }]);
 
       if (!error) {
         alert('공지사항이 성공적으로 등록되었습니다.');
@@ -197,7 +199,7 @@
       const tools = document.getElementById('pf-tools').value;
       const desc = document.getElementById('pf-desc').value;
 
-      const { error } = await supabase.from('portfolios').insert([{ title, category, link, thumb, tools, desc }]);
+      const { error } = await supabaseClient.from('portfolios').insert([{ title, category, link, thumb, tools, desc }]);
 
       if (!error) {
         alert('포트폴리오가 성공적으로 등록되었습니다.');
