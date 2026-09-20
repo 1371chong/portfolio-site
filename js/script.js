@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ★ Supabase 프로젝트 정보 (API 키 누락 방지용 정상 키 반영)
-  const SUPABASE_URL = 'https://gocigyxzbqfphdrnejuh.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY2lneXh6YnFmcGhkcm5lanVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTg1NzgsImV4cCI6MjEwNTQ3NDU3OH0.-nKW0gGsDMDVUOo9N2CXDFF7y8br5IsnQjaqQakwYak';
+  const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // 0. 다크 / 라이트 테마 전환 토글
