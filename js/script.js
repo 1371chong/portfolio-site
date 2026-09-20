@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 7. 세그먼트 필터 & 검색 (페이드인 모션 적용)
+  // 7. 세그먼트 필터 & 검색
   const segmentBtns = document.querySelectorAll('.segment-btn');
   const searchInput = document.getElementById('portfolio-search');
   let currentFilter = 'all';
@@ -231,11 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* =========================================================
-     ★ 인증 (회원가입/로그인/아이디·비번찾기) 및 DB 연동 영역
+     ★ 인증 (회원가입/로그인/아이디·비번찾기/회원탈퇴) 및 DB 연동 영역
      ========================================================= */
   
   // ★ 여기에 앱스 스크립트 웹 앱 URL을 붙여넣으세요!
-  const GOOGLE_APP_URL = 'https://script.google.com/macros/s/AKfycbwOwTpjzJu0jerW8TlTC2Os9Qpuiwq4XeRQ0gWKYeFWirVhPEdP6ALMwUUod1x5lME/exec';
+  const GOOGLE_APP_URL = '여기에_발급받은_구글_웹앱_URL을_붙여넣으세요';
 
   // 비밀번호 해시화
   async function hashPassword(password) {
@@ -250,6 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const authModal = document.getElementById('auth-modal');
   const btnLoginModal = document.getElementById('btn-login-modal');
   const btnLogout = document.getElementById('btn-logout');
+  const btnWithdraw = document.getElementById('btn-withdraw');
   const userGreeting = document.getElementById('user-greeting');
   
   const loginViewArea = document.getElementById('login-view-area');
@@ -267,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentUser) {
       if (btnLoginModal) btnLoginModal.style.display = 'none';
       if (btnLogout) btnLogout.style.display = 'inline-block';
+      if (btnWithdraw) btnWithdraw.style.display = 'inline-block';
       if (userGreeting) {
         userGreeting.style.display = 'inline-block';
         userGreeting.textContent = `${currentUser}님 환영합니다`;
@@ -274,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       if (btnLoginModal) btnLoginModal.style.display = 'inline-block';
       if (btnLogout) btnLogout.style.display = 'none';
+      if (btnWithdraw) btnWithdraw.style.display = 'none';
       if (userGreeting) userGreeting.style.display = 'none';
     }
   }
@@ -281,21 +284,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 모든 뷰 숨기기 유틸 함수
   function hideAllAuthViews() {
-    loginViewArea.style.display = 'none';
-    signupViewArea.style.display = 'none';
-    findIdViewArea.style.display = 'none';
-    findPwViewArea.style.display = 'none';
+    if (loginViewArea) loginViewArea.style.display = 'none';
+    if (signupViewArea) signupViewArea.style.display = 'none';
+    if (findIdViewArea) findIdViewArea.style.display = 'none';
+    if (findPwViewArea) findPwViewArea.style.display = 'none';
   }
 
   // 모달 열기/닫기 및 뷰 전환
   if(btnLoginModal) btnLoginModal.addEventListener('click', () => {
     hideAllAuthViews();
-    loginViewArea.style.display = 'block';
-    authModal.classList.add('active');
+    if (loginViewArea) loginViewArea.style.display = 'block';
+    if (authModal) authModal.classList.add('active');
   });
   
-  document.querySelector('.auth-modal-close').addEventListener('click', () => authModal.classList.remove('active'));
-  authModal.addEventListener('click', (e) => { if(e.target === authModal) authModal.classList.remove('active'); });
+  const authCloseBtn = document.querySelector('.auth-modal-close');
+  if (authCloseBtn) authCloseBtn.addEventListener('click', () => authModal.classList.remove('active'));
+  if (authModal) authModal.addEventListener('click', (e) => { if(e.target === authModal) authModal.classList.remove('active'); });
 
   if(btnGoSignup) btnGoSignup.addEventListener('click', () => { hideAllAuthViews(); signupViewArea.style.display = 'block'; });
   if(btnGoFindId) btnGoFindId.addEventListener('click', () => { hideAllAuthViews(); findIdViewArea.style.display = 'block'; });
@@ -312,6 +316,33 @@ document.addEventListener('DOMContentLoaded', () => {
       currentUser = null;
       updateAuthUI();
       alert('성공적으로 로그아웃 되었습니다.');
+    });
+  }
+
+  // 회원탈퇴
+  if (btnWithdraw) {
+    btnWithdraw.addEventListener('click', async () => {
+      if (!currentUser) return;
+      if (!confirm(`정말 ${currentUser} 계정을 탈퇴하시겠습니까?\n탈퇴 시 회원 정보가 영구적으로 삭제됩니다.`)) return;
+
+      const formData = new URLSearchParams();
+      formData.append('action', 'withdraw');
+      formData.append('username', currentUser);
+
+      try {
+        const res = await fetch(GOOGLE_APP_URL, { method: 'POST', body: formData }).then(r => r.json());
+        if (res.result === 'success') {
+          alert('회원탈퇴가 정상적으로 처리되었습니다.');
+          localStorage.removeItem('jwb_user');
+          currentUser = null;
+          updateAuthUI();
+        } else {
+          alert('회원탈퇴 처리에 실패했습니다.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('서버와 통신 중 오류가 발생했습니다.');
+      }
     });
   }
 
@@ -507,7 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         pfContainer.insertAdjacentHTML('beforeend', cardHTML);
       });
-      // filterPortfolio() 함수가 전역 혹은 상단에 정의되어 있어야 함
       if(typeof filterPortfolio === 'function') filterPortfolio(); 
     } catch(e) { console.error('포트폴리오 로드 실패'); }
   }

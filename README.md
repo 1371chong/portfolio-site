@@ -30,6 +30,8 @@
 * **3D Visuals**: Blender 3D, Cinema 4D (C4D)[cite: 7]
 * **Graphic Design**: Adobe Photoshop, Illustrator[cite: 7]
 
+### 업데이트 내역
+1. 로그인기능과 공지사항 기능 포트폴리오 추가 삭제 수정 기능 추가 
 ---
 
 ## 📂 프로젝트 구조 (Directory Structure)
