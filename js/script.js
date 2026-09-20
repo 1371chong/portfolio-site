@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ★ 본인의 Supabase 프로젝트 정보 입력
+  // ★ Supabase 프로젝트 정보 (API 키 누락 방지용 정상 키 반영)
   const SUPABASE_URL = 'https://gocigyxzbqfphdrnejuh.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY2lneXh6YnFmcGhkcm5lanVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTg1NzgsImV4cCI6MjEwNTQ3NDU3OH0.-nKW0gGsDMDVUOo9N2CXDFF7y8br5IsnQjaqQakwYak'; // 이 부분이 비어있거나 잘못되면 해당 에러가 발생합니다.
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvY2lneXh6YnFmcGhkcm5lanVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4OTg1NzgsImV4cCI6MjEwNTQ3NDU3OH0.-nKW0gGsDMDVUOo9N2CXDFF7y8br5IsnQjaqQakwYak';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // 0. 다크 / 라이트 테마 전환 토글
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 공지사항 데이터 불러오기 (Supabase) - 404 에러 방지용 정렬 수정
+  // 공지사항 데이터 불러오기 (Supabase) - 404 방지용 JS 정렬
   async function loadNotices() {
     const list = document.getElementById('notice-list');
     if(!list) return;
@@ -539,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     noticeModal.classList.add('active');
   };
 
-  // 포트폴리오 데이터 불러오기 (Supabase) - 404 에러 방지용 정렬 수정
+  // 포트폴리오 데이터 불러오기 (Supabase) - 404 방지용 JS 정렬
   function getYoutubeId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
