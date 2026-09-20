@@ -82,7 +82,8 @@
       <h2><i class="fa-solid fa-film"></i> 포트폴리오 등록 / 수정</h2>
       <form id="admin-portfolio-form" class="jwb-board-form">
         <input type="hidden" id="pf-id">
-        <input type="text" id="pf-title" placeholder="작품 제목" required>
+        <input type="text" id="pf-title" placeholder="작품 제목 (입력 시 썸네일 자동 생성)" required>
+        
         <select id="pf-category" style="width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);" required>
           <option value="">카테고리 시스템 코드 선택</option>
           <option value="video">영상 편집 (video)</option>
@@ -98,16 +99,16 @@
         <input type="text" id="pf-work-time" placeholder="작업 시간 (예: 2주 소요)" required>
         <input type="text" id="pf-link" placeholder="유튜브 링크 또는 영상 URL" required>
         
-        <!-- 구글 드라이브 연동 드래그 앤 드롭 업로더 영역 -->
+        <!-- 썸네일 입력 및 구글 드라이브 업로더 영역 -->
         <div style="margin-bottom: 12px;">
-          <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 6px;">작품 썸네일 이미지 (구글 드라이브 연동)</label>
-          <div id="drop-zone" style="border: 2px dashed var(--border); border-radius: 8px; padding: 1.5rem; text-align: center; background: var(--pill-bg); cursor: pointer; transition: 0.3s;">
+          <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 6px;">작품 썸네일 이미지 (제목 입력 시 자동 생성 또는 파일 업로드)</label>
+          <div id="drop-zone" style="border: 2px dashed var(--border); border-radius: 8px; padding: 1.5rem; text-align: center; background: var(--pill-bg); cursor: pointer; transition: 0.3s; margin-bottom: 8px;">
             <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.8rem; color: var(--accent); margin-bottom: 8px;"></i>
-            <p style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 4px;">이미지를 드래그하여 올려놓거나 <span style="color: var(--accent); text-decoration: underline;">파일 선택</span></p>
-            <p style="font-size: 0.75rem; color: var(--text-sub);">지원 형식: JPG, PNG, WEBP (구글 드라이브 자동 저장)</p>
+            <p style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 4px;">이미지를 드래그하거나 <span style="color: var(--accent); text-decoration: underline;">파일 선택</span> (구글 드라이브 업로드)</p>
+            <p style="font-size: 0.75rem; color: var(--text-sub);">* 제목만 입력해도 썸네일이 자동으로 만들어집니다.</p>
           </div>
           <input type="file" id="pf-file-input" accept="image/*" style="display: none;">
-          <input type="text" id="pf-thumb" placeholder="업로드된 이미지 URL이 여기에 자동 입력됩니다" readonly style="margin-top: 8px; font-size: 0.85rem; background: rgba(0,0,0,0.1); width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); color:var(--text-main);">
+          <input type="text" id="pf-thumb" placeholder="자동 생성되거나 업로드된 썸네일 URL" required style="font-size: 0.85rem; width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
         </div>
 
         <input type="text" id="pf-tools" placeholder="사용 툴 (예: After Effects, Blender)" required>
@@ -146,8 +147,7 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ★ Google Apps Script 웹 앱 URL 입력 (1단계에서 생성한 URL로 교체하세요)
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbydWEQYt9kpwh631-tCKuXl6YGYgesZnZhdfMQotFjoKBebDbEzd2OPieDrjgaJd2cz/exec";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwegUdq9fr-YItLRGz0k9JWaz0Dt9QNbJCKaUXO4eCbxrEcwOgUzqHzEc8NinKsPVfs/exec";
 
     const adminLoginOverlay = document.getElementById('admin-login-overlay');
     const adminDashboard = document.getElementById('admin-dashboard');
@@ -168,7 +168,6 @@
     }
     checkAdminAuth();
 
-    // 관리자 로그인 처리
     document.getElementById('admin-login-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const pwInput = document.getElementById('admin-pw').value;
@@ -188,7 +187,6 @@
       location.reload();
     });
 
-    // 관리자 비밀번호 변경 처리
     const adminPwChangeForm = document.getElementById('admin-pw-change-form');
     if (adminPwChangeForm) {
       adminPwChangeForm.addEventListener('submit', (e) => {
@@ -213,10 +211,27 @@
       });
     }
 
-    // ★ 구글 드라이브 드래그 앤 드롭 업로더 로직
+    // ★ 작품 제목(Title) 기반 자동 썸네일 생성 로직
+    const pfTitleInput = document.getElementById('pf-title');
+    const pfThumbInput = document.getElementById('pf-thumb');
+
+    if (pfTitleInput && pfThumbInput) {
+      pfTitleInput.addEventListener('input', (e) => {
+        const titleVal = e.target.value.trim();
+        // 수정 모드가 아닐 때(또는 빈 값일 때) 타이틀 기반 자동 썸네일 생성 적용
+        if (titleVal !== "") {
+          const encodedTitle = encodeURIComponent(titleVal);
+          const autoThumbUrl = `https://placehold.co/1200x675/0f172a/38bdf8/png?text=${encodedTitle}&font=montserrat`;
+          pfThumbInput.value = autoThumbUrl;
+        } else {
+          pfThumbInput.value = "";
+        }
+      });
+    }
+
+    // 구글 드라이브 드래그 앤 드롭 업로더 로직
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('pf-file-input');
-    const thumbInput = document.getElementById('pf-thumb');
 
     if (dropZone && fileInput) {
       dropZone.addEventListener('click', () => fileInput.click());
@@ -250,7 +265,7 @@
 
     function uploadFileToGoogleDrive(file) {
       if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes("여기에")) {
-        return alert('Google Apps Script 웹 앱 URL이 설정되지 않았습니다.');
+        return alert('Google Apps Script 웹 앱 URL이 설정되지 않았습니다. (제목 자동 생성 썸네일은 정상 사용 가능합니다)');
       }
 
       dropZone.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="font-size: 1.8rem; color: var(--accent); margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: var(--text-main);">구글 드라이브로 업로드 중...</p>`;
@@ -273,25 +288,22 @@
           const result = await response.json();
 
           if (result.status === 'success') {
-            thumbInput.value = result.url;
-            dropZone.innerHTML = `<i class="fa-solid fa-check" style="font-size: 1.8rem; color: #10b981; margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: #10b981;">업로드 완료!</p><p style="font-size: 0.75rem; color: var(--text-sub);">${file.name}</p>`;
-            setTimeout(() => {
-              dropZone.innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.8rem; color: var(--accent); margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: var(--text-main);">다른 이미지로 변경하려면 드래그 또는 클릭</p>`;
-            }, 3000);
+            pfThumbInput.value = result.url;
+            dropZone.innerHTML = `<i class="fa-solid fa-check" style="font-size: 1.8rem; color: #10b981; margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: #10b981;">업로드 완료!</p>`;
+            setTimeout(() => { resetDropZoneUI(); }, 3000);
           } else {
             alert('업로드 실패: ' + result.message);
             resetDropZoneUI();
           }
         } catch (err) {
           alert('통신 오류가 발생했습니다.');
-          console.error(err);
           resetDropZoneUI();
         }
       };
     }
 
     function resetDropZoneUI() {
-      dropZone.innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.8rem; color: var(--accent); margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: var(--text-main);">이미지를 드래그하여 올려놓거나 <span style="color: var(--accent); text-decoration: underline;">파일 선택</span></p>`;
+      dropZone.innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.8rem; color: var(--accent); margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: var(--text-main);">이미지를 드래그하거나 <span style="color: var(--accent); text-decoration: underline;">파일 선택</span> (구글 드라이브 업로드)</p>`;
     }
 
     async function loadAdminData() {
@@ -416,7 +428,6 @@
           else alert('등록 실패: ' + error.message);
         }
         resetPortfolioForm();
-        resetDropZoneUI();
         loadAdminData();
       } catch (err) {
         alert('네트워크 오류 발생');
