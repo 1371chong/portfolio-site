@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ★ Supabase 프로젝트 정보 (API 키 누락 방지용 정상 키 반영)
+  // ★ Supabase 프로젝트 정보 (정상 키 반영)
   const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 공지사항 데이터 불러오기 (Supabase) - 404 방지용 JS 정렬
+  // 공지사항 데이터 불러오기 (Supabase) - 404 방지용 JS 정렬 적용
   async function loadNotices() {
     const list = document.getElementById('notice-list');
     if(!list) return;
@@ -539,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     noticeModal.classList.add('active');
   };
 
-  // 포트폴리오 데이터 불러오기 (Supabase) - 404 방지용 JS 정렬
+  // 포트폴리오 데이터 불러오기 (Supabase) - 404 방지용 JS 정렬 적용
   function getYoutubeId(url) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
