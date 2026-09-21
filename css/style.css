@@ -502,7 +502,7 @@ body.light-mode .video-mask-text { background: var(--bg-color); }
 .dot.active { width: 28px; border-radius: 10px; background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
 
 /* =========================================
-   Infinite Text Marquee (수정 보완됨)
+   Infinite Text Marquee
    ========================================= */
 .marquee-container {
   width: 100%;
@@ -519,7 +519,6 @@ body.light-mode .video-mask-text { background: var(--bg-color); }
   display: flex;
   width: fit-content;
   animation: scroll-marquee 25s linear infinite;
-  will-change: transform;
 }
 
 .marquee-container:hover .marquee-track {
@@ -544,8 +543,8 @@ body.light-mode .video-mask-text { background: var(--bg-color); }
 }
 
 @keyframes scroll-marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } 
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); } 
 }
 
 /* =========================================
@@ -619,6 +618,7 @@ body.light-mode .video-mask-text { background: var(--bg-color); }
 }
 .jwb-btn:hover { background: #e03838; }
 
+/* 첨부파일 다운로드 행 스타일 */
 .jwb-attachment-row {
   display: flex;
   justify-content: space-between;
@@ -630,11 +630,31 @@ body.light-mode .video-mask-text { background: var(--bg-color); }
   margin-top: 8px;
   font-size: 0.85rem;
 }
-.jwb-attachment-left { display: flex; align-items: center; gap: 6px; }
-.jwb-attachment-link { color: #38bdf8; text-decoration: none; font-weight: 500; }
-.jwb-attachment-link:hover { text-decoration: underline; }
-.jwb-attachment-count { color: #ef4444; font-weight: 600; margin-left: 4px; }
-.jwb-attachment-date { color: var(--text-sub); font-size: 0.8rem; display: flex; align-items: center; gap: 4px; }
+.jwb-attachment-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.jwb-attachment-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 500;
+}
+.jwb-attachment-link:hover {
+  text-decoration: underline;
+}
+.jwb-attachment-count {
+  color: #ef4444;
+  font-weight: 600;
+  margin-left: 4px;
+}
+.jwb-attachment-date {
+  color: var(--text-sub);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
 /* =========================================
    포트폴리오 카테고리 알약 UI
