@@ -26,12 +26,13 @@
       <li class="toc-item"><a href="#skills" class="toc-link"><span class="toc-num">02</span> 스킬</a></li>
       <li class="toc-item"><a href="#brands" class="toc-link"><span class="toc-num">03</span> 함께한 브랜드</a></li>
       <li class="toc-item"><a href="#notice" class="toc-link"><span class="toc-num">04</span> 공지사항</a></li>
-      <li class="toc-item"><a href="#portfolio" class="toc-link"><span class="toc-num">05</span> 포트폴리오</a></li>
-      <li class="toc-item"><a href="#resume" class="toc-link"><span class="toc-num">06</span> 이력서</a></li>
-      <li class="toc-item"><a href="#process" class="toc-link"><span class="toc-num">07</span> 프로세스</a></li>
-      <li class="toc-item"><a href="#faq" class="toc-link"><span class="toc-num">08</span> FAQ</a></li>
-      <li class="toc-item"><a href="#about" class="toc-link"><span class="toc-num">09</span> 소개</a></li>
-      <li class="toc-item"><a href="#contact" class="toc-link"><span class="toc-num">10</span> 연락처</a></li>
+      <li class="toc-item"><a href="#freeboard" class="toc-link"><span class="toc-num">05</span> 자유게시판</a></li>
+      <li class="toc-item"><a href="#portfolio" class="toc-link"><span class="toc-num">06</span> 포트폴리오</a></li>
+      <li class="toc-item"><a href="#resume" class="toc-link"><span class="toc-num">07</span> 이력서</a></li>
+      <li class="toc-item"><a href="#process" class="toc-link"><span class="toc-num">08</span> 프로세스</a></li>
+      <li class="toc-item"><a href="#faq" class="toc-link"><span class="toc-num">09</span> FAQ</a></li>
+      <li class="toc-item"><a href="#about" class="toc-link"><span class="toc-num">10</span> 소개</a></li>
+      <li class="toc-item"><a href="#contact" class="toc-link"><span class="toc-num">11</span> 연락처</a></li>
     </ul>
   </aside>
 
@@ -40,6 +41,7 @@
     <div class="logo"><a href="#home" class="hover-target">JWB STUDIO</a></div>
     
     <div class="header-right-group">
+      <a href="review.html" class="btn-resume-outline hover-target" style="margin-right:10px; padding:0.4rem 0.9rem; border-color:var(--accent); color:var(--accent);"><i class="fa-solid fa-star"></i> 고객 후기</a>
       <span id="user-greeting" style="display:none; font-size:0.9rem; margin-right:15px; color:var(--text-main); font-weight:700;"></span>
       <button id="btn-login-modal" class="btn-resume-outline hover-target" style="margin-right:10px; padding:0.4rem 0.9rem;">로그인</button>
       <button id="btn-withdraw" class="btn-resume-outline hover-target" style="display:none; margin-right:10px; padding:0.4rem 0.9rem; border-color:var(--accent); color:var(--accent);">회원탈퇴</button>
@@ -65,6 +67,7 @@
         <li><a href="#skills" class="nav-link hover-target">스킬</a></li>
         <li><a href="#brands" class="nav-link hover-target">함께한 브랜드</a></li>
         <li><a href="#notice" class="nav-link hover-target">공지사항</a></li>
+        <li><a href="#freeboard" class="nav-link hover-target">자유게시판</a></li>
         <li><a href="#portfolio" class="nav-link hover-target">포트폴리오</a></li>
         <li><a href="#resume" class="nav-link hover-target">이력서</a></li>
         <li><a href="#process" class="nav-link hover-target">프로세스</a></li>
@@ -245,14 +248,60 @@
     <!-- 4. 공지사항 (Notice) 섹션 -->
     <section id="notice" class="scroll-reveal">
       <h2 class="section-title">공지사항 (Notice)</h2>
+      <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <select id="notice-category-filter" onchange="filterNotices()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
+          <option value="">전체 카테고리</option>
+          <option value="공지">공지</option>
+          <option value="안내">안내</option>
+          <option value="업데이트">업데이트</option>
+          <option value="일반">일반</option>
+        </select>
+        <input type="text" id="notice-search-input" placeholder="공지사항 검색..." onkeyup="filterNotices()" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
+      </div>
+
       <div class="jwb-board-container">
         <ul id="notice-list" class="jwb-post-list">
           <li style="text-align:center; padding:20px; color:var(--text-sub);">공지사항을 불러오는 중입니다...</li>
         </ul>
       </div>
+      <div id="notice-pagination" style="display: flex; justify-content: center; gap: 5px; margin-top: 1.5rem;"></div>
     </section>
 
-    <!-- 5. 포트폴리오 영역 -->
+    <!-- 5. 자유게시판 (Free Board) 섹션 -->
+    <section id="freeboard" class="scroll-reveal">
+      <h2 class="section-title">자유게시판</h2>
+      
+      <div id="free-board-form-wrapper" style="margin-bottom: 2rem; padding: 1.5rem; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border);">
+        <div id="free-login-required-msg" style="text-align: center; padding: 15px; color: var(--text-sub); display: none;">
+          자유게시판 글 작성은 <strong style="color: var(--accent);">로그인한 회원</strong>만 가능합니다. 로그인 후 이용해 주세요.
+        </div>
+        <form id="free-board-form" class="jwb-board-form">
+          <input type="text" id="free-title" placeholder="글 제목" required style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+          <input type="text" id="free-author" placeholder="작성자" readonly style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-sub); cursor:not-allowed;">
+          <textarea id="free-content" placeholder="내용을 입력하세요" rows="3" required style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);"></textarea>
+          
+          <div style="margin-bottom: 15px;">
+            <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 4px;">첨부파일 (구글 드라이브 연동 다운로드 지원)</label>
+            <input type="file" id="free-file-input" style="color:var(--text-sub);">
+            <input type="hidden" id="free-file-name">
+            <input type="hidden" id="free-file-url">
+            <input type="hidden" id="free-file-size">
+          </div>
+          <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">글 작성하기</button>
+        </form>
+      </div>
+
+      <input type="text" id="free-search-input" placeholder="자유게시판 검색..." onkeyup="filterFreeBoard()" style="width: 100%; padding: 10px; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
+      
+      <div class="jwb-board-container">
+        <ul id="public-free-list" class="jwb-post-list">
+          <li style="text-align:center; padding:20px; color:var(--text-sub);">게시글을 불러오는 중입니다...</li>
+        </ul>
+      </div>
+      <div id="free-pagination" style="display: flex; justify-content: center; gap: 5px; margin-top: 1.5rem;"></div>
+    </section>
+
+    <!-- 6. 포트폴리오 영역 (스크린샷 알약 UI 적용) -->
     <section id="portfolio" class="scroll-trigger-portfolio">
       <div class="portfolio-header">
         <div>
@@ -267,7 +316,10 @@
 
       <div class="portfolio-controls">
         <div class="segmented-control">
-          <button class="segment-btn active hover-target" data-filter="all"><i class="fa-solid fa-border-all"></i> <span>All</span></button>
+          <!-- 전체 버튼 (알약 박스 형태 강조) -->
+          <button class="segment-btn active hover-target" data-filter="all"><i class="fa-solid fa-border-all"></i> <span>전체</span></button>
+          
+          <!-- 카테고리별 아이콘 버튼 -->
           <button class="segment-btn hover-target" data-filter="video" title="영상 편집"><i class="fa-solid fa-video"></i></button>
           <button class="segment-btn hover-target" data-filter="ad" title="광고 / 프로모션"><i class="fa-solid fa-rectangle-ad"></i></button>
           <button class="segment-btn hover-target" data-filter="3d" title="3D 아트워크"><i class="fa-solid fa-cube"></i></button>
@@ -277,6 +329,7 @@
           <button class="segment-btn hover-target" data-filter="web" title="웹 / 인터랙티브"><i class="fa-solid fa-file-lines"></i></button>
           <button class="segment-btn hover-target" data-filter="vfx" title="VFX / 씬"><i class="fa-solid fa-person-running"></i></button>
         </div>
+
         <div class="search-pill-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
           <input type="text" id="portfolio-search" placeholder="작품명 또는 키워드 검색...">
@@ -290,7 +343,7 @@
       </div>
     </section>
 
-    <!-- 6. 인터랙티브 이력서 섹션 -->
+    <!-- 7. 인터랙티브 이력서 섹션 -->
     <section id="resume" class="scroll-reveal">
       <h2 class="section-title">인터랙티브 이력서 (Resume)</h2>
       <div class="resume-card">
@@ -327,7 +380,7 @@
       </div>
     </section>
 
-    <!-- 7. 제작 프로세스 영역 -->
+    <!-- 8. 제작 프로세스 영역 -->
     <section id="process" class="scroll-reveal">
       <h2 class="section-title">제작 프로세스 (Process)</h2>
       <div class="process-grid">
@@ -359,7 +412,7 @@
       </div>
     </section>
 
-    <!-- 8. 자주하는 질문 (FAQ) -->
+    <!-- 9. 자주하는 질문 (FAQ) -->
     <section id="faq" class="scroll-reveal">
       <h2 class="section-title">자주하는 질문 (FAQ)</h2>
       <div class="faq-list">
@@ -411,7 +464,7 @@
       </div>
     </section>
 
-    <!-- 9. 소개 영역 (About JWB STUDIO) -->
+    <!-- 10. 소개 영역 (About JWB STUDIO) -->
     <section id="about" class="scroll-reveal">
       <h2 class="section-title">소개 (About)</h2>
       
@@ -456,7 +509,7 @@
       </div>
     </section>
 
-    <!-- 10. 제작 의뢰 안내 영역 -->
+    <!-- 11. 제작 의뢰 안내 영역 -->
     <section id="order" class="scroll-reveal">
       <h2 class="section-title">제작 의뢰 (Work With Me)</h2>
       <div class="order-card">
@@ -475,7 +528,7 @@
       </div>
     </section>
 
-    <!-- 11. 연락처 영역 -->
+    <!-- 12. 연락처 영역 -->
     <section id="contact" class="scroll-reveal">
       <h2 class="section-title">연락처 (Contact)</h2>
       <div class="contact-card">
