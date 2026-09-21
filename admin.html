@@ -57,13 +57,29 @@
       </form>
     </div>
 
-    <!-- 2. 공지사항 관리 -->
+    <!-- 2. 공지사항 관리 (카테고리 및 구글 드라이브 파일 업로드 기능 추가) -->
     <div class="admin-section">
       <h2><i class="fa-solid fa-bullhorn"></i> 공지사항 등록 / 수정</h2>
       <form id="admin-notice-form" class="jwb-board-form">
         <input type="hidden" id="notice-id">
+        <select id="notice-category" style="width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);" required>
+          <option value="공지">공지</option>
+          <option value="안내">안내</option>
+          <option value="업데이트">업데이트</option>
+          <option value="일반">일반</option>
+        </select>
         <input type="text" id="notice-title" placeholder="공지사항 제목" required>
         <textarea id="notice-content" placeholder="공지사항 내용" rows="4" required></textarea>
+        
+        <!-- 구글 드라이브 파일 첨부 영역 -->
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 6px;">첨부파일 업로드 (구글 드라이브 연동)</label>
+          <input type="file" id="notice-file-input" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+          <input type="hidden" id="notice-file-name">
+          <input type="hidden" id="notice-file-url">
+          <input type="hidden" id="notice-file-size">
+        </div>
+
         <div style="display:flex; gap:10px;">
           <button type="submit" id="notice-submit-btn" class="jwb-btn">공지 등록</button>
           <button type="button" id="notice-cancel-btn" class="btn-resume-outline" style="display:none;" onclick="resetNoticeForm()">수정 취소</button>
@@ -72,12 +88,12 @@
 
       <h3 style="margin-top:2rem; font-size:1.1rem; color:var(--text-main);">등록된 공지사항 목록</h3>
       <table class="admin-table">
-        <thead><tr><th>ID</th><th>제목</th><th>등록일</th><th>관리</th></tr></thead>
+        <thead><tr><th>ID</th><th>카테고리</th><th>제목</th><th>첨부파일</th><th>관리</th></tr></thead>
         <tbody id="admin-notice-list"></tbody>
       </table>
     </div>
 
-    <!-- 3. 포트폴리오 관리 -->
+    <!-- 3. 포트폴리오 관리 (자동 썸네일 및 드라이브 업로더 포함) -->
     <div class="admin-section">
       <h2><i class="fa-solid fa-film"></i> 포트폴리오 등록 / 수정</h2>
       <form id="admin-portfolio-form" class="jwb-board-form">
@@ -144,7 +160,7 @@
 
   <script>
     const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzcD0H9nJ7_Xg5QrJrjoMQaQOS8E0Nj82tYXzq5EK_-_n1rwbkMyACe0NfCb22-uP5p/exec";
@@ -196,18 +212,47 @@
         const newPwCheck = document.getElementById('admin-new-pw-check').value;
         const storedPw = localStorage.getItem('jwb_admin_pw');
 
-        if (currentPw !== storedPw) {
-          return alert('현재 관리자 비밀번호가 올바르지 않습니다.');
-        }
-
-        if (newPw !== newPwCheck) {
-          return alert('새로운 비밀번호가 서로 일치하지 않습니다.');
-        }
+        if (currentPw !== storedPw) return alert('현재 관리자 비밀번호가 올바르지 않습니다.');
+        if (newPw !== newPwCheck) return alert('새로운 비밀번호가 서로 일치하지 않습니다.');
 
         localStorage.setItem('jwb_admin_pw', newPw);
         alert('관리자 비밀번호가 성공적으로 변경되었습니다. 보안을 위해 다시 로그인해 주세요.');
         sessionStorage.removeItem('jwb_admin_auth');
         location.reload();
+      });
+    }
+
+    // 공지사항 파일 업로드 핸들러 (구글 드라이브)
+    const noticeFileInput = document.getElementById('notice-file-input');
+    if (noticeFileInput) {
+      noticeFileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+          const base64Data = reader.result.split(',')[1];
+          const fileSizeKb = (file.size / 1024).toFixed(1) + 'KB';
+
+          try {
+            const res = await fetch(GAS_WEB_APP_URL, {
+              method: 'POST',
+              body: JSON.stringify({ fileName: file.name, mimeType: file.type, fileData: base64Data })
+            });
+            const result = await res.json();
+            if (result.status === 'success') {
+              document.getElementById('notice-file-name').value = file.name;
+              document.getElementById('notice-file-url').value = result.url;
+              document.getElementById('notice-file-size').value = fileSizeKb;
+              alert('구글 드라이브 업로드 완료!');
+            } else {
+              alert('업로드 실패: ' + result.message);
+            }
+          } catch (err) {
+            alert('통신 오류가 발생했습니다.');
+          }
+        };
       });
     }
 
@@ -220,8 +265,7 @@
         const titleVal = e.target.value.trim();
         if (titleVal !== "") {
           const encodedTitle = encodeURIComponent(titleVal);
-          const autoThumbUrl = `https://placehold.co/1200x675/0f172a/38bdf8/png?text=${encodedTitle}&font=montserrat`;
-          pfThumbInput.value = autoThumbUrl;
+          pfThumbInput.value = `https://placehold.co/1200x675/0f172a/38bdf8/png?text=${encodedTitle}&font=montserrat`;
         } else {
           pfThumbInput.value = "";
         }
@@ -234,75 +278,34 @@
 
     if (dropZone && fileInput) {
       dropZone.addEventListener('click', () => fileInput.click());
-
-      dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = 'var(--accent)';
-        dropZone.style.background = 'rgba(255, 255, 255, 0.05)';
-      });
-
-      dropZone.addEventListener('dragleave', () => {
-        dropZone.style.borderColor = 'var(--border)';
-        dropZone.style.background = 'var(--pill-bg)';
-      });
-
+      dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--accent)'; });
+      dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = 'var(--border)'; });
       dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
         dropZone.style.borderColor = 'var(--border)';
-        dropZone.style.background = 'var(--pill-bg)';
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-          uploadFileToGoogleDrive(e.dataTransfer.files[0]);
-        }
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) uploadFileToGoogleDrive(e.dataTransfer.files[0]);
       });
-
       fileInput.addEventListener('change', (e) => {
-        if (e.target.files && e.target.files[0]) {
-          uploadFileToGoogleDrive(e.target.files[0]);
-        }
+        if (e.target.files && e.target.files[0]) uploadFileToGoogleDrive(e.target.files[0]);
       });
     }
 
     function uploadFileToGoogleDrive(file) {
-      if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes("여기에")) {
-        return alert('Google Apps Script 웹 앱 URL이 설정되지 않았습니다.');
-      }
-
-      dropZone.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="font-size: 1.8rem; color: var(--accent); margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: var(--text-main);">구글 드라이브로 업로드 중...</p>`;
-
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = async () => {
-        const base64Data = reader.result.split(',')[1];
-        const payload = {
-          fileName: file.name,
-          mimeType: file.type,
-          fileData: base64Data
-        };
-
-        try {
-          const response = await fetch(GAS_WEB_APP_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload)
-          });
-          const result = await response.json();
-
-          if (result.status === 'success') {
-            pfThumbInput.value = result.url;
-            dropZone.innerHTML = `<i class="fa-solid fa-check" style="font-size: 1.8rem; color: #10b981; margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: #10b981;">업로드 완료!</p>`;
-            setTimeout(() => { resetDropZoneUI(); }, 3000);
-          } else {
-            alert('업로드 실패: ' + result.message);
-            resetDropZoneUI();
-          }
-        } catch (err) {
-          alert('통신 오류가 발생했습니다.');
-          resetDropZoneUI();
+        const res = await fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          body: JSON.stringify({ fileName: file.name, mimeType: file.type, fileData: reader.result.split(',')[1] })
+        });
+        const result = await res.json();
+        if (result.status === 'success') {
+          pfThumbInput.value = result.url;
+          alert('구글 드라이브 업로드 완료!');
+        } else {
+          alert('업로드 실패');
         }
       };
-    }
-
-    function resetDropZoneUI() {
-      dropZone.innerHTML = `<i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.8rem; color: var(--accent); margin-bottom: 8px;"></i><p style="font-size: 0.9rem; color: var(--text-main);">이미지를 드래그하거나 <span style="color: var(--accent); text-decoration: underline;">파일 선택</span> (구글 드라이브 업로드)</p>`;
     }
 
     async function loadAdminData() {
@@ -317,14 +320,21 @@
         const { data: notices } = await supabaseClient.from('notices').select('*');
         if (notices) notices.sort((a, b) => b.id - a.id);
         const noticeList = document.getElementById('admin-notice-list');
-        noticeList.innerHTML = notices?.length ? '' : '<tr><td colspan="4" style="text-align:center;">등록된 공지가 없습니다.</td></tr>';
+        noticeList.innerHTML = notices?.length ? '' : '<tr><td colspan="5" style="text-align:center;">등록된 공지가 없습니다.</td></tr>';
         notices?.forEach(n => {
           const safeTitle = (n.title || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
           const safeContent = (n.content || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
-          noticeList.innerHTML += `<tr><td>${n.id}</td><td>${n.title}</td><td>${n.date}</td><td>
-            <button class="action-btn btn-edit" onclick="editNotice(${n.id}, '${safeTitle}', '${safeContent}')">수정</button>
-            <button class="action-btn btn-delete" onclick="deleteNotice(${n.id})">삭제</button>
-          </td></tr>`;
+          noticeList.innerHTML += `
+            <tr>
+              <td>${n.id}</td>
+              <td>[${n.category || '공지'}]</td>
+              <td>${n.title}</td>
+              <td>${n.file_url ? `<a href="${n.file_url}" download target="_blank" style="color:var(--accent);"><i class="fa-solid fa-download"></i> ${n.file_name || '파일'}</a>` : '없음'}</td>
+              <td>
+                <button class="action-btn btn-edit" onclick="editNotice(${n.id}, '${n.category || '공지'}', '${safeTitle}', '${safeContent}')">수정</button>
+                <button class="action-btn btn-delete" onclick="deleteNotice(${n.id})">삭제</button>
+              </td>
+            </tr>`;
         });
 
         const { data: portfolios } = await supabaseClient.from('portfolios').select('*');
@@ -340,30 +350,43 @@
           const safeTools = (p.tools || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;");
           const safeDesc = (p.desc || '').replace(/'/g, "&apos;").replace(/"/g, "&quot;").replace(/\n/g, "\\n");
 
-          pfList.innerHTML += `<tr><td>${p.id}</td><td>${p.title}</td><td>${p.category_name || p.category}</td><td>
-            <button class="action-btn btn-edit" onclick="editPortfolio(${p.id}, '${safeTitle}', '${p.category}', '${safeCategoryName}', '${safeWorkTime}', '${safeLink}', '${safeThumb}', '${safeTools}', '${safeDesc}')">수정</button>
-            <button class="action-btn btn-delete" onclick="deletePortfolio(${p.id})">삭제</button>
-          </td></tr>`;
+          pfList.innerHTML += `
+            <tr>
+              <td>${p.id}</td>
+              <td>${p.title}</td>
+              <td>${p.category_name || p.category}</td>
+              <td>
+                <button class="action-btn btn-edit" onclick="editPortfolio(${p.id}, '${safeTitle}', '${p.category}', '${safeCategoryName}', '${safeWorkTime}', '${safeLink}', '${safeThumb}', '${safeTools}', '${safeDesc}')">수정</button>
+                <button class="action-btn btn-delete" onclick="deletePortfolio(${p.id})">삭제</button>
+              </td>
+            </tr>`;
         });
       } catch (err) {
         console.error("데이터 로드 에러:", err);
       }
     }
 
+    // 공지사항 등록 및 수정 처리
     document.getElementById('admin-notice-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('notice-id').value;
-      const title = document.getElementById('notice-title').value;
-      const content = document.getElementById('notice-content').value;
-      const date = new Date().toLocaleDateString();
+      const payload = {
+        category: document.getElementById('notice-category').value,
+        title: document.getElementById('notice-title').value,
+        content: document.getElementById('notice-content').value,
+        file_name: document.getElementById('notice-file-name').value || null,
+        file_url: document.getElementById('notice-file-url').value || null,
+        file_size: document.getElementById('notice-file-size').value || null,
+        date: new Date().toLocaleDateString()
+      };
 
       try {
         if (id && id.trim() !== "") {
-          const { error } = await supabaseClient.from('notices').update({ title, content }).eq('id', id);
+          const { error } = await supabaseClient.from('notices').update(payload).eq('id', id);
           if (!error) alert('공지사항이 수정되었습니다.');
           else alert('수정 실패: ' + error.message);
         } else {
-          const { error } = await supabaseClient.from('notices').insert([{ title, content, date }]);
+          const { error } = await supabaseClient.from('notices').insert([payload]);
           if (!error) alert('공지사항이 등록되었습니다.');
           else alert('등록 실패: ' + error.message);
         }
@@ -374,8 +397,9 @@
       }
     });
 
-    window.editNotice = (id, title, content) => {
+    window.editNotice = (id, category, title, content) => {
       document.getElementById('notice-id').value = id;
+      document.getElementById('notice-category').value = category;
       document.getElementById('notice-title').value = title;
       document.getElementById('notice-content').value = content;
       document.getElementById('notice-submit-btn').textContent = '공지 수정 완료';
@@ -386,6 +410,9 @@
     window.resetNoticeForm = () => {
       document.getElementById('admin-notice-form').reset();
       document.getElementById('notice-id').value = '';
+      document.getElementById('notice-file-name').value = '';
+      document.getElementById('notice-file-url').value = '';
+      document.getElementById('notice-file-size').value = '';
       document.getElementById('notice-submit-btn').textContent = '공지 등록';
       document.getElementById('notice-cancel-btn').style.display = 'none';
     };
@@ -402,6 +429,7 @@
       }
     };
 
+    // 포트폴리오 등록 및 수정 처리
     document.getElementById('admin-portfolio-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('pf-id').value;
@@ -453,7 +481,6 @@
       document.getElementById('pf-id').value = '';
       document.getElementById('pf-submit-btn').textContent = '포트폴리오 등록';
       document.getElementById('pf-cancel-btn').style.display = 'none';
-      resetDropZoneUI();
     };
 
     window.deletePortfolio = async (id) => {
@@ -468,5 +495,7 @@
       }
     };
   </script>
+</body>
+</html>
 </body>
 </html>
