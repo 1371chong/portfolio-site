@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // 1. 공지사항 데이터 로드 및 렌더링 (첨부파일 아이콘 및 상세보기 모달 연동)
+  // 1. 공지사항 데이터 로드 및 렌더링
   let allNotices = [];
   let currentNoticePage = 1;
 
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     noticeModal?.classList.add('active');
   };
 
-  // 2. 자유게시판 데이터 로드 및 렌더링 (제목 클릭 시 상세보기 및 첨부파일 아이콘)
+  // 2. 자유게시판 데이터 로드 및 렌더링
   let allFreePosts = [];
   let currentFreePage = 1;
 
@@ -252,6 +252,55 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('free-modal-attachment').innerHTML = createAttachmentHTML(fileName, fileSize, fileUrl, 0, date);
     freeModal?.classList.add('active');
   };
+
+  // 3. 자유게시판 글 작성(등록) 처리
+  const freeForm = document.getElementById('free-board-form');
+  if (freeForm) {
+    freeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentUser) {
+        alert('로그인 후 이용해 주세요.');
+        return;
+      }
+
+      const title = document.getElementById('free-title').value.trim();
+      const content = document.getElementById('free-content').value.trim();
+      const fileName = document.getElementById('free-file-name')?.value || null;
+      const fileUrl = document.getElementById('free-file-url')?.value || null;
+      const fileSize = document.getElementById('free-file-size')?.value || null;
+
+      if (!title || !content) {
+        alert('제목과 내용을 모두 입력해 주세요.');
+        return;
+      }
+
+      const payload = {
+        title: title,
+        author: currentUser,
+        content: content,
+        file_name: fileName,
+        file_url: fileUrl,
+        file_size: fileSize,
+        date: new Date().toLocaleString()
+      };
+
+      try {
+        const { error } = await supabase.from('free_board').insert([payload]);
+        if (error) {
+          alert('등록 실패: ' + error.message);
+        } else {
+          alert('자유게시판 글이 성공적으로 등록되었습니다!');
+          freeForm.reset();
+          if (document.getElementById('free-author')) {
+            document.getElementById('free-author').value = currentUser;
+          }
+          loadFreeBoard();
+        }
+      } catch (err) {
+        alert('서버 통신 중 오류가 발생했습니다.');
+      }
+    });
+  }
 
   // 초기 실행
   loadNotices();
