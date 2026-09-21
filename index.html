@@ -537,9 +537,10 @@
           <input type="text" id="signup-name" placeholder="이름" required>
           <div class="terms-area" style="margin: 15px 0; font-size: 0.85rem; color: var(--text-sub); text-align: left; background: var(--pill-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
             <label style="display: block; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); font-weight: 700; cursor: pointer; color: var(--text-main);"><input type="checkbox" id="term-all"> 전체 약관에 모두 동의합니다</label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-1" class="term-item" required> [필수] 이용약관 동의</label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-2" class="term-item" required> [필수] 개인정보처리방침 동의</label>
-            <label style="display: block; cursor: pointer;"><input type="checkbox" id="term-3" class="term-item" required> [필수] 저작권 귀속 약관 동의</label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-1" class="term-item" required> [필수] 이용약관 동의 <a href="terms.html" target="_blank" style="color:var(--accent); float:right; text-decoration:none;">보기</a></label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-2" class="term-item" required> [필수] 개인정보처리방침 동의 <a href="privacy.html" target="_blank" style="color:var(--accent); float:right; text-decoration:none;">보기</a></label>
+            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-3" class="term-item" required> [필수] 저작권 귀속 약관 동의 <a href="copyright.html" target="_blank" style="color:var(--accent); float:right; text-decoration:none;">보기</a></label>
+            <label style="display: block; cursor: pointer;"><input type="checkbox" id="term-4" class="term-item"> [선택] 마케팅 정보 수신 동의 <span style="color:var(--text-sub); float:right; font-size: 0.75rem;">(이벤트 및 혜택 안내)</span></label>
           </div>
           <button type="submit" class="jwb-btn hover-target" style="width:100%; justify-content:center; background: var(--pill-bg); border: 1px solid var(--accent); color: var(--text-main);">가입 완료</button>
         </form>
@@ -550,6 +551,12 @@
 
   <footer>
     <p class="footer-notice">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
+    <div class="footer-legal-links" style="margin: 10px 0; font-size: 0.9rem;">
+      <a href="terms.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">이용약관</a> | 
+      <a href="privacy.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">개인정보처리방침</a> | 
+      <a href="email_policy.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">이메일무단수집거부</a> | 
+      <a href="rights.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">이용자권리헌장</a>
+    </div>
     <p class="footer-copy">&copy; 2026 JWB STUDIO. All rights reserved.</p>
   </footer>
 
