@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  
-  const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzcD0H9nJ7_Xg5QrJrjoMQaQOS8E0Nj82tYXzq5EK_-_n1rwbkMyACe0NfCb22-uP5p/exec";
 
   // 테마 전환
   const themeToggleBtn = document.getElementById('theme-toggle');
@@ -16,47 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 헤더 스크롤
+  // 헤더 스크롤 효과
+  const header = document.getElementById('header');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
+    if (window.scrollY > 40) header?.classList.add('scrolled');
+    else header?.classList.remove('scrolled');
   }, { passive: true });
 
-  // 커서
-  const cursorDot = document.querySelector('.custom-cursor-dot');
-  const cursorBlur = document.querySelector('.custom-cursor-blur');
-  if (window.innerWidth > 768 && cursorDot && cursorBlur) {
-    window.addEventListener('mousemove', (e) => {
-      cursorDot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-      cursorBlur.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-    });
-    document.querySelectorAll('.hover-target').forEach(t => {
-      t.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-      t.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-    });
-  }
-
-  // ScrollSpy
-  const sections = document.querySelectorAll('section');
-  const tocLinks = document.querySelectorAll('.toc-link');
-  const navLinks = document.querySelectorAll('.nav-link');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    const pos = window.pageYOffset + 250;
-    sections.forEach(s => {
-      if (pos >= s.offsetTop && pos < s.offsetTop + s.offsetHeight) current = s.getAttribute('id');
-    });
-    navLinks.forEach(l => {
-      l.classList.remove('active');
-      if (l.getAttribute('href') === `#${current}`) l.classList.add('active');
-    });
-    tocLinks.forEach(l => {
-      l.classList.remove('active');
-      if (l.getAttribute('href') === `#${current}`) l.classList.add('active');
-    });
-  }, { passive: true });
-
-  // 인증 시스템
+  // 인증 시스템 상태 관리
   let currentUser = localStorage.getItem('jwb_user') || null;
   const authModal = document.getElementById('auth-modal');
   const btnLoginModal = document.getElementById('btn-login-modal');
@@ -88,27 +53,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateAuthUI();
 
-  if (btnLoginModal) btnLoginModal.addEventListener('click', () => authModal.classList.add('active'));
-  document.querySelector('.auth-modal-close')?.addEventListener('click', () => authModal.classList.remove('active'));
-
+  if (btnLoginModal) btnLoginModal.addEventListener('click', () => authModal?.classList.add('active'));
+  document.querySelector('.auth-modal-close')?.addEventListener('click', () => authModal?.classList.remove('active'));
   if (btnLogout) btnLogout.addEventListener('click', () => { localStorage.removeItem('jwb_user'); currentUser = null; updateAuthUI(); alert('로그아웃 되었습니다.'); });
 
-  // 첨부파일 HTML 헬퍼 함수
+  // 첨부파일 HTML 생성 헬퍼 함수
   function createAttachmentHTML(fileName, fileSize, fileUrl, downloadCount = 0, dateStr = '') {
-    if (!fileUrl) return '';
+    if (!fileUrl || fileUrl.trim() === '') return '';
     return `
-      <div class="jwb-attachment-row">
-        <div class="jwb-attachment-left">
+      <div class="jwb-attachment-row" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--pill-bg); border: 1px solid var(--border); border-radius: 6px; margin-top: 10px; font-size: 0.85rem;">
+        <div style="display: flex; align-items: center; gap: 6px;">
           <i class="fa-solid fa-download" style="color: var(--text-sub);"></i>
-          <a href="${fileUrl}" download target="_blank" class="jwb-attachment-link">${fileName} (${fileSize || '0KB'})</a>
-          <span class="jwb-attachment-count">+${downloadCount}</span>
+          <a href="${fileUrl}" download target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 500;">
+            ${fileName || '첨부파일'} (${fileSize || '0KB'})
+          </a>
+          <span style="color: #ef4444; font-weight: 600; margin-left: 4px;">+${downloadCount}</span>
         </div>
-        <div class="jwb-attachment-date"><i class="fa-regular fa-clock"></i> ${dateStr}</div>
+        <div style="color: var(--text-sub); font-size: 0.8rem;"><i class="fa-regular fa-clock"></i> ${dateStr}</div>
       </div>
     `;
   }
 
-  // 1. 공지사항 데이터 로드 및 렌더링 (첨부파일 아이콘 및 상세보기 모달)
+  // 1. 공지사항 데이터 로드 및 렌더링 (첨부파일 아이콘 및 상세보기 모달 연동)
   let allNotices = [];
   let currentNoticePage = 1;
 
@@ -116,10 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('notice-list');
     if (!list) return;
     try {
-      const { data: notices } = await supabase.from('notices').select('*');
+      const { data: notices, error } = await supabase.from('notices').select('*');
+      if (error) {
+        list.innerHTML = '<li style="text-align:center; padding:20px; color:var(--text-sub);">공지사항을 불러오지 못했습니다.</li>';
+        return;
+      }
       allNotices = notices ? notices.sort((a, b) => b.id - a.id) : [];
       renderNotices();
-    } catch (e) { list.innerHTML = '<li style="text-align:center;">공지 로드 실패</li>'; }
+    } catch (e) {
+      list.innerHTML = '<li style="text-align:center; padding:20px; color:var(--text-sub);">서버 연결 오류</li>';
+    }
   }
 
   window.filterNotices = () => { currentNoticePage = 1; renderNotices(); };
@@ -128,10 +100,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderNotices() {
     const list = document.getElementById('notice-list');
     if (!list) return;
+
     const cat = document.getElementById('notice-category-filter')?.value || '';
     const kw = document.getElementById('notice-search-input')?.value.toLowerCase().trim() || '';
 
-    const filtered = allNotices.filter(n => (cat === '' || (n.category || '공지') === cat) && ((n.title || '').toLowerCase().includes(kw) || (n.content || '').toLowerCase().includes(kw)));
+    const filtered = allNotices.filter(n => {
+      const matchCat = cat === '' || (n.category || '공지') === cat;
+      const matchKw = (n.title || '').toLowerCase().includes(kw) || (n.content || '').toLowerCase().includes(kw);
+      return matchCat && matchKw;
+    });
+
     const totalPages = Math.ceil(filtered.length / 5) || 1;
     if (currentNoticePage > totalPages) currentNoticePage = totalPages;
     const currentItems = filtered.slice((currentNoticePage - 1) * 5, currentNoticePage * 5);
@@ -144,22 +122,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     currentItems.forEach(item => {
-      const safeTitle = (item.title || '').replace(/'/g, "\\'");
-      const safeContent = (item.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+      const safeTitle = (item.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeContent = (item.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/"/g, '&quot;');
+      
       const hasFile = item.file_url && item.file_url.trim() !== '';
       const fileIcon = hasFile ? `<i class="fa-solid fa-file-arrow-down" style="color: #38bdf8; margin-right: 6px;" title="첨부파일 있음"></i>` : '';
 
       list.innerHTML += `
         <li class="jwb-post-item hover-target" style="cursor: pointer; padding: 15px; border-bottom: 1px solid var(--border);" onclick="openNoticeModal('${safeTitle}', '${item.date || ''}', '${safeContent}', '${item.file_name || ''}', '${item.file_size || ''}', '${item.file_url || ''}')">
-          <div class="jwb-post-header">
+          <div class="jwb-post-header" style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
             <div>
               <span style="color:var(--accent); font-weight:700; margin-right:8px; font-size:0.85rem; padding:2px 6px; background:var(--pill-bg); border-radius:4px;">[${item.category || '공지'}]</span>
               ${fileIcon}
               <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${item.title}</span>
             </div>
-            <span class="jwb-post-meta" style="font-size:0.8rem; color:var(--text-sub);">${item.date}</span>
+            <span class="jwb-post-meta" style="font-size:0.8rem; color:var(--text-sub);">${item.date || ''}</span>
           </div>
-          <div class="jwb-post-content" style="margin-top:6px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size:0.9rem; color:var(--text-sub);">${item.content}</div>
+          <div class="jwb-post-content" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size:0.9rem; color:var(--text-sub);">${item.content}</div>
         </li>
       `;
     });
@@ -168,17 +147,23 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 1; i <= totalPages; i++) {
       btns += `<button onclick="changeNoticePage(${i})" style="padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:${i === currentNoticePage ? 'var(--accent)' : 'var(--pill-bg)'}; color:#fff; cursor:pointer; font-weight:600; margin:0 2px;">${i}</button>`;
     }
-    document.getElementById('notice-pagination').innerHTML = btns;
+    const pageContainer = document.getElementById('notice-pagination');
+    if (pageContainer) pageContainer.innerHTML = btns;
   }
 
+  // 공지사항 모달 제어
   const noticeModal = document.getElementById('notice-modal');
-  document.querySelector('.notice-modal-close')?.addEventListener('click', () => noticeModal.classList.remove('active'));
-  window.openNoticeModal = (title, date, content, fileName, fileSize, fileUrl) => {
+  document.querySelector('.notice-modal-close')?.addEventListener('click', () => noticeModal?.classList.remove('active'));
+  if (noticeModal) {
+    noticeModal.addEventListener('click', (e) => { if (e.target === noticeModal) noticeModal.classList.remove('active'); });
+  }
+
+  window.openNoticeModal = function(title, date, content, fileName, fileSize, fileUrl) {
     document.getElementById('notice-modal-title').textContent = title;
     document.getElementById('notice-modal-date').textContent = date;
-    document.getElementById('notice-modal-content').textContent = content;
+    document.getElementById('notice-modal-content').textContent = content.replace(/\\n/g, '\n');
     document.getElementById('notice-modal-attachment').innerHTML = createAttachmentHTML(fileName, fileSize, fileUrl, 0, date);
-    noticeModal.classList.add('active');
+    noticeModal?.classList.add('active');
   };
 
   // 2. 자유게시판 데이터 로드 및 렌더링 (제목 클릭 시 상세보기 및 첨부파일 아이콘)
@@ -189,10 +174,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('public-free-list');
     if (!list) return;
     try {
-      const { data: posts } = await supabase.from('free_board').select('*');
+      const { data: posts, error } = await supabase.from('free_board').select('*');
+      if (error) {
+        list.innerHTML = '<li style="text-align:center; padding:20px; color:var(--text-sub);">게시글을 불러오지 못했습니다.</li>';
+        return;
+      }
       allFreePosts = posts ? posts.sort((a, b) => b.id - a.id) : [];
       renderFreeBoard();
-    } catch (e) { list.innerHTML = '<li style="text-align:center;">자유게시판 로드 실패</li>'; }
+    } catch (e) {
+      list.innerHTML = '<li style="text-align:center; padding:20px; color:var(--text-sub);">서버 연결 오류</li>';
+    }
   }
 
   window.filterFreeBoard = () => { currentFreePage = 1; renderFreeBoard(); };
@@ -201,9 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderFreeBoard() {
     const list = document.getElementById('public-free-list');
     if (!list) return;
-    const kw = document.getElementById('free-search-input')?.value.toLowerCase().trim() || '';
 
+    const kw = document.getElementById('free-search-input')?.value.toLowerCase().trim() || '';
     const filtered = allFreePosts.filter(p => (p.title || '').toLowerCase().includes(kw) || (p.content || '').toLowerCase().includes(kw) || (p.author || '').toLowerCase().includes(kw));
+
     const totalPages = Math.ceil(filtered.length / 5) || 1;
     if (currentFreePage > totalPages) currentFreePage = totalPages;
     const currentItems = filtered.slice((currentFreePage - 1) * 5, currentFreePage * 5);
@@ -216,22 +208,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     currentItems.forEach(f => {
-      const safeTitle = (f.title || '').replace(/'/g, "\\'");
-      const safeAuthor = (f.author || '').replace(/'/g, "\\'");
-      const safeContent = (f.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+      const safeTitle = (f.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeAuthor = (f.author || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeContent = (f.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/"/g, '&quot;');
+
       const hasFile = f.file_url && f.file_url.trim() !== '';
       const fileIcon = hasFile ? `<i class="fa-solid fa-file-arrow-down" style="color: #38bdf8; margin-right: 6px;" title="첨부파일 있음"></i>` : '';
 
       list.innerHTML += `
         <li class="jwb-post-item" style="padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer;" onclick="openFreeModal('${safeTitle}', '${safeAuthor}', '${f.date || ''}', '${safeContent}', '${f.file_name || ''}', '${f.file_size || ''}', '${f.file_url || ''}')">
-          <div class="jwb-post-header">
+          <div class="jwb-post-header" style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
             <div>
               ${fileIcon}
               <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${f.title}</span>
             </div>
             <span class="jwb-post-meta" style="font-size:0.8rem; color:var(--text-sub);">by ${f.author}</span>
           </div>
-          <div class="jwb-post-content" style="margin-top:6px; font-size:0.9rem; color:var(--text-sub);">${f.content}</div>
+          <div class="jwb-post-content" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size:0.9rem; color:var(--text-sub);">${f.content}</div>
         </li>
       `;
     });
@@ -240,43 +233,28 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 1; i <= totalPages; i++) {
       btns += `<button onclick="changeFreePage(${i})" style="padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:${i === currentFreePage ? 'var(--accent)' : 'var(--pill-bg)'}; color:#fff; cursor:pointer; font-weight:600; margin:0 2px;">${i}</button>`;
     }
-    document.getElementById('free-pagination').innerHTML = btns;
+    const pageContainer = document.getElementById('free-pagination');
+    if (pageContainer) pageContainer.innerHTML = btns;
   }
 
+  // 자유게시판 모달 제어
   const freeModal = document.getElementById('free-modal');
-  document.querySelector('.free-modal-close')?.addEventListener('click', () => freeModal.classList.remove('active'));
-  window.openFreeModal = (title, author, date, content, fileName, fileSize, fileUrl) => {
+  document.querySelector('.free-modal-close')?.addEventListener('click', () => freeModal?.classList.remove('active'));
+  if (freeModal) {
+    freeModal.addEventListener('click', (e) => { if (e.target === freeModal) freeModal.classList.remove('active'); });
+  }
+
+  window.openFreeModal = function(title, author, date, content, fileName, fileSize, fileUrl) {
     document.getElementById('free-modal-title').textContent = title;
     document.getElementById('free-modal-author').textContent = author;
     document.getElementById('free-modal-date').textContent = date;
-    document.getElementById('free-modal-content').textContent = content;
+    document.getElementById('free-modal-content').textContent = content.replace(/\\n/g, '\n');
     document.getElementById('free-modal-attachment').innerHTML = createAttachmentHTML(fileName, fileSize, fileUrl, 0, date);
-    freeModal.classList.add('active');
+    freeModal?.classList.add('active');
   };
 
-  // 자유게시판 글 등록
-  document.getElementById('free-board-form')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!currentUser) return alert('로그인 후 이용해주세요.');
-    const payload = {
-      title: document.getElementById('free-title').value,
-      author: currentUser,
-      content: document.getElementById('free-content').value,
-      file_name: document.getElementById('free-file-name').value || null,
-      file_url: document.getElementById('free-file-url').value || null,
-      file_size: document.getElementById('free-file-size').value || null,
-      date: new Date().toLocaleString()
-    };
-    const { error } = await supabase.from('free_board').insert([payload]);
-    if (!error) {
-      alert('등록되었습니다!');
-      e.target.reset();
-      loadFreeBoard();
-    } else {
-      alert('등록 실패: ' + error.message);
-    }
-  });
-
+  // 초기 실행
   loadNotices();
   loadFreeBoard();
+
 });
