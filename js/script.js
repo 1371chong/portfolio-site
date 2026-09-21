@@ -1,292 +1,68 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   
   const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzcD0H9nJ7_Xg5QrJrjoMQaQOS8E0Nj82tYXzq5EK_-_n1rwbkMyACe0NfCb22-uP5p/exec";
 
-  // 0. 다크 / 라이트 테마 전환 토글
+  // 테마 전환
   const themeToggleBtn = document.getElementById('theme-toggle');
-  const savedTheme = localStorage.getItem('theme');
-
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
-  }
-
+  if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     });
   }
 
-  // 1. 헤더 스크롤 감지 모션
-  const header = document.getElementById('header');
-  const handleHeaderScroll = () => {
-    if (window.scrollY > 40) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  };
+  // 헤더 스크롤
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }, { passive: true });
 
-  window.addEventListener('scroll', handleHeaderScroll, { passive: true });
-  handleHeaderScroll();
-
-  // 2. 히어로 자동 캐러셀 슬라이더
-  const slides = document.querySelectorAll('.hero-slide');
-  const prevBtn = document.querySelector('.prev-btn');
-  const nextBtn = document.querySelector('.next-btn');
-  const dots = document.querySelectorAll('.dot');
-  let currentSlide = 0;
-  let slideInterval;
-
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.remove('active');
-      if (dots[i]) dots[i].classList.remove('active');
-    });
-    currentSlide = (index + slides.length) % slides.length;
-    slides[currentSlide].classList.add('active');
-    if (dots[currentSlide]) dots[currentSlide].classList.add('active');
-  }
-
-  function nextSlide() { showSlide(currentSlide + 1); }
-  function prevSlide() { showSlide(currentSlide - 1); }
-  function startAutoSlide() { stopAutoSlide(); slideInterval = setInterval(nextSlide, 5000); }
-  function stopAutoSlide() { if (slideInterval) clearInterval(slideInterval); }
-
-  if (nextBtn) { nextBtn.addEventListener('click', () => { nextSlide(); startAutoSlide(); }); }
-  if (prevBtn) { prevBtn.addEventListener('click', () => { prevSlide(); startAutoSlide(); }); }
-  dots.forEach(dot => {
-    dot.addEventListener('click', (e) => {
-      const index = parseInt(e.target.getAttribute('data-index'));
-      showSlide(index);
-      startAutoSlide();
-    });
-  });
-
-  const sliderContainer = document.querySelector('.hero-slider-container');
-  if (sliderContainer) {
-    sliderContainer.addEventListener('mouseenter', stopAutoSlide);
-    sliderContainer.addEventListener('mouseleave', startAutoSlide);
-  }
-  startAutoSlide();
-
-  // 3. 커스텀 마우스 커서
+  // 커서
   const cursorDot = document.querySelector('.custom-cursor-dot');
   const cursorBlur = document.querySelector('.custom-cursor-blur');
-
   if (window.innerWidth > 768 && cursorDot && cursorBlur) {
     window.addEventListener('mousemove', (e) => {
-      const { clientX, clientY } = e;
-      cursorDot.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
-      cursorBlur.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
+      cursorDot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+      cursorBlur.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
     });
-    document.querySelectorAll('.hover-target').forEach(target => {
-      target.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-      target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    document.querySelectorAll('.hover-target').forEach(t => {
+      t.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      t.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
     });
   }
 
-  // 4. 햄버거 메뉴 및 정밀해진 ScrollSpy 로직 (TOC & Nav 링크 동기화)
-  const hamburgerBtn = document.querySelector('.hamburger-btn');
-  const navMenu = document.querySelector('.nav-menu');
-  const navLinks = document.querySelectorAll('.nav-link');
+  // ScrollSpy
   const sections = document.querySelectorAll('section');
   const tocLinks = document.querySelectorAll('.toc-link');
-
-  if (hamburgerBtn && navMenu) {
-    hamburgerBtn.addEventListener('click', () => {
-      hamburgerBtn.classList.toggle('open');
-      navMenu.classList.toggle('active');
-    });
-  }
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (hamburgerBtn) hamburgerBtn.classList.remove('open');
-      if (navMenu) navMenu.classList.remove('active');
-      const targetId = link.getAttribute('href');
-      const targetSection = document.querySelector(targetId);
-      if (targetSection) targetSection.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
-
-  // 스크롤 시 각 섹션의 화면 위치를 정밀하게 판단하여 active 부여
+  const navLinks = document.querySelectorAll('.nav-link');
   window.addEventListener('scroll', () => {
     let current = '';
-    const scrollPosition = window.pageYOffset + 250; // 화면 상단 기준 인식 범위를 최적화
-
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-        current = section.getAttribute('id');
-      }
+    const pos = window.pageYOffset + 250;
+    sections.forEach(s => {
+      if (pos >= s.offsetTop && pos < s.offsetTop + s.offsetHeight) current = s.getAttribute('id');
     });
-
-    // 맨 하단 도달 시 마지막 섹션 선택 보정
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
-      if (sections.length > 0) {
-        current = sections[sections.length - 1].getAttribute('id');
-      }
-    }
-
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+    navLinks.forEach(l => {
+      l.classList.remove('active');
+      if (l.getAttribute('href') === `#${current}`) l.classList.add('active');
     });
-    tocLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+    tocLinks.forEach(l => {
+      l.classList.remove('active');
+      if (l.getAttribute('href') === `#${current}`) l.classList.add('active');
     });
   }, { passive: true });
 
-  // 5. 일반 섹션 페이드인 Observer
-  const scrollReveals = document.querySelectorAll('.scroll-reveal');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        if (entry.target.id === 'skills') {
-          document.querySelectorAll('.skill-bar-fill').forEach(bar => {
-            bar.style.width = bar.getAttribute('data-progress');
-          });
-        }
-      }
-    });
-  }, { threshold: 0.15 });
-  scrollReveals.forEach(el => revealObserver.observe(el));
-
-  // 6. 뷰 모드 전환 (그리드/리스트)
-  const viewBtns = document.querySelectorAll('.view-btn');
-  const portfolioWrapper = document.getElementById('portfolio-wrapper');
-
-  viewBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      viewBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const viewMode = btn.getAttribute('data-view');
-      if (viewMode === 'list') {
-        portfolioWrapper.classList.remove('grid-view');
-        portfolioWrapper.classList.add('list-view');
-      } else {
-        portfolioWrapper.classList.remove('list-view');
-        portfolioWrapper.classList.add('grid-view');
-      }
-    });
-  });
-
-  // 7. 세그먼트 필터 & 검색
-  const segmentBtns = document.querySelectorAll('.segment-btn');
-  const searchInput = document.getElementById('portfolio-search');
-  let currentFilter = 'all';
-
-  function filterPortfolio() {
-    const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    let visibleIndex = 0;
-
-    document.querySelectorAll('.portfolio-card').forEach(card => {
-      const categories = card.getAttribute('data-category') || '';
-      const title = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
-      const desc = card.querySelector('.card-desc')?.textContent.toLowerCase() || '';
-      const matchesFilter = (currentFilter === 'all') || categories.includes(currentFilter);
-      const matchesSearch = !searchText || title.includes(searchText) || desc.includes(searchText);
-
-      if (matchesFilter && matchesSearch) {
-        card.style.display = portfolioWrapper.classList.contains('list-view') ? 'flex' : 'block';
-        card.style.transition = 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-        setTimeout(() => {
-          card.style.opacity = '1';
-          card.style.transform = 'scale(1) translateY(0) rotate(0deg)';
-        }, 60 + (visibleIndex * 70)); 
-        visibleIndex++;
-      } else {
-        card.style.transition = 'all 0.3s ease';
-        card.style.opacity = '0';
-        card.style.transform = 'scale(0.85) translateY(30px) rotate(-2deg)';
-        setTimeout(() => { card.style.display = 'none'; }, 300);
-      }
-    });
-  }
-
-  segmentBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      segmentBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = btn.getAttribute('data-filter');
-      
-      const wrapper = document.getElementById('portfolio-wrapper');
-      if (wrapper) {
-        wrapper.style.transform = 'scale(0.99)';
-        setTimeout(() => wrapper.style.transform = 'scale(1)', 200);
-      }
-
-      filterPortfolio();
-    });
-  });
-  if (searchInput) searchInput.addEventListener('input', filterPortfolio);
-
-  // 8. 가로 스크롤 마우스 휠 지원
-  if (portfolioWrapper) {
-    portfolioWrapper.addEventListener('wheel', (e) => {
-      if (portfolioWrapper.classList.contains('grid-view') && e.deltaY !== 0) {
-        e.preventDefault();
-        portfolioWrapper.scrollLeft += e.deltaY;
-      }
-    }, { passive: false });
-  }
-
-  // 9. FAQ 토글
-  document.querySelectorAll('.faq-question').forEach(q => {
-    q.addEventListener('click', () => { q.parentElement.classList.toggle('active'); });
-  });
-
-  // 10. 비디오 라이트박스 제어
-  const videoModal = document.getElementById('video-modal');
-  const modalIframe = document.getElementById('modal-iframe');
-  const modalClose = document.querySelector('#video-modal .modal-close');
-
-  const closeModal = () => {
-    if (videoModal) videoModal.classList.remove('active');
-    if (modalIframe) modalIframe.src = '';
-  };
-  if (modalClose) modalClose.addEventListener('click', closeModal);
-  if (videoModal) videoModal.addEventListener('click', (e) => { if (e.target === videoModal) closeModal(); });
-
-
-  /* =========================================================
-     ★ Supabase 인증 및 데이터 연동 영역
-     ========================================================= */
-
-  async function hashPassword(password) {
-    const msgUint8 = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
+  // 인증 시스템
   let currentUser = localStorage.getItem('jwb_user') || null;
-
   const authModal = document.getElementById('auth-modal');
   const btnLoginModal = document.getElementById('btn-login-modal');
   const btnLogout = document.getElementById('btn-logout');
   const btnWithdraw = document.getElementById('btn-withdraw');
   const userGreeting = document.getElementById('user-greeting');
-  
-  const loginViewArea = document.getElementById('login-view-area');
-  const signupViewArea = document.getElementById('signup-view-area');
-  const findIdViewArea = document.getElementById('find-id-view-area');
-  const findPwViewArea = document.getElementById('find-pw-view-area');
-  
-  const btnGoSignup = document.getElementById('go-to-signup');
-  const btnGoFindId = document.getElementById('go-to-find-id');
-  const btnGoFindPw = document.getElementById('go-to-find-pw');
-  const btnsGoLogin = document.querySelectorAll('.go-to-login-btn');
 
   function updateAuthUI() {
     const freeForm = document.getElementById('free-board-form');
@@ -297,10 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btnLoginModal) btnLoginModal.style.display = 'none';
       if (btnLogout) btnLogout.style.display = 'inline-block';
       if (btnWithdraw) btnWithdraw.style.display = 'inline-block';
-      if (userGreeting) {
-        userGreeting.style.display = 'inline-block';
-        userGreeting.textContent = `${currentUser}님 환영합니다`;
-      }
+      if (userGreeting) { userGreeting.style.display = 'inline-block'; userGreeting.textContent = `${currentUser}님 환영합니다`; }
       if (freeForm) freeForm.style.display = 'block';
       if (freeLoginMsg) freeLoginMsg.style.display = 'none';
       if (freeAuthorInput) freeAuthorInput.value = currentUser;
@@ -309,276 +82,59 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btnLogout) btnLogout.style.display = 'none';
       if (btnWithdraw) btnWithdraw.style.display = 'none';
       if (userGreeting) userGreeting.style.display = 'none';
-      
       if (freeForm) freeForm.style.display = 'none';
       if (freeLoginMsg) freeLoginMsg.style.display = 'block';
     }
   }
   updateAuthUI();
 
-  function hideAllAuthViews() {
-    if (loginViewArea) loginViewArea.style.display = 'none';
-    if (signupViewArea) signupViewArea.style.display = 'none';
-    if (findIdViewArea) findIdViewArea.style.display = 'none';
-    if (findPwViewArea) findPwViewArea.style.display = 'none';
-  }
+  if (btnLoginModal) btnLoginModal.addEventListener('click', () => authModal.classList.add('active'));
+  document.querySelector('.auth-modal-close')?.addEventListener('click', () => authModal.classList.remove('active'));
 
-  if(btnLoginModal) btnLoginModal.addEventListener('click', () => {
-    hideAllAuthViews();
-    if (loginViewArea) loginViewArea.style.display = 'block';
-    if (authModal) authModal.classList.add('active');
-  });
-  
-  const authCloseBtn = document.querySelector('.auth-modal-close');
-  if (authCloseBtn) authCloseBtn.addEventListener('click', () => authModal.classList.remove('active'));
-  if (authModal) authModal.addEventListener('click', (e) => { if(e.target === authModal) authModal.classList.remove('active'); });
+  if (btnLogout) btnLogout.addEventListener('click', () => { localStorage.removeItem('jwb_user'); currentUser = null; updateAuthUI(); alert('로그아웃 되었습니다.'); });
 
-  if(btnGoSignup) btnGoSignup.addEventListener('click', () => { hideAllAuthViews(); signupViewArea.style.display = 'block'; });
-  if(btnGoFindId) btnGoFindId.addEventListener('click', () => { hideAllAuthViews(); findIdViewArea.style.display = 'block'; });
-  if(btnGoFindPw) btnGoFindPw.addEventListener('click', () => { hideAllAuthViews(); findPwViewArea.style.display = 'block'; });
-  
-  btnsGoLogin.forEach(btn => {
-    btn.addEventListener('click', () => { hideAllAuthViews(); loginViewArea.style.display = 'block'; });
-  });
-
-  if (btnLogout) {
-    btnLogout.addEventListener('click', () => {
-      localStorage.removeItem('jwb_user');
-      currentUser = null;
-      updateAuthUI();
-      alert('성공적으로 로그아웃 되었습니다.');
-    });
-  }
-
-  if (btnWithdraw) {
-    btnWithdraw.addEventListener('click', async () => {
-      if (!currentUser) return;
-      if (!confirm(`정말 ${currentUser} 계정을 탈퇴하시겠습니까?\n탈퇴 시 회원 정보가 영구적으로 삭제됩니다.`)) return;
-
-      const { error } = await supabase
-        .from('users')
-        .delete()
-        .eq('username', currentUser);
-
-      if (!error) {
-        alert('회원탈퇴가 정상적으로 처리되었습니다.');
-        localStorage.removeItem('jwb_user');
-        currentUser = null;
-        updateAuthUI();
-      } else {
-        alert('회원탈퇴 처리에 실패했습니다.');
-        console.error(error);
-      }
-    });
-  }
-
-  const termAll = document.getElementById('term-all');
-  const termItems = document.querySelectorAll('.term-item');
-
-  if (termAll) {
-    termAll.addEventListener('change', (e) => { termItems.forEach(term => term.checked = e.target.checked); });
-    termItems.forEach(term => {
-      term.addEventListener('change', () => { termAll.checked = Array.from(termItems).every(t => t.checked); });
-    });
-  }
-
-  const signupForm = document.getElementById('signup-form');
-  if (signupForm) {
-    signupForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('signup-id').value;
-      const pw = document.getElementById('signup-pw').value;
-      const name = document.getElementById('signup-name').value;
-      
-      const term1 = document.getElementById('term-1').checked;
-      const term2 = document.getElementById('term-2').checked;
-      const term3 = document.getElementById('term-3').checked;
-      const term4 = document.getElementById('term-4').checked;
-
-      if (!term1 || !term2 || !term3) return alert('필수 약관에 모두 동의하셔야 합니다.');
-
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('*')
-        .eq('userid', id)
-        .single();
-
-      if (existingUser) {
-        return alert('이미 존재하는 아이디입니다.');
-      }
-
-      const hashedPassword = await hashPassword(pw);
-      const date = new Date().toLocaleString();
-
-      const { error } = await supabase
-        .from('users')
-        .insert([{ userid: id, password: hashedPassword, username: name, marketing: term4, created_at: date }]);
-
-      if (!error) {
-        alert('회원가입 완료! 이제 로그인 해주세요.');
-        signupForm.reset();
-        hideAllAuthViews();
-        loginViewArea.style.display = 'block';
-      } else {
-        alert('오류가 발생했습니다.');
-        console.error(error);
-      }
-    });
-  }
-
-  const loginForm = document.getElementById('login-form');
-  if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('login-id').value;
-      const pw = document.getElementById('login-pw').value;
-
-      const hashedPassword = await hashPassword(pw);
-
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('userid', id)
-        .eq('password', hashedPassword)
-        .single();
-
-      if (!error && data) {
-        currentUser = data.username;
-        localStorage.setItem('jwb_user', currentUser);
-        authModal.classList.remove('active');
-        loginForm.reset();
-        updateAuthUI();
-      } else {
-        alert('아이디나 비밀번호가 일치하지 않습니다.');
-      }
-    });
-  }
-
-  const findIdForm = document.getElementById('find-id-form');
-  if (findIdForm) {
-    findIdForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('find-id-name').value;
-
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('username', name)
-        .single();
-
-      if (!error && data) {
-        alert(`회원님의 아이디는 [ ${data.userid} ] 입니다.`);
-        hideAllAuthViews();
-        loginViewArea.style.display = 'block';
-      } else {
-        alert('일치하는 회원 정보가 없습니다.');
-      }
-    });
-  }
-
-  const findPwForm = document.getElementById('find-pw-form');
-  if (findPwForm) {
-    findPwForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('find-pw-id').value;
-      const name = document.getElementById('find-pw-name').value;
-
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('userid', id)
-        .eq('username', name)
-        .single();
-
-      if (!error && data) {
-        const tempPw = Math.floor(100000 + Math.random() * 900000).toString();
-        const hashedTempPw = await hashPassword(tempPw);
-
-        const { error: updateError } = await supabase
-          .from('users')
-          .update({ password: hashedTempPw })
-          .eq('userid', id);
-
-        if (!updateError) {
-          alert(`임시 비밀번호가 발급되었습니다: [ ${tempPw} ]\n\n로그인 후 반드시 비밀번호를 변경해 주세요.`);
-          hideAllAuthViews();
-          loginViewArea.style.display = 'block';
-        } else {
-          alert('임시 비밀번호 발급 중 오류가 발생했습니다.');
-        }
-      } else {
-        alert('입력하신 정보와 일치하는 계정이 없습니다.');
-      }
-    });
-  }
-
-  // 첨부파일 HTML 생성 헬퍼 함수
+  // 첨부파일 HTML 헬퍼 함수
   function createAttachmentHTML(fileName, fileSize, fileUrl, downloadCount = 0, dateStr = '') {
     if (!fileUrl) return '';
     return `
       <div class="jwb-attachment-row">
         <div class="jwb-attachment-left">
           <i class="fa-solid fa-download" style="color: var(--text-sub);"></i>
-          <a href="${fileUrl}" download target="_blank" class="jwb-attachment-link">
-            ${fileName} (${fileSize || '0KB'})
-          </a>
+          <a href="${fileUrl}" download target="_blank" class="jwb-attachment-link">${fileName} (${fileSize || '0KB'})</a>
           <span class="jwb-attachment-count">+${downloadCount}</span>
         </div>
-        <div class="jwb-attachment-date">
-          <i class="fa-regular fa-clock"></i> ${dateStr}
-        </div>
+        <div class="jwb-attachment-date"><i class="fa-regular fa-clock"></i> ${dateStr}</div>
       </div>
     `;
   }
 
-  // 1. 공지사항 데이터 불러오기
+  // 1. 공지사항 데이터 로드 및 렌더링 (첨부파일 아이콘 및 상세보기 모달)
   let allNotices = [];
   let currentNoticePage = 1;
-  const noticesPerPage = 5;
 
   async function loadNotices() {
     const list = document.getElementById('notice-list');
-    if(!list) return;
+    if (!list) return;
     try {
-      const { data: notices, error } = await supabase.from('notices').select('*');
-      if (error || !notices) {
-        allNotices = [];
-      } else {
-        notices.sort((a, b) => b.id - a.id);
-        allNotices = notices;
-      }
+      const { data: notices } = await supabase.from('notices').select('*');
+      allNotices = notices ? notices.sort((a, b) => b.id - a.id) : [];
       renderNotices();
-    } catch (e) { 
-      list.innerHTML = '<li style="text-align:center;">서버와 연결할 수 없습니다.</li>'; 
-    }
+    } catch (e) { list.innerHTML = '<li style="text-align:center;">공지 로드 실패</li>'; }
   }
 
-  window.filterNotices = function() {
-    currentNoticePage = 1;
-    renderNotices();
-  };
-
-  window.changeNoticePage = function(page) {
-    currentNoticePage = page;
-    renderNotices();
-  };
+  window.filterNotices = () => { currentNoticePage = 1; renderNotices(); };
+  window.changeNoticePage = (p) => { currentNoticePage = p; renderNotices(); };
 
   function renderNotices() {
     const list = document.getElementById('notice-list');
     if (!list) return;
+    const cat = document.getElementById('notice-category-filter')?.value || '';
+    const kw = document.getElementById('notice-search-input')?.value.toLowerCase().trim() || '';
 
-    const selectedCat = document.getElementById('notice-category-filter')?.value || '';
-    const searchKeyword = document.getElementById('notice-search-input')?.value.toLowerCase().trim() || '';
-
-    const filtered = allNotices.filter(n => {
-      const matchCat = selectedCat === '' || (n.category || '공지') === selectedCat;
-      const matchKey = (n.title || '').toLowerCase().includes(searchKeyword) || (n.content || '').toLowerCase().includes(searchKeyword);
-      return matchCat && matchKey;
-    });
-
-    const totalPages = Math.ceil(filtered.length / noticesPerPage) || 1;
+    const filtered = allNotices.filter(n => (cat === '' || (n.category || '공지') === cat) && ((n.title || '').toLowerCase().includes(kw) || (n.content || '').toLowerCase().includes(kw)));
+    const totalPages = Math.ceil(filtered.length / 5) || 1;
     if (currentNoticePage > totalPages) currentNoticePage = totalPages;
-    const currentItems = filtered.slice((currentNoticePage - 1) * noticesPerPage, currentNoticePage * noticesPerPage);
+    const currentItems = filtered.slice((currentNoticePage - 1) * 5, currentNoticePage * 5);
 
     list.innerHTML = '';
     if (currentItems.length === 0) {
@@ -589,46 +145,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     currentItems.forEach(item => {
       const safeTitle = (item.title || '').replace(/'/g, "\\'");
-      const safeDate = item.date || '';
       const safeContent = (item.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
-      const categoryTag = item.category || '공지';
-      const fileHtml = createAttachmentHTML(item.file_name, item.file_size, item.file_url, item.download_count || 0, item.date);
+      const hasFile = item.file_url && item.file_url.trim() !== '';
+      const fileIcon = hasFile ? `<i class="fa-solid fa-file-arrow-down" style="color: #38bdf8; margin-right: 6px;" title="첨부파일 있음"></i>` : '';
 
       list.innerHTML += `
-        <li class="jwb-post-item hover-target" style="cursor: pointer; padding: 15px; border-bottom: 1px solid var(--border);">
-          <div class="jwb-post-header" onclick="openNoticeModal('${safeTitle}', '${safeDate}', '${safeContent}')">
-            <span style="color:var(--accent); font-weight:700; margin-right:8px; font-size:0.85rem; padding:2px 6px; background:var(--pill-bg); border-radius:4px;">[${categoryTag}]</span>
-            <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${item.title}</span>
-            <span class="jwb-post-meta" style="float:right; font-size:0.8rem; color:var(--text-sub);">${item.date}</span>
+        <li class="jwb-post-item hover-target" style="cursor: pointer; padding: 15px; border-bottom: 1px solid var(--border);" onclick="openNoticeModal('${safeTitle}', '${item.date || ''}', '${safeContent}', '${item.file_name || ''}', '${item.file_size || ''}', '${item.file_url || ''}')">
+          <div class="jwb-post-header">
+            <div>
+              <span style="color:var(--accent); font-weight:700; margin-right:8px; font-size:0.85rem; padding:2px 6px; background:var(--pill-bg); border-radius:4px;">[${item.category || '공지'}]</span>
+              ${fileIcon}
+              <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${item.title}</span>
+            </div>
+            <span class="jwb-post-meta" style="font-size:0.8rem; color:var(--text-sub);">${item.date}</span>
           </div>
-          <div class="jwb-post-content" onclick="openNoticeModal('${safeTitle}', '${safeDate}', '${safeContent}')" style="margin-top:6px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size:0.9rem; color:var(--text-sub);">${item.content}</div>
-          ${fileHtml}
+          <div class="jwb-post-content" style="margin-top:6px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size:0.9rem; color:var(--text-sub);">${item.content}</div>
         </li>
       `;
     });
 
-    const pageContainer = document.getElementById('notice-pagination');
     let btns = '';
     for (let i = 1; i <= totalPages; i++) {
       btns += `<button onclick="changeNoticePage(${i})" style="padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:${i === currentNoticePage ? 'var(--accent)' : 'var(--pill-bg)'}; color:#fff; cursor:pointer; font-weight:600; margin:0 2px;">${i}</button>`;
     }
-    if(pageContainer) pageContainer.innerHTML = btns;
+    document.getElementById('notice-pagination').innerHTML = btns;
   }
 
   const noticeModal = document.getElementById('notice-modal');
-  const noticeModalClose = document.querySelector('.notice-modal-close');
-  if (noticeModalClose) noticeModalClose.addEventListener('click', () => noticeModal.classList.remove('active'));
-  if (noticeModal) noticeModal.addEventListener('click', (e) => { if(e.target === noticeModal) noticeModal.classList.remove('active'); });
-
-  window.openNoticeModal = function(title, date, content) {
+  document.querySelector('.notice-modal-close')?.addEventListener('click', () => noticeModal.classList.remove('active'));
+  window.openNoticeModal = (title, date, content, fileName, fileSize, fileUrl) => {
     document.getElementById('notice-modal-title').textContent = title;
     document.getElementById('notice-modal-date').textContent = date;
     document.getElementById('notice-modal-content').textContent = content;
+    document.getElementById('notice-modal-attachment').innerHTML = createAttachmentHTML(fileName, fileSize, fileUrl, 0, date);
     noticeModal.classList.add('active');
   };
 
-
-  // 2. 자유게시판 데이터 로드
+  // 2. 자유게시판 데이터 로드 및 렌더링 (제목 클릭 시 상세보기 및 첨부파일 아이콘)
   let allFreePosts = [];
   let currentFreePage = 1;
 
@@ -636,35 +189,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('public-free-list');
     if (!list) return;
     try {
-      const { data: posts, error } = await supabase.from('free_board').select('*');
-      if (error || !posts) {
-        allFreePosts = [];
-      } else {
-        posts.sort((a, b) => b.id - a.id);
-        allFreePosts = posts;
-      }
+      const { data: posts } = await supabase.from('free_board').select('*');
+      allFreePosts = posts ? posts.sort((a, b) => b.id - a.id) : [];
       renderFreeBoard();
-    } catch(e) {
-      list.innerHTML = '<li style="text-align:center;">자유게시판 로드 실패</li>';
-    }
+    } catch (e) { list.innerHTML = '<li style="text-align:center;">자유게시판 로드 실패</li>'; }
   }
 
-  window.filterFreeBoard = function() {
-    currentFreePage = 1;
-    renderFreeBoard();
-  };
-
-  window.changeFreePage = function(page) {
-    currentFreePage = page;
-    renderFreeBoard();
-  };
+  window.filterFreeBoard = () => { currentFreePage = 1; renderFreeBoard(); };
+  window.changeFreePage = (p) => { currentFreePage = p; renderFreeBoard(); };
 
   function renderFreeBoard() {
     const list = document.getElementById('public-free-list');
     if (!list) return;
-    const keyword = document.getElementById('free-search-input')?.value.toLowerCase().trim() || '';
+    const kw = document.getElementById('free-search-input')?.value.toLowerCase().trim() || '';
 
-    const filtered = allFreePosts.filter(p => (p.title || '').toLowerCase().includes(keyword) || (p.content || '').toLowerCase().includes(keyword) || (p.author || '').toLowerCase().includes(keyword));
+    const filtered = allFreePosts.filter(p => (p.title || '').toLowerCase().includes(kw) || (p.content || '').toLowerCase().includes(kw) || (p.author || '').toLowerCase().includes(kw));
     const totalPages = Math.ceil(filtered.length / 5) || 1;
     if (currentFreePage > totalPages) currentFreePage = totalPages;
     const currentItems = filtered.slice((currentFreePage - 1) * 5, currentFreePage * 5);
@@ -677,60 +216,48 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     currentItems.forEach(f => {
-      const fileHtml = createAttachmentHTML(f.file_name, f.file_size, f.file_url, f.download_count || 0, f.date || '방금 전');
+      const safeTitle = (f.title || '').replace(/'/g, "\\'");
+      const safeAuthor = (f.author || '').replace(/'/g, "\\'");
+      const safeContent = (f.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+      const hasFile = f.file_url && f.file_url.trim() !== '';
+      const fileIcon = hasFile ? `<i class="fa-solid fa-file-arrow-down" style="color: #38bdf8; margin-right: 6px;" title="첨부파일 있음"></i>` : '';
+
       list.innerHTML += `
-        <li class="jwb-post-item" style="padding: 15px; border-bottom: 1px solid var(--border);">
+        <li class="jwb-post-item" style="padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer;" onclick="openFreeModal('${safeTitle}', '${safeAuthor}', '${f.date || ''}', '${safeContent}', '${f.file_name || ''}', '${f.file_size || ''}', '${f.file_url || ''}')">
           <div class="jwb-post-header">
-            <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${f.title}</span>
-            <span class="jwb-post-meta" style="float:right; font-size:0.8rem; color:var(--text-sub);">by ${f.author}</span>
+            <div>
+              ${fileIcon}
+              <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${f.title}</span>
+            </div>
+            <span class="jwb-post-meta" style="font-size:0.8rem; color:var(--text-sub);">by ${f.author}</span>
           </div>
           <div class="jwb-post-content" style="margin-top:6px; font-size:0.9rem; color:var(--text-sub);">${f.content}</div>
-          ${fileHtml}
         </li>
       `;
     });
 
-    const pageContainer = document.getElementById('free-pagination');
     let btns = '';
     for (let i = 1; i <= totalPages; i++) {
       btns += `<button onclick="changeFreePage(${i})" style="padding:6px 12px; border-radius:6px; border:1px solid var(--border); background:${i === currentFreePage ? 'var(--accent)' : 'var(--pill-bg)'}; color:#fff; cursor:pointer; font-weight:600; margin:0 2px;">${i}</button>`;
     }
-    if(pageContainer) pageContainer.innerHTML = btns;
+    document.getElementById('free-pagination').innerHTML = btns;
   }
 
-  document.getElementById('free-file-input')?.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async () => {
-      try {
-        const res = await fetch(GAS_WEB_APP_URL, {
-          method: 'POST',
-          body: JSON.stringify({ fileName: file.name, mimeType: file.type, fileData: reader.result.split(',')[1] })
-        });
-        const result = await res.json();
-        if (result.status === 'success') {
-          document.getElementById('free-file-name').value = file.name;
-          document.getElementById('free-file-url').value = result.url;
-          document.getElementById('free-file-size').value = (file.size / 1024).toFixed(1) + 'KB';
-          alert('구글 드라이브 파일 업로드 완료!');
-        } else {
-          alert('업로드 실패: ' + result.message);
-        }
-      } catch (err) {
-        alert('파일 업로드 중 통신 오류가 발생했습니다.');
-      }
-    };
-  });
+  const freeModal = document.getElementById('free-modal');
+  document.querySelector('.free-modal-close')?.addEventListener('click', () => freeModal.classList.remove('active'));
+  window.openFreeModal = (title, author, date, content, fileName, fileSize, fileUrl) => {
+    document.getElementById('free-modal-title').textContent = title;
+    document.getElementById('free-modal-author').textContent = author;
+    document.getElementById('free-modal-date').textContent = date;
+    document.getElementById('free-modal-content').textContent = content;
+    document.getElementById('free-modal-attachment').innerHTML = createAttachmentHTML(fileName, fileSize, fileUrl, 0, date);
+    freeModal.classList.add('active');
+  };
 
+  // 자유게시판 글 등록
   document.getElementById('free-board-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!currentUser) {
-      alert('로그인한 회원만 글을 작성할 수 있습니다.');
-      return;
-    }
-
+    if (!currentUser) return alert('로그인 후 이용해주세요.');
     const payload = {
       title: document.getElementById('free-title').value,
       author: currentUser,
@@ -740,98 +267,16 @@ document.addEventListener('DOMContentLoaded', () => {
       file_size: document.getElementById('free-file-size').value || null,
       date: new Date().toLocaleString()
     };
-
     const { error } = await supabase.from('free_board').insert([payload]);
     if (!error) {
-      alert('자유게시판 글이 등록되었습니다!');
+      alert('등록되었습니다!');
       e.target.reset();
-      document.getElementById('free-file-name').value = '';
-      document.getElementById('free-file-url').value = '';
-      document.getElementById('free-file-size').value = '';
-      document.getElementById('free-author').value = currentUser;
       loadFreeBoard();
     } else {
       alert('등록 실패: ' + error.message);
     }
   });
 
-
-  // 3. 포트폴리오 데이터 불러오기
-  function getYoutubeId(url) {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  }
-  
-  const pfContainer = document.getElementById('portfolio-list-container');
-  
-  async function loadPortfolios() {
-    if(!pfContainer) return;
-    document.querySelectorAll('.dynamic-portfolio-card').forEach(el => el.remove());
-
-    try {
-      const { data: portfolios, error } = await supabase.from('portfolios').select('*');
-      if (error || !portfolios) return;
-
-      portfolios.sort((a, b) => b.id - a.id);
-
-      portfolios.forEach(item => {
-        const videoId = getYoutubeId(item.link || '');
-        let thumbUrl = item.thumb && item.thumb.trim() !== '' ? item.thumb : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'img/default_thumb.jpg');
-        const categoryName = item.category_name || item.category;
-        const workTime = item.work_time ? `<span class="meta-item"><i class="fa-solid fa-clock"></i> ${item.work_time}</span>` : '';
-
-        const cardHTML = `
-          <div class="portfolio-card dynamic-portfolio-card trigger-item hover-target zoom-card" 
-               data-category="${item.category}" data-video-id="${videoId}"
-               style="opacity: 0; transform: scale(0.9) translateY(30px);">
-            <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${(item.title || '').replace(/'/g, "\\'")}', '${item.tools}', '${(item.desc || '').replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">
-              <img src="${thumbUrl}" alt="포트폴리오 썸네일">
-              <div class="play-overlay"><span>VIEW DETAIL</span></div>
-            </div>
-            <div class="card-info">
-              <span class="card-tag">${categoryName}</span>
-              <h3 class="card-title">${item.title}</h3>
-              <p class="card-desc">${(item.desc || '').substring(0, 40)}...</p>
-              <div class="card-meta">
-                <span class="meta-item"><i class="fa-solid fa-wrench"></i> ${item.tools}</span>
-                ${workTime}
-              </div>
-            </div>
-          </div>
-        `;
-        pfContainer.insertAdjacentHTML('beforeend', cardHTML);
-      });
-      if(typeof filterPortfolio === 'function') filterPortfolio(); 
-    } catch(e) { console.error('포트폴리오 로드 실패'); }
-  }
-
-  window.openPortfolioModal = function(videoId, title, tools, desc) {
-    const videoModal = document.getElementById('video-modal');
-    const modalIframe = document.getElementById('modal-iframe');
-    
-    if(videoId) {
-      modalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-      modalIframe.style.display = 'block';
-    } else {
-      modalIframe.src = '';
-      modalIframe.style.display = 'none';
-    }
-    
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-desc').textContent = desc;
-    
-    const toolsContainer = document.getElementById('modal-tools');
-    toolsContainer.innerHTML = '';
-    tools.split(',').forEach(tool => {
-      if(tool.trim()) toolsContainer.innerHTML += `<span class="tool-badge">${tool.trim()}</span>`;
-    });
-    
-    videoModal.classList.add('active');
-  };
-
   loadNotices();
   loadFreeBoard();
-  loadPortfolios();
-
 });
