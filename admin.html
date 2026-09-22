@@ -87,8 +87,8 @@
     <div id="admin-login-container" style="max-width: 400px; margin: 10rem auto; padding: 2.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; text-align: center;">
       <h2 style="margin-bottom: 1.5rem; color: var(--text-main);">관리자 로그인</h2>
       <form id="admin-login-form">
-        <input type="text" id="admin-id" placeholder="관리자 아이디" required style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
-        <input type="password" id="admin-pw" placeholder="비밀번호" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+        <input type="text" id="admin-id" placeholder="관리자 아이디 (admin)" required style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+        <input type="password" id="admin-pw" placeholder="비밀번호 (admin1234)" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
         <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">로그인</button>
       </form>
     </div>
@@ -184,13 +184,6 @@
       
       const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzcD0H9nJ7_Xg5QrJrjoMQaQOS8E0Nj82tYXzq5EK_-_n1rwbkMyACe0NfCb22-uP5p/exec";
 
-      async function hashPassword(password) {
-        const msgUint8 = new TextEncoder().encode(password);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      }
-
       const loginContainer = document.getElementById('admin-login-container');
       const dashboardContainer = document.getElementById('admin-dashboard-container');
       const logoutBtn = document.getElementById('admin-logout-btn');
@@ -211,38 +204,21 @@
       }
       updateAdminUI();
 
-      // 관리자 로그인 처리 (아이디: admin, 비밀번호: 1234 또는 DB 확인)
+      // 관리자 로그인 처리 (아이디: admin, 비밀번호: admin1234)
       const adminLoginForm = document.getElementById('admin-login-form');
       if (adminLoginForm) {
-        adminLoginForm.addEventListener('submit', async (e) => {
+        adminLoginForm.addEventListener('submit', (e) => {
           e.preventDefault();
           const inputId = document.getElementById('admin-id').value;
           const inputPw = document.getElementById('admin-pw').value;
 
-          // 간단한 관리자 계정 하드코딩 인증 (또는 DB 조회 연동 가능)
-          if (inputId === 'admin' && inputPw === '1234') {
+          if (inputId === 'admin' && inputPw === 'admin1234') {
             isAdminLoggedIn = true;
             localStorage.setItem('jwb_admin_logged', 'true');
             alert('관리자 로그인 성공!');
             updateAdminUI();
           } else {
-            // Supabase users 테이블에서 관리자 권한 확인 (선택사항)
-            const hashedPw = await hashPassword(inputPw);
-            const { data, error } = await supabase
-              .from('users')
-              .select('*')
-              .eq('userid', inputId)
-              .eq('password', hashedPw)
-              .single();
-
-            if (!error && data && data.userid === 'admin') {
-              isAdminLoggedIn = true;
-              localStorage.setItem('jwb_admin_logged', 'true');
-              alert('관리자 로그인 성공!');
-              updateAdminUI();
-            } else {
-              alert('관리자 권한이 없거나 아이디/비밀번호가 틀렸습니다.');
-            }
+            alert('관리자 아이디 또는 비밀번호가 일치하지 않습니다.');
           }
         });
       }
