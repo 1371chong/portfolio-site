@@ -7,7 +7,6 @@
   <link rel="icon" href="img/logo/logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <!-- Supabase JS SDK CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     .admin-wrapper {
@@ -72,18 +71,17 @@
 </head>
 <body>
 
-  <!-- 헤더 -->
   <header id="header" class="scrolled">
     <div class="logo"><a href="index.html">JWB STUDIO [ADMIN]</a></div>
     <div class="header-right-group">
-      <a href="index.html" class="btn-resume-outline" style="padding:0.4rem 1rem;"><i class="fa-solid fa-house"></i> 메인으로 돌아가기</a>
-      <button id="admin-logout-btn" class="btn-resume-outline" style="display:none; padding:0.4rem 1rem; border-color:var(--accent); color:var(--accent);">관리자 로그아웃</button>
+      <a href="index.html" class="btn-resume-outline" style="padding:0.4rem 1rem;"><i class="fa-solid fa-house"></i> 메인으로</a>
+      <button id="admin-logout-btn" class="btn-resume-outline" style="display:none; padding:0.4rem 1rem; border-color:var(--accent); color:var(--accent);">로그아웃</button>
     </div>
   </header>
 
   <div class="container">
     
-    <!-- 1. 관리자 로그인 영역 (로그인 전) -->
+    <!-- 관리자 로그인 영역 -->
     <div id="admin-login-container" style="max-width: 400px; margin: 10rem auto; padding: 2.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; text-align: center;">
       <h2 style="margin-bottom: 1.5rem; color: var(--text-main);">관리자 로그인</h2>
       <form id="admin-login-form">
@@ -93,14 +91,14 @@
       </form>
     </div>
 
-    <!-- 2. 관리자 대시보드 영역 (로그인 후) -->
+    <!-- 관리자 대시보드 영역 -->
     <div id="admin-dashboard-container" class="admin-wrapper" style="display: none;">
       <div class="admin-header">
         <h2>관리자 대시보드</h2>
-        <span id="admin-welcome-text" style="color: var(--text-sub); font-weight: 600;">최고관리자님 환영합니다.</span>
+        <span style="color: var(--text-sub); font-weight: 600;">최고관리자님 환영합니다.</span>
       </div>
 
-      <!-- 공지사항 등록 섹션 -->
+      <!-- 공지사항 등록 -->
       <div class="admin-section">
         <h3>공지사항 등록</h3>
         <form id="admin-notice-form">
@@ -112,9 +110,9 @@
               <option value="일반">일반</option>
             </select>
             <input type="text" id="notice-title" placeholder="공지사항 제목" required>
-            <textarea id="notice-content" placeholder="공지사항 내용을 입력하세요" rows="4" required></textarea>
+            <textarea id="notice-content" placeholder="내용" rows="4" required></textarea>
             <div>
-              <label style="font-size:0.85rem; color:var(--text-sub); display:block; margin-bottom:4px;">첨부파일 (구글 드라이브 연동)</label>
+              <label style="font-size:0.85rem; color:var(--text-sub); display:block; margin-bottom:4px;">첨부파일</label>
               <input type="file" id="notice-file-input">
               <input type="hidden" id="notice-file-name">
               <input type="hidden" id="notice-file-url">
@@ -125,7 +123,7 @@
         </form>
       </div>
 
-      <!-- 포트폴리오 등록 섹션 -->
+      <!-- 포트폴리오 등록 (파일 업로드 추가) -->
       <div class="admin-section">
         <h3>포트폴리오 등록</h3>
         <form id="admin-portfolio-form">
@@ -141,18 +139,65 @@
               <option value="web">웹 / 인터랙티브 (web)</option>
               <option value="vfx">VFX / 씬 (vfx)</option>
             </select>
-            <input type="text" id="pf-category-name" placeholder="카테고리 표시 이름 (예: MOTION GRAPHICS)" required>
-            <input type="text" id="pf-link" placeholder="유튜브 링크 또는 영상 URL" required>
-            <input type="text" id="pf-tools" placeholder="사용 툴 (콤마로 구분, 예: After Effects, Blender)">
-            <input type="text" id="pf-work-time" placeholder="작업 기간 (예: 2주 소요)">
-            <input type="text" id="pf-thumb" placeholder="커스텀 썸네일 이미지 URL (선택사항)">
-            <textarea id="pf-desc" placeholder="작품 상세 설명" rows="3" required></textarea>
+            <input type="text" id="pf-category-name" placeholder="카테고리 표시 이름" required>
+            <input type="text" id="pf-link" placeholder="유튜브 링크" required>
+            <input type="text" id="pf-tools" placeholder="사용 툴">
+            <input type="text" id="pf-work-time" placeholder="작업 기간">
+            <input type="text" id="pf-thumb" placeholder="썸네일 이미지 URL">
+            <div>
+              <label style="font-size:0.85rem; color:var(--text-sub); display:block; margin-bottom:4px;">포트폴리오 첨부파일 (선택)</label>
+              <input type="file" id="pf-file-input">
+              <input type="hidden" id="pf-file-name">
+              <input type="hidden" id="pf-file-url">
+              <input type="hidden" id="pf-file-size">
+            </div>
+            <textarea id="pf-desc" placeholder="상세 설명" rows="3" required></textarea>
             <button type="submit" class="jwb-btn">포트폴리오 등록하기</button>
           </div>
         </form>
       </div>
 
-      <!-- 회원 관리 섹션 -->
+      <!-- 자유게시판 관리 (삭제/수정) -->
+      <div class="admin-section">
+        <h3>자유게시판 관리</h3>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="admin-free-list">
+              <tr><td colspan="4" style="text-align:center;">게시글 로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 고객 후기 관리 (삭제) -->
+      <div class="admin-section">
+        <h3>고객 후기 관리</h3>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>작성자</th>
+                <th>평점</th>
+                <th>후기 내용</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="admin-review-list">
+              <tr><td colspan="4" style="text-align:center;">후기 로딩 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 회원 관리 -->
       <div class="admin-section">
         <h3>가입 회원 목록</h3>
         <div style="overflow-x: auto;">
@@ -166,14 +211,27 @@
               </tr>
             </thead>
             <tbody id="admin-user-list">
-              <tr><td colspan="4" style="text-align:center; color:var(--text-sub);">회원 목록을 불러오는 중...</td></tr>
+              <tr><td colspan="4" style="text-align:center;">회원 목록 로딩 중...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
     </div>
+  </div>
 
+  <!-- 자유게시판 수정 모달 -->
+  <div id="admin-edit-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px; padding: 2rem;">
+      <button class="modal-close" onclick="closeAdminEditModal()">&times;</button>
+      <h3 style="margin-bottom: 1rem; color:var(--text-main);">자유게시판 글 수정</h3>
+      <form id="admin-edit-form">
+        <input type="hidden" id="edit-post-id">
+        <input type="text" id="edit-post-title" placeholder="제목" required style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+        <textarea id="edit-post-content" placeholder="내용" rows="5" required style="width:100%; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);"></textarea>
+        <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">수정 완료</button>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -181,13 +239,11 @@
       const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      
       const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzcD0H9nJ7_Xg5QrJrjoMQaQOS8E0Nj82tYXzq5EK_-_n1rwbkMyACe0NfCb22-uP5p/exec";
 
       const loginContainer = document.getElementById('admin-login-container');
       const dashboardContainer = document.getElementById('admin-dashboard-container');
       const logoutBtn = document.getElementById('admin-logout-btn');
-
       let isAdminLoggedIn = localStorage.getItem('jwb_admin_logged') === 'true';
 
       function updateAdminUI() {
@@ -196,6 +252,8 @@
           if(dashboardContainer) dashboardContainer.style.display = 'block';
           if(logoutBtn) logoutBtn.style.display = 'inline-block';
           loadUsersList();
+          loadAdminFreeBoard();
+          loadAdminReviews();
         } else {
           if(loginContainer) loginContainer.style.display = 'block';
           if(dashboardContainer) dashboardContainer.style.display = 'none';
@@ -204,62 +262,66 @@
       }
       updateAdminUI();
 
-      // 관리자 로그인 처리 (아이디: admin, 비밀번호: admin1234)
-      const adminLoginForm = document.getElementById('admin-login-form');
-      if (adminLoginForm) {
-        adminLoginForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const inputId = document.getElementById('admin-id').value;
-          const inputPw = document.getElementById('admin-pw').value;
-
-          if (inputId === 'admin' && inputPw === 'admin1234') {
-            isAdminLoggedIn = true;
-            localStorage.setItem('jwb_admin_logged', 'true');
-            alert('관리자 로그인 성공!');
-            updateAdminUI();
-          } else {
-            alert('관리자 아이디 또는 비밀번호가 일치하지 않습니다.');
-          }
-        });
-      }
+      document.getElementById('admin-login-form')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const inputId = document.getElementById('admin-id').value;
+        const inputPw = document.getElementById('admin-pw').value;
+        if (inputId === 'admin' && inputPw === 'admin1234') {
+          isAdminLoggedIn = true;
+          localStorage.setItem('jwb_admin_logged', 'true');
+          alert('관리자 로그인 성공!');
+          updateAdminUI();
+        } else {
+          alert('아이디 또는 비밀번호가 틀렸습니다.');
+        }
+      });
 
       if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
           localStorage.removeItem('jwb_admin_logged');
           isAdminLoggedIn = false;
           updateAdminUI();
-          alert('관리자 로그아웃 되었습니다.');
+          alert('로그아웃 되었습니다.');
         });
       }
 
-      // 공지사항 파일 업로드 핸들러
+      // 공지 파일 업로드
       document.getElementById('notice-file-input')?.addEventListener('change', async (e) => {
         const file = e.target.files[0];
-        if (!file) return;
+        if(!file) return;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async () => {
-          try {
-            const res = await fetch(GAS_WEB_APP_URL, {
-              method: 'POST',
-              body: JSON.stringify({ fileName: file.name, mimeType: file.type, fileData: reader.result.split(',')[1] })
-            });
-            const result = await res.json();
-            if (result.status === 'success') {
-              document.getElementById('notice-file-name').value = file.name;
-              document.getElementById('notice-file-url').value = result.url;
-              document.getElementById('notice-file-size').value = (file.size / 1024).toFixed(1) + 'KB';
-              alert('공지 첨부파일 구글 드라이브 업로드 완료!');
-            } else {
-              alert('업로드 실패: ' + result.message);
-            }
-          } catch (err) {
-            alert('파일 업로드 통신 오류 발생');
+          const res = await fetch(GAS_WEB_APP_URL, { method: 'POST', body: JSON.stringify({ fileName: file.name, mimeType: file.type, fileData: reader.result.split(',')[1] }) });
+          const r = await res.json();
+          if(r.status === 'success') {
+            document.getElementById('notice-file-name').value = file.name;
+            document.getElementById('notice-file-url').value = r.url;
+            document.getElementById('notice-file-size').value = (file.size / 1024).toFixed(1) + 'KB';
+            alert('파일 업로드 완료!');
           }
         };
       });
 
-      // 공지 등록 폼 제출
+      // 포트폴리오 파일 업로드
+      document.getElementById('pf-file-input')?.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+          const res = await fetch(GAS_WEB_APP_URL, { method: 'POST', body: JSON.stringify({ fileName: file.name, mimeType: file.type, fileData: reader.result.split(',')[1] }) });
+          const r = await res.json();
+          if(r.status === 'success') {
+            document.getElementById('pf-file-name').value = file.name;
+            document.getElementById('pf-file-url').value = r.url;
+            document.getElementById('pf-file-size').value = (file.size / 1024).toFixed(1) + 'KB';
+            alert('포트폴리오 파일 업로드 완료!');
+          }
+        };
+      });
+
+      // 공지 등록
       document.getElementById('admin-notice-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const payload = {
@@ -272,20 +334,11 @@
           download_count: 0,
           date: new Date().toLocaleDateString()
         };
-
         const { error } = await supabase.from('notices').insert([payload]);
-        if (!error) {
-          alert('공지사항이 정상 등록되었습니다!');
-          e.target.reset();
-          document.getElementById('notice-file-name').value = '';
-          document.getElementById('notice-file-url').value = '';
-          document.getElementById('notice-file-size').value = '';
-        } else {
-          alert('등록 실패: ' + error.message);
-        }
+        if(!error) { alert('공지 등록 완료!'); e.target.reset(); }
       });
 
-      // 포트폴리오 등록 폼 제출
+      // 포트폴리오 등록
       document.getElementById('admin-portfolio-form')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const payload = {
@@ -296,35 +349,104 @@
           tools: document.getElementById('pf-tools').value,
           work_time: document.getElementById('pf-work-time').value,
           thumb: document.getElementById('pf-thumb').value,
+          file_name: document.getElementById('pf-file-name').value || null,
+          file_url: document.getElementById('pf-file-url').value || null,
+          file_size: document.getElementById('pf-file-size').value || null,
           desc: document.getElementById('pf-desc').value
         };
-
         const { error } = await supabase.from('portfolios').insert([payload]);
-        if (!error) {
-          alert('포트폴리오가 정상 등록되었습니다!');
-          e.target.reset();
+        if(!error) { alert('포트폴리오 등록 완료!'); e.target.reset(); }
+      });
+
+      // 자유게시판 목록 및 관리
+      async function loadAdminFreeBoard() {
+        const tbody = document.getElementById('admin-free-list');
+        if(!tbody) return;
+        const { data: posts } = await supabase.from('free_board').select('*');
+        if(!posts || posts.length === 0) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">게시글이 없습니다.</td></tr>'; return; }
+        
+        tbody.innerHTML = '';
+        posts.forEach(p => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${p.title}</td>
+              <td>${p.author}</td>
+              <td>${p.date || '-'}</td>
+              <td>
+                <button onclick="openAdminEditModal(${p.id}, '${(p.title||'').replace(/'/g, "\\'")}', '${(p.content||'').replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" style="background:#38bdf8; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:0.8rem; margin-right:4px;">수정</button>
+                <button onclick="deleteFreePost(${p.id})" style="background:var(--accent); color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:0.8rem;">삭제</button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      window.deleteFreePost = async function(id) {
+        if(!confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
+        const { error } = await supabase.from('free_board').delete().eq('id', id);
+        if(!error) { alert('삭제되었습니다.'); loadAdminFreeBoard(); }
+      };
+
+      window.openAdminEditModal = function(id, title, content) {
+        document.getElementById('edit-post-id').value = id;
+        document.getElementById('edit-post-title').value = title;
+        document.getElementById('edit-post-content').value = content;
+        document.getElementById('admin-edit-modal').classList.add('active');
+      };
+
+      window.closeAdminEditModal = function() {
+        document.getElementById('admin-edit-modal').classList.remove('active');
+      };
+
+      document.getElementById('admin-edit-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('edit-post-id').value;
+        const title = document.getElementById('edit-post-title').value;
+        const content = document.getElementById('edit-post-content').value;
+
+        const { error } = await supabase.from('free_board').update({ title, content }).eq('id', id);
+        if(!error) {
+          alert('수정되었습니다.');
+          closeAdminEditModal();
+          loadAdminFreeBoard();
         } else {
-          alert('등록 실패: ' + error.message);
+          alert('수정 실패');
         }
       });
 
-      // 회원 목록 불러오기 및 강제 탈퇴 기능
+      // 후기 관리
+      async function loadAdminReviews() {
+        const tbody = document.getElementById('admin-review-list');
+        if(!tbody) return;
+        const { data: reviews } = await supabase.from('reviews').select('*');
+        if(!reviews || reviews.length === 0) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">등록된 후기가 없습니다.</td></tr>'; return; }
+        
+        tbody.innerHTML = '';
+        reviews.forEach(r => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${r.author || '익명'}</td>
+              <td>★ ${r.rating || 5}</td>
+              <td>${r.content}</td>
+              <td><button onclick="deleteReview(${r.id})" style="background:var(--accent); color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:0.8rem;">삭제</button></td>
+            </tr>
+          `;
+        });
+      }
+
+      window.deleteReview = async function(id) {
+        if(!confirm('이 후기를 삭제하시겠습니까?')) return;
+        const { error } = await supabase.from('reviews').delete().eq('id', id);
+        if(!error) { alert('후기가 삭제되었습니다.'); loadAdminReviews(); }
+      };
+
+      // 회원 관리
       async function loadUsersList() {
         const tbody = document.getElementById('admin-user-list');
-        if (!tbody) return;
-
-        const { data: users, error } = await supabase.from('users').select('*');
-        if (error || !users) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">회원 목록을 불러오지 못했습니다.</td></tr>';
-          return;
-        }
-
+        if(!tbody) return;
+        const { data: users } = await supabase.from('users').select('*');
+        if(!users) return;
         tbody.innerHTML = '';
-        if (users.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">가입된 회원이 없습니다.</td></tr>';
-          return;
-        }
-
         users.forEach(u => {
           tbody.innerHTML += `
             <tr>
@@ -338,14 +460,9 @@
       }
 
       window.deleteUser = async function(userid) {
-        if (!confirm(`[ ${userid} ] 회원을 강제 탈퇴시키겠습니까?`)) return;
+        if(!confirm(`${userid} 회원을 탈퇴시키겠습니까?`)) return;
         const { error } = await supabase.from('users').delete().eq('userid', userid);
-        if (!error) {
-          alert('회원이 탈퇴 처리되었습니다.');
-          loadUsersList();
-        } else {
-          alert('처리에 실패했습니다.');
-        }
+        if(!error) { alert('탈퇴 처리되었습니다.'); loadUsersList(); }
       };
 
     });
