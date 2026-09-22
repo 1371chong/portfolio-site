@@ -24,17 +24,18 @@
     </div>
   </header>
 
-  <div class="container" style="max-width: 1000px; padding-top: 6rem;">
+  <div class="container" style="max-width: 1100px; padding-top: 6rem;">
     <h1 class="section-title" style="margin-bottom: 2rem;"><i class="fa-solid fa-lock"></i> 관리자 대시보드</h1>
 
     <!-- 탭 메뉴 -->
-    <div style="display: flex; gap: 10px; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+    <div style="display: flex; gap: 10px; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; flex-wrap: wrap;">
       <button class="jwb-btn admin-tab-btn active" data-target="notice-manage-section" style="background:var(--accent); color:#fff;"><i class="fa-solid fa-bullhorn"></i> 공지사항 관리</button>
+      <button class="jwb-btn admin-tab-btn" data-target="portfolio-manage-section" style="background:var(--pill-bg);"><i class="fa-solid fa-photo-film"></i> 포트폴리오 관리</button>
       <button class="jwb-btn admin-tab-btn" data-target="free-manage-section" style="background:var(--pill-bg);"><i class="fa-solid fa-comments"></i> 자유게시판 관리</button>
       <button class="jwb-btn admin-tab-btn" data-target="user-manage-section" style="background:var(--pill-bg);"><i class="fa-solid fa-users"></i> 회원 관리</button>
     </div>
 
-    <!-- 1. 공지사항 관리 섹션 -->
+    <!-- 1. 공지사항 관리 섹션 (내 컴퓨터 파일 업로드 지원) -->
     <section id="notice-manage-section" class="admin-section" style="display: block;">
       <div class="jwb-board-container" style="margin-bottom: 2rem; padding: 2rem;">
         <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">공지사항 등록</h3>
@@ -49,11 +50,12 @@
             <input type="text" id="admin-notice-title" placeholder="공지사항 제목" required style="flex:1; margin-bottom:0;">
           </div>
           <textarea id="admin-notice-content" placeholder="공지사항 내용 입력..." rows="4" required style="margin-bottom: 10px;"></textarea>
-          <div style="margin-bottom: 15px;">
-            <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 4px;">첨부파일 링크 또는 파일명 (선택)</label>
-            <input type="text" id="admin-notice-filename" placeholder="첨부파일명 (예: guide.pdf)" style="margin-bottom:8px;">
-            <input type="text" id="admin-notice-fileurl" placeholder="다운로드 URL 링크 (예: https://...)">
+          
+          <div style="margin-bottom: 15px; background: var(--pill-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+            <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 6px;"><i class="fa-solid fa-file-arrow-up"></i> 내 컴퓨터에서 첨부파일 찾기</label>
+            <input type="file" id="admin-notice-file" style="color:var(--text-sub); font-size:0.9rem;">
           </div>
+
           <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">공지사항 게시하기</button>
         </form>
       </div>
@@ -66,7 +68,54 @@
       </div>
     </section>
 
-    <!-- 2. 자유게시판 관리 섹션 -->
+    <!-- 2. 포트폴리오 관리 섹션 (추가, 수정, 삭제) -->
+    <section id="portfolio-manage-section" class="admin-section" style="display: none;">
+      <div class="jwb-board-container" style="margin-bottom: 2rem; padding: 2rem;">
+        <h3 id="portfolio-form-title" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">새 포트폴리오 작품 등록</h3>
+        <form id="admin-portfolio-form" class="jwb-board-form">
+          <input type="hidden" id="edit-portfolio-id">
+          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <select id="admin-pf-category" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
+              <option value="video">영상 편집 (video)</option>
+              <option value="ad">광고/프로모션 (ad)</option>
+              <option value="3d">3D 아트워크 (3d)</option>
+              <option value="graphic">그래픽/이미지 (graphic)</option>
+              <option value="typo">타이포그래피 (typo)</option>
+              <option value="motion">모션 그래픽 (motion)</option>
+              <option value="web">웹/인터랙티브 (web)</option>
+              <option value="vfx">VFX/씬 (vfx)</option>
+            </select>
+            <input type="text" id="admin-pf-title" placeholder="작품 제목" required style="flex:1; margin-bottom:0;">
+          </div>
+          
+          <textarea id="admin-pf-desc" placeholder="작품 상세 설명" rows="3" required style="margin-bottom: 10px;"></textarea>
+          
+          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" id="admin-pf-tools" placeholder="사용 툴 (예: After Effects, Blender)" required style="flex:1; margin-bottom:0;">
+            <input type="text" id="admin-pf-video" placeholder="유튜브 또는 영상 URL" required style="flex:1; margin-bottom:0;">
+          </div>
+
+          <div style="margin-bottom: 15px; background: var(--pill-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+            <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 6px;"><i class="fa-solid fa-image"></i> 내 컴퓨터에서 썸네일 이미지 찾기</label>
+            <input type="file" id="admin-pf-imgfile" accept="image/*" style="color:var(--text-sub); font-size:0.9rem;">
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button type="submit" class="jwb-btn" id="pf-submit-btn" style="flex:1; justify-content:center;">포트폴리오 등록</button>
+            <button type="button" id="pf-cancel-btn" style="display:none; background:var(--pill-bg); border:1px solid var(--border); color:var(--text-main); padding:10px 20px; border-radius:8px; cursor:pointer;" onclick="resetPortfolioForm()">취소</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="jwb-board-container" style="padding: 2rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">등록된 포트폴리오 목록</h3>
+        <ul id="admin-portfolio-list" class="jwb-post-list">
+          <li style="text-align:center; padding:20px; color:var(--text-sub);">불러오는 중...</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. 자유게시판 관리 섹션 -->
     <section id="free-manage-section" class="admin-section" style="display: none;">
       <div class="jwb-board-container" style="padding: 2rem;">
         <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">자유게시판 전체 글 관리</h3>
@@ -76,7 +125,7 @@
       </div>
     </section>
 
-    <!-- 3. 회원 관리 섹션 -->
+    <!-- 4. 회원 관리 섹션 -->
     <section id="user-manage-section" class="admin-section" style="display: none;">
       <div class="jwb-board-container" style="padding: 2rem;">
         <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">가입 회원 목록</h3>
@@ -99,6 +148,7 @@
       const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const STORAGE_BUCKET = 'jwb-bucket'; // Supabase Storage 버킷 이름 (필요시 생성 필요)
 
       // 테마 전환
       const themeToggleBtn = document.getElementById('theme-toggle');
@@ -125,7 +175,20 @@
         });
       });
 
-      // 1. 공지사항 로드 및 등록
+      // 스토리지 파일 업로드 헬퍼 함수
+      async function uploadFileToSupabase(fileObj) {
+        if (!fileObj) return null;
+        const fileName = `${Date.now()}_${fileObj.name}`;
+        const { data, error } = await supabase.storage.from(STORAGE_BUCKET).upload(fileName, fileObj);
+        if (error) {
+          alert('파일 업로드 실패: ' + error.message);
+          return null;
+        }
+        const { data: { publicUrl } } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
+        return { name: fileObj.name, url: publicUrl, size: Math.round(fileObj.size / 1024) + 'KB' };
+      }
+
+      // 1. 공지사항 관리
       async function loadAdminNotices() {
         const list = document.getElementById('admin-notice-list');
         if (!list) return;
@@ -156,11 +219,20 @@
           const category = document.getElementById('admin-notice-category').value;
           const title = document.getElementById('admin-notice-title').value.trim();
           const content = document.getElementById('admin-notice-content').value.trim();
-          const fileName = document.getElementById('admin-notice-filename').value.trim();
-          const fileUrl = document.getElementById('admin-notice-fileurl').value.trim();
+          const fileInput = document.getElementById('admin-notice-file').files[0];
+
+          let fileInfo = { name: null, url: null, size: null };
+          if (fileInput) {
+            const uploaded = await uploadFileToSupabase(fileInput);
+            if (uploaded) fileInfo = uploaded;
+          }
 
           const { error } = await supabase.from('notices').insert([{
-            category, title, content, file_name: fileName || null, file_url: fileUrl || null, date: new Date().toLocaleDateString()
+            category, title, content, 
+            file_name: fileInfo.name, 
+            file_url: fileInfo.url, 
+            file_size: fileInfo.size,
+            date: new Date().toLocaleDateString()
           }]);
 
           if (error) {
@@ -180,7 +252,107 @@
         else { alert('삭제되었습니다.'); loadAdminNotices(); }
       };
 
-      // 2. 자유게시판 글 관리
+      // 2. 포트폴리오 관리 (추가, 수정, 삭제)
+      async function loadAdminPortfolio() {
+        const list = document.getElementById('admin-portfolio-list');
+        if (!list) return;
+        const { data, error } = await supabase.from('portfolio').select('*').order('id', { ascending: false });
+        if (error || !data || data.length === 0) {
+          list.innerHTML = '<li style="text-align:center; padding:15px; color:var(--text-sub);">등록된 포트폴리오가 없습니다.</li>';
+          return;
+        }
+        list.innerHTML = '';
+        data.forEach(item => {
+          const safeItem = encodeURIComponent(JSON.stringify(item));
+          list.innerHTML += `
+            <li style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <img src="${item.img || ''}" alt="" style="width:50px; height:35px; object-fit:cover; border-radius:4px;">
+                <div>
+                  <span style="color:var(--accent); font-weight:700; font-size:0.8rem;">[${item.category}]</span>
+                  <strong style="color:var(--text-main); margin-left:6px;">${item.title}</strong>
+                </div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button onclick="editPortfolio('${safeItem}')" style="background:#3b82f6; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">수정</button>
+                <button onclick="deletePortfolio(${item.id})" style="background:#ef4444; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">삭제</button>
+              </div>
+            </li>
+          `;
+        });
+      }
+
+      const portfolioForm = document.getElementById('admin-portfolio-form');
+      if (portfolioForm) {
+        portfolioForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('edit-portfolio-id').value;
+          const category = document.getElementById('admin-pf-category').value;
+          const title = document.getElementById('admin-pf-title').value.trim();
+          const desc = document.getElementById('admin-pf-desc').value.trim();
+          const tools = document.getElementById('admin-pf-tools').value.trim();
+          const video = document.getElementById('admin-pf-video').value.trim();
+          const imgFile = document.getElementById('admin-pf-imgfile').files[0];
+
+          let imgUrl = null;
+          if (imgFile) {
+            const uploaded = await uploadFileToSupabase(imgFile);
+            if (uploaded) imgUrl = uploaded.url;
+          }
+
+          if (editId) {
+            // 수정 모드
+            const updateData = { category, title, desc, tools, video };
+            if (imgUrl) updateData.img = imgUrl;
+
+            const { error } = await supabase.from('portfolio').update(updateData).eq('id', editId);
+            if (error) alert('수정 실패: ' + error.message);
+            else { alert('포트폴리오가 수정되었습니다.'); resetPortfolioForm(); loadAdminPortfolio(); }
+          } else {
+            // 신규 등록 모드
+            if (!imgUrl) {
+              alert('썸네일 이미지를 첨부해 주세요.');
+              return;
+            }
+            const { error } = await supabase.from('portfolio').insert([{
+              category, title, desc, tools, video, img: imgUrl
+            }]);
+            if (error) alert('등록 실패: ' + error.message);
+            else { alert('포트폴리오가 등록되었습니다.'); portfolioForm.reset(); loadAdminPortfolio(); }
+          }
+        });
+      }
+
+      window.editPortfolio = (encodedItem) => {
+        const item = JSON.parse(decodeURIComponent(encodedItem));
+        document.getElementById('edit-portfolio-id').value = item.id;
+        document.getElementById('admin-pf-category').value = item.category;
+        document.getElementById('admin-pf-title').value = item.title;
+        document.getElementById('admin-pf-desc').value = item.desc;
+        document.getElementById('admin-pf-tools').value = item.tools;
+        document.getElementById('admin-pf-video').value = item.video;
+        document.getElementById('portfolio-form-title').textContent = `포트폴리오 수정 (ID: ${item.id})`;
+        document.getElementById('pf-submit-btn').textContent = '포트폴리오 수정 완료';
+        document.getElementById('pf-cancel-btn').style.display = 'inline-block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      window.resetPortfolioForm = () => {
+        document.getElementById('admin-portfolio-form').reset();
+        document.getElementById('edit-portfolio-id').value = '';
+        document.getElementById('portfolio-form-title').textContent = '새 포트폴리오 작품 등록';
+        document.getElementById('pf-submit-btn').textContent = '포트폴리오 등록';
+        document.getElementById('pf-cancel-btn').style.display = 'none';
+      };
+
+      window.deletePortfolio = async (id) => {
+        if (!confirm('정말 이 포트폴리오 작품을 삭제하시겠습니까?')) return;
+        const { error } = await supabase.from('portfolio').delete().eq('id', id);
+        if (error) alert('삭제 실패: ' + error.message);
+        else { alert('삭제되었습니다.'); loadAdminPortfolio(); }
+      };
+
+      // 3. 자유게시판 관리
       async function loadAdminFreeBoard() {
         const list = document.getElementById('admin-free-list');
         if (!list) return;
@@ -210,7 +382,7 @@
         else { alert('삭제되었습니다.'); loadAdminFreeBoard(); }
       };
 
-      // 3. 회원 관리
+      // 4. 회원 관리
       async function loadAdminUsers() {
         const list = document.getElementById('admin-user-list');
         if (!list) return;
@@ -242,10 +414,10 @@
 
       // 초기 데이터 로드
       loadAdminNotices();
+      loadAdminPortfolio();
       loadAdminFreeBoard();
       loadAdminUsers();
     });
   </script>
 </body>
-</html>
 </html>
