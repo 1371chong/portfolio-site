@@ -22,7 +22,273 @@ document.addEventListener('DOMContentLoaded', () => {
     else header.classList.remove('scrolled');
   });
 
+  // 비밀번호 해시 암호화 함수 (SHA-256)
+  async function hashPassword(password) {
+    const msgUint8 = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // ==========================================
+  // 사용자 인증 및 모달 제어 영역
+  // ==========================================
+  let currentUser = localStorage.getItem('jwb_user') || null;
+  const authModal = document.getElementById('auth-modal');
+  const btnLoginModal = document.getElementById('btn-login-modal');
+  const btnLogout = document.getElementById('btn-logout');
+  const btnWithdraw = document.getElementById('btn-withdraw');
+  const userGreeting = document.getElementById('user-greeting');
+
+  const loginViewArea = document.getElementById('login-view-area');
+  const signupViewArea = document.getElementById('signup-view-area');
+  const findIdViewArea = document.getElementById('find-id-view-area');
+  const findPwViewArea = document.getElementById('find-pw-view-area');
+
+  function hideAllAuthViews() {
+    if (loginViewArea) loginViewArea.style.display = 'none';
+    if (signupViewArea) signupViewArea.style.display = 'none';
+    if (findIdViewArea) findIdViewArea.style.display = 'none';
+    if (findPwViewArea) findPwViewArea.style.display = 'none';
+  }
+
+  function updateAuthUI() {
+    const freeForm = document.getElementById('free-board-form');
+    const freeLoginMsg = document.getElementById('free-login-required-msg');
+    const freeAuthorInput = document.getElementById('free-author');
+
+    if (currentUser) {
+      if (btnLoginModal) btnLoginModal.style.display = 'none';
+      if (btnLogout) btnLogout.style.display = 'inline-block';
+      if (btnWithdraw) btnWithdraw.style.display = 'inline-block';
+      if (userGreeting) { 
+        userGreeting.style.display = 'inline-block'; 
+        userGreeting.textContent = `${currentUser}님 환영합니다`; 
+      }
+      if (freeForm) freeForm.style.display = 'block';
+      if (freeLoginMsg) freeLoginMsg.style.display = 'none';
+      if (freeAuthorInput) freeAuthorInput.value = currentUser;
+    } else {
+      if (btnLoginModal) btnLoginModal.style.display = 'inline-block';
+      if (btnLogout) btnLogout.style.display = 'none';
+      if (btnWithdraw) btnWithdraw.style.display = 'none';
+      if (userGreeting) userGreeting.style.display = 'none';
+      if (freeForm) freeForm.style.display = 'none';
+      if (freeLoginMsg) freeLoginMsg.style.display = 'block';
+    }
+  }
+  updateAuthUI();
+
+  if (btnLoginModal) {
+    btnLoginModal.addEventListener('click', () => {
+      hideAllAuthViews();
+      if (loginViewArea) loginViewArea.style.display = 'block';
+      if (authModal) authModal.classList.add('active');
+    });
+  }
+
+  const authCloseBtn = document.querySelector('.auth-modal-close');
+  if (authCloseBtn) authCloseBtn.addEventListener('click', () => authModal.classList.remove('active'));
+  if (authModal) {
+    authModal.addEventListener('click', (e) => {
+      if (e.target === authModal) authModal.classList.remove('active');
+    });
+  }
+
+  // 회원가입 / ID 찾기 / PW 찾기 뷰 전환 버튼 이벤트
+  document.getElementById('go-to-signup')?.addEventListener('click', () => { hideAllAuthViews(); if(signupViewArea) signupViewArea.style.display = 'block'; });
+  document.getElementById('go-to-find-id')?.addEventListener('click', () => { hideAllAuthViews(); if(findIdViewArea) findIdViewArea.style.display = 'block'; });
+  document.getElementById('go-to-find-pw')?.addEventListener('click', () => { hideAllAuthViews(); if(findPwViewArea) findPwViewArea.style.display = 'block'; });
+
+  document.querySelectorAll('.go-to-login-btn').forEach(btn => {
+    btn.addEventListener('click', () => { hideAllAuthViews(); if(loginViewArea) loginViewArea.style.display = 'block'; });
+  });
+
+  // 회원가입 제출
+  const signupForm = document.getElementById('signup-form');
+  if (signupForm) {
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('signup-id').value.trim();
+      const pw = document.getElementById('signup-pw').value;
+      const name = document.getElementById('signup-name').value.trim();
+
+      const term1 = document.getElementById('term-1')?.checked;
+      const term2 = document.getElementById('term-2')?.checked;
+      const term3 = document.getElementById('term-3')?.checked;
+      const term4 = document.getElementById('term-4')?.checked || false;
+
+      if (!term1 || !term2 || !term3) {
+        alert('필수 약관에 모두 동의하셔야 합니다.');
+        return;
+      }
+
+      // 아이디 중복 확인
+      const { data: existingUser } = await supabase.from('users').select('*').eq('userid', id).single();
+      if (existingUser) {
+        alert('이미 존재하는 아이디입니다.');
+        return;
+      }
+
+      const hashedPassword = await hashPassword(pw);
+      const dateStr = new Date().toLocaleString();
+
+      const { error } = await supabase.from('users').insert([{
+        userid: id,
+        password: hashedPassword,
+        username: name,
+        marketing: term4,
+        created_at: dateStr
+      }]);
+
+      if (!error) {
+        alert('회원가입이 완료되었습니다! 로그인해 주세요.');
+        signupForm.reset();
+        hideAllAuthViews();
+        if(loginViewArea) loginViewArea.style.display = 'block';
+      } else {
+        alert('회원가입 중 오류가 발생했습니다.');
+        console.error(error);
+      }
+    });
+  }
+
+  // 로그인 제출
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('login-id').value.trim();
+      const pw = document.getElementById('login-pw').value;
+
+      const hashedPassword = await hashPassword(pw);
+
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('userid', id)
+        .eq('password', hashedPassword)
+        .single();
+
+      if (!error && data) {
+        currentUser = data.username;
+        localStorage.setItem('jwb_user', currentUser);
+        if(authModal) authModal.classList.remove('active');
+        loginForm.reset();
+        updateAuthUI();
+        alert(`${currentUser}님 환영합니다!`);
+      } else {
+        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+      }
+    });
+  }
+
+  // 아이디 찾기 제출
+  const findIdForm = document.getElementById('find-id-form');
+  if (findIdForm) {
+    findIdForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('find-id-name').value.trim();
+
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', name)
+        .single();
+
+      if (!error && data) {
+        alert(`회원님의 아이디는 [ ${data.userid} ] 입니다.`);
+        hideAllAuthViews();
+        if(loginViewArea) loginViewArea.style.display = 'block';
+      } else {
+        alert('입력하신 이름과 일치하는 회원 정보가 없습니다.');
+      }
+    });
+  }
+
+  // 비밀번호 찾기 제출
+  const findPwForm = document.getElementById('find-pw-form');
+  if (findPwForm) {
+    findPwForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('find-pw-id').value.trim();
+      const name = document.getElementById('find-pw-name').value.trim();
+
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('userid', id)
+        .eq('username', name)
+        .single();
+
+      if (!error && data) {
+        const tempPw = Math.floor(100000 + Math.random() * 900000).toString();
+        const hashedTempPw = await hashPassword(tempPw);
+
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({ password: hashedTempPw })
+          .eq('userid', id);
+
+        if (!updateError) {
+          alert(`임시 비밀번호가 발급되었습니다: [ ${tempPw} ]\n\n로그인 후 반드시 비밀번호를 변경해 주세요.`);
+          hideAllAuthViews();
+          if(loginViewArea) loginViewArea.style.display = 'block';
+        } else {
+          alert('임시 비밀번호 발급 중 오류가 발생했습니다.');
+        }
+      } else {
+        alert('입력하신 정보와 일치하는 계정이 없습니다.');
+      }
+    });
+  }
+
+  // 로그아웃
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      localStorage.removeItem('jwb_user');
+      currentUser = null;
+      updateAuthUI();
+      alert('로그아웃 되었습니다.');
+    });
+  }
+
+  // 회원탈퇴
+  if (btnWithdraw) {
+    btnWithdraw.addEventListener('click', async () => {
+      if (!currentUser) return;
+      if (!confirm(`정말 ${currentUser} 계정을 탈퇴하시겠습니까? 탈퇴 시 정보가 삭제됩니다.`)) return;
+
+      const { error } = await supabase.from('users').delete().eq('username', currentUser);
+      if (!error) {
+        alert('회원탈퇴가 완료되었습니다.');
+        localStorage.removeItem('jwb_user');
+        currentUser = null;
+        updateAuthUI();
+      } else {
+        alert('회원탈퇴 처리에 실패했습니다.');
+      }
+    });
+  }
+
+  // 약관 전체 동의 체크박스 연동
+  const termAll = document.getElementById('term-all');
+  const termItems = document.querySelectorAll('.term-item');
+  if (termAll) {
+    termAll.addEventListener('change', (e) => {
+      termItems.forEach(term => term.checked = e.target.checked);
+    });
+    termItems.forEach(term => {
+      term.addEventListener('change', () => {
+        termAll.checked = Array.from(termItems).every(t => t.checked);
+      });
+    });
+  }
+
+
+  // ==========================================
   // 첨부파일 행 생성 헬퍼 함수
+  // ==========================================
   function createAttachmentHTML(fileName, fileSize, fileUrl, downloadCount = 0, dateStr = '') {
     if (!fileUrl) return '';
     return `
@@ -41,51 +307,9 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // 인증 UI 상태 관리
-  let currentUser = localStorage.getItem('jwb_user') || null;
-  const authModal = document.getElementById('auth-modal');
-  const btnLoginModal = document.getElementById('btn-login-modal');
-  const btnLogout = document.getElementById('btn-logout');
-  const btnWithdraw = document.getElementById('btn-withdraw');
-  const userGreeting = document.getElementById('user-greeting');
-
-  function updateAuthUI() {
-    const freeForm = document.getElementById('free-board-form');
-    const freeLoginMsg = document.getElementById('free-login-required-msg');
-    const freeAuthorInput = document.getElementById('free-author');
-
-    if (currentUser) {
-      if (btnLoginModal) btnLoginModal.style.display = 'none';
-      if (btnLogout) btnLogout.style.display = 'inline-block';
-      if (btnWithdraw) btnWithdraw.style.display = 'inline-block';
-      if (userGreeting) { userGreeting.style.display = 'inline-block'; userGreeting.textContent = `${currentUser}님 환영합니다`; }
-      if (freeForm) freeForm.style.display = 'block';
-      if (freeLoginMsg) freeLoginMsg.style.display = 'none';
-      if (freeAuthorInput) freeAuthorInput.value = currentUser;
-    } else {
-      if (btnLoginModal) btnLoginModal.style.display = 'inline-block';
-      if (btnLogout) btnLogout.style.display = 'none';
-      if (btnWithdraw) btnWithdraw.style.display = 'none';
-      if (userGreeting) userGreeting.style.display = 'none';
-      if (freeForm) freeForm.style.display = 'none';
-      if (freeLoginMsg) freeLoginMsg.style.display = 'block';
-    }
-  }
-  updateAuthUI();
-
-  if (btnLoginModal) btnLoginModal.addEventListener('click', () => authModal.classList.add('active'));
-  document.querySelector('.auth-modal-close')?.addEventListener('click', () => authModal.classList.remove('active'));
-
-  if (btnLogout) {
-    btnLogout.addEventListener('click', () => {
-      localStorage.removeItem('jwb_user');
-      currentUser = null;
-      updateAuthUI();
-      alert('로그아웃 되었습니다.');
-    });
-  }
-
-  // 공지사항 로드
+  // ==========================================
+  // 공지사항 및 자유게시판 로드
+  // ==========================================
   let allNotices = [];
   async function loadNotices() {
     const list = document.getElementById('notice-list');
@@ -99,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('notice-list');
     if(!list) return;
     list.innerHTML = '';
-    if(allNotices.length === 0) { list.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">공지사항이 없습니다.</td></tr>'; return; }
+    if(allNotices.length === 0) { list.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">공지사항이 없습니다.</td></tr>'; return; }
 
     allNotices.forEach((item, idx) => {
       const hasFile = item.file_url ? '<i class="fa-solid fa-paperclip"></i>' : '';
@@ -126,7 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
     noticeModal.classList.add('active');
   };
 
-  // 자유게시판 로드
   let allFreePosts = [];
   async function loadFreeBoard() {
     const list = document.getElementById('public-free-list');
@@ -140,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.getElementById('public-free-list');
     if(!list) return;
     list.innerHTML = '';
-    if(allFreePosts.length === 0) { list.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">게시글이 없습니다.</td></tr>'; return; }
+    if(allFreePosts.length === 0) { list.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">게시글이 없습니다.</td></tr>'; return; }
 
     allFreePosts.forEach((f, idx) => {
       const hasFile = f.file_url ? '<i class="fa-solid fa-paperclip"></i>' : '';
@@ -199,10 +422,18 @@ document.addEventListener('DOMContentLoaded', () => {
       date: new Date().toLocaleDateString()
     };
     const { error } = await supabase.from('free_board').insert([payload]);
-    if(!error) { alert('등록되었습니다!'); e.target.reset(); loadFreeBoard(); }
+    if(!error) { 
+      alert('등록되었습니다!'); 
+      e.target.reset(); 
+      document.getElementById('free-file-name').value = '';
+      document.getElementById('free-file-url').value = '';
+      document.getElementById('free-file-size').value = '';
+      document.getElementById('free-author').value = currentUser;
+      loadFreeBoard(); 
+    }
   });
 
-  // 포트폴리오 로드 (첨부파일 연동 포함)
+  // 포트폴리오 로드
   const pfContainer = document.getElementById('portfolio-list-container');
   async function loadPortfolios() {
     if(!pfContainer) return;
@@ -216,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       pfContainer.insertAdjacentHTML('beforeend', `
         <div class="portfolio-card dynamic-portfolio-card hover-target zoom-card" data-category="${item.category}">
-          <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${(item.title||'').replace(/'/g, "\\'")}', '${item.tools}', '${(item.desc||'').replace(/'/g, "\\'").replace(/\n/g, '\\n')}', '${item.file_name||''}', '${item.file_size||''}', '${item.file_url||''}')">
+          <div class="card-thumb-box img-zoom-wrapper" onclick="openPortfolioModal('${videoId}', '${(item.title||'').replace(/'/g, "\\'")}', '${item.tools}', '${(item.desc||'').replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">
             <img src="${thumb}" alt="썸네일">
             <div class="play-overlay"><span>VIEW DETAIL</span></div>
           </div>
@@ -233,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  window.openPortfolioModal = function(videoId, title, tools, desc, fileName, fileSize, fileUrl) {
+  window.openPortfolioModal = function(videoId, title, tools, desc) {
     const videoModal = document.getElementById('video-modal');
     const iframe = document.getElementById('modal-iframe');
     if(videoId) { iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`; iframe.style.display = 'block'; }
@@ -242,7 +473,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modal-title').textContent = title;
     document.getElementById('modal-desc').textContent = desc;
     
-    // 포트폴리오 모달 내 첨부파일 영역 추가 처리 가능
+    const toolsContainer = document.getElementById('modal-tools');
+    if(toolsContainer) {
+      toolsContainer.innerHTML = '';
+      tools.split(',').forEach(tool => {
+        if(tool.trim()) toolsContainer.innerHTML += `<span class="tool-badge">${tool.trim()}</span>`;
+      });
+    }
     videoModal.classList.add('active');
   };
 
