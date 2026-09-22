@@ -593,16 +593,75 @@ body.light-mode .video-mask-text { background: var(--bg-color); }
    Board & Forms
    ========================================= */
 .jwb-board-container {
-  background: var(--card-bg); border-radius: 16px; padding: 2.5rem;
+  background: var(--card-bg); border-radius: 16px; padding: 1.5rem;
   border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  overflow-x: auto;
 }
-.jwb-post-list { list-style: none; padding: 0; margin: 0; }
-.jwb-post-item { padding: 1.5rem 0; border-bottom: 1px solid var(--border); }
-.jwb-post-item:last-child { border-bottom: none; }
-.jwb-post-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-.jwb-post-title { font-size: 1.15rem; font-weight: 700; color: var(--text-main); }
-.jwb-post-meta { font-size: 0.85rem; color: var(--text-sub); }
-.jwb-post-content { font-size: 0.95rem; line-height: 1.6; color: var(--text-sub); white-space: pre-wrap; margin-top: 10px; }
+
+/* 테이블형 게시판 스타일 (스크린샷 반영) */
+.jwb-board-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+  min-width: 600px;
+}
+
+.jwb-board-table th {
+  background: var(--pill-bg);
+  color: var(--text-sub);
+  font-weight: 700;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
+}
+
+.jwb-board-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+  transition: background 0.2s ease;
+}
+
+.jwb-board-table tr:hover td {
+  background: var(--card-hover);
+  cursor: pointer;
+}
+
+.jwb-board-table .board-num {
+  width: 70px;
+  text-align: center;
+  color: var(--text-sub);
+}
+
+.jwb-board-table .board-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jwb-board-table .board-title-cell i {
+  color: #38bdf8; 
+  font-size: 0.9rem;
+}
+
+.jwb-board-table .board-author {
+  width: 130px;
+  color: var(--text-sub);
+}
+
+.jwb-board-table .board-date {
+  width: 100px;
+  text-align: center;
+  color: var(--text-sub);
+  font-size: 0.85rem;
+}
+
+.jwb-board-table .board-views {
+  width: 70px;
+  text-align: center;
+  color: var(--text-sub);
+}
 
 .jwb-board-form input, .jwb-board-form textarea {
   width: 100%; padding: 14px; margin-bottom: 12px;
@@ -618,7 +677,7 @@ body.light-mode .video-mask-text { background: var(--bg-color); }
 }
 .jwb-btn:hover { background: #e03838; }
 
-/* 첨부파일 다운로드 행 스타일 */
+/* 첨부파일 다운로드 행 스타일 (상세보기 모달 전용) */
 .jwb-attachment-row {
   display: flex;
   justify-content: space-between;
