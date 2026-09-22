@@ -3,420 +3,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JWB STUDIO | 관리자 페이지 (Admin)</title>
+  <title>JWB STUDIO | 관리자 대시보드</title>
   <link rel="icon" href="img/logo/logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <!-- Supabase JS SDK CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .admin-wrapper {
+      max-width: 1000px;
+      margin: 8rem auto 4rem;
+      padding: 2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-section {
+      margin-bottom: 2.5rem;
+      background: var(--pill-bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .admin-section h3 {
+      margin-bottom: 1rem;
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    .admin-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .admin-form-group input, .admin-form-group textarea, .admin-form-group select {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .admin-table th, .admin-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .admin-table th {
+      background: var(--card-bg);
+      color: var(--text-sub);
+    }
+  </style>
 </head>
 <body>
 
-  <!-- 헤더 영역 -->
-  <header id="header">
-    <div class="logo"><a href="index.html">JWB STUDIO <span style="font-size:0.8rem; color:var(--accent);">ADMIN</span></a></div>
+  <!-- 헤더 -->
+  <header id="header" class="scrolled">
+    <div class="logo"><a href="index.html">JWB STUDIO [ADMIN]</a></div>
     <div class="header-right-group">
-      <a href="index.html" class="btn-resume-outline hover-target"><i class="fa-solid fa-house"></i> 메인으로 돌아가기</a>
-      <button id="theme-toggle" class="theme-toggle-btn hover-target" aria-label="테마 변경">
-        <i class="fa-solid fa-moon icon-dark"></i>
-        <i class="fa-solid fa-sun icon-light"></i>
-      </button>
+      <a href="index.html" class="btn-resume-outline" style="padding:0.4rem 1rem;"><i class="fa-solid fa-house"></i> 메인으로 돌아가기</a>
+      <button id="admin-logout-btn" class="btn-resume-outline" style="display:none; padding:0.4rem 1rem; border-color:var(--accent); color:var(--accent);">관리자 로그아웃</button>
     </div>
   </header>
 
-  <div class="container" style="max-width: 1100px; padding-top: 6rem;">
-    <h1 class="section-title" style="margin-bottom: 2rem;"><i class="fa-solid fa-lock"></i> 관리자 대시보드</h1>
-
-    <!-- 탭 메뉴 -->
-    <div style="display: flex; gap: 10px; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; flex-wrap: wrap;">
-      <button class="jwb-btn admin-tab-btn active" data-target="notice-manage-section" style="background:var(--accent); color:#fff;"><i class="fa-solid fa-bullhorn"></i> 공지사항 관리</button>
-      <button class="jwb-btn admin-tab-btn" data-target="portfolio-manage-section" style="background:var(--pill-bg);"><i class="fa-solid fa-photo-film"></i> 포트폴리오 관리</button>
-      <button class="jwb-btn admin-tab-btn" data-target="free-manage-section" style="background:var(--pill-bg);"><i class="fa-solid fa-comments"></i> 자유게시판 관리</button>
-      <button class="jwb-btn admin-tab-btn" data-target="user-manage-section" style="background:var(--pill-bg);"><i class="fa-solid fa-users"></i> 회원 관리</button>
+  <div class="container">
+    
+    <!-- 1. 관리자 로그인 영역 (로그인 전) -->
+    <div id="admin-login-container" style="max-width: 400px; margin: 10rem auto; padding: 2.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; text-align: center;">
+      <h2 style="margin-bottom: 1.5rem; color: var(--text-main);">관리자 로그인</h2>
+      <form id="admin-login-form">
+        <input type="text" id="admin-id" placeholder="관리자 아이디" required style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+        <input type="password" id="admin-pw" placeholder="비밀번호" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
+        <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">로그인</button>
+      </form>
     </div>
 
-    <!-- 1. 공지사항 관리 섹션 (내 컴퓨터 파일 업로드 지원) -->
-    <section id="notice-manage-section" class="admin-section" style="display: block;">
-      <div class="jwb-board-container" style="margin-bottom: 2rem; padding: 2rem;">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">공지사항 등록</h3>
-        <form id="admin-notice-form" class="jwb-board-form">
-          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <select id="admin-notice-category" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
+    <!-- 2. 관리자 대시보드 영역 (로그인 후) -->
+    <div id="admin-dashboard-container" class="admin-wrapper" style="display: none;">
+      <div class="admin-header">
+        <h2>관리자 대시보드</h2>
+        <span id="admin-welcome-text" style="color: var(--text-sub); font-weight: 600;">최고관리자님 환영합니다.</span>
+      </div>
+
+      <!-- 공지사항 등록 섹션 -->
+      <div class="admin-section">
+        <h3>공지사항 등록</h3>
+        <form id="admin-notice-form">
+          <div class="admin-form-group">
+            <select id="notice-cat">
               <option value="공지">공지</option>
               <option value="안내">안내</option>
               <option value="업데이트">업데이트</option>
               <option value="일반">일반</option>
             </select>
-            <input type="text" id="admin-notice-title" placeholder="공지사항 제목" required style="flex:1; margin-bottom:0;">
+            <input type="text" id="notice-title" placeholder="공지사항 제목" required>
+            <textarea id="notice-content" placeholder="공지사항 내용을 입력하세요" rows="4" required></textarea>
+            <div>
+              <label style="font-size:0.85rem; color:var(--text-sub); display:block; margin-bottom:4px;">첨부파일 (구글 드라이브 연동)</label>
+              <input type="file" id="notice-file-input">
+              <input type="hidden" id="notice-file-name">
+              <input type="hidden" id="notice-file-url">
+              <input type="hidden" id="notice-file-size">
+            </div>
+            <button type="submit" class="jwb-btn">공지 등록하기</button>
           </div>
-          <textarea id="admin-notice-content" placeholder="공지사항 내용 입력..." rows="4" required style="margin-bottom: 10px;"></textarea>
-          
-          <div style="margin-bottom: 15px; background: var(--pill-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
-            <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 6px;"><i class="fa-solid fa-file-arrow-up"></i> 내 컴퓨터에서 첨부파일 찾기</label>
-            <input type="file" id="admin-notice-file" style="color:var(--text-sub); font-size:0.9rem;">
-          </div>
-
-          <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">공지사항 게시하기</button>
         </form>
       </div>
 
-      <div class="jwb-board-container" style="padding: 2rem;">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">등록된 공지사항 목록</h3>
-        <ul id="admin-notice-list" class="jwb-post-list">
-          <li style="text-align:center; padding:20px; color:var(--text-sub);">불러오는 중...</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 2. 포트폴리오 관리 섹션 (추가, 수정, 삭제) -->
-    <section id="portfolio-manage-section" class="admin-section" style="display: none;">
-      <div class="jwb-board-container" style="margin-bottom: 2rem; padding: 2rem;">
-        <h3 id="portfolio-form-title" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">새 포트폴리오 작품 등록</h3>
-        <form id="admin-portfolio-form" class="jwb-board-form">
-          <input type="hidden" id="edit-portfolio-id">
-          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <select id="admin-pf-category" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
+      <!-- 포트폴리오 등록 섹션 -->
+      <div class="admin-section">
+        <h3>포트폴리오 등록</h3>
+        <form id="admin-portfolio-form">
+          <div class="admin-form-group">
+            <input type="text" id="pf-title" placeholder="작품 제목" required>
+            <select id="pf-category">
               <option value="video">영상 편집 (video)</option>
-              <option value="ad">광고/프로모션 (ad)</option>
+              <option value="ad">광고 / 프로모션 (ad)</option>
               <option value="3d">3D 아트워크 (3d)</option>
-              <option value="graphic">그래픽/이미지 (graphic)</option>
+              <option value="graphic">그래픽 / 이미지 (graphic)</option>
               <option value="typo">타이포그래피 (typo)</option>
               <option value="motion">모션 그래픽 (motion)</option>
-              <option value="web">웹/인터랙티브 (web)</option>
-              <option value="vfx">VFX/씬 (vfx)</option>
+              <option value="web">웹 / 인터랙티브 (web)</option>
+              <option value="vfx">VFX / 씬 (vfx)</option>
             </select>
-            <input type="text" id="admin-pf-title" placeholder="작품 제목" required style="flex:1; margin-bottom:0;">
-          </div>
-          
-          <textarea id="admin-pf-desc" placeholder="작품 상세 설명" rows="3" required style="margin-bottom: 10px;"></textarea>
-          
-          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <input type="text" id="admin-pf-tools" placeholder="사용 툴 (예: After Effects, Blender)" required style="flex:1; margin-bottom:0;">
-            <input type="text" id="admin-pf-video" placeholder="유튜브 또는 영상 URL" required style="flex:1; margin-bottom:0;">
-          </div>
-
-          <div style="margin-bottom: 15px; background: var(--pill-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
-            <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 6px;"><i class="fa-solid fa-image"></i> 내 컴퓨터에서 썸네일 이미지 찾기</label>
-            <input type="file" id="admin-pf-imgfile" accept="image/*" style="color:var(--text-sub); font-size:0.9rem;">
-          </div>
-
-          <div style="display: flex; gap: 10px;">
-            <button type="submit" class="jwb-btn" id="pf-submit-btn" style="flex:1; justify-content:center;">포트폴리오 등록</button>
-            <button type="button" id="pf-cancel-btn" style="display:none; background:var(--pill-bg); border:1px solid var(--border); color:var(--text-main); padding:10px 20px; border-radius:8px; cursor:pointer;" onclick="resetPortfolioForm()">취소</button>
+            <input type="text" id="pf-category-name" placeholder="카테고리 표시 이름 (예: MOTION GRAPHICS)" required>
+            <input type="text" id="pf-link" placeholder="유튜브 링크 또는 영상 URL" required>
+            <input type="text" id="pf-tools" placeholder="사용 툴 (콤마로 구분, 예: After Effects, Blender)">
+            <input type="text" id="pf-work-time" placeholder="작업 기간 (예: 2주 소요)">
+            <input type="text" id="pf-thumb" placeholder="커스텀 썸네일 이미지 URL (선택사항)">
+            <textarea id="pf-desc" placeholder="작품 상세 설명" rows="3" required></textarea>
+            <button type="submit" class="jwb-btn">포트폴리오 등록하기</button>
           </div>
         </form>
       </div>
 
-      <div class="jwb-board-container" style="padding: 2rem;">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">등록된 포트폴리오 목록</h3>
-        <ul id="admin-portfolio-list" class="jwb-post-list">
-          <li style="text-align:center; padding:20px; color:var(--text-sub);">불러오는 중...</li>
-        </ul>
+      <!-- 회원 관리 섹션 -->
+      <div class="admin-section">
+        <h3>가입 회원 목록</h3>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>가입일시</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="admin-user-list">
+              <tr><td colspan="4" style="text-align:center; color:var(--text-sub);">회원 목록을 불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </section>
 
-    <!-- 3. 자유게시판 관리 섹션 -->
-    <section id="free-manage-section" class="admin-section" style="display: none;">
-      <div class="jwb-board-container" style="padding: 2rem;">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">자유게시판 전체 글 관리</h3>
-        <ul id="admin-free-list" class="jwb-post-list">
-          <li style="text-align:center; padding:20px; color:var(--text-sub);">불러오는 중...</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 4. 회원 관리 섹션 -->
-    <section id="user-manage-section" class="admin-section" style="display: none;">
-      <div class="jwb-board-container" style="padding: 2rem;">
-        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text-main);">가입 회원 목록</h3>
-        <ul id="admin-user-list" class="jwb-post-list">
-          <li style="text-align:center; padding:20px; color:var(--text-sub);">불러오는 중...</li>
-        </ul>
-      </div>
-    </section>
+    </div>
 
   </div>
 
-  <footer>
-    <p class="footer-notice">JWB STUDIO Admin Control Center</p>
-    <p class="footer-copy">&copy; 2026 JWB STUDIO. All rights reserved.</p>
-  </footer>
-
-  <!-- 관리자 기능 스크립트 -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const SUPABASE_URL = 'https://rktwmdtjboyihmrrajrc.supabase.co';
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrdHdtZHRqYm95aWhtcnJhanJjIiwicm9sZSI6InJub24iLCJpYXQiOjE3ODk5MDQ0NTksImV4cCI6MjEwNTQ4MDQ1OX0.LdeCCKnAm5HJu8BlE40HEXuQ5rfJb067PfaA84kY1N0';
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const STORAGE_BUCKET = 'jwb-bucket'; // Supabase Storage 버킷 이름 (필요시 생성 필요)
+      
+      const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzcD0H9nJ7_Xg5QrJrjoMQaQOS8E0Nj82tYXzq5EK_-_n1rwbkMyACe0NfCb22-uP5p/exec";
 
-      // 테마 전환
-      const themeToggleBtn = document.getElementById('theme-toggle');
-      if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
-      if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-          document.body.classList.toggle('light-mode');
-          localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+      async function hashPassword(password) {
+        const msgUint8 = new TextEncoder().encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      const loginContainer = document.getElementById('admin-login-container');
+      const dashboardContainer = document.getElementById('admin-dashboard-container');
+      const logoutBtn = document.getElementById('admin-logout-btn');
+
+      let isAdminLoggedIn = localStorage.getItem('jwb_admin_logged') === 'true';
+
+      function updateAdminUI() {
+        if (isAdminLoggedIn) {
+          if(loginContainer) loginContainer.style.display = 'none';
+          if(dashboardContainer) dashboardContainer.style.display = 'block';
+          if(logoutBtn) logoutBtn.style.display = 'inline-block';
+          loadUsersList();
+        } else {
+          if(loginContainer) loginContainer.style.display = 'block';
+          if(dashboardContainer) dashboardContainer.style.display = 'none';
+          if(logoutBtn) logoutBtn.style.display = 'none';
+        }
+      }
+      updateAdminUI();
+
+      // 관리자 로그인 처리 (아이디: admin, 비밀번호: 1234 또는 DB 확인)
+      const adminLoginForm = document.getElementById('admin-login-form');
+      if (adminLoginForm) {
+        adminLoginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const inputId = document.getElementById('admin-id').value;
+          const inputPw = document.getElementById('admin-pw').value;
+
+          // 간단한 관리자 계정 하드코딩 인증 (또는 DB 조회 연동 가능)
+          if (inputId === 'admin' && inputPw === '1234') {
+            isAdminLoggedIn = true;
+            localStorage.setItem('jwb_admin_logged', 'true');
+            alert('관리자 로그인 성공!');
+            updateAdminUI();
+          } else {
+            // Supabase users 테이블에서 관리자 권한 확인 (선택사항)
+            const hashedPw = await hashPassword(inputPw);
+            const { data, error } = await supabase
+              .from('users')
+              .select('*')
+              .eq('userid', inputId)
+              .eq('password', hashedPw)
+              .single();
+
+            if (!error && data && data.userid === 'admin') {
+              isAdminLoggedIn = true;
+              localStorage.setItem('jwb_admin_logged', 'true');
+              alert('관리자 로그인 성공!');
+              updateAdminUI();
+            } else {
+              alert('관리자 권한이 없거나 아이디/비밀번호가 틀렸습니다.');
+            }
+          }
         });
       }
 
-      // 탭 전환 기능
-      const tabBtns = document.querySelectorAll('.admin-tab-btn');
-      const sections = document.querySelectorAll('.admin-section');
-      tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          tabBtns.forEach(b => { b.classList.remove('active'); b.style.background = 'var(--pill-bg)'; b.style.color = 'var(--text-main)'; });
-          sections.forEach(s => s.style.display = 'none');
-          
-          btn.classList.add('active');
-          btn.style.background = 'var(--accent)';
-          btn.style.color = '#fff';
-          document.getElementById(btn.getAttribute('data-target')).style.display = 'block';
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('jwb_admin_logged');
+          isAdminLoggedIn = false;
+          updateAdminUI();
+          alert('관리자 로그아웃 되었습니다.');
         });
+      }
+
+      // 공지사항 파일 업로드 핸들러
+      document.getElementById('notice-file-input')?.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+          try {
+            const res = await fetch(GAS_WEB_APP_URL, {
+              method: 'POST',
+              body: JSON.stringify({ fileName: file.name, mimeType: file.type, fileData: reader.result.split(',')[1] })
+            });
+            const result = await res.json();
+            if (result.status === 'success') {
+              document.getElementById('notice-file-name').value = file.name;
+              document.getElementById('notice-file-url').value = result.url;
+              document.getElementById('notice-file-size').value = (file.size / 1024).toFixed(1) + 'KB';
+              alert('공지 첨부파일 구글 드라이브 업로드 완료!');
+            } else {
+              alert('업로드 실패: ' + result.message);
+            }
+          } catch (err) {
+            alert('파일 업로드 통신 오류 발생');
+          }
+        };
       });
 
-      // 스토리지 파일 업로드 헬퍼 함수
-      async function uploadFileToSupabase(fileObj) {
-        if (!fileObj) return null;
-        const fileName = `${Date.now()}_${fileObj.name}`;
-        const { data, error } = await supabase.storage.from(STORAGE_BUCKET).upload(fileName, fileObj);
-        if (error) {
-          alert('파일 업로드 실패: ' + error.message);
-          return null;
-        }
-        const { data: { publicUrl } } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(fileName);
-        return { name: fileObj.name, url: publicUrl, size: Math.round(fileObj.size / 1024) + 'KB' };
-      }
+      // 공지 등록 폼 제출
+      document.getElementById('admin-notice-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          category: document.getElementById('notice-cat').value,
+          title: document.getElementById('notice-title').value,
+          content: document.getElementById('notice-content').value,
+          file_name: document.getElementById('notice-file-name').value || null,
+          file_url: document.getElementById('notice-file-url').value || null,
+          file_size: document.getElementById('notice-file-size').value || null,
+          download_count: 0,
+          date: new Date().toLocaleDateString()
+        };
 
-      // 1. 공지사항 관리
-      async function loadAdminNotices() {
-        const list = document.getElementById('admin-notice-list');
-        if (!list) return;
-        const { data, error } = await supabase.from('notices').select('*').order('id', { ascending: false });
-        if (error || !data || data.length === 0) {
-          list.innerHTML = '<li style="text-align:center; padding:15px; color:var(--text-sub);">등록된 공지사항이 없습니다.</li>';
+        const { error } = await supabase.from('notices').insert([payload]);
+        if (!error) {
+          alert('공지사항이 정상 등록되었습니다!');
+          e.target.reset();
+          document.getElementById('notice-file-name').value = '';
+          document.getElementById('notice-file-url').value = '';
+          document.getElementById('notice-file-size').value = '';
+        } else {
+          alert('등록 실패: ' + error.message);
+        }
+      });
+
+      // 포트폴리오 등록 폼 제출
+      document.getElementById('admin-portfolio-form')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          title: document.getElementById('pf-title').value,
+          category: document.getElementById('pf-category').value,
+          category_name: document.getElementById('pf-category-name').value,
+          link: document.getElementById('pf-link').value,
+          tools: document.getElementById('pf-tools').value,
+          work_time: document.getElementById('pf-work-time').value,
+          thumb: document.getElementById('pf-thumb').value,
+          desc: document.getElementById('pf-desc').value
+        };
+
+        const { error } = await supabase.from('portfolios').insert([payload]);
+        if (!error) {
+          alert('포트폴리오가 정상 등록되었습니다!');
+          e.target.reset();
+        } else {
+          alert('등록 실패: ' + error.message);
+        }
+      });
+
+      // 회원 목록 불러오기 및 강제 탈퇴 기능
+      async function loadUsersList() {
+        const tbody = document.getElementById('admin-user-list');
+        if (!tbody) return;
+
+        const { data: users, error } = await supabase.from('users').select('*');
+        if (error || !users) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">회원 목록을 불러오지 못했습니다.</td></tr>';
           return;
         }
-        list.innerHTML = '';
-        data.forEach(item => {
-          list.innerHTML += `
-            <li style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <span style="color:var(--accent); font-weight:700;">[${item.category || '공지'}]</span>
-                <strong style="color:var(--text-main); margin-left:8px;">${item.title}</strong>
-                <span style="font-size:0.8rem; color:var(--text-sub); margin-left:10px;">${item.date || ''}</span>
-              </div>
-              <button onclick="deleteNotice(${item.id})" style="background:#ef4444; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.8rem;">삭제</button>
-            </li>
+
+        tbody.innerHTML = '';
+        if (users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">가입된 회원이 없습니다.</td></tr>';
+          return;
+        }
+
+        users.forEach(u => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${u.userid}</td>
+              <td>${u.username}</td>
+              <td>${u.created_at || '-'}</td>
+              <td><button onclick="deleteUser('${u.userid}')" style="background:var(--accent); color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:0.8rem;">탈퇴</button></td>
+            </tr>
           `;
         });
       }
 
-      const noticeForm = document.getElementById('admin-notice-form');
-      if (noticeForm) {
-        noticeForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const category = document.getElementById('admin-notice-category').value;
-          const title = document.getElementById('admin-notice-title').value.trim();
-          const content = document.getElementById('admin-notice-content').value.trim();
-          const fileInput = document.getElementById('admin-notice-file').files[0];
-
-          let fileInfo = { name: null, url: null, size: null };
-          if (fileInput) {
-            const uploaded = await uploadFileToSupabase(fileInput);
-            if (uploaded) fileInfo = uploaded;
-          }
-
-          const { error } = await supabase.from('notices').insert([{
-            category, title, content, 
-            file_name: fileInfo.name, 
-            file_url: fileInfo.url, 
-            file_size: fileInfo.size,
-            date: new Date().toLocaleDateString()
-          }]);
-
-          if (error) {
-            alert('공지 등록 실패: ' + error.message);
-          } else {
-            alert('공지사항이 성공적으로 등록되었습니다.');
-            noticeForm.reset();
-            loadAdminNotices();
-          }
-        });
-      }
-
-      window.deleteNotice = async (id) => {
-        if (!confirm('정말 이 공지사항을 삭제하시겠습니까?')) return;
-        const { error } = await supabase.from('notices').delete().eq('id', id);
-        if (error) alert('삭제 실패: ' + error.message);
-        else { alert('삭제되었습니다.'); loadAdminNotices(); }
-      };
-
-      // 2. 포트폴리오 관리 (추가, 수정, 삭제)
-      async function loadAdminPortfolio() {
-        const list = document.getElementById('admin-portfolio-list');
-        if (!list) return;
-        const { data, error } = await supabase.from('portfolio').select('*').order('id', { ascending: false });
-        if (error || !data || data.length === 0) {
-          list.innerHTML = '<li style="text-align:center; padding:15px; color:var(--text-sub);">등록된 포트폴리오가 없습니다.</li>';
-          return;
-        }
-        list.innerHTML = '';
-        data.forEach(item => {
-          const safeItem = encodeURIComponent(JSON.stringify(item));
-          list.innerHTML += `
-            <li style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-              <div style="display:flex; align-items:center; gap:12px;">
-                <img src="${item.img || ''}" alt="" style="width:50px; height:35px; object-fit:cover; border-radius:4px;">
-                <div>
-                  <span style="color:var(--accent); font-weight:700; font-size:0.8rem;">[${item.category}]</span>
-                  <strong style="color:var(--text-main); margin-left:6px;">${item.title}</strong>
-                </div>
-              </div>
-              <div style="display:flex; gap:6px;">
-                <button onclick="editPortfolio('${safeItem}')" style="background:#3b82f6; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">수정</button>
-                <button onclick="deletePortfolio(${item.id})" style="background:#ef4444; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">삭제</button>
-              </div>
-            </li>
-          `;
-        });
-      }
-
-      const portfolioForm = document.getElementById('admin-portfolio-form');
-      if (portfolioForm) {
-        portfolioForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const editId = document.getElementById('edit-portfolio-id').value;
-          const category = document.getElementById('admin-pf-category').value;
-          const title = document.getElementById('admin-pf-title').value.trim();
-          const desc = document.getElementById('admin-pf-desc').value.trim();
-          const tools = document.getElementById('admin-pf-tools').value.trim();
-          const video = document.getElementById('admin-pf-video').value.trim();
-          const imgFile = document.getElementById('admin-pf-imgfile').files[0];
-
-          let imgUrl = null;
-          if (imgFile) {
-            const uploaded = await uploadFileToSupabase(imgFile);
-            if (uploaded) imgUrl = uploaded.url;
-          }
-
-          if (editId) {
-            // 수정 모드
-            const updateData = { category, title, desc, tools, video };
-            if (imgUrl) updateData.img = imgUrl;
-
-            const { error } = await supabase.from('portfolio').update(updateData).eq('id', editId);
-            if (error) alert('수정 실패: ' + error.message);
-            else { alert('포트폴리오가 수정되었습니다.'); resetPortfolioForm(); loadAdminPortfolio(); }
-          } else {
-            // 신규 등록 모드
-            if (!imgUrl) {
-              alert('썸네일 이미지를 첨부해 주세요.');
-              return;
-            }
-            const { error } = await supabase.from('portfolio').insert([{
-              category, title, desc, tools, video, img: imgUrl
-            }]);
-            if (error) alert('등록 실패: ' + error.message);
-            else { alert('포트폴리오가 등록되었습니다.'); portfolioForm.reset(); loadAdminPortfolio(); }
-          }
-        });
-      }
-
-      window.editPortfolio = (encodedItem) => {
-        const item = JSON.parse(decodeURIComponent(encodedItem));
-        document.getElementById('edit-portfolio-id').value = item.id;
-        document.getElementById('admin-pf-category').value = item.category;
-        document.getElementById('admin-pf-title').value = item.title;
-        document.getElementById('admin-pf-desc').value = item.desc;
-        document.getElementById('admin-pf-tools').value = item.tools;
-        document.getElementById('admin-pf-video').value = item.video;
-        document.getElementById('portfolio-form-title').textContent = `포트폴리오 수정 (ID: ${item.id})`;
-        document.getElementById('pf-submit-btn').textContent = '포트폴리오 수정 완료';
-        document.getElementById('pf-cancel-btn').style.display = 'inline-block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      };
-
-      window.resetPortfolioForm = () => {
-        document.getElementById('admin-portfolio-form').reset();
-        document.getElementById('edit-portfolio-id').value = '';
-        document.getElementById('portfolio-form-title').textContent = '새 포트폴리오 작품 등록';
-        document.getElementById('pf-submit-btn').textContent = '포트폴리오 등록';
-        document.getElementById('pf-cancel-btn').style.display = 'none';
-      };
-
-      window.deletePortfolio = async (id) => {
-        if (!confirm('정말 이 포트폴리오 작품을 삭제하시겠습니까?')) return;
-        const { error } = await supabase.from('portfolio').delete().eq('id', id);
-        if (error) alert('삭제 실패: ' + error.message);
-        else { alert('삭제되었습니다.'); loadAdminPortfolio(); }
-      };
-
-      // 3. 자유게시판 관리
-      async function loadAdminFreeBoard() {
-        const list = document.getElementById('admin-free-list');
-        if (!list) return;
-        const { data, error } = await supabase.from('free_board').select('*').order('id', { ascending: false });
-        if (error || !data || data.length === 0) {
-          list.innerHTML = '<li style="text-align:center; padding:15px; color:var(--text-sub);">등록된 게시글이 없습니다.</li>';
-          return;
-        }
-        list.innerHTML = '';
-        data.forEach(item => {
-          list.innerHTML += `
-            <li style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <strong style="color:var(--text-main);">${item.title}</strong>
-                <span style="font-size:0.85rem; color:var(--text-sub); margin-left:10px;">by ${item.author} (${item.date || ''})</span>
-              </div>
-              <button onclick="deleteFreePost(${item.id})" style="background:#ef4444; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.8rem;">삭제</button>
-            </li>
-          `;
-        });
-      }
-
-      window.deleteFreePost = async (id) => {
-        if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
-        const { error } = await supabase.from('free_board').delete().eq('id', id);
-        if (error) alert('삭제 실패: ' + error.message);
-        else { alert('삭제되었습니다.'); loadAdminFreeBoard(); }
-      };
-
-      // 4. 회원 관리
-      async function loadAdminUsers() {
-        const list = document.getElementById('admin-user-list');
-        if (!list) return;
-        const { data, error } = await supabase.from('users').select('*');
-        if (error || !data || data.length === 0) {
-          list.innerHTML = '<li style="text-align:center; padding:15px; color:var(--text-sub);">가입된 회원이 없습니다.</li>';
-          return;
-        }
-        list.innerHTML = '';
-        data.forEach(user => {
-          list.innerHTML += `
-            <li style="padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <strong style="color:var(--text-main);">아이디: ${user.userid}</strong>
-                <span style="font-size:0.85rem; color:var(--text-sub); margin-left:15px;">이름: ${user.name}</span>
-              </div>
-              <button onclick="deleteUser('${user.userid}')" style="background:#ef4444; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.8rem;">회원 강제탈퇴</button>
-            </li>
-          `;
-        });
-      }
-
-      window.deleteUser = async (userid) => {
-        if (!confirm(`[${userid}] 회원을 탈퇴시키겠습니까?`)) return;
+      window.deleteUser = async function(userid) {
+        if (!confirm(`[ ${userid} ] 회원을 강제 탈퇴시키겠습니까?`)) return;
         const { error } = await supabase.from('users').delete().eq('userid', userid);
-        if (error) alert('탈퇴 처리 실패: ' + error.message);
-        else { alert('회원이 탈퇴 처리되었습니다.'); loadAdminUsers(); }
+        if (!error) {
+          alert('회원이 탈퇴 처리되었습니다.');
+          loadUsersList();
+        } else {
+          alert('처리에 실패했습니다.');
+        }
       };
 
-      // 초기 데이터 로드
-      loadAdminNotices();
-      loadAdminPortfolio();
-      loadAdminFreeBoard();
-      loadAdminUsers();
     });
   </script>
 </body>
