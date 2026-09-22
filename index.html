@@ -1,565 +1,197 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>정원복 포트폴리오 | Media &amp; Motion Graphics</title>
-  <link rel="icon" href="img/logo/logo.png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Supabase JS SDK CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정원복 포트폴리오 | Motion Graphics Portfolio</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- 상단 네비게이션 -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">JWB STUDIO</a>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#about">소개</a></li>
+                    <li><a href="#portfolio">작품</a></li>
+                    <li><a href="#skills">스킬</a></li>
+                    <li><a href="#board">게시판</a></li>
+                    <li><a href="#contact">연락처</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <!-- 커스텀 마우스 커서 -->
-  <div class="custom-cursor-dot"></div>
-  <div class="custom-cursor-blur"></div>
+    <!-- 메인 타이틀 섹션 (스토리텔링) -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>시각적 한계를 넘어,<br>공감을 이끌어내는 움직임.</h1>
+            <p>상상하던 세계를 2D와 3D 모션 그래픽으로 현실화합니다.</p>
+        </div>
+    </section>
 
-  <!-- TOC (Table of Contents) 플로팅 목차 -->
-  <aside class="toc-container" id="toc">
-    <div class="toc-header">
-      <i class="fa-solid fa-list-ul"></i> 목차 (TOC)
-    </div>
-    <ul class="toc-list">
-      <li class="toc-item"><a href="#home" class="toc-link active"><span class="toc-num">01</span> 홈</a></li>
-      <li class="toc-item"><a href="#skills" class="toc-link"><span class="toc-num">02</span> 스킬</a></li>
-      <li class="toc-item"><a href="#brands" class="toc-link"><span class="toc-num">03</span> 함께한 브랜드</a></li>
-      <li class="toc-item"><a href="#notice" class="toc-link"><span class="toc-num">04</span> 공지사항</a></li>
-      <li class="toc-item"><a href="#freeboard" class="toc-link"><span class="toc-num">05</span> 자유게시판</a></li>
-      <li class="toc-item"><a href="#portfolio" class="toc-link"><span class="toc-num">06</span> 포트폴리오</a></li>
-      <li class="toc-item"><a href="#resume" class="toc-link"><span class="toc-num">07</span> 이력서</a></li>
-      <li class="toc-item"><a href="#process" class="toc-link"><span class="toc-num">08</span> 프로세스</a></li>
-      <li class="toc-item"><a href="#faq" class="toc-link"><span class="toc-num">09</span> FAQ</a></li>
-      <li class="toc-item"><a href="#about" class="toc-link"><span class="toc-num">10</span> 소개</a></li>
-      <li class="toc-item"><a href="#contact" class="toc-link"><span class="toc-num">11</span> 연락처</a></li>
-    </ul>
-  </aside>
-
-  <!-- Header Navigation -->
-  <header id="header">
-    <div class="logo"><a href="#home" class="hover-target">JWB STUDIO</a></div>
-    
-    <div class="header-right-group">
-      <a href="review.html" class="btn-resume-outline hover-target" style="margin-right:10px; padding:0.4rem 0.9rem; border-color:var(--accent); color:var(--accent);"><i class="fa-solid fa-star"></i> 고객 후기</a>
-      <span id="user-greeting" style="display:none; font-size:0.9rem; margin-right:15px; color:var(--text-main); font-weight:700;"></span>
-      <button id="btn-login-modal" class="btn-resume-outline hover-target" style="margin-right:10px; padding:0.4rem 0.9rem;">로그인</button>
-      <button id="btn-withdraw" class="btn-resume-outline hover-target" style="display:none; margin-right:10px; padding:0.4rem 0.9rem; border-color:var(--accent); color:var(--accent);">회원탈퇴</button>
-      <button id="btn-logout" class="btn-resume-outline hover-target" style="display:none; margin-right:10px; padding:0.4rem 0.9rem;">로그아웃</button>
-
-      <a href="pdf/이력서.pdf" download="정원복_이력서.pdf" class="btn-quick-resume hover-target"><i class="fa-solid fa-file-arrow-down"></i> 이력서</a>
-
-      <button id="theme-toggle" class="theme-toggle-btn hover-target" aria-label="테마 변경">
-        <i class="fa-solid fa-moon icon-dark"></i>
-        <i class="fa-solid fa-sun icon-light"></i>
-      </button>
-
-      <button class="hamburger-btn hover-target" aria-label="메뉴 열기">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-
-    <nav class="nav-menu">
-      <ul>
-        <li><a href="#home" class="nav-link hover-target">Home</a></li>
-        <li><a href="#skills" class="nav-link hover-target">스킬</a></li>
-        <li><a href="#brands" class="nav-link hover-target">함께한 브랜드</a></li>
-        <li><a href="#notice" class="nav-link hover-target">공지사항</a></li>
-        <li><a href="#freeboard" class="nav-link hover-target">자유게시판</a></li>
-        <li><a href="#portfolio" class="nav-link hover-target">포트폴리오</a></li>
-        <li><a href="#resume" class="nav-link hover-target">이력서</a></li>
-        <li><a href="#process" class="nav-link hover-target">프로세스</a></li>
-        <li><a href="#faq" class="nav-link hover-target">FAQ</a></li>
-        <li><a href="#about" class="nav-link hover-target">소개</a></li>
-        <li><a href="#order" class="nav-link highlight-menu hover-target">제작 의뢰</a></li>
-        <li><a href="#contact" class="nav-link hover-target">연락처</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <div class="container">
-    <!-- 1. Home -->
-    <section id="home" class="hero-section">
-      <div class="motion-bg-glow"></div>
-      <div class="video-mask-container">
-        <video autoplay loop muted playsinline class="video-mask-bg">
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-in-dark-background-42934-large.mp4" type="video/mp4">
-        </video>
-        <h1 class="video-mask-text">JWB STUDIO</h1>
-      </div>
-
-      <div class="hero-slider-container">
-        <div class="hero-slider-track">
-          <div class="hero-slide active">
-            <div class="slide-bg zoom-effect" style="background-image: linear-gradient(90deg, rgba(11,12,16,0.85) 0%, rgba(11,12,16,0.3) 100%), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1400&q=80');"></div>
-            <div class="slide-content">
-              <span class="slide-badge">JWB STUDIO</span>
-              <h1 class="slide-title">감각적인 컷 연출부터<br><span class="highlight">인터랙티브 웹 연동까지</span></h1>
-              <p class="slide-desc">JWB STUDIO는 모션 그래픽, 3D 비주얼, 웹 인터랙티브 미디어를 아우르는 종합 비주얼 스튜디오입니다.</p>
-              <a href="#portfolio" class="slide-btn hover-target">작품 둘러보기 <i class="fa-solid fa-arrow-right"></i></a>
+    <!-- 소개 & 이력서 섹션 -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-grid">
+                <div class="about-desc">
+                    <h3>정원복 (Jeong Won-bok)</h3>
+                    <p class="story">
+                        "행정의 꼼꼼함과 그래픽의 창의력을 하나로."<br><br>
+                        행정 사무 실무를 통해 기른 체계적인 프로세스 관리 능력과, 
+                        시각적 상상력을 화면에 구현하는 기술을 바탕으로 작업합니다. 
+                        단순히 보기 좋은 영상을 넘어, 누구나 쉽게 공감하고 메시지를 이해할 수 있는 
+                        모션 그래픽과 영상 프로덕션을 추구합니다.
+                    </p>
+                </div>
+                <div class="resume-card">
+                    <h4>Resume & Portfolio</h4>
+                    <p>더 자세한 작업 이력과 상세 포트폴리오를 확인해 보세요.</p>
+                    <a href="JWB_Resume.pdf" download class="btn">이력서 PDF 다운로드</a>
+                </div>
             </div>
-          </div>
-          <div class="hero-slide">
-            <div class="slide-bg zoom-effect" style="background-image: linear-gradient(90deg, rgba(11,12,16,0.85) 0%, rgba(11,12,16,0.3) 100%), url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1400&q=80');"></div>
-            <div class="slide-content">
-              <span class="slide-badge">3D ARTWORK &amp; VFX</span>
-              <h1 class="slide-title">상상을 현실로 구현하는<br><span class="highlight">3D 비주얼 아키텍처</span></h1>
-              <p class="slide-desc">브랜드 홍보 필름부터 타이틀 씬 연출까지 디테일한 비주얼을 제작합니다.</p>
-              <a href="#order" class="slide-btn hover-target">제작 의뢰하기 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- 스킬 섹션 -->
+    <section class="section bg-light" id="skills">
+        <div class="container">
+            <h2 class="section-title">Tech Stack</h2>
+            <div class="skills-wrapper">
+                <div class="skill-item">
+                    <h4>After Effects</h4>
+                    <p>2D 키프레임 애니메이션, 타이포그래피, 모션그래픽 구현</p>
+                </div>
+                <div class="skill-item">
+                    <h4>Blender</h4>
+                    <p>3D 모델링, 텍스처링, 라이팅 및 입체적 렌더링</p>
+                </div>
+                <div class="skill-item">
+                    <h4>Cinema 4D</h4>
+                    <p>고급 3D 모션 그래픽 및 세밀한 시뮬레이션 작업</p>
+                </div>
+                <div class="skill-item">
+                    <h4>Web & Dev</h4>
+                    <p>HTML/CSS/JS, Supabase 연동, 파이썬 기반 데이터 봇 기획</p>
+                </div>
             </div>
-          </div>
-          <div class="hero-slide">
-            <div class="slide-bg zoom-effect" style="background-image: linear-gradient(90deg, rgba(11,12,16,0.85) 0%, rgba(11,12,16,0.3) 100%), url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1400&q=80');"></div>
-            <div class="slide-content">
-              <span class="slide-badge">INTERACTIVE WEB</span>
-              <h1 class="slide-title">웹 공간에서 구현되는<br><span class="highlight">인터랙티브 미디어</span></h1>
-              <p class="slide-desc">HTML5, CSS3, JavaScript 기술을 접목한 독창적인 포트폴리오 사이트 구축.</p>
-              <a href="#about" class="slide-btn hover-target">디렉터 소개 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- 포트폴리오 섹션 -->
+    <section class="section" id="portfolio">
+        <div class="container">
+            <h2 class="section-title">Works</h2>
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="2d">2D Motion</button>
+                <button class="filter-btn" data-filter="3d">3D Rendering</button>
+                <button class="filter-btn" data-filter="dev">Web / Interactive</button>
             </div>
-          </div>
-        </div>
-        <button class="slider-nav-btn prev-btn hover-target" aria-label="이전 슬라이드"><i class="fa-solid fa-chevron-left"></i></button>
-        <button class="slider-nav-btn next-btn hover-target" aria-label="다음 슬라이드"><i class="fa-solid fa-chevron-right"></i></button>
-        <div class="slider-dots">
-          <span class="dot active hover-target" data-index="0"></span>
-          <span class="dot hover-target" data-index="1"></span>
-          <span class="dot hover-target" data-index="2"></span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 무한 스크롤 텍스트 마키 영역 -->
-    <div class="marquee-container">
-      <div class="marquee-track hover-target">
-        <div class="marquee-text">
-          JWB STUDIO <span class="dot">•</span> AFTER EFFECTS <span class="dot">•</span> BLENDER 3D <span class="dot">•</span> CINEMA 4D <span class="dot">•</span> ILLUSTRATOR <span class="dot">•</span> PHOTOSHOP <span class="dot">•</span>
-          JWB STUDIO <span class="dot">•</span> AFTER EFFECTS <span class="dot">•</span> BLENDER 3D <span class="dot">•</span> CINEMA 4D <span class="dot">•</span> ILLUSTRATOR <span class="dot">•</span> PHOTOSHOP <span class="dot">•</span>
-        </div>
-        <div class="marquee-text">
-          JWB STUDIO <span class="dot">•</span> AFTER EFFECTS <span class="dot">•</span> BLENDER 3D <span class="dot">•</span> CINEMA 4D <span class="dot">•</span> ILLUSTRATOR <span class="dot">•</span> PHOTOSHOP <span class="dot">•</span>
-          JWB STUDIO <span class="dot">•</span> AFTER EFFECTS <span class="dot">•</span> BLENDER 3D <span class="dot">•</span> CINEMA 4D <span class="dot">•</span> ILLUSTRATOR <span class="dot">•</span> PHOTOSHOP <span class="dot">•</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. 스킬 영역 -->
-    <section id="skills" class="scroll-reveal" style="padding-top: 5rem;">
-      <h2 class="section-title">스킬 (Skills)</h2>
-      <div class="skills-grid">
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="img/icon/icon_after effects.png" alt="After Effects" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">After Effects</span>
-              <span class="skill-percent">90%</span>
+            
+            <div class="portfolio-grid">
+                <article class="portfolio-card" data-category="2d">
+                    <div class="card-img"></div>
+                    <div class="card-info">
+                        <h3>타이포그래피 인트로</h3>
+                        <p>After Effects</p>
+                    </div>
+                </article>
+                <article class="portfolio-card" data-category="3d">
+                    <div class="card-img"></div>
+                    <div class="card-info">
+                        <h3>제품 프로모션 영상</h3>
+                        <p>Blender / Cinema 4D</p>
+                    </div>
+                </article>
+                <article class="portfolio-card" data-category="dev">
+                    <div class="card-img"></div>
+                    <div class="card-info">
+                        <h3>JWB STUDIO 웹사이트</h3>
+                        <p>HTML / CSS / Supabase</p>
+                    </div>
+                </article>
             </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="90%"></div></div>
         </div>
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="img/icon/con_premiere.png" alt="Premiere Pro" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">Premiere</span>
-              <span class="skill-percent">80%</span>
+    </section>
+
+    <!-- 게시판 & FAQ 섹션 -->
+    <section class="section bg-light" id="board">
+        <div class="container grid-half">
+            <!-- 좌측: 게시판 -->
+            <div class="board-area">
+                <div class="board-tabs">
+                    <button class="tab-btn active" data-target="notice">공지사항</button>
+                    <button class="tab-btn" data-target="free">자유게시판</button>
+                </div>
+                <div class="board-box" id="notice-board">
+                    <ul>
+                        <li><span class="tag">[안내]</span> JWB STUDIO 포트폴리오 오픈 <span>26.09.22</span></li>
+                        <li><span class="tag">[외주]</span> 영상 제작 단가 및 프로세스 안내 <span>26.09.20</span></li>
+                    </ul>
+                </div>
+                <div class="board-box hidden" id="free-board">
+                    <ul>
+                        <li>자유롭게 의견과 방명록을 남겨주세요. <span>운영자</span></li>
+                    </ul>
+                </div>
             </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="85%"></div></div>
-        </div>
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="img/icon/icon_photoshop.png" alt="photoshop" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">Photoshop</span>
-              <span class="skill-percent">85%</span>
+
+            <!-- 우측: FAQ -->
+            <div class="faq-area">
+                <h2 class="sub-title">자주 묻는 질문 (FAQ)</h2>
+                <div class="accordion">
+                    <div class="acc-item">
+                        <button class="acc-title">외주 의뢰 시 어떤 정보가 필요한가요?</button>
+                        <div class="acc-content"><p>영상 목적, 예산, 희망 레퍼런스 링크, 마감 일정을 남겨주시면 원활한 상담이 가능합니다.</p></div>
+                    </div>
+                    <div class="acc-item">
+                        <button class="acc-title">3D 영상 작업 기간은 어떻게 되나요?</button>
+                        <div class="acc-content"><p>모델링 난이도와 렌더링 시간에 따라 다르며, 기획부터 납품까지 평균 3~4주 소요됩니다.</p></div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="85%"></div></div>
         </div>
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="img/icon/icon_Illustrator.png" alt="Illustrator" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">Illustrator</span>
-              <span class="skill-percent">85%</span>
-            </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="85%"></div></div>
-        </div>
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="img/icon/icon_Blender.png" alt="Blender" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">Blender (3D)</span>
-              <span class="skill-percent">80%</span>
-            </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="80%"></div></div>
-        </div>
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="img/icon/con_C4D.png" alt="Cinema 4D" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">Cinema 4D (C4D)</span>
-              <span class="skill-percent">75%</span>
-            </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="75%"></div></div>
-        </div>
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">HTML5 / CSS3 / JS</span>
-              <span class="skill-percent">80%</span>
-            </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="80%"></div></div>
-        </div>
-        <div class="skill-card hover-target">
-          <div class="skill-header">
-            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="skill-icon">
-            <div class="skill-title-group">
-              <span class="skill-name">Supabase &amp; GitHub</span>
-              <span class="skill-percent">80%</span>
-            </div>
-          </div>
-          <div class="skill-bar-bg"><div class="skill-bar-fill" data-progress="80%"></div></div>
-        </div>
-      </div>
     </section>
 
-    <!-- 3. 함께한 브랜드 섹션 -->
-    <section id="brands" class="brands-section scroll-reveal">
-      <div class="brands-header">
-        <span class="sub-subtitle">협업 브랜드</span>
-        <h2 class="brands-title">함께한 브랜드</h2>
-        <p class="brands-notice">아직 함께한 브랜드가 없습니다.</p>
-      </div>
-      <div class="brands-grid">
-        <div class="brand-item hover-target" title="가상 브랜드 1">
-          <span class="brand-text"><i class="fa-solid fa-cube"></i> 루미너스 스튜디오</span>
+    <!-- 문의 및 외주 섹션 -->
+    <section class="section" id="contact">
+        <div class="container contact-container">
+            <h2 class="section-title">Contact & Outsourcing</h2>
+            <p class="contact-desc">프로젝트 의뢰 및 협업 문의를 환영합니다.</p>
+            <form class="contact-form">
+                <div class="input-group">
+                    <input type="text" placeholder="이름 / 기업명" required>
+                    <input type="email" placeholder="회신받을 이메일" required>
+                </div>
+                <select required>
+                    <option value="">문의 분야 선택</option>
+                    <option value="2d">2D 모션그래픽 작업</option>
+                    <option value="3d">3D 렌더링 및 애니메이션</option>
+                    <option value="other">기타 비즈니스 협업</option>
+                </select>
+                <textarea rows="6" placeholder="프로젝트 예산, 일정 및 상세 내용을 입력해주세요." required></textarea>
+                <button type="submit" class="btn submit-btn">문의 접수하기</button>
+            </form>
         </div>
-      </div>
     </section>
 
-    <!-- 4. 공지사항 (Notice) 섹션 -->
-    <section id="notice" class="scroll-reveal">
-      <h2 class="section-title">공지사항 (Notice)</h2>
-      <div style="display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap;">
-        <select id="notice-category-filter" onchange="filterNotices()" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
-          <option value="">전체 카테고리</option>
-          <option value="공지">공지</option>
-          <option value="안내">안내</option>
-          <option value="업데이트">업데이트</option>
-          <option value="일반">일반</option>
-        </select>
-        <input type="text" id="notice-search-input" placeholder="공지사항 검색..." onkeyup="filterNotices()" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
-      </div>
-
-      <div class="jwb-board-container">
-        <ul id="notice-list" class="jwb-post-list">
-          <li style="text-align:center; padding:20px; color:var(--text-sub);">공지사항을 불러오는 중입니다...</li>
-        </ul>
-      </div>
-      <div id="notice-pagination" style="display: flex; justify-content: center; gap: 5px; margin-top: 1.5rem;"></div>
-    </section>
-
-    <!-- 5. 자유게시판 (Free Board) 섹션 -->
-    <section id="freeboard" class="scroll-reveal">
-      <h2 class="section-title">자유게시판</h2>
-      
-      <div id="free-board-form-wrapper" style="margin-bottom: 2rem; padding: 1.5rem; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border);">
-        <div id="free-login-required-msg" style="text-align: center; padding: 15px; color: var(--text-sub); display: none;">
-          자유게시판 글 작성은 <strong style="color: var(--accent);">로그인한 회원</strong>만 가능합니다. 로그인 후 이용해 주세요.
+    <!-- 하단 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <p class="legal-notice">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
+            <ul class="footer-policy">
+                <li><a href="#">이용약관</a></li>
+                <li><a href="#">개인정보처리방침</a></li>
+                <li><a href="#">이메일무단수집거부</a></li>
+                <li><a href="#">이용자권리헌장</a></li>
+            </ul>
+            <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
         </div>
-        <form id="free-board-form" class="jwb-board-form">
-          <input type="text" id="free-title" placeholder="글 제목" required style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);">
-          <input type="text" id="free-author" placeholder="작성자" readonly style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-sub); cursor:not-allowed;">
-          <textarea id="free-content" placeholder="내용을 입력하세요" rows="3" required style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid var(--border); background:var(--pill-bg); color:var(--text-main);"></textarea>
-          
-          <div style="margin-bottom: 15px;">
-            <label style="font-size: 0.85rem; color: var(--text-sub); display: block; margin-bottom: 4px;">첨부파일 (구글 드라이브 연동 다운로드 지원)</label>
-            <input type="file" id="free-file-input" style="color:var(--text-sub);">
-            <input type="hidden" id="free-file-name">
-            <input type="hidden" id="free-file-url">
-            <input type="hidden" id="free-file-size">
-          </div>
-          <button type="submit" class="jwb-btn" style="width:100%; justify-content:center;">글 작성하기</button>
-        </form>
-      </div>
+    </footer>
 
-      <input type="text" id="free-search-input" placeholder="자유게시판 검색..." onkeyup="filterFreeBoard()" style="width: 100%; padding: 10px; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--pill-bg); color: var(--text-main);">
-      
-      <div class="jwb-board-container">
-        <ul id="public-free-list" class="jwb-post-list">
-          <li style="text-align:center; padding:20px; color:var(--text-sub);">게시글을 불러오는 중입니다...</li>
-        </ul>
-      </div>
-      <div id="free-pagination" style="display: flex; justify-content: center; gap: 5px; margin-top: 1.5rem;"></div>
-    </section>
-
-    <!-- 6. 포트폴리오 영역 -->
-    <section id="portfolio" class="scroll-trigger-portfolio">
-      <div class="portfolio-header">
-        <div>
-          <h2 class="section-title">포트폴리오 (Portfolio)</h2>
-          <p class="scroll-hint">← 좌우 스크롤 또는 뷰 스위치 아이콘을 눌러 목록 모드로 변경하세요 →</p>
-        </div>
-        <div class="view-mode-switcher">
-          <button class="view-btn active hover-target" data-view="grid" title="카드 그리드 뷰"><i class="fa-solid fa-border-all"></i></button>
-          <button class="view-btn hover-target" data-view="list" title="카드 리스트 뷰"><i class="fa-solid fa-list"></i></button>
-        </div>
-      </div>
-
-      <div class="portfolio-controls">
-        <div class="segmented-control">
-          <button class="segment-btn active hover-target" data-filter="all"><i class="fa-solid fa-border-all"></i> <span>전체</span></button>
-          <button class="segment-btn hover-target" data-filter="video" title="영상 편집"><i class="fa-solid fa-video"></i></button>
-          <button class="segment-btn hover-target" data-filter="ad" title="광고 / 프로모션"><i class="fa-solid fa-rectangle-ad"></i></button>
-          <button class="segment-btn hover-target" data-filter="3d" title="3D 아트워크"><i class="fa-solid fa-cube"></i></button>
-          <button class="segment-btn hover-target" data-filter="graphic" title="그래픽 / 이미지"><i class="fa-regular fa-image"></i></button>
-          <button class="segment-btn hover-target" data-filter="typo" title="타이포그래피"><i class="fa-solid fa-heading"></i></button>
-          <button class="segment-btn hover-target" data-filter="motion" title="모션 그래픽"><i class="fa-solid fa-play"></i></button>
-          <button class="segment-btn hover-target" data-filter="web" title="웹 / 인터랙티브"><i class="fa-solid fa-file-lines"></i></button>
-          <button class="segment-btn hover-target" data-filter="vfx" title="VFX / 씬"><i class="fa-solid fa-person-running"></i></button>
-        </div>
-
-        <div class="search-pill-box">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="portfolio-search" placeholder="작품명 또는 키워드 검색...">
-        </div>
-      </div>
-
-      <div id="portfolio-wrapper" class="horizontal-scroll-wrapper grid-view">
-        <div class="horizontal-portfolio-list" id="portfolio-list-container"></div>
-      </div>
-    </section>
-
-    <!-- 7. 인터랙티브 이력서 섹션 -->
-    <section id="resume" class="scroll-reveal">
-      <h2 class="section-title">인터랙티브 이력서 (Resume)</h2>
-      <div class="resume-card">
-        <div class="resume-header">
-          <div class="resume-badge">INTERACTIVE RESUME</div>
-          <h3 class="resume-title">정원복 | Media Creator &amp; Visual Director</h3>
-          <p class="resume-desc">모션 그래픽, 3D 연출, 웹 인터랙티브 개발 스펙트럼이 담긴 최신 이력서입니다.</p>
-        </div>
-        <div class="resume-features">
-          <div class="feature-item"><i class="fa-solid fa-check-circle"></i><span>PDF / 이미지 즉시 다운로드 지원</span></div>
-          <div class="feature-item"><i class="fa-solid fa-check-circle"></i><span>프로젝트 핵심 역량 및 타임라인 수록</span></div>
-          <div class="feature-item"><i class="fa-solid fa-check-circle"></i><span>실시간 포트폴리오 웹 링크 포함</span></div>
-        </div>
-        <div class="resume-actions">
-          <button id="btn-preview-resume" class="btn-resume-primary hover-target"><i class="fa-regular fa-eye"></i> 이력서 미리보기</button>
-          <a href="PDF/resume.pdf" download="정원복_이력서.pdf" class="btn-resume-secondary hover-target"><i class="fa-solid fa-file-pdf"></i> PDF 다운로드</a>
-          <button id="btn-copy-resume-link" class="btn-resume-outline hover-target"><i class="fa-solid fa-link"></i> 링크 복사</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 8. 제작 프로세스 영역 -->
-    <section id="process" class="scroll-reveal">
-      <h2 class="section-title">제작 프로세스 (Process)</h2>
-      <div class="process-grid">
-        <div class="process-step hover-target"><div class="step-num">01</div><h3 class="step-title">기획 및 리서치</h3><p class="step-desc">프로젝트 목적 분석, 타깃 시청자 설정 및 톤앤매너·레퍼런스를 확정합니다.</p></div>
-        <div class="process-step hover-target"><div class="step-num">02</div><h3 class="step-title">스토리보드 &amp; 콘셉트 시안</h3><p class="step-desc">시각화 작업 전 스토리보드 구성과 주요 키 컷의 2D/3D 스타일 프레임을 제작합니다.</p></div>
-        <div class="process-step hover-target"><div class="step-num">03</div><h3 class="step-title">3D/모션 제작 &amp; 컴포지팅</h3><p class="step-desc">Blender/C4D 모델링, After Effects 키프레임 모션, VFX 특수효과 작업을 진행합니다.</p></div>
-        <div class="process-step hover-target"><div class="step-num">04</div><h3 class="step-title">종합 편집 &amp; 사운드</h3><p class="step-desc">컬러 그래딩(색보정), 타이포그래피 모션 연출, BGM 및 효과음 믹싱으로 완성도를 높입니다.</p></div>
-        <div class="process-step hover-target"><div class="step-num">05</div><h3 class="step-title">피드백 반영 &amp; 최종 납품</h3><p class="step-desc">클라이언트 피드백을 수렴하여 디테일을 보완한 후 최적화된 매체별 포맷으로 전달합니다.</p></div>
-      </div>
-    </section>
-
-    <!-- 9. 자주하는 질문 (FAQ) -->
-    <section id="faq" class="scroll-reveal">
-      <h2 class="section-title">자주하는 질문 (FAQ)</h2>
-      <div class="faq-list">
-        <div class="faq-item"><div class="faq-question hover-target"><span>Q. 영상 제작 문의 절차는 어떻게 되나요?</span><span class="faq-toggle">▼</span></div><div class="faq-answer">레퍼런스 영상 및 요구사항 전달 → 일정 및 견적 확정 → 1차 시안 제작 → 피드백 및 수정 → 최종 납품 순으로 진행됩니다.</div></div>
-        <div class="faq-item"><div class="faq-question hover-target"><span>Q. 작업 기간은 통상 어느 정도 소요되나요?</span><span class="faq-toggle">▼</span></div><div class="faq-answer">영상 종류 및 3D/모션 그래픽 포함 여부에 따라 상이하며, 일반적인 숏폼/프로모션 영상은 1~2주 내외로 소요됩니다.</div></div>
-        <div class="faq-item"><div class="faq-question hover-target"><span>Q. 웹 디자인/인터랙티브 관련 제작도 함께 가능한가요?</span><span class="faq-toggle">▼</span></div><div class="faq-answer">네, HTML/CSS/JavaScript 기반의 포트폴리오 페이지 구축 및 비디오 연동 인터랙티브 웹 사이트 제작도 지원합니다.</div></div>
-        <div class="faq-item"><div class="faq-question hover-target"><span>Q. 피드백 및 수정 작업은 몇 회까지 가능한가요?</span><span class="faq-toggle">▼</span></div><div class="faq-answer">기본적으로 1차 시안 제공 후 2회까지 무상 수정을 지원해 드립니다. 다만 기획이나 전체 컷 구성 자체가 변경되는 대규모 수정의 경우 추가 비용이 발생할 수 있습니다.</div></div>
-        <div class="faq-item"><div class="faq-question hover-target"><span>Q. 프로젝트 원본 파일(AEP, BLEND 등)도 함께 제공되나요?</span><span class="faq-toggle">▼</span></div><div class="faq-answer">기본 납품 항목은 최종 결과물 영상 파일(MP4, MOV 등)입니다. After Effects(AEP)나 Blender(BLEND) 등의 원본 프로젝트 파일은 별도의 라이선스 협의 및 작업비 추가를 통해 함께 받으실 수 있습니다.</div></div>
-      </div>
-    </section>
-
-    <!-- 10. 소개 영역 -->
-    <section id="about" class="scroll-reveal">
-      <h2 class="section-title">소개 (About)</h2>
-      <div class="detail-box" style="margin-bottom: 2rem; border-color: var(--accent);">
-        <span class="card-tag" style="font-size: 0.85rem; margin-bottom: 0.8rem;">ABOUT JWB STUDIO</span>
-        <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.8rem; color: var(--text-main);">"감각적인 컷 연출부터 인터랙티브 웹 연동까지."</h3>
-        <p style="color: var(--text-sub); font-size: 1rem; line-height: 1.7; word-break: keep-all;">
-          <strong>JWB STUDIO</strong>는 사진 및 프로모션 영상 편집, 3D 타이틀 연출, 웹 인터랙티브 미디어를 아우르는 종합 비주얼 크리에이티브 스튜디오입니다.
-        </p>
-      </div>
-      <div class="profile-container">
-        <div class="profile-img-box"><img src="img/profile/IMG_3015.jpg" alt="정원복 프로필 사진" class="profile-img hover-target" loading="lazy"></div>
-        <div class="profile-info"><p class="about-intro">안녕하세요, 모션 그래픽과 비주얼 연출을 바탕으로 미디어 콘텐츠를 제작하는 영상 크리에이터 정원복입니다.</p></div>
-      </div>
-      <div class="about-details-grid">
-        <div class="detail-box">
-          <h3 class="detail-title">학력</h3>
-          <ul class="detail-list">
-            <li><span class="detail-date">2018.02</span><span class="detail-text">석전중학교 졸업</span></li>
-            <li><span class="detail-date">2021.02</span><span class="detail-text">구미고등학교 부설방송통신고등학교 졸업</span></li>
-            <li><span class="detail-date">2023.02</span><span class="detail-text">구미대학교 경영학 전문학사</span></li>
-            <li><span class="detail-date">2026</span><span class="detail-text">사회복지학 전공 과정 이수 중</span></li>
-          </ul>
-        </div>
-        <div class="detail-box">
-          <h3 class="detail-title">교육 및 수료</h3>
-          <ul class="detail-list">
-            <li><span class="detail-date">2026.08</span><span class="detail-text">청년취업지원 진로 프로그램 (CAP+) 수료</span></li>
-            <li><span class="detail-date">2026.07</span><span class="detail-text">국민취업지원제도 이수 및 취업 역량 강화 과정</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 11. 제작 의뢰 안내 영역 -->
-    <section id="order" class="scroll-reveal">
-      <h2 class="section-title">제작 의뢰 (Work With Me)</h2>
-      <div class="order-card">
-        <div class="order-info">
-          <h3 class="order-heading">새로운 영상 프로젝트를 고민 중이신가요?</h3>
-          <p class="order-subtext">브랜드 홍보, 모션 그래픽, 타이틀 씬 연출 등 필요하신 영상의 레퍼런스나 아이디어가 있다면 언제든지 문의해 주세요.</p>
-        </div>
-        <div class="order-action" style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <a href="#contact" class="order-btn hover-target">외주 문의하기</a>
-          <a href="copyright.html" target="_blank" class="btn-resume-outline hover-target" style="border-color: var(--border); color: var(--text-main);"><i class="fa-solid fa-file-contract"></i> 저작권 귀속 약관</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- 12. 연락처 영역 -->
-    <section id="contact" class="scroll-reveal">
-      <h2 class="section-title">연락처 (Contact)</h2>
-      <div class="contact-card">
-        <p class="contact-desc">외주 의뢰 및 기타 협업 문의는 아래 연락처, 이메일, 또는 오픈채팅으로 편하게 전달해주시기 바랍니다.</p>
-        <div class="contact-grid">
-          <div class="contact-item"><span class="contact-label"><i class="fa-regular fa-envelope"></i> 이메일</span><span class="contact-value"><a href="mailto:chong04041@naver.com" class="hover-target">chong04041@naver.com</a></span></div>
-          <div class="contact-item"><span class="contact-label"><i class="fa-solid fa-phone"></i> 연락처</span><span class="contact-value">010-3401-1371</span></div>
-          <div class="contact-item"><span class="contact-label"><i class="fa-solid fa-comment"></i> 카카오톡 오픈채팅</span><span class="contact-value"><a href="https://open.kakao.com/o/your_openchat_id" target="_blank" rel="noopener" class="hover-target">오픈채팅으로 문의하기</a></span></div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- 비디오 라이트박스 및 상세 모달 -->
-  <div id="video-modal" class="modal-overlay">
-    <div class="modal-content">
-      <button class="modal-close hover-target">&times;</button>
-      <div class="modal-video-wrapper"><iframe id="modal-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
-      <div class="modal-info-box">
-        <div class="modal-header-group"><span id="modal-tag" class="card-tag">카테고리</span><h3 id="modal-title" class="modal-project-title">작품 제목</h3></div>
-        <div class="modal-detail-grid"><div class="modal-detail-item"><span class="modal-label"><i class="fa-solid fa-wrench"></i> 사용 툴</span><div id="modal-tools" class="tools-badge-group"></div></div></div>
-        <p id="modal-desc" class="modal-project-desc">작품 상세 설명이 들어가는 공간입니다.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 공지사항 상세 보기 모달 -->
-  <div id="notice-modal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 600px; padding: 2.5rem;">
-      <button class="modal-close notice-modal-close hover-target">&times;</button>
-      <span id="notice-modal-date" class="card-tag" style="margin-bottom: 0.5rem; display:inline-block;">날짜</span>
-      <h2 id="notice-modal-title" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--text-main);">공지 제목</h2>
-      <div id="notice-modal-content" style="color: var(--text-sub); font-size: 1rem; line-height: 1.8; white-space: pre-wrap; word-break: keep-all; border-top: 1px solid var(--border); padding-top: 1.5rem; margin-bottom: 1.5rem;">공지 내용이 들어가는 자리입니다.</div>
-      <div id="notice-modal-attachment"></div>
-    </div>
-  </div>
-
-  <!-- 자유게시판 상세 보기 모달 -->
-  <div id="free-modal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 600px; padding: 2.5rem;">
-      <button class="modal-close free-modal-close hover-target">&times;</button>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-        <span id="free-modal-author" class="card-tag">작성자</span>
-        <span id="free-modal-date" style="font-size: 0.85rem; color: var(--text-sub);">날짜</span>
-      </div>
-      <h2 id="free-modal-title" style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--text-main);">게시글 제목</h2>
-      <div id="free-modal-content" style="color: var(--text-sub); font-size: 1rem; line-height: 1.8; white-space: pre-wrap; word-break: keep-all; border-top: 1px solid var(--border); padding-top: 1.5rem; margin-bottom: 1.5rem;">게시글 내용이 들어가는 자리입니다.</div>
-      <div id="free-modal-attachment"></div>
-    </div>
-  </div>
-
-  <!-- 일반 회원가입 및 로그인 모달 -->
-  <div id="auth-modal" class="modal-overlay">
-    <div class="modal-content auth-modal-content" style="max-width: 400px; padding: 2.5rem; background: var(--card-bg);">
-      <button class="modal-close auth-modal-close hover-target">&times;</button>
-      
-      <div id="login-view-area">
-        <h2 style="margin-bottom: 1.5rem; color:var(--text-main); text-align:center;">로그인</h2>
-        <form id="login-form" class="jwb-board-form">
-          <input type="text" id="login-id" placeholder="아이디" required style="margin-bottom:10px;">
-          <input type="password" id="login-pw" placeholder="비밀번호" required>
-          <button type="submit" class="jwb-btn hover-target" style="width:100%; justify-content:center; margin-top:10px;">로그인</button>
-        </form>
-        <div style="margin-top: 15px; text-align: center; font-size: 0.85rem; color: var(--text-sub);">
-          <button type="button" id="go-to-find-id" style="background:none; border:none; color:var(--text-sub); cursor:pointer; font-family:inherit;">아이디 찾기</button> | 
-          <button type="button" id="go-to-find-pw" style="background:none; border:none; color:var(--text-sub); cursor:pointer; font-family:inherit;">비밀번호 찾기</button> | 
-          <button type="button" id="go-to-signup" style="background:none; border:none; color:var(--accent); cursor:pointer; font-weight:bold; font-family:inherit;">회원가입</button>
-        </div>
-        <hr style="margin: 20px 0; border:0; border-top:1px solid var(--border);">
-        <div style="text-align: center;">
-          <button type="button" onclick="location.href='admin.html'" style="background:none; border:1px solid var(--border); padding: 8px 16px; border-radius: 20px; color:var(--text-sub); cursor:pointer; font-size: 0.8rem; transition:0.3s;" onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--accent)';" onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-sub)';">
-            <i class="fa-solid fa-lock"></i> 관리자 페이지 (Admin)
-          </button>
-        </div>
-      </div>
-
-      <div id="find-id-view-area" style="display: none;">
-        <h2 style="margin-bottom: 1.5rem; color:var(--text-main); text-align:center;">아이디 찾기</h2>
-        <form id="find-id-form" class="jwb-board-form">
-          <input type="text" id="find-id-name" placeholder="이름" required style="margin-bottom:10px;">
-          <button type="submit" class="jwb-btn hover-target" style="width:100%; justify-content:center; margin-top:10px;">아이디 찾기</button>
-        </form>
-        <div style="margin-top: 15px; text-align: center; font-size: 0.85rem;"><button type="button" class="go-to-login-btn" style="background:none; border:none; color:var(--text-sub); cursor:pointer; font-weight:bold; font-family:inherit;">로그인으로 돌아가기</button></div>
-      </div>
-
-      <div id="find-pw-view-area" style="display: none;">
-        <h2 style="margin-bottom: 1.5rem; color:var(--text-main); text-align:center;">비밀번호 찾기</h2>
-        <form id="find-pw-form" class="jwb-board-form">
-          <input type="text" id="find-pw-id" placeholder="아이디" required style="margin-bottom:10px;">
-          <input type="text" id="find-pw-name" placeholder="이름" required style="margin-bottom:10px;">
-          <button type="submit" class="jwb-btn hover-target" style="width:100%; justify-content:center; margin-top:10px;">임시 비밀번호 발급</button>
-        </form>
-        <div style="margin-top: 15px; text-align: center; font-size: 0.85rem;"><button type="button" class="go-to-login-btn" style="background:none; border:none; color:var(--text-sub); cursor:pointer; font-weight:bold; font-family:inherit;">로그인으로 돌아가기</button></div>
-      </div>
-
-      <div id="signup-view-area" style="display: none;">
-        <h2 style="margin-bottom: 1.5rem; color:var(--text-main); text-align:center;">회원가입</h2>
-        <form id="signup-form" class="jwb-board-form">
-          <input type="text" id="signup-id" placeholder="아이디" required style="margin-bottom:10px;">
-          <input type="password" id="signup-pw" placeholder="비밀번호" required style="margin-bottom:10px;">
-          <input type="text" id="signup-name" placeholder="이름" required>
-          <div class="terms-area" style="margin: 15px 0; font-size: 0.85rem; color: var(--text-sub); text-align: left; background: var(--pill-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border);">
-            <label style="display: block; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); font-weight: 700; cursor: pointer; color: var(--text-main);"><input type="checkbox" id="term-all"> 전체 약관에 모두 동의합니다</label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-1" class="term-item" required> [필수] 이용약관 동의 <a href="terms.html" target="_blank" style="color:var(--accent); float:right; text-decoration:none;">보기</a></label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-2" class="term-item" required> [필수] 개인정보처리방침 동의 <a href="privacy.html" target="_blank" style="color:var(--accent); float:right; text-decoration:none;">보기</a></label>
-            <label style="display: block; margin-bottom: 8px; cursor: pointer;"><input type="checkbox" id="term-3" class="term-item" required> [필수] 저작권 귀속 약관 동의 <a href="copyright.html" target="_blank" style="color:var(--accent); float:right; text-decoration:none;">보기</a></label>
-            <label style="display: block; cursor: pointer;"><input type="checkbox" id="term-4" class="term-item"> [선택] 마케팅 정보 수신 동의 <span style="color:var(--text-sub); float:right; font-size: 0.75rem;">(이벤트 및 혜택 안내)</span></label>
-          </div>
-          <button type="submit" class="jwb-btn hover-target" style="width:100%; justify-content:center; background: var(--pill-bg); border: 1px solid var(--accent); color: var(--text-main);">가입 완료</button>
-        </form>
-        <div style="margin-top: 15px; text-align: center; font-size: 0.85rem;"><button type="button" class="go-to-login-btn" style="background:none; border:none; color:var(--text-sub); cursor:pointer; font-weight:bold; font-family:inherit;">로그인으로 돌아가기</button></div>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <p class="footer-notice">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
-    <div class="footer-legal-links" style="margin: 10px 0; font-size: 0.9rem;">
-      <a href="terms.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">이용약관</a> | 
-      <a href="privacy.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">개인정보처리방침</a> | 
-      <a href="email_policy.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">이메일무단수집거부</a> | 
-      <a href="rights.html" class="hover-target" style="color: var(--text-sub); text-decoration: none; margin: 0 8px;">이용자권리헌장</a>
-    </div>
-    <p class="footer-copy">&copy; 2026 JWB STUDIO. All rights reserved.</p>
-  </footer>
-
-  <script src="js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
