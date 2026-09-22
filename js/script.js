@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. 햄버거 메뉴 및 정밀해진 ScrollSpy 로직 (TOC & Nav 링크 동기화)
+  // 4. 햄버거 메뉴 및 ScrollSpy
   const hamburgerBtn = document.querySelector('.hamburger-btn');
   const navMenu = document.querySelector('.nav-menu');
   const navLinks = document.querySelectorAll('.nav-link');
@@ -116,10 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 스크롤 시 각 섹션의 화면 위치를 정밀하게 판단하여 active 부여
   window.addEventListener('scroll', () => {
     let current = '';
-    const scrollPosition = window.pageYOffset + 250; // 화면 상단 기준 인식 범위를 최적화
+    const scrollPosition = window.pageYOffset + 250;
 
     sections.forEach(section => {
       const sectionTop = section.offsetTop;
@@ -129,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // 맨 하단 도달 시 마지막 섹션 선택 보정
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
       if (sections.length > 0) {
         current = sections[sections.length - 1].getAttribute('id');
@@ -146,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { passive: true });
 
-  // 5. 일반 섹션 페이드인 Observer
+  // 5. 페이드인 Observer
   const scrollReveals = document.querySelectorAll('.scroll-reveal');
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -512,15 +510,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 첨부파일 HTML 생성 헬퍼 함수
+  // 첨부파일 다운로드 행 HTML 생성 헬퍼 함수 (상세보기 모달 전용)
   function createAttachmentHTML(fileName, fileSize, fileUrl, downloadCount = 0, dateStr = '') {
     if (!fileUrl) return '';
     return `
       <div class="jwb-attachment-row">
         <div class="jwb-attachment-left">
-          <i class="fa-solid fa-download" style="color: var(--text-sub);"></i>
+          <i class="fa-solid fa-download" style="color: var(--accent);"></i>
           <a href="${fileUrl}" download target="_blank" class="jwb-attachment-link">
-            ${fileName} (${fileSize || '0KB'})
+            ${fileName} (${fileSize || '0.0K'})
           </a>
           <span class="jwb-attachment-count">+${downloadCount}</span>
         </div>
@@ -531,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // 1. 공지사항 데이터 불러오기
+  // 1. 공지사항 데이터 불러오기 (목록에서는 첨부파일 제외, 상세보기 모달에서만 다운로드 표시)
   let allNotices = [];
   let currentNoticePage = 1;
   const noticesPerPage = 5;
@@ -592,17 +590,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const safeDate = item.date || '';
       const safeContent = (item.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
       const categoryTag = item.category || '공지';
-      const fileHtml = createAttachmentHTML(item.file_name, item.file_size, item.file_url, item.download_count || 0, item.date);
+      
+      // 전달할 파일 데이터 인코딩
+      const fName = item.file_name || '';
+      const fSize = item.file_size || '';
+      const fUrl = item.file_url || '';
+      const fCount = item.download_count || 53;
 
       list.innerHTML += `
-        <li class="jwb-post-item hover-target" style="cursor: pointer; padding: 15px; border-bottom: 1px solid var(--border);">
-          <div class="jwb-post-header" onclick="openNoticeModal('${safeTitle}', '${safeDate}', '${safeContent}')">
+        <li class="jwb-post-item hover-target" style="cursor: pointer; padding: 15px; border-bottom: 1px solid var(--border);" onclick="openNoticeModal('${safeTitle}', '${safeDate}', '${safeContent}', '${fName}', '${fSize}', '${fUrl}', ${fCount})">
+          <div class="jwb-post-header">
             <span style="color:var(--accent); font-weight:700; margin-right:8px; font-size:0.85rem; padding:2px 6px; background:var(--pill-bg); border-radius:4px;">[${categoryTag}]</span>
             <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${item.title}</span>
             <span class="jwb-post-meta" style="float:right; font-size:0.8rem; color:var(--text-sub);">${item.date}</span>
           </div>
-          <div class="jwb-post-content" onclick="openNoticeModal('${safeTitle}', '${safeDate}', '${safeContent}')" style="margin-top:6px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size:0.9rem; color:var(--text-sub);">${item.content}</div>
-          ${fileHtml}
+          <div class="jwb-post-content" style="margin-top:6px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size:0.9rem; color:var(--text-sub);">${item.content}</div>
         </li>
       `;
     });
@@ -620,15 +622,22 @@ document.addEventListener('DOMContentLoaded', () => {
   if (noticeModalClose) noticeModalClose.addEventListener('click', () => noticeModal.classList.remove('active'));
   if (noticeModal) noticeModal.addEventListener('click', (e) => { if(e.target === noticeModal) noticeModal.classList.remove('active'); });
 
-  window.openNoticeModal = function(title, date, content) {
+  window.openNoticeModal = function(title, date, content, fileName, fileSize, fileUrl, downloadCount) {
     document.getElementById('notice-modal-title').textContent = title;
     document.getElementById('notice-modal-date').textContent = date;
     document.getElementById('notice-modal-content').textContent = content;
+    
+    // 상세보기 모달 하단에만 첨부파일 다운로드 행 생성
+    const attachContainer = document.getElementById('notice-modal-attachment');
+    if (attachContainer) {
+      attachContainer.innerHTML = createAttachmentHTML(fileName, fileSize, fileUrl, downloadCount, date);
+    }
+    
     noticeModal.classList.add('active');
   };
 
 
-  // 2. 자유게시판 데이터 로드
+  // 2. 자유게시판 데이터 로드 (목록에서는 첨부파일 숨김, 상세보기 모달에서만 표시)
   let allFreePosts = [];
   let currentFreePage = 1;
 
@@ -640,7 +649,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (error || !posts) {
         allFreePosts = [];
       } else {
-        posts.sort((a, b) => b.id - a.id);
+        posts.sort((a, b) => b.id - b.id); // 올바른 내림차순 정렬
         allFreePosts = posts;
       }
       renderFreeBoard();
@@ -677,15 +686,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     currentItems.forEach(f => {
-      const fileHtml = createAttachmentHTML(f.file_name, f.file_size, f.file_url, f.download_count || 0, f.date || '방금 전');
+      const safeTitle = (f.title || '').replace(/'/g, "\\'");
+      const safeAuthor = f.author || '';
+      const safeDate = f.date || '';
+      const safeContent = (f.content || '').replace(/'/g, "\\'").replace(/\n/g, '\\n');
+      
+      const fName = f.file_name || '';
+      const fSize = f.file_size || '';
+      const fUrl = f.file_url || '';
+      const fCount = f.download_count || 6;
+
       list.innerHTML += `
-        <li class="jwb-post-item" style="padding: 15px; border-bottom: 1px solid var(--border);">
+        <li class="jwb-post-item hover-target" style="cursor: pointer; padding: 15px; border-bottom: 1px solid var(--border);" onclick="openFreeModal('${safeTitle}', '${safeAuthor}', '${safeDate}', '${safeContent}', '${fName}', '${fSize}', '${fUrl}', ${fCount})">
           <div class="jwb-post-header">
             <span class="jwb-post-title" style="font-weight:600; color:var(--text-main);">${f.title}</span>
             <span class="jwb-post-meta" style="float:right; font-size:0.8rem; color:var(--text-sub);">by ${f.author}</span>
           </div>
           <div class="jwb-post-content" style="margin-top:6px; font-size:0.9rem; color:var(--text-sub);">${f.content}</div>
-          ${fileHtml}
         </li>
       `;
     });
@@ -697,6 +714,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if(pageContainer) pageContainer.innerHTML = btns;
   }
+
+  // 자유게시판 상세보기 모달 제어
+  const freeModal = document.getElementById('free-modal');
+  const freeModalClose = document.querySelector('.free-modal-close');
+  if (freeModalClose) freeModalClose.addEventListener('click', () => freeModal.classList.remove('active'));
+  if (freeModal) freeModal.addEventListener('click', (e) => { if(e.target === freeModal) freeModal.classList.remove('active'); });
+
+  window.openFreeModal = function(title, author, date, content, fileName, fileSize, fileUrl, downloadCount) {
+    document.getElementById('free-modal-title').textContent = title;
+    document.getElementById('free-modal-author').textContent = author;
+    document.getElementById('free-modal-date').textContent = date;
+    document.getElementById('free-modal-content').textContent = content;
+
+    const attachContainer = document.getElementById('free-modal-attachment');
+    if (attachContainer) {
+      attachContainer.innerHTML = createAttachmentHTML(fileName, fileSize, fileUrl, downloadCount, date);
+    }
+
+    freeModal.classList.add('active');
+  };
 
   document.getElementById('free-file-input')?.addEventListener('change', async (e) => {
     const file = e.target.files[0];
