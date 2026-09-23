@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWB STUDIO | ADMIN DASHBOARD</title>
+    <link rel="stylesheet" href="/css/cstyle.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-wrap">
+        <!-- 사이드바 -->
+        <aside class="admin-sidebar">
+            <h2 class="brand">ADMIN</h2>
+            <ul class="admin-menu">
+                <li><a href="#" class="active" data-target="works-manage">포트폴리오 관리</a></li>
+                <li><a href="#" data-target="board-manage">게시판 관리</a></li>
+                <li><a href="index.html" class="logout-link">사이트로 돌아가기</a></li>
+            </ul>
+        </aside>
+
+        <!-- 메인 콘텐츠 영역 -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h2>관리자 대시보드</h2>
+                <span class="admin-id">접속 계정: admin</span>
+            </header>
+
+            <!-- 포트폴리오 관리 섹션 -->
+            <section class="admin-section active" id="works-manage">
+                <div class="section-top">
+                    <h3>포트폴리오 작품 목록</h3>
+                    <!-- 작품추가 버튼에 올바른 ID 부여 및 동작 연결 -->
+                    <button id="btn-open-add-work" class="btn-solid btn-small">+ 작품 추가</button>
+                </div>
+                <div class="admin-table-wrap mt-30">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>썸네일</th>
+                                <th>카테고리</th>
+                                <th>제목</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><div class="thumb-mini" style="background:#333;"></div></td>
+                                <td>2D MOTION</td>
+                                <td>타이포그래피 및 인포그래픽</td>
+                                <td><button class="btn-outline btn-small">삭제</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 포트폴리오 작품 추가 모달 (썸네일 업로드 포함) -->
+    <div id="add-work-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 class="headline-m" style="margin-bottom: 20px;">새 포트폴리오 작품 추가</h3>
+            <form id="add-work-form" class="cjenm-form">
+                <div class="input-group">
+                    <select id="work-category" required>
+                        <option value="2d">2D MOTION</option>
+                        <option value="3d">3D ARTS</option>
+                        <option value="web">WEB & DEV</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="work-title" placeholder="작품 제목" required>
+                </div>
+                <!-- 썸네일 업로드 필드 (Apps Script 연동) -->
+                <div class="input-group file-upload-wrap">
+                    <label for="work-thumb-file" class="file-label">썸네일 이미지 업로드</label>
+                    <input type="file" id="work-thumb-file" class="file-input" accept="image/*" required>
+                    <span id="work-thumb-name" style="margin-left: 10px; font-size: 0.9rem; color: #aaa;">선택된 파일 없음</span>
+                </div>
+                <button type="submit" class="btn-solid wide mt-30">작품 등록</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>
