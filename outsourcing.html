@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="JWB STUDIO의 모션그래픽, 3D 비주얼, 영상·웹 제작 외주 서비스와 프로젝트 문의 안내입니다.">
+    <link rel="canonical" href="https://www.wonbok.kr/outsourcing.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JWB STUDIO">
+    <meta property="og:title" content="외주 서비스 및 프로젝트 문의 | JWB STUDIO">
+    <meta property="og:description" content="영상, 모션그래픽, 3D 및 웹 프로젝트 의뢰 안내">
+    <meta property="og:url" content="https://www.wonbok.kr/outsourcing.html">
+    <meta property="og:image" content="https://www.wonbok.kr/img/logo/logo.png">
+    <title>외주서비스 & 문의 | JWB STUDIO</title>
+    <link rel="icon" href="img/logo/logo.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+</head>
+<body>
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html#home" class="brand">JWB STUDIO</a>
+            <ul class="nav-menu">
+                <li><a href="index.html#home">HOME</a></li>
+                <li><a href="outsourcing.html" class="nav-highlight">외주서비스</a></li>
+                <li><a href="admin-login.html" class="admin-nav-btn">관리자</a></li>
+                <li><button class="theme-toggle-btn" id="theme-toggle">🌙 다크</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section" style="padding-top: 180px;">
+        <div class="container">
+            <div class="section-head fade-up">
+                <h2 class="headline-l">OUTSOURCING SERVICE</h2>
+                <p class="body-text" style="max-width: 600px;">
+                    모션그래픽, 3D 비주얼, 그리고 인터랙티브 웹 제작까지 트렌디하고 완성도 높은 결과물로 프로젝트를 성공적으로 이끕니다.
+                </p>
+                <p class="body-text" style="max-width: 760px; margin-top: 18px;">견적은 작업 범위, 난이도, 일정, 산출물에 따라 개별 안내합니다. 착수 전 일정, 수정 범위, 납품 형식과 원본 파일 제공 여부를 협의해 확정합니다.</p>
+            </div>
+            <div class="work-grid mt-50" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <div class="work-card" style="background: var(--bg-secondary); padding: 40px; border: 1px solid var(--border-color);">
+                    <div class="category">01. Motion Graphics</div>
+                    <h3 style="margin-top: 15px; font-size: 1.5rem;">영상 제작 & 모션그래픽</h3>
+                </div>
+                <div class="work-card" style="background: var(--bg-secondary); padding: 40px; border: 1px solid var(--border-color);">
+                    <div class="category">02. 3D Modeling</div>
+                    <h3 style="margin-top: 15px; font-size: 1.5rem;">3D 비주얼라이제이션</h3>
+                </div>
+                <div class="work-card" style="background: var(--bg-secondary); padding: 40px; border: 1px solid var(--border-color);">
+                    <div class="category">03. Web Development</div>
+                    <h3 style="margin-top: 15px; font-size: 1.5rem;">반응형 포트폴리오 웹</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 파일 첨부형 외주 문의 폼 -->
+    <section class="section bg-black" id="inquiry-form-section">
+        <div class="container" style="max-width: 800px;">
+            <div class="section-head" style="text-align: center; margin-bottom: 40px;">
+                <h2 class="headline-m">외주 및 프로젝트 문의하기</h2>
+                <p class="body-text" style="margin-top: 10px;">참고 자료(기획서 등)와 함께 문의를 접수해 주세요.</p>
+            </div>
+
+            <form id="outsource-form" class="cjenm-form">
+                <div class="input-group"><input type="text" id="writer_name" placeholder="성함 또는 기업명" required></div>
+                <div class="input-group"><input type="email" id="writer_email" placeholder="답변 받을 이메일 주소" required></div>
+                <div class="input-group"><input type="text" id="inquiry_title" placeholder="프로젝트 제목 / 주제" required></div>
+                <div class="input-group"><textarea id="inquiry_content" rows="6" placeholder="프로젝트 예산, 일정 및 상세 내용" required></textarea></div>
+                <div class="input-group">
+                    <label class="body-text" style="font-size:0.9rem; display:block; margin-bottom:8px;">참고 자료 첨부 (선택)</label>
+                    <input type="file" id="inquiry_file" style="color:var(--text-primary);">
+                </div>
+                <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;">
+                    <label for="company-website">웹사이트</label>
+                    <input type="text" id="company-website" name="company_website" tabindex="-1" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label class="body-text"><input type="checkbox" id="privacy-consent" required> 문의 상담을 위한 개인정보 수집·이용에 동의합니다. <a href="privacy.html" target="_blank" rel="noopener">내용 보기</a></label>
+                    <small class="body-text">이름, 이메일, 문의 내용 및 선택 첨부파일을 상담 목적으로 이용합니다. 보유기간과 파기 기준은 개인정보처리방침을 확인해 주세요.</small>
+                </div>
+                <small class="body-text">스팸 방지를 위해 자동 제출 제한이 적용됩니다.</small>
+                <button type="submit" class="btn-solid wide" id="submit-inquiry">문의 접수하기</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const supabaseClient = window.getJwbSupabase();
+
+        // 테마 토글
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                htmlElement.setAttribute('data-theme', 'light');
+                themeToggleBtn.textContent = '☀️ 라이트';
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeToggleBtn.textContent = '🌙 다크';
+            }
+        });
+
+        // Honeypot과 rate limit을 거치는 Supabase Edge Function으로 문의 접수
+        document.getElementById('outsource-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!supabaseClient) { alert('문의 접수 설정이 준비되지 않았습니다. 이메일 또는 카카오 채널로 연락해 주세요.'); return; }
+            const submit = document.getElementById('submit-inquiry');
+            submit.disabled = true; submit.textContent = '접수 중…';
+            try {
+                const form = document.getElementById('outsource-form');
+                const payload = new FormData();
+                payload.set('name', document.getElementById('writer_name').value.trim());
+                payload.set('email', document.getElementById('writer_email').value.trim());
+                payload.set('title', document.getElementById('inquiry_title').value.trim());
+                payload.set('content', document.getElementById('inquiry_content').value.trim());
+                payload.set('company_website', document.getElementById('company-website').value);
+                const file = document.getElementById('inquiry_file').files[0];
+                if (file) payload.set('file', file);
+                const response = await fetch(`${window.JWB_SUPABASE_CONFIG.url.replace(/\/$/, '')}/functions/v1/submit-inquiry`, {
+                    method: 'POST', headers: { apikey: window.JWB_SUPABASE_CONFIG.anonKey }, body: payload,
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || '문의 접수에 실패했습니다.');
+                alert('문의가 접수됐습니다. 확인 후 안내드리겠습니다.');
+                form.reset();
+            } catch (error) {
+                alert(error.message || '문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            } finally {
+                submit.disabled = false; submit.textContent = '문의 접수하기';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,285 +1,197 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // 일반 아이디 세션 관리
-    let currentUser = localStorage.getItem('jwb_logged_user') || null;
-    let isAdmin = currentUser === 'admin';
-
-    function updateAuthUI() {
-        const authArea = document.getElementById('nav-auth-area');
-        const optionNotice = document.getElementById('option-notice');
-        
-        if (currentUser) {
-            authArea.innerHTML = `<a href="#" id="btn-logout" class="btn-outline btn-small">${isAdmin ? 'ADMIN (로그아웃)' : currentUser + ' (로그아웃)'}</a>`;
-            
-            document.getElementById('btn-logout').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.removeItem('jwb_logged_user');
-                currentUser = null;
-                isAdmin = false;
-                alert('로그아웃 되었습니다.');
-                window.location.reload();
-            });
-
-            if(isAdmin && optionNotice) {
-                optionNotice.style.display = 'block';
-            }
-        } else {
-            authArea.innerHTML = `<a href="#" id="btn-open-login" class="btn-solid btn-small">LOGIN</a>`;
-            if(optionNotice) optionNotice.style.display = 'none';
-            
-            document.getElementById('btn-open-login').addEventListener('click', (e) => {
-                e.preventDefault();
-                closeAllModals();
-                document.getElementById('login-modal').classList.add('active');
-            });
-        }
-    }
-    updateAuthUI();
-
-    // Google Drive 썸네일 불러오기 (즉시 다운로드 및 보기 지원)
-    function loadGoogleDriveThumbnails() {
-        document.querySelectorAll('.gdrive-thumb').forEach(thumb => {
-            const driveId = thumb.getAttribute('data-drive-id');
-            if(driveId && driveId !== 'YOUR_GDRIVE_FILE_ID_1') {
-                const imgUrl = `https://drive.google.com/uc?export=view&id=${driveId}`;
-                thumb.style.backgroundImage = `url('${imgUrl}')`;
-            }
-        });
-    }
-    loadGoogleDriveThumbnails();
-
-    // 스크롤 및 애니메이션
-    const navbar = document.getElementById('navbar');
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) navbar.classList.add('scrolled');
-        else navbar.classList.remove('scrolled');
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  const projectModal = document.getElementById('project-modal');
+  const closeProject = () => {
+    if (!projectModal) return;
+    projectModal.classList.remove('active');
+    const video = document.getElementById('project-video-wrap');
+    if (video) video.innerHTML = '';
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('work')) { url.searchParams.delete('work'); window.history.replaceState({}, '', url); }
+    document.title = 'JWB STUDIO | Motion & Interactive';
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', 'JWB STUDIO | Motion & Interactive');
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', '모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오');
+    document.querySelector('meta[property="og:image"]')?.setAttribute('content', 'https://www.wonbok.kr/img/logo/logo.png');
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', 'https://www.wonbok.kr/');
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', 'JWB STUDIO | Motion & Interactive');
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', '모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오');
+    document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', 'https://www.wonbok.kr/img/logo/logo.png');
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', 'https://www.wonbok.kr/');
+  };
+  document.getElementById('project-modal-close')?.addEventListener('click', closeProject);
+  window.addEventListener('click', e => {
+    if (e.target === projectModal) closeProject();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeProject();
+  });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. 스크롤 진행 바 생성 및 동작
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress-bar';
+    document.body.prepend(progressBar);
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        progressBar.style.width = `${scrollPercent}%`;
     });
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('visible');
+    // 2. 커스텀 마우스 커서 동작
+    if (window.innerWidth >= 1024) {
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
         });
-    }, { threshold: 0.1, rootMargin: "0px 0px -100px 0px" });
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // 포트폴리오 탭 필터링
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const workItems = document.querySelectorAll('.work-card');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filter = btn.getAttribute('data-filter');
-            workItems.forEach(item => {
-                if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                    item.style.display = 'block';
-                    setTimeout(() => { item.style.opacity = '1'; item.style.transform = 'scale(1)'; }, 50);
-                } else {
-                    item.style.opacity = '0';
-                    item.style.transform = 'scale(0.95)';
-                    setTimeout(() => item.style.display = 'none', 400);
-                }
-            });
+        // 링크나 버튼 호버 시 커서 확대 효과
+        document.querySelectorAll('a, button, .work-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
         });
-    });
-
-    // 게시판 탭 전환 (공지, 자유, 후기)
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            tabBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const tabId = btn.getAttribute('data-tab') + '-board';
-            tabContents.forEach(content => {
-                if (content.id === tabId) content.classList.add('active');
-                else content.classList.remove('active');
-            });
-        });
-    });
-
-    // FAQ 아코디언
-    const accHeads = document.querySelectorAll('.acc-head');
-    accHeads.forEach(head => {
-        head.addEventListener('click', function() {
-            const body = this.nextElementSibling;
-            if (body.style.maxHeight) body.style.maxHeight = null;
-            else {
-                document.querySelectorAll('.acc-body').forEach(b => b.style.maxHeight = null);
-                body.style.maxHeight = body.scrollHeight + "px";
-            }
-        });
-    });
-
-    // 모달 관리
-    const loginModal = document.getElementById('login-modal');
-    const signupModal = document.getElementById('signup-modal');
-    const findModal = document.getElementById('find-modal');
-    const boardModal = document.getElementById('board-modal');
-    const writeModal = document.getElementById('write-modal');
-
-    function closeAllModals() {
-        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
     }
 
-    document.querySelectorAll('.modal-close').forEach(btn => {
-        btn.addEventListener('click', closeAllModals);
-    });
+    // 3. 숫자 카운팅 애니메이션 (대상 요소에 클래스 및 data-target 속성 활용 시)
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
 
-    window.addEventListener('click', (e) => {
-        if(e.target.classList.contains('modal-overlay')) closeAllModals();
-    });
-
-    document.getElementById('link-signup').addEventListener('click', (e) => {
-        e.preventDefault();
-        closeAllModals();
-        signupModal.classList.add('active');
-    });
-
-    const openFindModal = (title) => {
-        closeAllModals();
-        document.getElementById('find-title').textContent = title;
-        findModal.classList.add('active');
+    const runCounter = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+        const updateCount = () => {
+            const inc = target / speed;
+            if (count < target) {
+                count += inc;
+                counter.innerText = Math.ceil(count);
+                setTimeout(updateCount, 15);
+            } else {
+                counter.innerText = target;
+            }
+        };
+        updateCount();
     };
-    document.getElementById('link-find-id').addEventListener('click', (e) => { e.preventDefault(); openFindModal('아이디 찾기'); });
-    document.getElementById('link-find-pw').addEventListener('click', (e) => { e.preventDefault(); openFindModal('비밀번호 재설정'); });
 
-    document.querySelectorAll('.link-back-login').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeAllModals();
-            loginModal.classList.add('active');
+    // IntersectionObserver로 화면에 보일 때 카운팅 시작
+    const counterObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                runCounter(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => counterObserver.observe(counter));
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    faqQuestions.forEach(button => {
+        button.addEventListener('click', () => {
+            const currentItem = button.parentElement;
+            const isActive = currentItem.classList.contains('active');
+
+            // 다른 열려있는 FAQ들을 모두 닫고 싶다면 아래 주석을 해제하세요
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.faq-question')?.setAttribute('aria-expanded', 'false');
+            });
+
+            // 클릭한 항목이 열려있지 않았다면 열기
+            if (!isActive) {
+                currentItem.classList.add('active');
+                button.setAttribute('aria-expanded', 'true');
+            }
         });
     });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // 데스크톱 환경에서만 마그네틱 효과 적용
+    if (window.innerWidth >= 1024) {
+        const magneticButtons = document.querySelectorAll('.btn-solid, .btn-outline, .inquiry-btn');
 
-    // 글쓰기 권한 체크 (로그인 한 회원만 가능)
-    document.getElementById('btn-write-post').addEventListener('click', () => {
-        if (!currentUser) {
-            alert('로그인한 회원만 글을 작성할 수 있습니다.');
-            closeAllModals();
-            loginModal.classList.add('active');
-            return;
-        }
-        closeAllModals();
-        writeModal.classList.add('active');
-    });
+        magneticButtons.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
 
-    // 파일 및 썸네일 업로드 이름 표시
-    const fileInput = document.getElementById('write-file');
-    const fileDisplay = document.getElementById('file-name-display');
-    if(fileInput) {
-        fileInput.addEventListener('change', function() {
-            if(this.files && this.files.length > 0) fileDisplay.textContent = this.files[0].name;
-            else fileDisplay.textContent = "선택된 파일 없음";
+                // 마우스 방향으로 살짝 끌려오는 거리 조절 (계수가 클수록 적게 움직임)
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                // 마우스가 벗어나면 제자리로 부드럽게 복귀
+                btn.style.transform = 'translate(0px, 0px)';
+            });
         });
     }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    let itemsPerPage = 6; // 한 번에 보여줄 프로젝트 개수
+    let visibleCount = itemsPerPage;
 
-    const thumbInput = document.getElementById('write-thumb');
-    const thumbDisplay = document.getElementById('thumb-name-display');
-    if(thumbInput) {
-        thumbInput.addEventListener('change', function() {
-            if(this.files && this.files.length > 0) thumbDisplay.textContent = this.files[0].name;
-            else thumbDisplay.textContent = "선택된 썸네일 없음";
+    // Supabase에서 포트폴리오를 받은 뒤 렌더 완료 이벤트로 초기화
+    window.addEventListener('portfolio:ready', initLoadMore);
+
+    function initLoadMore() {
+        const workCards = document.querySelectorAll('.work-card');
+        const loadMoreWrap = document.getElementById('load-more-wrap');
+        const btnLoadMore = document.getElementById('btn-load-more');
+
+        if (workCards.length <= itemsPerPage) {
+            if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+            return;
+        }
+
+        // 초기 상태: 지정된 개수만 보여주고 나머지는 숨김
+        workCards.forEach((card, index) => {
+            if (index >= itemsPerPage) {
+                card.classList.add('hidden');
+            } else {
+                card.classList.remove('hidden');
+            }
         });
+
+        if (loadMoreWrap) loadMoreWrap.style.display = 'block';
+
+        // 더보기 버튼 클릭 이벤트
+        if (btnLoadMore) {
+            btnLoadMore.onclick = () => {
+                visibleCount += itemsPerPage;
+                let shown = 0;
+
+                workCards.forEach((card, index) => {
+                    // 검색어나 필터에 의해 숨겨진 카드가 아닐 경우에만 순차적으로 해제
+                    if (index < visibleCount) {
+                        card.classList.remove('hidden');
+                    }
+                });
+
+                // 모든 카드를 다 보여줬다면 더보기 버튼 숨기기
+                if (visibleCount >= workCards.length) {
+                    loadMoreWrap.style.display = 'none';
+                }
+            };
+        }
     }
-
-    // 게시물 상세보기 (누구나 읽기 가능 + 즉시 다운로드 링크 매핑)
-    document.querySelectorAll('.board-items li').forEach(item => {
-        item.addEventListener('click', function() {
-            const title = this.getAttribute('data-title');
-            const date = this.getAttribute('data-date');
-            const type = this.getAttribute('data-type');
-            const author = this.getAttribute('data-author');
-            const content = this.getAttribute('data-content');
-            
-            const fileUrl = this.getAttribute('data-file-url');
-            const fileName = this.getAttribute('data-file-name');
-            const fileSize = this.getAttribute('data-file-size');
-            const fileCount = this.getAttribute('data-file-count');
-
-            document.getElementById('modal-badge').textContent = type;
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-date').textContent = date;
-            document.getElementById('modal-body-text').textContent = content;
-
-            const fileArea = document.getElementById('modal-file-area');
-            if(fileUrl && fileName) {
-                fileArea.style.display = 'block';
-                // 구글 드라이브 즉시 다운로드 URL 설정 (?export=download)
-                document.getElementById('modal-file-link').href = fileUrl;
-                document.getElementById('modal-file-name').textContent = fileName;
-                document.getElementById('modal-file-size').textContent = fileSize || '';
-                document.getElementById('modal-file-count').textContent = fileCount || '';
-                document.getElementById('modal-file-date').textContent = `🕒 ${date}`;
-            } else {
-                fileArea.style.display = 'none';
-            }
-
-            const actionButtons = document.getElementById('modal-action-buttons');
-            if (currentUser && (isAdmin || currentUser === author)) {
-                actionButtons.style.display = 'flex';
-            } else {
-                actionButtons.style.display = 'none';
-            }
-
-            closeAllModals();
-            boardModal.classList.add('active');
-        });
-    });
-
-    // 수정 및 삭제 버튼 이벤트
-    document.getElementById('btn-edit-post').addEventListener('click', () => {
-        alert('게시글 수정 모드로 전환됩니다.');
-    });
-
-    document.getElementById('btn-delete-post').addEventListener('click', () => {
-        if(confirm('정말 이 게시물을 삭제하시겠습니까?')) {
-            alert('게시물이 삭제되었습니다.');
-            closeAllModals();
-            window.location.reload();
-        }
-    });
-
-    // 로그인 및 회원가입 처리 (일반 아이디 기반)
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const inputId = document.getElementById('login-userid').value;
-        const password = document.getElementById('login-pw').value;
-        
-        if(inputId === 'admin' && password === 'admin1234') {
-            alert('관리자님 환영합니다.');
-            localStorage.setItem('jwb_logged_user', 'admin');
-            closeAllModals();
-            window.location.href = 'admin.html';
-            return;
-        }
-
-        localStorage.setItem('jwb_logged_user', inputId);
-        alert('로그인 성공!');
-        closeAllModals();
-        window.location.reload();
-    });
-
-    document.getElementById('signup-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        alert('회원가입이 완료되었습니다. 로그인해 주세요.');
-        closeAllModals();
-        loginModal.classList.add('active');
-    });
-
-    document.getElementById('write-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const category = document.getElementById('write-category').value;
-        
-        if(category === '공지' && !isAdmin) {
-            alert('공지사항은 관리자만 작성할 수 있습니다.');
-            return;
-        }
-
-        alert('게시글과 썸네일 및 첨부파일이 Apps Script를 통해 구글 드라이브에 성공적으로 연동되었습니다.');
-        closeAllModals();
-        document.getElementById('write-form').reset();
-        fileDisplay.textContent = "선택된 파일 없음";
-        thumbDisplay.textContent = "선택된 썸네일 없음";
-    });
 });

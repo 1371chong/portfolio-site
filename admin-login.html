@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow">
+    <title>관리자 로그인 | JWB STUDIO</title>
+    <link rel="icon" href="img/logo/logo.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--color-bg);">
+    <div class="modal-content auth-content" style="width: 100%; max-width: 400px; padding: 40px; background: var(--color-gray); border: 1px solid var(--color-border);">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="index.html" class="brand" style="font-size: 1.8rem;">JWB STUDIO</a>
+            <p class="body-text" style="font-size: 0.9rem; margin-top: 8px;">ADMINISTRATOR LOGIN</p>
+        </div>
+
+        <form id="login-form" class="cjenm-form">
+            <div class="input-group" style="margin-bottom: 15px;">
+                <input type="email" id="admin-email" placeholder="관리자 이메일" required>
+            </div>
+            <div class="input-group" style="margin-bottom: 25px;">
+                <input type="password" id="admin-password" placeholder="비밀번호" required>
+            </div>
+            <button type="submit" class="btn-solid wide">로그인</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="index.html" class="body-text" style="font-size: 0.85rem; text-decoration: underline;">← 메인으로 돌아가기</a>
+        </div>
+    </div>
+
+    <script>
+        const supabaseClient = window.getJwbSupabase();
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!supabaseClient) { alert('Supabase 설정이 필요합니다. js/supabase-config.js를 확인해 주세요.'); return; }
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                alert('로그인 실패: ' + error.message);
+            } else if (data.user?.app_metadata?.role !== 'admin') {
+                await supabaseClient.auth.signOut();
+                alert('관리자 권한이 설정된 계정만 로그인할 수 있습니다.');
+            } else {
+                alert('관리자 로그인 성공!');
+                window.location.href = 'admin.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -3,23 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="JWB STUDIO 정원복의 모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오입니다. 작품과 외주 서비스를 확인하고 프로젝트를 문의하세요.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <link rel="canonical" href="https://www.wonbok.kr/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JWB STUDIO">
+    <meta property="og:title" content="JWB STUDIO | Motion & Interactive">
+    <meta property="og:description" content="모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오">
+    <meta property="og:url" content="https://www.wonbok.kr/">
+    <meta property="og:image" content="https://www.wonbok.kr/img/logo/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JWB STUDIO | Motion & Interactive">
+    <meta name="twitter:description" content="모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오">
+    <meta name="twitter:image" content="https://www.wonbok.kr/img/logo/logo.png">
     <title>JWB STUDIO | Motion & Interactive</title>
     <link rel="icon" href="img/logo/logo.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Supabase CDN (소식 목록 불러오기용) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/contact-config.js"></script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Person","name":"정원복","alternateName":"Jeong Won-bok","url":"https://www.wonbok.kr/","jobTitle":"Motion Graphics and Web Creator","worksFor":{"@type":"Organization","name":"JWB STUDIO"},"knowsAbout":["Motion Graphics","3D Visual","Video Editing","Web Development"]}
+    </script>
 </head>
 <body>
     <!-- 네비게이션 -->
     <nav class="navbar" id="navbar">
         <div class="nav-inner">
-            <a href="#home" class="brand">JWB STUDIO</a>
+            <a href="index.html#home" class="brand">JWB STUDIO</a>
             <ul class="nav-menu">
-                <li><a href="#home">HOME</a></li>
-                <li><a href="#about">ABOUT</a></li>
-                <li><a href="#works">WORKS</a></li>
-                <li><a href="#skills">SKILLS</a></li>
-                <li><a href="#board">BOARD & FAQ</a></li>
-                <li id="nav-auth-area"><a href="#" id="btn-open-login" class="btn-solid btn-small">LOGIN</a></li>
+                <li><a href="index.html#home">HOME</a></li>
+                <li><a href="index.html#about">ABOUT</a></li>
+                <li><a href="index.html#works">PORTFOLIO</a></li>
+                <li><a href="index.html#skills">SKILLS</a></li>
+                <li><a href="index.html#workflow">WORKFLOW</a></li>
+                <li><a href="index.html#notices">NOTICES</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+                <li><a href="outsourcing.html" class="nav-highlight">외주서비스</a></li>
+                <li><a href="admin-login.html" class="admin-nav-btn">관리자</a></li>
             </ul>
         </div>
     </nav>
@@ -28,8 +50,11 @@
     <section class="hero" id="home">
         <div class="hero-bg"></div>
         <div class="hero-content fade-up">
-            <h1 class="headline-xl">BEYOND<br>THE VISUAL.</h1>
-            <p class="hero-desc">정밀한 기획과 압도적인 모션그래픽으로 브랜드의 새로운 가능성을 엽니다.</p>
+            <h1 class="headline-xl">CRAFTING<br>THE FUTURE.</h1>
+            <p class="hero-desc">체계적인 프로세스와 압도적인 모션그래픽·웹 개발로 브랜드의 가치를 높입니다.</p>
+            <div class="hero-sub-badge" style="margin-top: 25px; display: inline-block; padding: 6px 16px; background: rgba(255,255,255,0.06); border: 1px solid var(--color-border); border-radius: 20px; font-size: 0.9rem; color: var(--color-text-dim);">
+                ✨ Motion Graphics • 3D Visual • Web Development • Python Automation
+            </div>
         </div>
         <div class="scroll-indicator">
             <span>SCROLL</span>
@@ -53,6 +78,10 @@
                         <p class="body-text">
                             행정 실무의 체계적이고 꼼꼼한 프로세스와, 2D·3D 모션그래픽 및 웹 개발을 아우르는 창의적 시각 예술을 결합하여 최상의 결과물을 도출합니다.
                         </p>
+                        <div class="profile-contact" aria-label="연락처">
+                            <a href="#" id="contact-email" class="profile-contact-link" hidden>✉ 이메일 보내기</a>
+                            <a href="#" id="contact-kakao" class="profile-contact-link" target="_blank" rel="noopener" hidden>💬 카카오 오픈채팅</a>
+                        </div>
                     </div>
                 </div>
 
@@ -71,50 +100,62 @@
                         </ul>
                     </div>
                 </div>
+
+                <div class="history-item mt-30">
+                    <h4>SELECTED PROJECTS</h4>
+                    <ul>
+                        <li>프로젝트별 목표, 담당 범위, 작업 과정과 결과를 포트폴리오 상세에서 확인할 수 있습니다.</li>
+                        <li>실제 공개 가능한 작업 사례와 수치는 각 작품 정보에 등록해 주세요.</li>
+                    </ul>
+                </div>
                 
-                <a href="PDF/resume.pdf" download class="btn-outline mt-30">이력서 다운로드 (PDF)</a>
+                <div class="btn-group mt-30" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <a href="PDF/resume.pdf" download class="btn-outline">이력서 다운로드 (PDF)</a>
+                    <a href="outsourcing.html" class="btn btn-outline inquiry-btn">외주문의 안내</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- 포트폴리오 섹션 -->
+   <!-- 포트폴리오 섹션 -->
     <section class="section bg-black" id="works">
         <div class="container">
             <div class="section-head fade-up">
-                <h2 class="headline-l">SELECTED WORKS</h2>
-                <div class="work-filters">
-                    <button class="filter-btn active" data-filter="all">전체</button>
-                    <button class="filter-btn" data-filter="2d">2D 모션</button>
-                    <button class="filter-btn" data-filter="3d">3D ARTS</button>
-                    <button class="filter-btn" data-filter="web">WEB</button>
+                <div>
+                    <h2 class="headline-l">PORTFOLIO</h2>
+                    <div class="work-search-wrap">
+                        <input type="text" id="work-search-input" class="work-search-input" placeholder="프로젝트 키워드 검색 (예: Motion, 3D, Web)...">
+                    </div>
                 </div>
+                <div class="work-filters" id="work-filters"></div>
             </div>
             
-            <div class="work-grid">
-                <div class="work-card fade-up" data-category="2d">
-                    <div class="thumb gdrive-thumb" data-drive-id="YOUR_GDRIVE_FILE_ID_1"></div>
-                    <div class="info">
-                        <span class="category">After Effects</span>
-                        <h3>타이포그래피 및 인포그래픽</h3>
-                    </div>
-                </div>
-                <div class="work-card fade-up" data-category="3d">
-                    <div class="thumb gdrive-thumb" data-drive-id="YOUR_GDRIVE_FILE_ID_2"></div>
-                    <div class="info">
-                        <span class="category">Blender / Cinema 4D</span>
-                        <h3>제품 3D 프로모션 영상</h3>
-                    </div>
-                </div>
-                <div class="work-card fade-up" data-category="web">
-                    <div class="thumb gdrive-thumb" data-drive-id="YOUR_GDRIVE_FILE_ID_3"></div>
-                    <div class="info">
-                        <span class="category">HTML / CSS / JS</span>
-                        <h3>JWB STUDIO 인터랙티브 웹</h3>
-                    </div>
-                </div>
+            <!-- 포트폴리오 카드 그리드 -->
+            <div class="work-grid" id="work-grid"></div>
+
+            <!-- 더보기 버튼 영역 (신규 추가) -->
+            <div class="load-more-wrap" id="load-more-wrap" style="display: none;">
+                <button type="button" class="btn-load-more" id="btn-load-more">더보기 (+)</button>
             </div>
         </div>
     </section>
+
+    <!-- 프로젝트 상세 모달 -->
+    <div id="project-modal" class="modal-overlay">
+        <div class="modal-content project-modal-content">
+            <button class="modal-close" id="project-modal-close">&times;</button>
+            <div class="project-video-wrap" id="project-video-wrap"></div>
+            <div class="modal-header">
+                <span class="badge" id="project-category"></span>
+                <h3 id="project-title"></h3>
+                <p class="modal-date" id="project-meta"></p>
+            </div>
+            <div class="modal-body" id="project-description"></div>
+            <div class="project-meta-grid" id="project-extra"></div>
+            <a href="#works" class="btn-outline wide" id="project-youtube" target="_blank" rel="noopener">YouTube에서 보기</a>
+            <button type="button" class="btn-outline wide" id="project-share" style="margin-top:12px;">프로젝트 공유 링크 복사</button>
+        </div>
+    </div>
 
     <!-- 스킬 섹션 -->
     <section class="section" id="skills">
@@ -123,15 +164,31 @@
             <div class="skill-list mt-50">
                 <div class="skill-row fade-up">
                     <div class="skill-name">After Effects</div>
-                    <div class="skill-desc">2D 키프레임 애니메이션, 타이포그래피, 모션그래픽 기획 및 제작</div>
+                    <div class="skill-desc">2D 키프레임 애니메이션, 타이포그래피, 모션그래픽 기획 및 시각 효과 제작</div>
                 </div>
                 <div class="skill-row fade-up">
-                    <div class="skill-name">Blender & Cinema 4D</div>
-                    <div class="skill-desc">3D 모델링, 텍스처링, 라이팅 설정 및 하이엔드 3D 모션그래픽</div>
+                    <div class="skill-name">Premiere Pro</div>
+                    <div class="skill-desc">유튜브 콘텐츠 편집, 트렌디한 컷 편집, 오디오 믹싱 및 종합 영상 편집</div>
+                </div>
+                <div class="skill-row fade-up">
+                    <div class="skill-name">Photoshop</div>
+                    <div class="skill-desc">이미지 리터칭, 합성, 그래픽 소스 보정 및 웹/디자인 비주얼 에셋 제작</div>
+                </div>
+                <div class="skill-row fade-up">
+                    <div class="skill-name">Illustrator</div>
+                    <div class="skill-desc">벡터 드로잉, 로고 디자인, 아이콘 및 인포그래픽 등 브랜드 에셋 제작</div>
+                </div>
+                <div class="skill-row fade-up">
+                    <div class="skill-name">Blender</div>
+                    <div class="skill-desc">3D 모델링, 텍스처링, 조명 및 에셋 제작 기반의 3D 그래픽 작업</div>
+                </div>
+                <div class="skill-row fade-up">
+                    <div class="skill-name">Cinema 4D</div>
+                    <div class="skill-desc">하이엔드 3D 모션그래픽, 타이틀 디자인 및 전문 렌더링 작업</div>
                 </div>
                 <div class="skill-row fade-up">
                     <div class="skill-name">Web Development</div>
-                    <div class="skill-desc">HTML/CSS/JS 기반 UI 구현 및 Supabase 데이터베이스 연동</div>
+                    <div class="skill-desc">HTML/CSS/JS 기반 UI 구현 및 인터랙티브 포트폴리오 웹 제작</div>
                 </div>
                 <div class="skill-row fade-up">
                     <div class="skill-name">Python & Bot Dev</div>
@@ -141,84 +198,101 @@
         </div>
     </section>
 
-    <!-- 게시판 & FAQ 섹션 (공지, 자유, 후기 탭) -->
-    <section class="section bg-gray" id="board">
-        <div class="container layout-split">
-            <!-- Board 영역 -->
-            <div class="board-area fade-up">
-                <div class="board-head-wrap">
-                    <h2 class="headline-m">BOARD</h2>
-                    <button id="btn-write-post" class="btn-outline btn-small">글쓰기</button>
+    <!-- 작업 프로세스 섹션 -->
+    <section class="section bg-black" id="workflow">
+        <div class="container">
+            <h2 class="headline-l fade-up">WORKFLOW</h2>
+            <div class="workflow-grid fade-up">
+                <div class="workflow-card">
+                    <div class="workflow-step">STEP 01</div>
+                    <h3>문의 및 기획 상담</h3>
+                    <p>프로젝트 개요, 예산, 일정 및 참고 레퍼런스를 분석하여 최적의 방향성을 설정합니다.</p>
                 </div>
-                
-                <div class="tabs mt-30">
-                    <button class="tab-btn active" data-tab="notice">공지사항</button>
-                    <button class="tab-btn" data-tab="free">자유게시판</button>
-                    <button class="tab-btn" data-tab="review">후기</button>
+                <div class="workflow-card">
+                    <div class="workflow-step">STEP 02</div>
+                    <h3>콘티 및 시안 제작</h3>
+                    <p>상세 기획을 바탕으로 2D/3D 콘티 및 디자인 시안을 도출하여 세부 조율을 거칩니다.</p>
                 </div>
-                
-                <!-- 공지사항 탭 -->
-                <div class="tab-content active" id="notice-board">
-                    <ul class="list-style board-items">
-                        <li data-title="[공지] 채용 공고문 영양사 긴급채용" 
-                            data-date="2026.07.27 11:43" 
-                            data-type="공지" 
-                            data-author="admin"
-                            data-content="영양사 긴급채용 관련 상세 공고문 파일입니다. 첨부파일을 확인해주세요." 
-                            data-file-url="https://drive.google.com/uc?export=download&id=EXAMPLE_ID" 
-                            data-file-name="채용 공고문영양사-긴급채용.pdf" 
-                            data-file-size="(99.6K)" 
-                            data-file-count="+53">
-                            <p>[공지] 채용 공고문 영양사 긴급채용 <span class="file-icon">📁</span></p>
-                            <span>2026.07.27 11:43</span>
-                        </li>
-                    </ul>
+                <div class="workflow-card">
+                    <div class="workflow-step">STEP 03</div>
+                    <h3>본 작업 및 렌더링</h3>
+                    <p>모션그래픽 애니메이션, 3D 렌더링 및 웹 인터랙션 구현 등 전문적인 본 제작을 진행합니다.</p>
                 </div>
-                
-                <!-- 자유게시판 탭 -->
-                <div class="tab-content" id="free-board">
-                    <ul class="list-style board-items">
-                        <li data-title="입사지원서 및 개인정보동의서 양식 공유" 
-                            data-date="2026.07.27 11:43" 
-                            data-type="자유" 
-                            data-author="user1"
-                            data-content="지원에 필요한 양식 파일입니다. 다운로드 후 작성해 주세요." 
-                            data-file-url="https://drive.google.com/uc?export=download&id=EXAMPLE_ID_2" 
-                            data-file-name="입사지원서 및 개인정보동의서.hwp" 
-                            data-file-size="(32.0K)" 
-                            data-file-count="+6">
-                            <p>입사지원서 및 개인정보동의서 양식 <span class="file-icon">📁</span></p>
-                            <span>2026.07.27 11:43</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- 후기 게시판 탭 -->
-                <div class="tab-content" id="review-board">
-                    <ul class="list-style board-items">
-                        <li data-title="[후기] JWB STUDIO 포트폴리오 작업 의뢰 후기입니다!" 
-                            data-date="2026.09.22 20:00" 
-                            data-type="후기" 
-                            data-author="happy_client"
-                            data-content="정말 꼼꼼하고 빠른 작업 속도에 감동했습니다. 결과물이 너무 멋져요!" 
-                            data-file-url="" 
-                            data-file-name="" 
-                            data-file-size="" 
-                            data-file-count="">
-                            <p>[후기] JWB STUDIO 포트폴리오 작업 의뢰 후기입니다!</p>
-                            <span>2026.09.22</span>
-                        </li>
-                    </ul>
+                <div class="workflow-card">
+                    <div class="workflow-step">STEP 04</div>
+                    <h3>피드백 및 최종 전달</h3>
+                    <p>클라이언트 피드백을 신속하게 반영한 후 고화질 최종 결과물과 소스를 안전하게 전달합니다.</p>
                 </div>
             </div>
+            <div class="workflow-card fade-up" style="margin-top:24px;">
+                <h3>견적·수정·납품 안내</h3>
+                <p>견적은 작업 범위, 난이도, 일정과 필요한 산출물을 확인한 뒤 안내합니다. 작업 시작 전 수정 범위, 일정, 납품 형식과 원본 파일 제공 여부를 서면으로 확정합니다.</p>
+            </div>
+        </div>
+    </section>
 
-            <!-- FAQ 영역 -->
-            <div class="faq-area fade-up" style="transition-delay: 0.2s;">
-                <h2 class="headline-m">FAQ</h2>
-                <div class="accordion mt-30">
-                    <div class="acc-item">
-                        <button class="acc-head">3D 영상 작업 기간은 보통 얼마나 걸리나요?</button>
-                        <div class="acc-body"><p>모델링의 복잡도와 렌더링 타임에 따라 상이하지만, 평균 3~4주 정도 소요됩니다.</p></div>
+    <!-- 스튜디오 소식 섹션 (신규 추가) -->
+    <section class="section" id="notices">
+        <div class="container" style="max-width: 1000px;">
+            <h2 class="headline-l fade-up" style="margin-bottom: 50px;">STUDIO NOTICES</h2>
+            <div id="notice-list" class="fade-up">
+                <p style="color: var(--color-text-dim);">소식 불러오는 중...</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="notice-detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notice-detail-title">
+        <div class="modal-content notice-modal-content">
+            <button type="button" class="modal-close" id="notice-modal-close" aria-label="공지 닫기">&times;</button>
+            <div class="modal-header">
+                <span class="badge" id="notice-detail-category"></span>
+                <h3 id="notice-detail-title"></h3>
+                <p class="modal-date" id="notice-detail-date"></p>
+            </div>
+            <div class="notice-modal-body" id="notice-detail-content"></div>
+            <div id="notice-detail-files"></div>
+        </div>
+    </div>
+
+    <!-- FAQ 섹션 -->
+    <section class="section bg-black" id="faq">
+        <div class="container" style="max-width: 1000px;">
+            <h2 class="headline-l fade-up" style="margin-bottom: 50px;">FAQ</h2>
+            <div class="faq-list fade-up">
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+                        <span>Q. 외주 작업 의뢰는 어떤 절차로 진행되나요?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-1">
+                        <p>외주 서비스 페이지의 '외주 및 프로젝트 문의하기' 양식이나 카카오 오픈채팅을 통해 프로젝트 개요, 예산, 마감일을 남겨주시면 검토 후 상세 상담과 견적을 안내해 드립니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+                        <span>Q. 제작 가능한 프로젝트의 전문 분야 범위는 어떻게 되나요?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-2">
+                        <p>영상 편집, 2D·3D 모션그래픽, 포토샵·일러스트 디자인, 반응형 웹사이트 구축, 디스코드 봇 개발까지 폭넓게 대응하고 있습니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+                        <span>Q. 작업 기간과 수정(피드백) 반영은 어떻게 이루어지나요?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-3">
+                        <p>프로젝트 규모와 난이도에 따라 일정을 조율하며, 기획 단계에서 충분한 협의를 거친 뒤 본 작업에 착수합니다. 수정 요청은 사전 협의된 범위 내에서 신속하게 반영해 드립니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+                        <span>Q. 이력서 및 개인 경력 관련 문서는 어디서 확인할 수 있나요?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-4">
+                        <p>메인 페이지 ABOUT 섹션 하단의 '이력서 다운로드 (PDF)' 버튼을 클릭하시면 상세한 학력, 보유 자격 및 실무 역량이 담긴 이력서 파일을 다운로드하실 수 있습니다.</p>
                     </div>
                 </div>
             </div>
@@ -233,160 +307,91 @@
                 <div class="footer-policies">
                     <a href="terms.html">이용약관</a>
                     <a href="privacy.html">개인정보처리방침</a>
-                    <a href="email-policy.html">이메일무단수집거부</a>
-                    <a href="charter.html">이용자권리헌장</a>
                 </div>
             </div>
             <div class="footer-bottom mt-30">
-                <p class="notice-text">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
                 <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-
-    <!-- ================= 모달 시스템 ================= -->
-    
-    <!-- 1. 로그인 모달 (일반 아이디 사용) -->
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal-content auth-content">
-            <button class="modal-close">&times;</button>
-            <h3 class="headline-m" style="text-align: center; margin-bottom: 20px;">LOGIN</h3>
-            <form id="login-form" class="cjenm-form">
-                <div class="input-group">
-                    <input type="text" id="login-userid" placeholder="일반 아이디 또는 관리자 (admin)" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="login-pw" placeholder="비밀번호" required>
-                </div>
-                <button type="submit" class="btn-solid wide">로그인</button>
-            </form>
-            <div class="auth-links mt-30">
-                <a href="#" id="link-signup">회원가입</a> | 
-                <a href="#" id="link-find-id">아이디 찾기</a> | 
-                <a href="#" id="link-find-pw">비밀번호 찾기</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. 회원가입 모달 (일반 아이디 사용) -->
-    <div id="signup-modal" class="modal-overlay">
-        <div class="modal-content auth-content">
-            <button class="modal-close">&times;</button>
-            <h3 class="headline-m" style="text-align: center; margin-bottom: 20px;">SIGN UP</h3>
-            <form id="signup-form" class="cjenm-form">
-                <div class="input-group">
-                    <input type="text" id="signup-userid" placeholder="사용할 아이디 (예: jwb123)" required>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="signup-name" placeholder="이름 (닉네임)" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="signup-pw" placeholder="비밀번호 (6자리 이상)" required>
-                </div>
-                <button type="submit" class="btn-solid wide">가입하기</button>
-            </form>
-            <div class="auth-links mt-30">
-                <a href="#" class="link-back-login">로그인으로 돌아가기</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. 아이디/비밀번호 찾기 모달 -->
-    <div id="find-modal" class="modal-overlay">
-        <div class="modal-content auth-content">
-            <button class="modal-close">&times;</button>
-            <h3 class="headline-m" id="find-title" style="text-align: center; margin-bottom: 20px;">비밀번호 재설정</h3>
-            <p class="body-text" style="text-align:center; margin-bottom: 20px;">가입하신 아이디를 입력하시면 안내를 보내드립니다.</p>
-            <form id="find-form" class="cjenm-form">
-                <div class="input-group">
-                    <input type="text" id="find-userid" placeholder="가입한 아이디 입력" required>
-                </div>
-                <button type="submit" class="btn-solid wide">확인</button>
-            </form>
-            <div class="auth-links mt-30">
-                <a href="#" class="link-back-login">로그인으로 돌아가기</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- 4. 게시판 상세보기 모달 (즉시 다운로드 및 권한 버튼) -->
-    <div id="board-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <div class="modal-header">
-                <span class="badge" id="modal-badge">공지</span>
-                <h3 id="modal-title">제목</h3>
-                <span class="modal-date" id="modal-date">0000.00.00</span>
-            </div>
-            <div class="modal-body">
-                <p id="modal-body-text">내용</p>
-            </div>
-            
-            <!-- 첨부파일 다운로드 리스트 (즉시 다운로드) -->
-            <div class="modal-attachment mt-30" id="modal-file-area" style="display: none;">
-                <div class="file-download-box">
-                    <a href="#" id="modal-file-link" target="_blank" class="file-download-item">
-                        <div class="file-info-left">
-                            <span class="download-icon">📥</span>
-                            <span class="file-name" id="modal-file-name">파일명.pdf</span>
-                            <span class="file-size" id="modal-file-size">(99.6K)</span>
-                            <span class="download-count" id="modal-file-count">+53</span>
-                        </div>
-                        <div class="file-info-right">
-                            <span class="file-date" id="modal-file-date">🕒 2026.07.27 11:43</span>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- 수정/삭제 버튼 (작성자 본인 또는 관리자만 노출) -->
-            <div class="modal-admin-actions mt-30" id="modal-action-buttons" style="display: none; display: flex; gap: 10px; justify-content: flex-end;">
-                <button type="button" id="btn-edit-post" class="btn-outline btn-small">수정</button>
-                <button type="button" id="btn-delete-post" class="btn-solid btn-small" style="background:#ff4757; color:#fff;">삭제</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 5. 게시판 글쓰기 모달 (썸네일 업로드 포함) -->
-    <div id="write-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <h3 class="headline-m" style="margin-bottom: 20px;">새 게시물 작성</h3>
-            <form id="write-form" class="cjenm-form">
-                <div class="input-group">
-                    <select id="write-category" required>
-                        <option value="자유">자유게시판</option>
-                        <option value="후기">후기 게시판</option>
-                        <option value="공지" id="option-notice" style="display: none;">공지사항 (관리자 전용)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="write-title" placeholder="글 제목" required>
-                </div>
-                <div class="input-group">
-                    <textarea id="write-content" rows="6" placeholder="내용을 입력하세요." required></textarea>
-                </div>
-                
-                <!-- 썸네일 업로드 필드 추가 -->
-                <div class="input-group file-upload-wrap">
-                    <label for="write-thumb" class="file-label">썸네일 이미지 선택</label>
-                    <input type="file" id="write-thumb" class="file-input" accept="image/*">
-                    <span id="thumb-name-display" style="margin-left: 10px; font-size: 0.9rem; color: #aaa;">선택된 썸네일 없음</span>
-                </div>
-
-                <!-- 첨부파일 업로드 필드 (Apps Script 연동) -->
-                <div class="input-group file-upload-wrap mt-20">
-                    <label for="write-file" class="file-label">첨부파일 선택 (Drive 연동)</label>
-                    <input type="file" id="write-file" class="file-input">
-                    <span id="file-name-display" style="margin-left: 10px; font-size: 0.9rem; color: #aaa;">선택된 파일 없음</span>
-                </div>
-                
-                <button type="submit" class="btn-solid wide mt-30">게시물 등록</button>
-            </form>
-        </div>
-    </div>
-
+    <script src="js/portfolio.js"></script>
     <script src="js/script.js"></script>
+    <script>
+        async function loadNotices() {
+            const list = document.getElementById('notice-list');
+            const client = window.getJwbSupabase();
+            if (!client) { list.textContent = '공지 게시판을 준비 중입니다.'; return; }
+            const { data, error } = await client.from('notices').select('id,title,content,category,attachments,created_at').order('created_at', { ascending: false });
+            if (error) { list.textContent = '공지사항을 불러오지 못했습니다. 잠시 후 다시 방문해 주세요.'; return; }
+            if (!data?.length) { list.textContent = '등록된 공지사항이 없습니다.'; return; }
+            const board = document.createElement('div'); board.className = 'notice-board-wrap';
+            const header = document.createElement('div'); header.className = 'notice-board-header';
+            header.innerHTML = '<div style="text-align:center">번호</div><div>제목</div><div style="text-align:right">작성일</div>';
+            board.append(header);
+            data.forEach((notice, index) => {
+                const row = document.createElement('button'); row.type = 'button'; row.className = 'notice-board-row';
+                row.setAttribute('aria-haspopup', 'dialog');
+                row.setAttribute('aria-label', `${notice.category || '공지사항'}: ${notice.title} 상세 보기`);
+                const number = document.createElement('div'); number.className = 'notice-col-num'; number.textContent = String(data.length - index);
+                const title = document.createElement('div'); title.className = 'notice-col-title';
+                const category = document.createElement('span'); category.className = 'notice-category'; category.textContent = notice.category || '공지사항';
+                const titleText = document.createElement('span'); titleText.textContent = notice.title; title.append(category, titleText);
+                const date = document.createElement('div'); date.className = 'notice-col-date'; date.textContent = new Date(notice.created_at).toLocaleDateString('ko-KR');
+                row.append(number, title, date);
+                row.addEventListener('click', () => openNoticeDetail(notice, row));
+                board.append(row);
+            });
+            list.replaceChildren(board);
+        }
+        const noticeModal = document.getElementById('notice-detail-modal');
+        let noticeReturnFocus = null;
+        function openNoticeDetail(notice, trigger) {
+            noticeReturnFocus = trigger;
+            document.getElementById('notice-detail-category').textContent = notice.category || '공지사항';
+            document.getElementById('notice-detail-title').textContent = notice.title || '';
+            document.getElementById('notice-detail-date').textContent = new Date(notice.created_at).toLocaleString('ko-KR');
+            document.getElementById('notice-detail-content').textContent = notice.content || '';
+            const filesWrap = document.getElementById('notice-detail-files');
+            filesWrap.replaceChildren();
+            const attachments = Array.isArray(notice.attachments) ? notice.attachments : [];
+            const validFiles = attachments.filter(file => /^[A-Za-z0-9_-]{10,}$/.test(String(file.file_id || '')));
+            if (validFiles.length) {
+                const heading = document.createElement('strong'); heading.className = 'notice-files-title'; heading.textContent = '첨부파일';
+                const files = document.createElement('ul'); files.className = 'notice-files';
+                validFiles.forEach(file => {
+                    const item = document.createElement('li');
+                    const link = document.createElement('a'); link.href = `https://drive.google.com/file/d/${encodeURIComponent(file.file_id)}/view`; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = `📎 ${file.name || '첨부파일'}`;
+                    item.append(link); files.append(item);
+                });
+                filesWrap.append(heading, files);
+            }
+            noticeModal.classList.add('active');
+            document.getElementById('notice-modal-close').focus();
+        }
+        function closeNoticeDetail() {
+            noticeModal.classList.remove('active');
+            noticeReturnFocus?.focus();
+        }
+        document.getElementById('notice-modal-close').addEventListener('click', closeNoticeDetail);
+        noticeModal.addEventListener('click', event => { if (event.target === noticeModal) closeNoticeDetail(); });
+        document.addEventListener('keydown', event => { if (event.key === 'Escape' && noticeModal.classList.contains('active')) closeNoticeDetail(); });
+        loadNotices();
+        const contact = window.JWB_CONTACT || {};
+        if (contact.email) { const a = document.getElementById('contact-email'); a.href = `mailto:${contact.email}`; a.hidden = false; }
+        if (contact.kakaoUrl) { const a = document.getElementById('contact-kakao'); a.href = contact.kakaoUrl; a.hidden = false; }
+        // 포트폴리오 실시간 검색
+        const searchInput = document.getElementById('work-search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const keyword = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('.work-card').forEach(card => {
+                    const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                    const category = card.querySelector('.category')?.textContent.toLowerCase() || '';
+                    card.style.display = (title.includes(keyword) || category.includes(keyword)) ? 'block' : 'none';
+                });
+            });
+        }
+    </script>
 </body>
 </html>

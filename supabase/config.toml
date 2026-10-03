@@ -1,0 +1,5 @@
+[functions.submit-inquiry]
+verify_jwt = false
+
+[functions.drive-upload]
+verify_jwt = true

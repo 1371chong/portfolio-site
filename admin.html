@@ -3,87 +3,570 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JWB STUDIO | ADMIN DASHBOARD</title>
-    <link rel="stylesheet" href="/css/cstyle.css">
-    <link rel="stylesheet" href="/css/admin.css">
+    <meta name="robots" content="noindex,nofollow">
+    <title>관리자 대시보드 | JWB STUDIO</title>
+    <link rel="icon" href="img/logo/logo.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <style>
+        .admin-container { width: 92%; max-width: 1400px; margin: 40px auto; padding-top: 80px; }
+        .admin-section { background: var(--color-gray); border: 1px solid var(--color-border); padding: 30px; margin-bottom: 40px; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .admin-table th, .admin-table td { border: 1px solid var(--color-border); padding: 12px 15px; text-align: left; font-size: 0.95rem; }
+        .admin-table th { background: rgba(255,255,255,0.05); color: var(--color-text); }
+        .admin-table td { color: var(--color-text-dim); }
+        .admin-action-btns { display: flex; gap: 8px; }
+        .btn-edit { background: #3498db; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
+        .btn-delete { background: #e74c3c; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
+    </style>
 </head>
 <body>
-    <div class="admin-wrap">
-        <!-- 사이드바 -->
-        <aside class="admin-sidebar">
-            <h2 class="brand">ADMIN</h2>
-            <ul class="admin-menu">
-                <li><a href="#" class="active" data-target="works-manage">포트폴리오 관리</a></li>
-                <li><a href="#" data-target="board-manage">게시판 관리</a></li>
-                <li><a href="index.html" class="logout-link">사이트로 돌아가기</a></li>
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="brand">JWB STUDIO [ADMIN]</a>
+            <ul class="nav-menu">
+                <li><a href="#" id="logout-btn">로그아웃</a></li>
             </ul>
-        </aside>
+        </div>
+    </nav>
 
-        <!-- 메인 콘텐츠 영역 -->
-        <main class="admin-main">
-            <header class="admin-header">
-                <h2>관리자 대시보드</h2>
-                <span class="admin-id">접속 계정: admin</span>
-            </header>
-
-            <!-- 포트폴리오 관리 섹션 -->
-            <section class="admin-section active" id="works-manage">
-                <div class="section-top">
-                    <h3>포트폴리오 작품 목록</h3>
-                    <!-- 작품추가 버튼에 올바른 ID 부여 및 동작 연결 -->
-                    <button id="btn-open-add-work" class="btn-solid btn-small">+ 작품 추가</button>
+    <div class="admin-container">
+        <!-- 1. 포트폴리오 관리 섹션 -->
+        <div class="admin-section">
+            <h2 class="headline-m" id="p-form-title" style="font-size: 1.8rem;">포트폴리오 항목 등록</h2>
+            <form id="portfolio-form" class="cjenm-form mt-30">
+                <input type="hidden" id="p-id">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group"><input type="text" id="p-title" placeholder="프로젝트 제목" required></div>
+                    <div class="input-group"><select id="p-category" required><option value="">카테고리 선택</option><option value="2d">2D MOTION</option><option value="3d">3D ARTS</option><option value="web">WEB & DEV</option><option value="bot">BOT & DEV</option></select></div>
                 </div>
-                <div class="admin-table-wrap mt-30">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>썸네일</th>
-                                <th>카테고리</th>
-                                <th>제목</th>
-                                <th>관리</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><div class="thumb-mini" style="background:#333;"></div></td>
-                                <td>2D MOTION</td>
-                                <td>타이포그래피 및 인포그래픽</td>
-                                <td><button class="btn-outline btn-small">삭제</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- 포트폴리오 작품 추가 모달 (썸네일 업로드 포함) -->
-    <div id="add-work-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <h3 class="headline-m" style="margin-bottom: 20px;">새 포트폴리오 작품 추가</h3>
-            <form id="add-work-form" class="cjenm-form">
+                <div class="input-group"><input type="url" id="p-youtube" placeholder="YouTube 영상 링크 (선택, 기존 항목 호환)"></div>
+                <input type="hidden" id="p-media-path">
+                <input type="hidden" id="p-media-type">
+                <input type="hidden" id="p-drive-file-id">
+                <input type="hidden" id="p-drive-url">
+                <input type="hidden" id="p-thumb-drive-file-id">
+                <input type="hidden" id="p-thumb-drive-url">
                 <div class="input-group">
-                    <select id="work-category" required>
-                        <option value="2d">2D MOTION</option>
-                        <option value="3d">3D ARTS</option>
-                        <option value="web">WEB & DEV</option>
-                    </select>
+                    <label class="body-text" for="p-media-file">썸네일 이미지 업로드 (JPG/PNG/WebP · 최대 20MB, Google Drive 저장)</label>
+                    <input type="file" id="p-media-file" accept="image/jpeg,image/png,image/webp">
+                    <small id="p-upload-progress" class="body-text" aria-live="polite"></small>
                 </div>
                 <div class="input-group">
-                    <input type="text" id="work-title" placeholder="작품 제목" required>
+                    <label class="body-text" for="p-drive-video-file">작품 영상 업로드 (MP4/WebM · Google Drive 저장, 최대 100MB)</label>
+                    <input type="file" id="p-drive-video-file" accept="video/mp4,video/webm">
+                    <small id="p-drive-progress" class="body-text" aria-live="polite"></small>
                 </div>
-                <!-- 썸네일 업로드 필드 (Apps Script 연동) -->
-                <div class="input-group file-upload-wrap">
-                    <label for="work-thumb-file" class="file-label">썸네일 이미지 업로드</label>
-                    <input type="file" id="work-thumb-file" class="file-input" accept="image/*" required>
-                    <span id="work-thumb-name" style="margin-left: 10px; font-size: 0.9rem; color: #aaa;">선택된 파일 없음</span>
+                <div class="input-group"><textarea id="p-desc" rows="3" placeholder="프로젝트 설명" required></textarea></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                    <div class="input-group"><input type="text" id="p-period" placeholder="작업 시기 (예: 2026.03)"></div>
+                    <div class="input-group"><input type="text" id="p-role" placeholder="담당 역할"></div>
                 </div>
-                <button type="submit" class="btn-solid wide mt-30">작품 등록</button>
+                <div class="input-group"><input type="text" id="p-tools" placeholder="사용 도구"></div>
+                <div class="input-group"><textarea id="p-objective" rows="2" placeholder="프로젝트 목표"></textarea></div>
+                <div class="input-group"><textarea id="p-process" rows="2" placeholder="제작 과정"></textarea></div>
+                <div class="input-group"><textarea id="p-outcome" rows="2" placeholder="결과 또는 성과 (공개 가능한 내용)"></textarea></div>
+                <button type="submit" class="btn-solid btn-small" id="p-submit-btn">포트폴리오 등록</button>
+                <button type="button" class="btn-outline btn-small" id="p-cancel-btn" style="display:none; margin-left:10px;">취소</button>
             </form>
+        </div>
+
+        <div class="admin-section">
+            <h2 class="headline-m" style="font-size: 1.8rem;">포트폴리오 목록 관리</h2>
+            <table class="admin-table">
+                <thead><tr><th>제목</th><th>카테고리</th><th>관리</th></tr></thead>
+                <tbody id="portfolio-table-body"><tr><td colspan="3" style="text-align:center;">불러오는 중...</td></tr></tbody>
+            </table>
+        </div>
+
+        <!-- 2. 스튜디오 소식 관리 섹션 (신규 추가) -->
+        <div class="admin-section">
+            <h2 class="headline-m" id="n-form-title" style="font-size: 1.8rem;">스튜디오 소식 등록</h2>
+            <form id="notice-form" class="cjenm-form mt-30">
+                <input type="hidden" id="n-id">
+                <div class="input-group"><select id="n-category" required><option value="공지사항">공지사항</option><option value="업데이트">업데이트</option><option value="작업 소식">작업 소식</option><option value="기타">기타</option></select></div>
+                <div class="input-group"><input type="text" id="n-title" placeholder="소식 제목" required></div>
+                <div class="input-group"><textarea id="n-content" rows="4" placeholder="소식 내용" required></textarea></div>
+                <div class="input-group">
+                    <label class="body-text" for="n-attachments">공지 첨부파일 (최대 5개, 파일당 20MB · PDF, 이미지, 텍스트, Office 문서 · Google Drive 저장)</label>
+                    <input type="file" id="n-attachments" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                    <ul id="n-existing-attachments" class="body-text" style="padding-left:20px;margin-top:10px;"></ul>
+                    <small id="n-upload-progress" class="body-text" aria-live="polite"></small>
+                </div>
+                <button type="submit" class="btn-solid btn-small" id="n-submit-btn">소식 등록</button>
+                <button type="button" class="btn-outline btn-small" id="n-cancel-btn" style="display:none; margin-left:10px;">취소</button>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h2 class="headline-m" style="font-size: 1.8rem;">스튜디오 소식 목록 관리</h2>
+            <table class="admin-table">
+                <thead><tr><th>작성일시</th><th>분류</th><th>제목</th><th>관리</th></tr></thead>
+                <tbody id="notice-table-body"><tr><td colspan="3" style="text-align:center;">불러오는 중...</td></tr></tbody>
+            </table>
+        </div>
+
+        <!-- 3. 외주 문의 내역 관리 섹션 -->
+        <div class="admin-section">
+            <h2 class="headline-m" style="font-size: 1.8rem;">접수된 외주 문의 내역</h2>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead><tr><th>접수일시</th><th>성함</th><th>이메일</th><th>제목</th><th>첨부파일</th><th>진행상태</th><th>답변</th></tr></thead>
+                    <tbody id="inquiry-table-body"><tr><td colspan="7" style="text-align: center;">불러오는 중...</td></tr></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <script src="/js/admin.js"></script>
+    <div class="modal-overlay" id="quote-modal" role="dialog" aria-modal="true" aria-labelledby="quote-title">
+        <div class="modal-content" style="width:min(760px,94vw); padding:30px;">
+            <button type="button" class="modal-close" id="quote-close" aria-label="닫기">&times;</button>
+            <h2 id="quote-title" class="headline-m">견적 답변 초안</h2>
+            <p class="body-text" style="margin:12px 0 18px;">대괄호 항목을 확인해 수정한 뒤 복사해서 회신하세요.</p>
+            <textarea id="quote-draft" rows="16" style="width:100%;padding:16px;background:var(--color-bg);color:var(--color-text);border:1px solid var(--color-border);"></textarea>
+            <button type="button" id="quote-copy" class="btn-solid btn-small" style="margin-top:14px;">초안 복사</button>
+        </div>
+    </div>
+
+    <script>
+        const supabaseClient = window.getJwbSupabase();
+        const SUPABASE_URL = window.JWB_SUPABASE_CONFIG.url;
+        const DRIVE_VIDEO_MAX_BYTES = 100 * 1024 * 1024;
+        const DRIVE_THUMBNAIL_MAX_BYTES = 20 * 1024 * 1024;
+        const DRIVE_THUMBNAIL_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+        const NOTICE_ATTACHMENT_MAX_BYTES = 20 * 1024 * 1024;
+        const NOTICE_ATTACHMENT_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']);
+
+        const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        let cachedInquiries = [];
+        let editingNoticeAttachments = [];
+        let editingNoticeOriginalAttachments = [];
+
+        function renderExistingNoticeAttachments() {
+            const list = document.getElementById('n-existing-attachments');
+            list.replaceChildren(...editingNoticeAttachments.map(file => {
+                const item = document.createElement('li');
+                const label = document.createElement('span'); label.textContent = `${file.name} (${Math.ceil((file.size || 0) / 1024)}KB) `;
+                const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn-delete'; remove.textContent = '첨부 해제';
+                remove.addEventListener('click', () => { editingNoticeAttachments = editingNoticeAttachments.filter(current => current.file_id !== file.file_id); renderExistingNoticeAttachments(); });
+                item.append(label, remove); return item;
+            }));
+        }
+
+        async function uploadNoticeAttachment(file, index, total) {
+            if (!NOTICE_ATTACHMENT_TYPES.has(file.type) || file.size < 1 || file.size > NOTICE_ATTACHMENT_MAX_BYTES) throw new Error('지원 형식과 파일당 20MB 용량 제한을 확인해 주세요.');
+            const noticeTitle = document.getElementById('n-title').value.trim() || '공지사항';
+            const { uploadUrl } = await driveFunction({ action: 'start', kind: 'attachment', name: `${noticeTitle}_${file.name}`, mimeType: file.type, size: file.size });
+            const uploaded = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('PUT', uploadUrl);
+                xhr.setRequestHeader('Content-Type', file.type);
+                xhr.upload.onprogress = event => { if (event.lengthComputable) document.getElementById('n-upload-progress').textContent = `첨부파일 ${index}/${total} 업로드 중 ${Math.round(event.loaded / event.total * 100)}%`; };
+                xhr.onerror = () => reject(new Error('네트워크 오류로 파일 업로드가 중단됐습니다.'));
+                xhr.onload = () => {
+                    if (xhr.status < 200 || xhr.status >= 300) return reject(new Error(`Google Drive 업로드 실패 (${xhr.status}).`));
+                    try { resolve(JSON.parse(xhr.responseText)); } catch { reject(new Error('Google Drive 응답을 읽을 수 없습니다.')); }
+                };
+                xhr.send(file);
+            });
+            try {
+                const shared = await driveFunction({ action: 'share', fileId: uploaded.id });
+                return { name: file.name, file_id: shared.id, url: shared.webViewLink, size: file.size, mime_type: file.type, storage: 'google-drive' };
+            } catch (error) {
+                await driveFunction({ action: 'delete', fileId: uploaded.id }).catch(() => {});
+                throw error;
+            }
+        }
+
+        async function driveFunction(body) {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) throw new Error('관리자 로그인이 필요합니다.');
+            const response = await fetch(`${SUPABASE_URL.replace(/\/$/, '')}/functions/v1/drive-upload`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', apikey: window.JWB_SUPABASE_CONFIG.anonKey, Authorization: `Bearer ${session.access_token}` },
+                body: JSON.stringify(body)
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(result.error || 'Google Drive 연결에 실패했습니다.');
+            return result;
+        }
+
+        async function uploadDriveVideo(file) {
+            if (!['video/mp4', 'video/webm'].includes(file.type) || file.size > DRIVE_VIDEO_MAX_BYTES) {
+                throw new Error('MP4/WebM 동영상만 업로드할 수 있으며, 최대 용량은 100MB입니다.');
+            }
+            const title = document.getElementById('p-title').value.trim() || file.name;
+            const { uploadUrl } = await driveFunction({ action: 'start', name: `${title}_${file.name}`, mimeType: file.type, size: file.size });
+            const fileInfo = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('PUT', uploadUrl);
+                xhr.setRequestHeader('Content-Type', file.type);
+                xhr.upload.onprogress = event => {
+                    if (event.lengthComputable) document.getElementById('p-drive-progress').textContent = `Google Drive 업로드 중 ${Math.round(event.loaded / event.total * 100)}%`;
+                };
+                xhr.onerror = () => reject(new Error('네트워크 오류로 업로드가 중단됐습니다.'));
+                xhr.onload = () => {
+                    if (xhr.status < 200 || xhr.status >= 300) return reject(new Error(`Google Drive 업로드 실패 (${xhr.status}).`));
+                    try { resolve(JSON.parse(xhr.responseText)); } catch { reject(new Error('Google Drive 응답을 읽을 수 없습니다.')); }
+                };
+                xhr.send(file);
+            });
+            try {
+                const shared = await driveFunction({ action: 'share', fileId: fileInfo.id });
+                document.getElementById('p-drive-progress').textContent = 'Google Drive 업로드 및 공개 재생 설정 완료';
+                return shared;
+            } catch (error) {
+                await driveFunction({ action: 'delete', fileId: fileInfo.id }).catch(() => {});
+                throw error;
+            }
+        }
+
+        async function uploadDriveThumbnail(file) {
+            if (!DRIVE_THUMBNAIL_TYPES.has(file.type) || file.size < 1 || file.size > DRIVE_THUMBNAIL_MAX_BYTES) {
+                throw new Error('JPG/PNG/WebP 이미지 파일만 업로드할 수 있으며, 최대 용량은 20MB입니다.');
+            }
+            const title = document.getElementById('p-title').value.trim() || file.name;
+            const { uploadUrl } = await driveFunction({ action: 'start', kind: 'thumbnail', name: `${title}_${file.name}`, mimeType: file.type, size: file.size });
+            const fileInfo = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('PUT', uploadUrl);
+                xhr.setRequestHeader('Content-Type', file.type);
+                xhr.upload.onprogress = event => {
+                    if (event.lengthComputable) document.getElementById('p-upload-progress').textContent = `Google Drive 썸네일 업로드 중 ${Math.round(event.loaded / event.total * 100)}%`;
+                };
+                xhr.onerror = () => reject(new Error('네트워크 오류로 업로드가 중단됐습니다.'));
+                xhr.onload = () => {
+                    if (xhr.status < 200 || xhr.status >= 300) return reject(new Error(`Google Drive 업로드 실패 (${xhr.status}).`));
+                    try { resolve(JSON.parse(xhr.responseText)); } catch { reject(new Error('Google Drive 응답을 읽을 수 없습니다.')); }
+                };
+                xhr.send(file);
+            });
+            try {
+                const shared = await driveFunction({ action: 'share', fileId: fileInfo.id });
+                document.getElementById('p-upload-progress').textContent = 'Google Drive 썸네일 업로드 완료';
+                return shared;
+            } catch (error) {
+                await driveFunction({ action: 'delete', fileId: fileInfo.id }).catch(() => {});
+                throw error;
+            }
+        }
+
+        async function checkSession() {
+            if (!supabaseClient) { alert('Supabase 설정이 필요합니다. js/supabase-config.js를 확인해 주세요.'); return; }
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session || session.user?.app_metadata?.role !== 'admin') {
+                alert('관리자 로그인이 필요합니다.');
+                if (session) await supabaseClient.auth.signOut();
+                window.location.href = 'admin-login.html';
+            } else {
+                loadPortfolios();
+                loadNotices();
+                loadInquiries();
+            }
+        }
+
+        // 포트폴리오 관리 로직
+        async function loadPortfolios() {
+            const { data } = await supabaseClient.from('portfolios').select('*').order('id', { ascending: false });
+            const tbody = document.getElementById('portfolio-table-body');
+            if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">등록된 항목이 없습니다.</td></tr>`; return; }
+            tbody.replaceChildren(...data.map(item => {
+                const row = document.createElement('tr');
+                const title = document.createElement('td'); title.textContent = item.title;
+                const category = document.createElement('td'); category.textContent = item.category;
+                const cell = document.createElement('td'); const actions = document.createElement('div'); actions.className = 'admin-action-btns';
+                const edit = document.createElement('button'); edit.className = 'btn-edit'; edit.textContent = '수정'; edit.type = 'button'; edit.addEventListener('click', () => editPortfolio(item));
+                const remove = document.createElement('button'); remove.className = 'btn-delete'; remove.textContent = '삭제'; remove.type = 'button'; remove.addEventListener('click', () => deletePortfolio(item.id));
+                actions.append(edit, remove); cell.append(actions); row.append(title, category, cell); return row;
+            }));
+        }
+
+        document.getElementById('portfolio-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('p-id').value;
+            const title = document.getElementById('p-title').value;
+            const category = document.getElementById('p-category').value;
+            const youtube = document.getElementById('p-youtube').value.trim();
+            const description = document.getElementById('p-desc').value;
+            const period = document.getElementById('p-period').value.trim();
+            const role = document.getElementById('p-role').value.trim();
+            const tools = document.getElementById('p-tools').value.trim();
+            const objective = document.getElementById('p-objective').value.trim();
+            const process = document.getElementById('p-process').value.trim();
+            const outcome = document.getElementById('p-outcome').value.trim();
+            let mediaPath = document.getElementById('p-media-path').value;
+            let mediaType = document.getElementById('p-media-type').value;
+            let driveFileId = document.getElementById('p-drive-file-id').value;
+            let driveUrl = document.getElementById('p-drive-url').value;
+            let thumbDriveFileId = document.getElementById('p-thumb-drive-file-id').value;
+            let thumbDriveUrl = document.getElementById('p-thumb-drive-url').value;
+            const oldDriveFileId = driveFileId;
+            const oldDriveUrl = driveUrl;
+            const oldThumbDriveFileId = thumbDriveFileId;
+            const oldThumbDriveUrl = thumbDriveUrl;
+            const oldMediaPath = mediaPath;
+            let uploadedThumbDriveFileId = '';
+            let uploadedDriveFileId = '';
+            const selectedFile = document.getElementById('p-media-file').files[0];
+            if (selectedFile) {
+                try {
+                    document.getElementById('p-upload-progress').textContent = 'Google Drive 썸네일 업로드 준비 중…';
+                    const uploaded = await uploadDriveThumbnail(selectedFile);
+                    thumbDriveFileId = uploaded.id;
+                    thumbDriveUrl = uploaded.webViewLink || `https://drive.google.com/file/d/${uploaded.id}/view`;
+                    uploadedThumbDriveFileId = uploaded.id;
+                    mediaPath = '';
+                    mediaType = 'image';
+                    document.getElementById('p-thumb-drive-file-id').value = thumbDriveFileId;
+                    document.getElementById('p-thumb-drive-url').value = thumbDriveUrl;
+                } catch (error) {
+                    document.getElementById('p-upload-progress').textContent = '';
+                    alert(`썸네일 Google Drive 업로드에 실패했습니다: ${error.message}`); return;
+                }
+            }
+            const selectedVideo = document.getElementById('p-drive-video-file').files[0];
+            if (selectedVideo) {
+                try {
+                    document.getElementById('p-drive-progress').textContent = 'Google Drive 업로드 준비 중…';
+                    const uploaded = await uploadDriveVideo(selectedVideo);
+                    driveFileId = uploaded.id;
+                    uploadedDriveFileId = uploaded.id;
+                    driveUrl = uploaded.webViewLink || `https://drive.google.com/file/d/${uploaded.id}/view`;
+                    document.getElementById('p-drive-file-id').value = driveFileId;
+                    document.getElementById('p-drive-url').value = driveUrl;
+                } catch (error) {
+                    document.getElementById('p-drive-progress').textContent = '';
+                    if (uploadedThumbDriveFileId) await driveFunction({ action: 'delete', fileId: uploadedThumbDriveFileId }).catch(() => {});
+                    document.getElementById('p-thumb-drive-file-id').value = oldThumbDriveFileId;
+                    document.getElementById('p-thumb-drive-url').value = oldThumbDriveUrl;
+                    document.getElementById('p-upload-progress').textContent = oldThumbDriveFileId ? '기존 Google Drive 썸네일 사용 중' : (oldMediaPath ? '기존 Supabase 썸네일 사용 중' : '');
+                    alert(`Google Drive 업로드에 실패했습니다: ${error.message}`); return;
+                }
+            }
+            const values = { title, category, youtube, description, period, role, tools, objective, process, outcome, media_path: mediaPath, media_type: mediaType, drive_file_id: driveFileId, drive_url: driveUrl, thumb_drive_file_id: thumbDriveFileId, thumb_drive_url: thumbDriveUrl };
+
+            const result = id ? await supabaseClient.from('portfolios').update(values).eq('id', id) : await supabaseClient.from('portfolios').insert([values]);
+            if (result.error) {
+                if (uploadedThumbDriveFileId) await driveFunction({ action: 'delete', fileId: uploadedThumbDriveFileId }).catch(() => {});
+                if (uploadedDriveFileId) await driveFunction({ action: 'delete', fileId: uploadedDriveFileId }).catch(() => {});
+                document.getElementById('p-thumb-drive-file-id').value = oldThumbDriveFileId;
+                document.getElementById('p-thumb-drive-url').value = oldThumbDriveUrl;
+                document.getElementById('p-drive-file-id').value = oldDriveFileId;
+                document.getElementById('p-drive-url').value = oldDriveUrl;
+                alert('저장하지 못했습니다. Supabase 설정을 확인해 주세요.'); return;
+            }
+            if (oldMediaPath && uploadedThumbDriveFileId) await supabaseClient.storage.from('portfolio-assets').remove([oldMediaPath]);
+            if (oldDriveFileId && uploadedDriveFileId && oldDriveFileId !== uploadedDriveFileId) await driveFunction({ action: 'delete', fileId: oldDriveFileId }).catch(() => {});
+            if (oldThumbDriveFileId && uploadedThumbDriveFileId && oldThumbDriveFileId !== thumbDriveFileId) await driveFunction({ action: 'delete', fileId: oldThumbDriveFileId }).catch(() => {});
+            alert(id ? '수정되었습니다.' : '등록되었습니다.');
+            resetPortfolioForm();
+            loadPortfolios();
+        });
+
+        window.editPortfolio = item => {
+            document.getElementById('p-id').value = item.id;
+            document.getElementById('p-title').value = item.title || '';
+            document.getElementById('p-category').value = item.category || '';
+            document.getElementById('p-youtube').value = item.youtube || '';
+            document.getElementById('p-media-path').value = item.media_path || '';
+            document.getElementById('p-media-type').value = item.media_type || '';
+            document.getElementById('p-drive-file-id').value = item.drive_file_id || '';
+            document.getElementById('p-drive-url').value = item.drive_url || '';
+            document.getElementById('p-thumb-drive-file-id').value = item.thumb_drive_file_id || '';
+            document.getElementById('p-thumb-drive-url').value = item.thumb_drive_url || '';
+            document.getElementById('p-upload-progress').textContent = item.thumb_drive_file_id ? '기존 Google Drive 썸네일 사용 중 (새 파일 선택 시 교체)' : (item.media_path ? '기존 Supabase 썸네일 사용 중 (새 파일 선택 시 Drive로 교체)' : '');
+            document.getElementById('p-drive-progress').textContent = item.drive_file_id ? '기존 Google Drive 동영상 사용 중 (새 파일 선택 시 교체)' : '';
+            document.getElementById('p-desc').value = item.description || '';
+            document.getElementById('p-period').value = item.period || '';
+            document.getElementById('p-role').value = item.role || '';
+            document.getElementById('p-tools').value = item.tools || '';
+            document.getElementById('p-objective').value = item.objective || '';
+            document.getElementById('p-process').value = item.process || '';
+            document.getElementById('p-outcome').value = item.outcome || '';
+            document.getElementById('p-form-title').textContent = '포트폴리오 항목 수정';
+            document.getElementById('p-submit-btn').textContent = '수정 완료';
+            document.getElementById('p-cancel-btn').style.display = 'inline-block';
+        };
+
+        document.getElementById('p-cancel-btn').addEventListener('click', resetPortfolioForm);
+        function resetPortfolioForm() {
+            document.getElementById('portfolio-form').reset();
+            document.getElementById('p-id').value = '';
+            document.getElementById('p-media-path').value = '';
+            document.getElementById('p-media-type').value = '';
+            document.getElementById('p-drive-file-id').value = '';
+            document.getElementById('p-drive-url').value = '';
+            document.getElementById('p-thumb-drive-file-id').value = '';
+            document.getElementById('p-thumb-drive-url').value = '';
+            document.getElementById('p-upload-progress').textContent = '';
+            document.getElementById('p-drive-progress').textContent = '';
+            document.getElementById('p-form-title').textContent = '포트폴리오 항목 등록';
+            document.getElementById('p-submit-btn').textContent = '포트폴리오 등록';
+            document.getElementById('p-cancel-btn').style.display = 'none';
+        }
+
+        window.deletePortfolio = async (id) => {
+            if (confirm('삭제하시겠습니까?')) {
+                const { data } = await supabaseClient.from('portfolios').select('media_path, drive_file_id, thumb_drive_file_id').eq('id', id).maybeSingle();
+                await supabaseClient.from('portfolios').delete().eq('id', id);
+                if (data?.media_path) await supabaseClient.storage.from('portfolio-assets').remove([data.media_path]);
+                if (data?.drive_file_id) await driveFunction({ action: 'delete', fileId: data.drive_file_id }).catch(() => {});
+                if (data?.thumb_drive_file_id) await driveFunction({ action: 'delete', fileId: data.thumb_drive_file_id }).catch(() => {});
+                loadPortfolios();
+            }
+        };
+
+        // 스튜디오 소식 관리 로직 (신규 추가)
+        async function loadNotices() {
+            const { data, error } = await supabaseClient.from('notices').select('*').order('created_at', { ascending: false });
+            const tbody = document.getElementById('notice-table-body');
+            if (error) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">공지 목록을 불러오지 못했습니다. Supabase 테이블과 권한 설정을 확인해 주세요.</td></tr>`; return; }
+            if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">등록된 소식이 없습니다.</td></tr>`; return; }
+            tbody.replaceChildren(...data.map(item => {
+                const row = document.createElement('tr');
+                const date = document.createElement('td'); date.textContent = new Date(item.created_at).toLocaleString('ko-KR');
+                const category = document.createElement('td'); category.textContent = item.category || '공지사항';
+                const title = document.createElement('td'); title.textContent = item.title;
+                const actionsCell = document.createElement('td');
+                const actions = document.createElement('div'); actions.className = 'admin-action-btns';
+                const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'btn-edit'; edit.textContent = '수정';
+                edit.addEventListener('click', () => editNotice(item));
+                const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn-delete'; remove.textContent = '삭제';
+                remove.addEventListener('click', () => deleteNotice(item.id));
+                actions.append(edit, remove); actionsCell.append(actions); row.append(date, category, title, actionsCell); return row;
+            }));
+        }
+
+        document.getElementById('notice-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('n-id').value;
+            const title = document.getElementById('n-title').value.trim();
+            const content = document.getElementById('n-content').value.trim();
+            const category = document.getElementById('n-category').value;
+            const selectedFiles = Array.from(document.getElementById('n-attachments').files);
+            const previousAttachments = [...editingNoticeOriginalAttachments];
+            if (editingNoticeAttachments.length + selectedFiles.length > 5) { alert('공지사항 하나에는 첨부파일을 최대 5개까지 등록할 수 있습니다.'); return; }
+            if (selectedFiles.some(file => !NOTICE_ATTACHMENT_TYPES.has(file.type) || file.size < 1 || file.size > NOTICE_ATTACHMENT_MAX_BYTES)) { alert('PDF·이미지·텍스트·Office 문서만 가능하며 파일당 20MB까지 첨부할 수 있습니다.'); return; }
+            const submitButton = document.getElementById('n-submit-btn'); submitButton.disabled = true;
+            const uploadedAttachments = [];
+            let result;
+            try {
+                for (let index = 0; index < selectedFiles.length; index++) uploadedAttachments.push(await uploadNoticeAttachment(selectedFiles[index], index + 1, selectedFiles.length));
+                const attachments = [...editingNoticeAttachments, ...uploadedAttachments];
+                const values = { title, content, category, attachments, updated_at: new Date().toISOString() };
+                result = id
+                    ? await supabaseClient.from('notices').update(values).eq('id', id)
+                    : await supabaseClient.from('notices').insert([values]);
+            } catch (error) {
+                await Promise.all(uploadedAttachments.map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
+                alert(`공지사항을 저장하지 못했습니다: ${error.message}`); return;
+            } finally { submitButton.disabled = false; }
+            if (result.error) {
+                await Promise.all(uploadedAttachments.map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
+                alert('저장하지 못했습니다. Supabase에 공지 카테고리·첨부파일 열을 추가했는지 확인해 주세요.'); return;
+            }
+            const retainedIds = new Set([...editingNoticeAttachments, ...uploadedAttachments].map(file => file.file_id));
+            await Promise.all(previousAttachments.filter(file => !retainedIds.has(file.file_id)).map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
+            alert(id ? '소식이 수정되었습니다.' : '소식이 등록되었습니다.');
+            resetNoticeForm();
+            loadNotices();
+        });
+
+        window.editNotice = (notice) => {
+            document.getElementById('n-id').value = notice.id;
+            document.getElementById('n-category').value = notice.category || '공지사항';
+            document.getElementById('n-title').value = notice.title || '';
+            document.getElementById('n-content').value = notice.content || '';
+            editingNoticeAttachments = Array.isArray(notice.attachments) ? notice.attachments : [];
+            editingNoticeOriginalAttachments = [...editingNoticeAttachments];
+            renderExistingNoticeAttachments();
+            document.getElementById('n-form-title').textContent = '스튜디오 소식 수정';
+            document.getElementById('n-submit-btn').textContent = '수정 완료';
+            document.getElementById('n-cancel-btn').style.display = 'inline-block';
+        };
+
+        document.getElementById('n-cancel-btn').addEventListener('click', resetNoticeForm);
+        function resetNoticeForm() {
+            document.getElementById('notice-form').reset();
+            document.getElementById('n-id').value = '';
+            editingNoticeAttachments = [];
+            editingNoticeOriginalAttachments = [];
+            renderExistingNoticeAttachments();
+            document.getElementById('n-upload-progress').textContent = '';
+            document.getElementById('n-category').value = '공지사항';
+            document.getElementById('n-form-title').textContent = '스튜디오 소식 등록';
+            document.getElementById('n-submit-btn').textContent = '소식 등록';
+            document.getElementById('n-cancel-btn').style.display = 'none';
+        }
+
+        window.deleteNotice = async (id) => {
+            if (confirm('이 소식을 삭제하시겠습니까?')) {
+                const { data: notice } = await supabaseClient.from('notices').select('attachments').eq('id', id).maybeSingle();
+                const { error } = await supabaseClient.from('notices').delete().eq('id', id);
+                if (error) { alert('삭제하지 못했습니다. Supabase 권한을 확인해 주세요.'); return; }
+                await Promise.all((notice?.attachments || []).map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
+                loadNotices();
+            }
+        };
+
+        // 외주 문의 관리 로직
+        async function loadInquiries() {
+            const { data } = await supabaseClient.from('inquiries').select('*').order('created_at', { ascending: false });
+            const tbody = document.getElementById('inquiry-table-body');
+            if (!data || data.length === 0) { cachedInquiries = []; tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">접수된 문의가 없습니다.</td></tr>`; return; }
+            cachedInquiries = data;
+            const rows = await Promise.all(data.map(async item => {
+                let fileLink = '없음';
+                if (item.file_url) {
+                    const { data: signed } = await supabaseClient.storage.from('inquiry-files').createSignedUrl(item.file_url, 60);
+                    if (signed?.signedUrl) fileLink = `<a href="${escapeHtml(signed.signedUrl)}" target="_blank" rel="noopener" style="color:#3498db; text-decoration:underline;">다운로드</a>`;
+                }
+                return `
+                    <tr>
+                        <td>${new Date(item.created_at).toLocaleString()}</td>
+                        <td>${escapeHtml(item.name)}</td>
+                        <td>${escapeHtml(item.email)}</td>
+                        <td>${escapeHtml(item.title)}</td>
+                        <td>${fileLink}</td>
+                        <td>
+                            <select onchange="updateInquiryStatus(${item.id}, this.value)" style="background:var(--color-bg); color:var(--color-text); border:1px solid var(--color-border); padding:4px;">
+                                <option value="대기중" ${item.status === '대기중' ? 'selected' : ''}>대기중</option>
+                                <option value="상담진행중" ${item.status === '상담진행중' ? 'selected' : ''}>상담진행중</option>
+                                <option value="작업완료" ${item.status === '작업완료' ? 'selected' : ''}>작업완료</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn-edit" onclick="showQuoteDraft(${Number(item.id)})">초안</button></td>
+                    </tr>
+                `;
+            }));
+            tbody.innerHTML = rows.join('');
+        }
+
+        window.updateInquiryStatus = async (id, status) => {
+            await supabaseClient.from('inquiries').update({ status }).eq('id', id);
+            alert('상태가 변경되었습니다.');
+        };
+
+        window.showQuoteDraft = id => {
+            const item = cachedInquiries.find(row => Number(row.id) === Number(id));
+            if (!item) return;
+            document.getElementById('quote-draft').value = `안녕하세요, ${item.name}님.\n\n${item.title} 문의 주셔서 감사합니다. 보내주신 내용을 확인했습니다.\n\n[작업 범위]\n[제작 항목과 포함 범위를 기재해 주세요]\n\n[예상 일정]\n[착수일과 예상 납기를 기재해 주세요]\n\n[견적]\n[금액과 결제 조건을 기재해 주세요]\n\n[수정 및 납품]\n[수정 횟수·범위, 납품 형식, 원본 파일 제공 여부를 기재해 주세요]\n\n위 내용 확인 후 진행 여부를 회신 부탁드립니다. 추가 질문이 있으시면 편하게 답변해 주세요.\n감사합니다.\nJWB STUDIO`;
+            document.getElementById('quote-modal').classList.add('active');
+            document.getElementById('quote-draft').focus();
+        };
+        document.getElementById('quote-close').addEventListener('click', () => document.getElementById('quote-modal').classList.remove('active'));
+        document.getElementById('quote-copy').addEventListener('click', async () => {
+            await navigator.clipboard.writeText(document.getElementById('quote-draft').value);
+            document.getElementById('quote-copy').textContent = '복사 완료';
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        });
+
+        checkSession();
+    </script>
 </body>
 </html>
