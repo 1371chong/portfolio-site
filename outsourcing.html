@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="JWB STUDIO의 모션그래픽, 3D 비주얼, 영상·웹 제작 외주 서비스와 프로젝트 문의 안내입니다.">
+    <meta name="description" content="JWB STUDIO의 모션그래픽, 3D 비주얼, 영상·웹 제작 외주 서비스입니다. 크몽에서 의뢰할 수 있습니다.">
     <link rel="canonical" href="https://www.wonbok.kr/outsourcing.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JWB STUDIO">
-    <meta property="og:title" content="외주 서비스 및 프로젝트 문의 | JWB STUDIO">
-    <meta property="og:description" content="영상, 모션그래픽, 3D 및 웹 프로젝트 의뢰 안내">
+    <meta property="og:title" content="외주 서비스 | JWB STUDIO">
+    <meta property="og:description" content="영상, 모션그래픽, 3D 및 웹 프로젝트를 크몽에서 의뢰해 보세요.">
     <meta property="og:url" content="https://www.wonbok.kr/outsourcing.html">
     <meta property="og:image" content="https://www.wonbok.kr/img/logo/logo.png">
-    <title>외주서비스 & 문의 | JWB STUDIO</title>
+    <title>외주서비스 | JWB STUDIO</title>
     <link rel="icon" href="img/logo/logo.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js"></script>
+    <script src="js/contact-config.js"></script>
 </head>
-<body>
+<body class="kmong-page">
     <nav class="navbar scrolled" id="navbar">
         <div class="nav-inner">
             <a href="index.html#home" class="brand">JWB STUDIO</a>
-            <ul class="nav-menu">
+            <button type="button" class="menu-toggle" id="mobile-menu-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav-menu"><span></span><span></span><span></span></button>
+            <ul class="nav-menu" id="site-nav-menu">
                 <li><a href="index.html#home">HOME</a></li>
                 <li><a href="outsourcing.html" class="nav-highlight">외주서비스</a></li>
                 <li><a href="admin-login.html" class="admin-nav-btn">관리자</a></li>
-                <li><button class="theme-toggle-btn" id="theme-toggle">🌙 다크</button></li>
             </ul>
         </div>
     </nav>
@@ -35,7 +34,7 @@
             <div class="section-head fade-up">
                 <h2 class="headline-l">OUTSOURCING SERVICE</h2>
                 <p class="body-text" style="max-width: 600px;">
-                    모션그래픽, 3D 비주얼, 그리고 인터랙티브 웹 제작까지 트렌디하고 완성도 높은 결과물로 프로젝트를 성공적으로 이끕니다.
+                    모션그래픽과 3D 비주얼 제작으로 프로젝트에 어울리는 완성도 높은 결과물을 만듭니다.
                 </p>
                 <p class="body-text" style="max-width: 760px; margin-top: 18px;">견적은 작업 범위, 난이도, 일정, 산출물에 따라 개별 안내합니다. 착수 전 일정, 수정 범위, 납품 형식과 원본 파일 제공 여부를 협의해 확정합니다.</p>
             </div>
@@ -48,97 +47,126 @@
                     <div class="category">02. 3D Modeling</div>
                     <h3 style="margin-top: 15px; font-size: 1.5rem;">3D 비주얼라이제이션</h3>
                 </div>
-                <div class="work-card" style="background: var(--bg-secondary); padding: 40px; border: 1px solid var(--border-color);">
-                    <div class="category">03. Web Development</div>
-                    <h3 style="margin-top: 15px; font-size: 1.5rem;">반응형 포트폴리오 웹</h3>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- 파일 첨부형 외주 문의 폼 -->
-    <section class="section bg-black" id="inquiry-form-section">
+    <section class="section" id="service-packages">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <span class="category">SERVICE GUIDE</span>
+                    <h2 class="headline-l" style="margin-top:12px;">서비스 분야 및 안내</h2>
+                    <p class="body-text" style="margin-top:14px;max-width:720px;">작업 범위와 기본 금액은 프로젝트 규모와 크몽 상품 구성에 따라 달라질 수 있습니다. 최신 구성과 가격은 각 서비스 페이지에서 확인해 주세요.</p>
+                </div>
+            </div>
+            <div class="service-package-grid">
+                <article class="service-package-card">
+                    <span class="service-package-number">01 / VIDEO</span>
+                    <h3>영상 제작 &amp; 모션그래픽</h3>
+                    <p>브랜드·제품·서비스에 어울리는 영상과 모션그래픽 제작을 상담합니다.</p>
+                    <div class="service-package-price"><span>시작 가격</span><strong data-kmong-price="motion">크몽에서 확인</strong></div>
+                    <div class="service-package-duration"><span>예상 작업 기간</span><strong data-kmong-duration="motion">범위 확정 후 안내</strong></div>
+                    <a class="btn-outline" data-kmong-link data-kmong-service="motion" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">서비스 보기</a>
+                </article>
+                <article class="service-package-card">
+                    <span class="service-package-number">02 / 3D</span>
+                    <h3>3D 비주얼라이제이션</h3>
+                    <p>프로젝트 목적과 활용 매체에 맞는 3D 비주얼 작업 범위를 협의합니다.</p>
+                    <div class="service-package-price"><span>시작 가격</span><strong data-kmong-price="threeD">크몽에서 확인</strong></div>
+                    <div class="service-package-duration"><span>예상 작업 기간</span><strong data-kmong-duration="threeD">범위 확정 후 안내</strong></div>
+                    <a class="btn-outline" data-kmong-link data-kmong-service="threeD" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">서비스 보기</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section bg-black" id="inquiry-preparation">
+        <div class="container inquiry-prep-wrap">
+            <span class="category">BEFORE YOU ORDER</span>
+            <h2 class="headline-m" style="margin-top:12px;">크몽 문의 전 준비하면 좋은 내용</h2>
+            <p class="body-text" style="margin:12px 0 24px;">아래 내용을 정리해 두면 필요한 작업과 견적을 더 정확하게 상담할 수 있습니다.</p>
+            <div class="inquiry-prep-list" id="inquiry-prep-list">
+                <label><input type="checkbox" class="inquiry-prep-check"> 프로젝트 목적과 영상·3D 비주얼 사용처</label>
+                <label><input type="checkbox" class="inquiry-prep-check"> 원하는 결과물의 길이·규격·화면 비율</label>
+                <label><input type="checkbox" class="inquiry-prep-check"> 참고 이미지, 로고, 기존 자료 또는 레퍼런스</label>
+                <label><input type="checkbox" class="inquiry-prep-check"> 희망 마감일과 중간 확인 일정</label>
+                <label><input type="checkbox" class="inquiry-prep-check"> 예상 예산과 필요한 수정 범위</label>
+            </div>
+            <div class="inquiry-prep-footer">
+                <small id="inquiry-prep-progress" role="status" aria-live="polite">준비 항목 0 / 5</small>
+                <a class="btn-solid" id="prep-kmong-link" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">준비한 내용으로 크몽 문의하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 크몽 외주 의뢰 링크 -->
+    <section class="section bg-black" id="kmong-section">
         <div class="container" style="max-width: 800px;">
             <div class="section-head" style="text-align: center; margin-bottom: 40px;">
-                <h2 class="headline-m">외주 및 프로젝트 문의하기</h2>
-                <p class="body-text" style="margin-top: 10px;">참고 자료(기획서 등)와 함께 문의를 접수해 주세요.</p>
+                <h2 class="headline-m">크몽에서 프로젝트 의뢰하기</h2>
+                <p class="body-text" style="margin-top: 10px;">서비스 상세 내용과 의뢰 절차를 확인하고 크몽에서 문의해 주세요.</p>
             </div>
-
-            <form id="outsource-form" class="cjenm-form">
-                <div class="input-group"><input type="text" id="writer_name" placeholder="성함 또는 기업명" required></div>
-                <div class="input-group"><input type="email" id="writer_email" placeholder="답변 받을 이메일 주소" required></div>
-                <div class="input-group"><input type="text" id="inquiry_title" placeholder="프로젝트 제목 / 주제" required></div>
-                <div class="input-group"><textarea id="inquiry_content" rows="6" placeholder="프로젝트 예산, 일정 및 상세 내용" required></textarea></div>
-                <div class="input-group">
-                    <label class="body-text" style="font-size:0.9rem; display:block; margin-bottom:8px;">참고 자료 첨부 (선택)</label>
-                    <input type="file" id="inquiry_file" style="color:var(--text-primary);">
-                </div>
-                <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;">
-                    <label for="company-website">웹사이트</label>
-                    <input type="text" id="company-website" name="company_website" tabindex="-1" autocomplete="off">
-                </div>
-                <div class="input-group">
-                    <label class="body-text"><input type="checkbox" id="privacy-consent" required> 문의 상담을 위한 개인정보 수집·이용에 동의합니다. <a href="privacy.html" target="_blank" rel="noopener">내용 보기</a></label>
-                    <small class="body-text">이름, 이메일, 문의 내용 및 선택 첨부파일을 상담 목적으로 이용합니다. 보유기간과 파기 기준은 개인정보처리방침을 확인해 주세요.</small>
-                </div>
-                <small class="body-text">스팸 방지를 위해 자동 제출 제한이 적용됩니다.</small>
-                <button type="submit" class="btn-solid wide" id="submit-inquiry">문의 접수하기</button>
-            </form>
+            <div class="kmong-card">
+                <p class="body-text" style="margin-bottom:24px;">프로젝트 내용과 참고 자료를 준비하셨다면 크몽 서비스 페이지에서 바로 상담을 시작할 수 있습니다.</p>
+                <a class="btn-solid wide" id="kmong-link" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">크몽에서 의뢰·문의하기</a>
+            </div>
+            <div class="kmong-review-card" aria-labelledby="kmong-review-title">
+                <div class="kmong-review-label">크몽 후기</div>
+                <h3 id="kmong-review-title">실제 리뷰와 평점 확인</h3>
+                <p class="body-text">최신 후기와 평점은 크몽 서비스 페이지에서 확인해 주세요.</p>
+                <a class="btn-outline" id="kmong-review-link" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">크몽 리뷰·평점 보기</a>
+            </div>
         </div>
     </section>
+
+    <a class="mobile-kmong-cta" id="mobile-kmong-cta" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">크몽에서 의뢰·문의하기</a>
 
     <footer class="footer">
         <div class="container">
-            <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
+            <div class="footer-top">
+                <div class="footer-brand">JWB STUDIO</div>
+                <div class="footer-policies">
+                    <a href="terms.html">이용약관</a>
+                    <a href="privacy.html">개인정보처리방침</a>
+                    <a href="email-policy.html">이메일무단수집거부</a>
+                    <a href="charter.html">이용자권리헌장</a>
+                </div>
+            </div>
+            <div class="footer-bottom mt-30">
+                <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
+                <p class="copyright">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
+            </div>
         </div>
     </footer>
 
+    <script src="js/mobile-nav.js"></script>
     <script>
-        const supabaseClient = window.getJwbSupabase();
-
-        // 테마 토글
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-        themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                htmlElement.setAttribute('data-theme', 'light');
-                themeToggleBtn.textContent = '☀️ 라이트';
-            } else {
-                htmlElement.setAttribute('data-theme', 'dark');
-                themeToggleBtn.textContent = '🌙 다크';
-            }
+        const kmongLinks = ['kmong-link', 'kmong-review-link', 'mobile-kmong-cta', 'prep-kmong-link'];
+        const configuredKmongUrl = window.JWB_CONTACT?.kmongUrl;
+        const isKmongUrl = value => /^https:\/\/(www\.)?kmong\.com\//i.test(value || '');
+        if (configuredKmongUrl && /^https:\/\/(www\.)?kmong\.com\//i.test(configuredKmongUrl)) {
+            kmongLinks.forEach(id => { const link = document.getElementById(id); if (link) link.href = configuredKmongUrl; });
+        }
+        document.querySelectorAll('[data-kmong-link]').forEach(link => {
+            const serviceUrl = window.JWB_CONTACT?.kmongServices?.[link.dataset.kmongService];
+            link.href = isKmongUrl(serviceUrl) ? serviceUrl : (configuredKmongUrl || 'https://kmong.com/');
         });
-
-        // Honeypot과 rate limit을 거치는 Supabase Edge Function으로 문의 접수
-        document.getElementById('outsource-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!supabaseClient) { alert('문의 접수 설정이 준비되지 않았습니다. 이메일 또는 카카오 채널로 연락해 주세요.'); return; }
-            const submit = document.getElementById('submit-inquiry');
-            submit.disabled = true; submit.textContent = '접수 중…';
-            try {
-                const form = document.getElementById('outsource-form');
-                const payload = new FormData();
-                payload.set('name', document.getElementById('writer_name').value.trim());
-                payload.set('email', document.getElementById('writer_email').value.trim());
-                payload.set('title', document.getElementById('inquiry_title').value.trim());
-                payload.set('content', document.getElementById('inquiry_content').value.trim());
-                payload.set('company_website', document.getElementById('company-website').value);
-                const file = document.getElementById('inquiry_file').files[0];
-                if (file) payload.set('file', file);
-                const response = await fetch(`${window.JWB_SUPABASE_CONFIG.url.replace(/\/$/, '')}/functions/v1/submit-inquiry`, {
-                    method: 'POST', headers: { apikey: window.JWB_SUPABASE_CONFIG.anonKey }, body: payload,
-                });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.error || '문의 접수에 실패했습니다.');
-                alert('문의가 접수됐습니다. 확인 후 안내드리겠습니다.');
-                form.reset();
-            } catch (error) {
-                alert(error.message || '문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-            } finally {
-                submit.disabled = false; submit.textContent = '문의 접수하기';
-            }
+        document.querySelectorAll('[data-kmong-price]').forEach(price => {
+            const value = window.JWB_CONTACT?.kmongPrices?.[price.dataset.kmongPrice];
+            if (typeof value === 'string' && value.trim()) price.textContent = value.trim();
         });
+        document.querySelectorAll('[data-kmong-duration]').forEach(duration => {
+            const value = window.JWB_CONTACT?.kmongDurations?.[duration.dataset.kmongDuration];
+            if (typeof value === 'string' && value.trim()) duration.textContent = value.trim();
+        });
+        const prepChecks = [...document.querySelectorAll('.inquiry-prep-check')];
+        const prepProgress = document.getElementById('inquiry-prep-progress');
+        const updatePrepProgress = () => {
+            const checked = prepChecks.filter(input => input.checked).length;
+            prepProgress.textContent = `준비 항목 ${checked} / ${prepChecks.length}`;
+        };
+        prepChecks.forEach(input => input.addEventListener('change', updatePrepProgress));
     </script>
 </body>
 </html>

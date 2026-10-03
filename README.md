@@ -1,132 +1,188 @@
-# JWB STUDIO Portfolio
+# JWB STUDIO 포트폴리오 사이트
 
-정적 사이트와 Supabase를 연결해 포트폴리오, 공지, 문의와 관리자 기능을 운영합니다.
+JWB STUDIO의 포트폴리오와 공지사항을 소개하는 정적 웹사이트입니다. 화면은 HTML·CSS·JavaScript로 제공하고, 작품·공지 데이터와 관리자 로그인은 Supabase를 사용합니다. 작품 미디어와 공지 첨부파일은 Google Drive에 저장합니다.
 
-## 기능
+## 주요 기능
 
-- 포트폴리오: 썸네일 이미지(JPG/PNG/WebP, Google Drive, 최대 20MB)와 MP4/WebM 작품 영상(Google Drive, 최대 100MB) 업로드, 상세 소개, 프로젝트별 공유 링크
-- 공지: 카테고리별 공개 게시판, 관리자 등록·수정·삭제, Google Drive 첨부파일(공지당 최대 5개, 파일당 20MB)
-- 외주 문의: 허니팟과 IP 지문당 15분에 3회 제출 제한, PDF/이미지 첨부, Supabase 저장 및 Discord 알림
-- 알림: Resend 이메일과 Discord 웹훅(각각 선택 설정)
-- 견적: 문의를 바탕으로 답변 초안을 만들고 복사
-- 검색 노출: 페이지 설명·Open Graph·JSON-LD, `robots.txt`, `sitemap.xml`
+- 포트폴리오 등록·수정·삭제, 공개 또는 임시저장
+- 포트폴리오 한국어 카테고리 필터, 키워드 검색, 상세 보기와 공유 링크
+- 작품별 쉼표 구분 태그(최대 10개), 태그 검색 및 상세·카드 표시
+- 작품 상세 조회수 집계 및 관리자 목록 조회수 표시
+- 관리자 대시보드: 작품·공지 수, 공개 작품, 누적 조회수, 예약 공지, 인기 작품 요약
+- 관리자에서 경력·학력·교육 이력 등록·수정·삭제 및 공개 여부·순서 관리
+- 썸네일 이미지(Google Drive, JPG/PNG/WebP, 파일당 최대 20MB)와 작품 영상(Google Drive, MP4/WebM, 파일당 최대 100MB) 업로드
+- 공지 카테고리, 예약 게시, 미리보기, 수정·삭제
+- 공지 첨부파일(Google Drive, PDF·이미지·텍스트·Office 문서, 파일당 최대 20MB, 공지당 최대 5개)
+- 크몽 중심의 외주 서비스 안내, 서비스 링크·가격·예상 기간 설정
+- 이용약관, 개인정보 처리방침, 이용자 권리 헌장, 이메일 무단 수집 거부 페이지
+- 모바일 메뉴, 검색엔진 메타데이터, `robots.txt`, `sitemap.xml`
 
-## 1. Supabase 프로젝트 준비
+예약 공지는 정한 게시 시각부터 공개됩니다. 백그라운드 예약 작업은 필요하지 않습니다. 게시 예정 시각이 지난 공지는 방문자가 페이지를 새로 열거나 새로고침할 때 표시됩니다.
 
-1. Supabase 대시보드에서 프로젝트를 만듭니다.
-2. 프로젝트의 **SQL Editor**에서 `supabase-setup.sql` 전체를 실행합니다. 테이블, RLS, 문의 제한 함수, 공지 카테고리·첨부파일 열, 썸네일과 동영상 Google Drive 파일 ID 저장 열, 비공개 문의 첨부 버킷이 준비됩니다. 기존 프로젝트도 이 SQL을 다시 실행하면 필요한 열이 추가됩니다.
-3. **Authentication → Users**에서 관리자 계정을 추가합니다. 공개 회원가입이 필요 없다면 가입을 비활성화하세요.
-4. SQL Editor에서 아래 쿼리를 실행해 그 계정에 관리자 역할을 지정합니다. 이메일은 실제 관리자 이메일로 바꿉니다.
+## 폴더와 주요 파일
+
+| 경로 | 용도 |
+|---|---|
+| `index.html` | 메인 페이지, 포트폴리오와 공지사항 |
+| `outsourcing.html` | 외주 서비스 안내와 크몽 연결 |
+| `admin-login.html` | 관리자 로그인 |
+| `admin.html` | 포트폴리오·공지 관리 및 기존 문의 기록 확인 |
+| `js/supabase-config.js` | Supabase 프로젝트 URL과 공개 키 |
+| `js/contact-config.js` | 크몽·이메일·카카오 링크와 가격·기간 |
+| `js/portfolio.js` | 포트폴리오 로딩, 상세 화면, 조회수 호출 |
+| `js/notices.js` | 공개 공지와 첨부 링크 표시 |
+| `js/profile.js` | Supabase에서 공개 프로필 이력 불러오기 |
+| `supabase-setup.sql` | 테이블·권한·Storage·프로필 이력·포트폴리오 태그·예약 게시·조회수 함수 설정 |
+| `supabase/functions/drive-upload/` | 관리자 전용 Google Drive 업로드 Edge Function |
+| `privacy.html`, `terms.html` 등 | 정책 및 권리 안내 페이지 |
+| `PDF/` | 공개 다운로드 가능한 이력서 파일 |
+
+## 준비물
+
+- HTTPS를 지원하는 정적 웹 호스팅과 공개 사이트 주소
+- Supabase 프로젝트
+- 관리자용 이메일과 비밀번호
+- 포트폴리오 및 공지 파일 업로드를 사용하는 경우 Google Cloud 프로젝트와 Google Drive
+- `drive-upload`를 배포하려면 Supabase CLI
+
+별도의 빌드 명령이나 패키지 설치는 필요하지 않습니다. 웹사이트 루트 폴더를 그대로 호스팅에 올립니다.
+
+## 1. Supabase 설정
+
+### 프로젝트와 데이터베이스
+
+1. Supabase 대시보드에서 프로젝트를 생성합니다.
+2. 프로젝트의 **SQL Editor**에서 이 폴더의 `supabase-setup.sql` 전체 내용을 실행합니다. 이 스크립트는 필요한 테이블, RLS 권한, Storage 버킷, 경력·학력·교육 이력 테이블과 초기 프로필 항목, 포트폴리오 태그 열, 예약 게시 열과 조회수 증가 함수를 설정합니다. 재실행할 수 있도록 작성되어 있습니다.
+3. SQL 실행이 완료됐는지 확인합니다. 이전 버전을 사용하다 업데이트하는 경우에도 최신 SQL을 다시 실행해야 예약 게시와 조회수가 동작합니다.
+
+### 관리자 계정
+
+1. **Authentication → Users**에서 이메일·비밀번호 방식으로 관리자 사용자를 추가합니다.
+2. SQL Editor에서 아래 쿼리의 이메일을 실제 관리자 이메일로 바꾸고 실행합니다.
 
    ```sql
    update auth.users
    set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role":"admin"}'::jsonb
-   where email = 'YOUR_ADMIN_EMAIL';
+   where email = '관리자 이메일 주소';
    ```
 
-5. **Project Settings → API**에서 Project URL과 공개용 anon/publishable key를 복사해 `js/supabase-config.js`에 넣습니다. `service_role` 또는 secret key는 브라우저 파일에 넣지 마세요.
-6. 문의 첨부는 PDF/JPG/PNG/WebP, 최대 10MB입니다. 포트폴리오 썸네일과 영상, 공지 첨부파일은 Google Drive에 저장합니다.
+3. 역할을 변경한 뒤에는 기존 세션에서 로그아웃하고 다시 로그인합니다.
+4. **Authentication → URL Configuration**에서 사이트 주소를 Site URL 및 허용된 Redirect URLs에 등록합니다. 실제 도메인과 관리자 로그인 주소를 등록하세요.
 
-## 2. 문의 접수와 스팸 방지
+관리자 페이지 주소는 `https://사이트주소/admin-login.html`입니다. 로그인에 성공하면 `admin.html`로 이동합니다. 공개 방문자에게 관리자 역할이나 비밀번호를 공유하지 마세요.
 
-문의는 Supabase Edge Function이 검증한 뒤 DB에 저장합니다. Turnstile은 사용하지 않으며, 숨겨진 허니팟 입력란과 IP 지문 기준 15분당 최대 3회 제한으로 기본적인 자동 제출을 줄입니다. CAPTCHA보다 스팸 방어 강도는 낮으므로 스팸이 늘면 Turnstile 또는 다른 CAPTCHA 제공자를 다시 연결할 수 있습니다.
+### 브라우저 연결
 
-## 3. Discord 문의 알림 설정
+`js/supabase-config.js`에서 다음 두 값을 Supabase 대시보드의 **Project Settings → API** 값으로 바꿉니다.
 
-문의는 Supabase DB에 저장되고, Discord에는 개인정보를 포함하지 않은 새 문의 알림이 전송됩니다. Discord 웹훅 주소는 브라우저 코드에 넣지 않습니다.
-
-- Discord에서 문의 알림을 받을 채널의 웹훅을 만든 뒤 Supabase 대시보드 **Edge Functions → Secrets**에 `DISCORD_WEBHOOK_URL`로 저장합니다.
-- 이메일 알림도 원하면 Resend에서 발신 도메인을 인증하고 `RESEND_API_KEY`, `NOTIFY_EMAIL_TO`, `NOTIFY_EMAIL_FROM`을 추가합니다.
-- Discord 웹훅을 설정하지 않으면 해당 알림을 건너뜁니다. 알림 전송에 실패해도 문의 데이터는 Supabase에 보관됩니다.
-
-## 4. Edge Function 배포
-
-프로젝트 루트(`portfolio-site-main`)에서 Supabase CLI를 설치하고 다음을 실행합니다. `<PROJECT_REF>`는 Supabase 프로젝트의 Reference ID입니다.
-
-```powershell
-supabase login
-supabase link --project-ref <PROJECT_REF>
-supabase functions deploy submit-inquiry
-supabase functions deploy drive-upload
+```js
+window.JWB_SUPABASE_CONFIG = {
+  url: 'https://프로젝트ID.supabase.co',
+  anonKey: '공개용 anon 또는 publishable key'
+};
 ```
 
-Edge Function Secrets에 다음 값도 저장합니다.
+이 파일에는 공개용 키만 넣습니다. `service_role` 또는 secret key는 HTML·JavaScript·GitHub 등 브라우저에 전달되는 곳에 절대 넣지 마세요.
+
+## 2. Google Drive 업로드 설정 (Apps Script)
+
+이 프로젝트는 Google Cloud OAuth를 사용하지 않습니다. `google-apps-script` 폴더의 브리지를 본인 Google 계정으로 배포하고, 관리자 브라우저 → Supabase Edge Function → Apps Script → Google Drive 순서로 파일을 업로드합니다. 브라우저가 Google Drive에 직접 파일을 보내지 않으므로 Drive CORS 오류를 피합니다.
+
+### Apps Script 설정
+
+1. Google Drive에서 동영상, 썸네일, 공지 첨부파일을 저장할 폴더를 준비합니다. 폴더 ID는 주소의 `/folders/` 뒤에 있는 값입니다.
+2. [Google Apps Script](https://script.google.com/)에서 프로젝트를 만들고 `google-apps-script/Code.gs` 내용을 붙여넣습니다.
+3. 프로젝트 설정에서 매니페스트 편집을 켜고 `google-apps-script/appsscript.json` 내용을 붙여넣습니다. 왼쪽 **서비스 +**에서 **Drive API**를 추가합니다.
+4. **프로젝트 설정 → 스크립트 속성**에 다음 값을 등록합니다.
+
+| 속성 | 값 |
+|---|---|
+| `JWB_SHARED_SECRET` | Supabase `APPS_SCRIPT_SHARED_SECRET`과 동일한 임의의 비밀 문자열 |
+| `JWB_DRIVE_FOLDER_ID` | 동영상 기본 폴더 ID |
+| `JWB_DRIVE_THUMBNAIL_FOLDER_ID` | 썸네일 폴더 ID |
+| `JWB_DRIVE_NOTICE_FOLDER_ID` | 공지 첨부파일 폴더 ID |
+
+5. 편집기에서 `authorizeDriveAccess`를 한 번 실행하고 권한을 승인합니다.
+6. **배포 → 새 배포 → 웹 앱**에서 실행 사용자를 **나**, 액세스 권한을 **모든 사용자**로 선택해 배포합니다. `/exec`로 끝나는 웹 앱 URL을 복사합니다. 코드를 변경하면 **배포 관리 → 수정 → 새 버전**으로 다시 배포합니다.
+
+### Supabase 설정 및 배포
+
+Supabase 대시보드 **Edge Functions → Secrets**에 다음 값을 설정합니다.
 
 | Secret | 값 |
 |---|---|
-| `ALLOWED_ORIGINS` | `https://www.wonbok.kr` 및 실제 사용 도메인(origin 전체 주소)을 쉼표로 구분 |
-| `RATE_LIMIT_SALT` | 임의의 긴 비밀 문자열 |
-| `APPS_SCRIPT_WEB_APP_URL` | 아래 Apps Script 배포에서 복사한 웹 앱 URL |
-| `APPS_SCRIPT_SHARED_SECRET` | Apps Script와 Supabase에 동일하게 저장할 긴 임의 비밀 문자열 |
-| `RESEND_API_KEY` | Resend API 키, 이메일 알림을 사용할 때 |
-| `NOTIFY_EMAIL_TO` | 알림을 받을 이메일 |
-| `NOTIFY_EMAIL_FROM` | Resend에서 인증한 발신 주소 |
-| `DISCORD_WEBHOOK_URL` | Discord 웹훅 URL, Discord 알림을 사용할 때 |
+| `APPS_SCRIPT_WEB_APP_URL` | Apps Script 배포 화면에서 복사한 `/exec` 전체 URL |
+| `APPS_SCRIPT_SHARED_SECRET` | Apps Script `JWB_SHARED_SECRET`과 같은 값 |
+| `ALLOWED_ORIGINS` | `https://www.wonbok.kr,https://wonbok.kr` (실제로 사용하는 도메인만 등록) |
 
-Supabase가 Edge Function 런타임에 제공하는 `SUPABASE_SERVICE_ROLE_KEY`는 함수가 DB와 스토리지에 저장할 때 사용합니다. 직접 설정하거나 프런트엔드에 복사하지 마세요. `supabase/config.toml`은 문의 함수의 JWT 검증을 끄고, 함수 코드에서 허용 Origin·허니팟·제출 제한을 검사합니다.
+프로젝트 루트에서 Windows PowerShell로 함수를 배포합니다. `<PROJECT_REF>`는 Supabase 프로젝트 ID입니다.
 
-## 5. Google Drive 동영상 저장 설정 (Apps Script)
+```powershell
+npx.cmd --yes supabase@latest functions deploy drive-upload --project-ref <PROJECT_REF>
+```
 
-Apps Script가 본인 Google 계정 권한으로 Drive 업로드 세션을 만듭니다. 파일 본문은 브라우저에서 Google Drive로 직접 전송하므로 Supabase Edge Function을 거치지 않으며, 현재 관리자 페이지의 최대 100MB 업로드를 유지합니다. 관리자 로그인은 Supabase가 확인하고, Apps Script 공유 비밀값은 Supabase Edge Function 안에서만 전달합니다.
+사이트 파일을 호스팅에 올리는 것과 Edge Function 배포는 별개입니다. 둘 다 최신 코드로 갱신해야 공지 첨부파일 업로드가 동작합니다. 배포 후 작은 파일로 먼저 확인하세요. Google Drive 파일은 링크가 있는 사용자가 볼 수 있도록 공유되므로 공개 가능한 파일만 올리세요.
 
-### Apps Script 웹 앱 만들기
+## 3. 크몽 및 연락처 설정
 
-1. 영상·첨부파일을 저장할 Google Drive 폴더를 준비합니다. 폴더 ID는 폴더 주소의 `/folders/` 뒤에 있는 문자열입니다. 루트에 저장하려면 폴더 설정을 비워 둡니다.
-2. [Google Apps Script](https://script.google.com/)에서 새 프로젝트를 만들고 `google-apps-script/Code.gs`의 내용을 편집기의 `Code.gs`에 붙여넣습니다. 이미 프로젝트를 만들었다면 기존 `Code.gs`를 새 내용으로 교체합니다.
-3. 왼쪽 **프로젝트 설정**에서 `appsscript.json 매니페스트 파일을 편집기에 표시`를 켭니다. 나타난 `appsscript.json`에 `google-apps-script/appsscript.json`의 내용을 붙여넣고 저장합니다. 기본 Apps Script Cloud 프로젝트를 사용하면 Drive 고급 서비스 추가에 필요한 API도 자동으로 활성화됩니다. 표준 Cloud 프로젝트로 바꾼 경우에는 Drive API 설정을 별도로 확인해야 합니다.
-4. **프로젝트 설정 → 스크립트 속성**에 다음 속성을 추가합니다.
+`js/contact-config.js`의 공개 정보를 수정합니다.
 
-   | 속성 | 값 |
-   |---|---|
-   | `JWB_SHARED_SECRET` | 최소 32바이트 이상 임의 비밀값. 아래의 Supabase Edge Function에도 똑같이 저장 |
-   | `JWB_DRIVE_FOLDER_ID` | 선택 사항. 대상 Drive 폴더 URL의 `/folders/` 뒤에 있는 ID |
-   | `JWB_DRIVE_THUMBNAIL_FOLDER_ID` | 선택 사항. 썸네일 전용 폴더 ID. 미설정 시 기본 Drive 폴더 사용 |
-   | `JWB_DRIVE_NOTICE_FOLDER_ID` | 선택 사항. 공지 첨부 전용 폴더 ID. 미설정 시 `JWB_DRIVE_FOLDER_ID` 폴더를 사용 |
+- `email`: 공개할 이메일. 공개하지 않으면 빈 문자열로 둡니다.
+- `kakaoUrl`: 카카오 오픈채팅 주소. 공개하지 않으면 빈 문자열로 둡니다.
+- `kmongUrl`: 크몽 프로필 또는 대표 서비스 주소
+- `kmongServices.motion`, `kmongServices.threeD`: 영상·모션그래픽 및 3D 개별 서비스 주소
+- `kmongPrices`: 서비스별 시작 가격 문구
+- `kmongDurations`: 서비스별 예상 작업 기간
 
-   Windows PowerShell에서 비밀값을 만들려면 다음을 실행하고, 출력된 값만 두 설정에 붙여넣습니다.
+값을 비워 둔 가격·기간은 기본 안내 문구로 표시됩니다. 공개 전에 크몽 URL이 본인의 실제 서비스 페이지인지 확인하세요.
 
-   ```powershell
-   [Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
-   ```
+현재 새 외주 의뢰는 크몽으로 연결됩니다. 관리자 페이지의 문의 목록은 이전에 저장된 문의 기록을 확인하기 위한 용도로 남아 있습니다. 저장되어 있는 `submit-inquiry` Edge Function은 현재 사이트의 새 문의 접수 흐름에서 사용하지 않습니다.
 
-5. 편집기에서 `authorizeDriveAccess`를 한 번 실행하고 표시되는 권한 요청에서 본인 Google 계정의 Drive 접근을 승인합니다.
-6. **배포 → 새 배포 → 웹 앱**을 선택합니다. 실행 사용자는 **나**, 액세스 권한은 **모든 사용자**로 설정해 배포합니다. 기존 배포가 있으면 **배포 관리 → 수정 → 새 버전**으로 업데이트합니다. 웹 앱 URL(`/exec`)을 복사합니다. 이 URL은 비밀이 아니지만, 공유 비밀값은 외부에 공개하면 안 됩니다.
+## 4. 관리자 사용 방법
 
-### Supabase 연결
+### 포트폴리오
 
-1. Supabase 대시보드의 **Edge Functions → Secrets**에서 `APPS_SCRIPT_WEB_APP_URL`에 웹 앱 URL을, `APPS_SCRIPT_SHARED_SECRET`에 위와 동일한 비밀값을 저장합니다. 기존 Google OAuth Secrets (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REFRESH_TOKEN`)은 더 이상 필요하지 않습니다.
-2. 사이트의 주소가 `ALLOWED_ORIGINS`에 포함되었는지 확인하고 아래를 실행해 `drive-upload`를 배포합니다.
+1. 관리자 페이지 상단에서 작품·공지 수와 누적 조회수, 조회수 상위 작품을 확인합니다. `admin-login.html`에서 로그인하고 포트폴리오 등록 폼을 작성합니다.
+2. 카테고리, 제목, 설명을 입력합니다. 태그 입력란에는 쉼표로 구분해 최대 10개(각 30자 이하)를 추가합니다. 태그는 카드와 상세 화면에 표시되고 키워드 검색에 포함됩니다. 필요하면 썸네일이나 MP4/WebM 파일을 업로드합니다.
+3. **사이트에 공개**를 선택하면 공개 포트폴리오에 나타납니다. 체크를 끄면 관리자만 볼 수 있는 임시저장 상태입니다.
+4. 작품 상세를 열면 조회수가 증가합니다. 조회수는 포트폴리오 카드와 관리자 목록에 표시됩니다.
 
-   ```powershell
-   supabase functions deploy drive-upload
-   ```
+### 경력·학력·교육 이력
 
-3. 관리자 페이지에서 썸네일(JPG/PNG/WebP, 최대 20MB), MP4/WebM 영상(최대 100MB), 공지 첨부파일을 업로드합니다. 공지는 **공지사항·업데이트·작업 소식·기타** 카테고리를 선택할 수 있고, 파일을 최대 5개까지 붙일 수 있습니다. 공지 첨부 가능 형식은 PDF·이미지·텍스트·Office 문서이며 파일당 최대 20MB입니다. 업로드된 썸네일·영상·공지 첨부파일은 Drive에서 “링크가 있는 모든 사용자” 보기 권한이 되므로 공개 가능한 파일만 올리세요. 파일 교체나 해당 작품·공지를 삭제하면 이전 Drive 파일도 정리됩니다. 기존 Supabase 썸네일은 새 Drive 썸네일로 교체하기 전까지 계속 표시됩니다.
+관리자 페이지의 **경력·학력·교육 이력 관리**에서 종류, 항목명, 학교·회사·교육기관, 기간, 설명을 등록합니다. 공개 체크를 끄면 관리자 목록에는 남고 메인 프로필에서는 숨겨집니다. 표시 순서 숫자가 낮은 항목부터 각 이력 그룹 안에 나타납니다. 데이터베이스가 비어 있을 때 현재 메인 페이지에 표시 중인 학력·국비 교육·경력 항목이 초기 데이터로 등록됩니다.
 
-**보안 참고:** 웹 앱은 Supabase 서버만 공유 비밀값을 알고 있도록 구성합니다. `JWB_SHARED_SECRET`을 사이트 파일, GitHub 저장소, 관리자 브라우저 코드에 넣지 마세요. 공유 설정이 조직 계정 정책으로 차단되어 있으면 개인 Google 계정의 Drive 폴더를 이용하세요. Apps Script의 실행 시간과 Google 계정별 할당량은 Google 정책에 따라 달라질 수 있습니다.
+### 공지사항
 
-## 6. 사이트 설정 및 게시
+1. 카테고리·제목·내용을 입력하고 **게시 예정 일시**를 선택합니다. 현재 시각으로 두면 즉시 공개되고 미래 시각을 선택하면 예약됩니다.
+2. 파일은 공지 하나당 최대 5개, 파일당 최대 20MB까지 첨부할 수 있습니다.
+3. 미리보기를 확인한 뒤 등록합니다. 게시 예정 시각은 기존 공지를 수정할 때도 변경할 수 있습니다.
+4. 예약 공지는 관리자 목록에서 `예약`으로 표시됩니다. 정한 시각이 지난 뒤 공개 페이지를 새로 열면 표시됩니다.
 
-1. `js/contact-config.js`에 공개할 실제 이메일과 카카오 오픈채팅 주소를 입력합니다.
-2. `privacy.html`에 실제 보유기간, Supabase 프로젝트 리전과 서비스 처리 위치를 확인해 반영합니다. 문의 알림 이메일을 켜면 해당 데이터 처리 사실도 정책에 유지합니다.
-3. 사이트 파일 전체를 현재 호스팅에 업로드합니다. 루트에 `robots.txt`, `sitemap.xml`, `supabase` 폴더도 포함합니다.
-4. 관리자 페이지에서 작품·공지 등록을 확인하고, 테스트 문의가 DB에 쌓이는지와 설정한 알림 채널에 전달되는지 확인합니다.
+기존 Supabase Storage 공지 첨부파일도 계속 읽을 수 있도록 호환 설정이 남아 있습니다. 새 첨부파일은 Google Drive를 사용합니다.
 
-## 관리자 메뉴
+## 5. 사이트 게시
 
-- `admin-login.html`: 관리자 로그인
-- `admin.html`: 작품과 미디어 등록·수정·삭제, 공지 CRUD, 문의 확인·상태 변경, 답변 초안 복사
+1. `js/supabase-config.js`와 `js/contact-config.js`를 실제 설정으로 변경합니다.
+2. 정책 페이지의 연락처, 개인정보 보유 기간, 실제 운영 방식을 확인하고 필요한 내용을 반영합니다. 이력서 파일도 외부 공개가 적절한지 확인합니다.
+3. 프로젝트 루트의 파일과 `css/`, `img/`, `js/`, `PDF/`, `supabase/` 폴더를 모두 호스팅에 업로드합니다. `CNAME` 파일을 사용하는 호스팅에서는 해당 파일도 포함합니다.
+4. 사이트 메인 주소, 로그인, 포트폴리오 조회, 공지 공개와 예약, Google Drive 업로드를 확인합니다.
 
-작품 공유 링크는 `index.html?work=<작품ID>#works` 형식입니다. 공유 미리보기 메타데이터와 페이지 제목은 브라우저에서 작품에 맞춰 바뀝니다. 정적 호스팅 특성상 일부 SNS 미리보기 봇은 JavaScript 변경을 읽지 못하고 기본 사이트 미리보기를 표시할 수 있습니다.
+## 문제 해결
 
-## 공식 설정 안내
+| 증상 | 확인할 항목 |
+|---|---|
+| Supabase에 연결되지 않음 | `js/supabase-config.js`에 Project URL과 공개 키가 정확히 들어 있는지 확인 |
+| 관리자 로그인이 거부됨 | 사용자가 등록됐는지, `app_metadata.role`이 `admin`인지, URL Configuration이 맞는지 확인한 뒤 다시 로그인 |
+| 예약 게시 열이나 조회수 함수를 찾을 수 없음 | 최신 `supabase-setup.sql` 전체를 SQL Editor에서 실행했는지 확인 |
+| Drive 업로드가 실패하거나 403 발생 | `drive-upload` 배포, Edge Function Secrets, `ALLOWED_ORIGINS`, Google Drive API 및 공유 정책 확인 |
+| Drive 업로드 후 공개 접근 불가 | 파일의 공유 권한과 Google Workspace 외부 공유 설정 확인 |
+| 공지가 저장되지만 보이지 않음 | 공지의 게시 예정 시각과 Supabase RLS 정책을 확인하고 페이지 새로고침 |
+
+## 참고 문서
 
 - [Supabase Edge Functions 배포](https://supabase.com/docs/guides/functions/deploy)
 - [Supabase Edge Function Secrets](https://supabase.com/docs/guides/functions/secrets)
+- [Supabase Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
 - [Google Drive 업로드](https://developers.google.com/workspace/drive/api/guides/manage-uploads)
-- [Google Drive 파일 권한 설정](https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions/create)
-- [Apps Script 웹 앱 배포](https://developers.google.com/apps-script/guides/web)
-- [Apps Script Cloud 프로젝트](https://developers.google.com/apps-script/guides/cloud-platform-projects)
-- [Apps Script 서비스 할당량](https://developers.google.com/apps-script/guides/services/quotas)
-- [Supabase Storage 재개 가능한 업로드](https://supabase.com/docs/guides/storage/uploads/resumable-uploads)
-- [Resend와 Supabase 연동](https://resend.com/supabase)
+- [Google Drive 파일 권한](https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions/create)
+- [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2)

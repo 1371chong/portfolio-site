@@ -69,10 +69,10 @@ function startUpload(request) {
   const metadata = { name: safeName, mimeType: mimeType };
   const properties = PropertiesService.getScriptProperties();
   const folderId = kind === 'attachment'
-    ? (properties.getProperty('1NWqJe5TxZQbL5Ii6-P9HGoXwcUybJNt6') || properties.getProperty('1hVzBUe4bkpflJeYkFLp914K4p3G2vK2z'))
+    ? (properties.getProperty('JWB_DRIVE_NOTICE_FOLDER_ID') || properties.getProperty('JWB_DRIVE_FOLDER_ID'))
     : kind === 'thumbnail'
-      ? (properties.getProperty('1hVzBUe4bkpflJeYkFLp914K4p3G2vK2z') || properties.getProperty('1hVzBUe4bkpflJeYkFLp914K4p3G2vK2z'))
-      : properties.getProperty('1hVzBUe4bkpflJeYkFLp914K4p3G2vK2z');
+      ? (properties.getProperty('JWB_DRIVE_THUMBNAIL_FOLDER_ID') || properties.getProperty('JWB_DRIVE_FOLDER_ID'))
+      : properties.getProperty('JWB_DRIVE_FOLDER_ID');
   if (folderId) metadata.parents = [folderId];
 
   const query = '?uploadType=resumable&fields=id,name,mimeType,webViewLink';

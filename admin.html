@@ -17,26 +17,46 @@
         .admin-table th { background: rgba(255,255,255,0.05); color: var(--color-text); }
         .admin-table td { color: var(--color-text-dim); }
         .admin-action-btns { display: flex; gap: 8px; }
-        .admin-table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .admin-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-        .admin-section { min-width: 0; }
-        .admin-table { min-width: 560px; }
-        .admin-container input, .admin-container textarea, .admin-container select { max-width: 100%; }
-        .admin-container input[type="file"] { width: 100%; }
-        .admin-container small[aria-live] { display: block; min-height: 1.4em; overflow-wrap: anywhere; }
+        .admin-table-scroll { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+        .admin-table { min-width:560px; }
+        .admin-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+        .admin-form-grid-narrow { grid-template-columns:minmax(140px,180px) minmax(0,1fr); }
+        .admin-container input[type="file"] { width:100%; max-width:100%; }
+        .admin-container small[aria-live] { display:block; min-height:1.4em; overflow-wrap:anywhere; }
+        .admin-dashboard-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin:24px 0; }
+        .admin-stat-card { padding:18px 20px; background:#1b1b1b; border:1px solid var(--color-border); }
+        .admin-stat-card span { display:block; color:var(--color-text-dim); font-size:.88rem; }
+        .admin-stat-card strong { display:block; margin-top:8px; color:var(--color-text); font-size:1.7rem; }
+        .admin-popular-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px 20px; padding-left:20px; color:var(--color-text-dim); }
+        .admin-popular-list strong { color:var(--color-text); margin-left:8px; }
         .btn-edit { background: #3498db; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
         .btn-delete { background: #e74c3c; color: #fff; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
-        @media (max-width: 640px) {
-            .admin-container { width: 100%; margin: 0 auto; padding: 76px 12px 24px; }
-            .admin-section { padding: 18px 14px; margin-bottom: 18px; }
-            .admin-section h2 { font-size: 1.35rem !important; line-height: 1.35; }
-            .admin-form-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
-            .admin-table th, .admin-table td { padding: 10px; font-size: .85rem; }
-            .admin-action-btns { flex-wrap: wrap; }
-            .admin-section .btn-small { min-height: 42px; }
-            .admin-section .btn-cancel { margin-left: 0 !important; }
-            .navbar .nav-inner { padding-left: 12px; padding-right: 12px; }
-            .brand { font-size: .9rem; }
+        .notice-admin-preview { margin-top:28px; padding:22px 24px; background:#1b1b1b; border:1px solid #3a3a3a; }
+        .notice-admin-preview-head { display:flex; align-items:center; gap:18px; padding-bottom:12px; border-bottom:1px solid #3a3a3a; color:#f5f5f5; font-weight:700; }
+        .notice-admin-preview-head time { margin-left:auto; color:#888; font-size:.85rem; font-weight:400; }
+        .notice-admin-preview > .notice-category-badge { margin-top:18px; }
+        .notice-admin-preview h3 { margin:22px 0 12px; font-size:1.1rem; }
+        .notice-admin-preview p { min-height:48px; color:#bbb; white-space:pre-wrap; line-height:1.7; }
+        .admin-attachment-list { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+        .admin-attachment-list li { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--color-border); color:var(--color-text-dim); font-size:.9rem; }
+        .admin-attachment-list button { flex:0 0 auto; padding:5px 8px; border:1px solid var(--color-border); background:transparent; color:var(--color-text); cursor:pointer; }
+        @media(max-width:600px){.notice-admin-preview-head{gap:10px;flex-wrap:wrap}.notice-admin-preview-head time{margin-left:0;width:100%}}
+        @media(max-width:800px){.admin-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:640px){
+            .admin-container{width:100%;margin:0 auto;padding:76px 12px 24px;}
+            .admin-section{min-width:0;padding:18px 14px;margin-bottom:18px;}
+            .admin-section h2{font-size:1.35rem!important;line-height:1.35;}
+            .admin-form-grid,.admin-form-grid-narrow{grid-template-columns:minmax(0,1fr);gap:0;}
+            .admin-table th,.admin-table td{padding:10px;font-size:.85rem;}
+            .admin-action-btns{flex-wrap:wrap;}
+            .admin-section .btn-small{min-height:42px;}
+            .admin-dashboard-grid{gap:8px;margin:16px 0;}
+            .admin-stat-card{padding:13px 12px;}
+            .admin-stat-card strong{font-size:1.35rem;}
+            .admin-popular-list{grid-template-columns:1fr;}
+            .admin-attachment-list li{align-items:flex-start;flex-wrap:wrap;}
+            .navbar .nav-inner{padding-left:12px;padding-right:12px;}
+            .brand{font-size:.9rem;}
         }
     </style>
 </head>
@@ -51,6 +71,19 @@
     </nav>
 
     <div class="admin-container">
+        <section class="admin-section" aria-labelledby="dashboard-title">
+            <h2 class="headline-m" id="dashboard-title" style="font-size:1.8rem;">관리자 대시보드</h2>
+            <div class="admin-dashboard-grid">
+                <div class="admin-stat-card"><span>전체 포트폴리오</span><strong id="dashboard-portfolio-total">-</strong></div>
+                <div class="admin-stat-card"><span>공개 작품</span><strong id="dashboard-portfolio-published">-</strong></div>
+                <div class="admin-stat-card"><span>전체 공지</span><strong id="dashboard-notice-total">-</strong></div>
+                <div class="admin-stat-card"><span>누적 작품 조회수</span><strong id="dashboard-portfolio-views">-</strong></div>
+                <div class="admin-stat-card"><span>예약 공지</span><strong id="dashboard-notice-scheduled">-</strong></div>
+            </div>
+            <h3 style="margin:22px 0 10px;">조회수 높은 작품</h3>
+            <ol class="admin-popular-list" id="dashboard-popular-work"><li>불러오는 중...</li></ol>
+        </section>
+
         <!-- 1. 포트폴리오 관리 섹션 -->
         <div class="admin-section">
             <h2 class="headline-m" id="p-form-title" style="font-size: 1.8rem;">포트폴리오 항목 등록</h2>
@@ -58,8 +91,9 @@
                 <input type="hidden" id="p-id">
                 <div class="admin-form-grid">
                     <div class="input-group"><input type="text" id="p-title" placeholder="프로젝트 제목" required></div>
-                    <div class="input-group"><select id="p-category" required><option value="">카테고리 선택</option><option value="2d">2D MOTION</option><option value="3d">3D ARTS</option><option value="web">WEB & DEV</option><option value="bot">BOT & DEV</option></select></div>
+                    <div class="input-group"><select id="p-category" required><option value="">카테고리 선택</option><option value="typography">타이포그래픽</option><option value="2d">모션그래픽</option><option value="advertising">광고영상</option><option value="web-variety">웹예능</option><option value="youtube-promo">유튜브 홍보영상</option><option value="3d">3D 비주얼</option><option value="other">기타</option></select></div>
                 </div>
+                <div class="input-group"><label class="body-text"><input type="checkbox" id="p-published" checked> 사이트에 공개 (체크 해제하면 임시저장)</label></div>
                 <div class="input-group"><input type="url" id="p-youtube" placeholder="YouTube 영상 링크 (선택, 기존 항목 호환)"></div>
                 <input type="hidden" id="p-media-path">
                 <input type="hidden" id="p-media-type">
@@ -83,6 +117,7 @@
                     <div class="input-group"><input type="text" id="p-role" placeholder="담당 역할"></div>
                 </div>
                 <div class="input-group"><input type="text" id="p-tools" placeholder="사용 도구"></div>
+                <div class="input-group"><label class="body-text" for="p-tags">작품 태그 (쉼표로 구분, 최대 10개)</label><input type="text" id="p-tags" maxlength="320" placeholder="예: 타이포, 광고, 프리미어, 브랜드 영상"><small class="body-text">태그는 작품 카드와 상세 화면에 표시되고 키워드 검색에도 포함됩니다.</small></div>
                 <div class="input-group"><textarea id="p-objective" rows="2" placeholder="프로젝트 목표"></textarea></div>
                 <div class="input-group"><textarea id="p-process" rows="2" placeholder="제작 과정"></textarea></div>
                 <div class="input-group"><textarea id="p-outcome" rows="2" placeholder="결과 또는 성과 (공개 가능한 내용)"></textarea></div>
@@ -94,47 +129,87 @@
         <div class="admin-section">
             <h2 class="headline-m" style="font-size: 1.8rem;">포트폴리오 목록 관리</h2>
             <div class="admin-table-scroll"><table class="admin-table">
-                <thead><tr><th>제목</th><th>카테고리</th><th>관리</th></tr></thead>
-                <tbody id="portfolio-table-body"><tr><td colspan="3" style="text-align:center;">불러오는 중...</td></tr></tbody>
+                <thead><tr><th>제목</th><th>카테고리</th><th>조회수</th><th>공개 상태</th><th>관리</th></tr></thead>
+                <tbody id="portfolio-table-body"><tr><td colspan="5" style="text-align:center;">불러오는 중...</td></tr></tbody>
             </table></div>
         </div>
+
+        <section class="admin-section" aria-labelledby="profile-admin-title">
+            <h2 class="headline-m" id="profile-admin-title" style="font-size:1.8rem;">경력·학력·교육 이력 관리</h2>
+            <form id="profile-entry-form" class="cjenm-form mt-30">
+                <input type="hidden" id="profile-entry-id">
+                <div class="admin-form-grid">
+                    <div class="input-group"><select id="profile-entry-type" required aria-label="이력 종류"><option value="career">경력</option><option value="education">학력</option><option value="training">교육</option></select></div>
+                    <div class="input-group"><input type="text" id="profile-entry-title" maxlength="180" placeholder="항목 이름 / 학위 / 직무" required></div>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="input-group"><input type="text" id="profile-entry-organization" maxlength="160" placeholder="회사 / 학교 / 교육기관 (선택)"></div>
+                    <div class="input-group"><input type="text" id="profile-entry-period" maxlength="100" placeholder="기간 (예: 2025.08 ~ 2026.01)"></div>
+                </div>
+                <div class="input-group"><textarea id="profile-entry-description" rows="3" maxlength="1200" placeholder="상세 내용 (선택)"></textarea></div>
+                <div class="admin-form-grid admin-form-grid-narrow">
+                    <div class="input-group"><label class="body-text" for="profile-entry-order">표시 순서</label><input type="number" id="profile-entry-order" value="0" step="1"></div>
+                    <div class="input-group"><label class="body-text"><input type="checkbox" id="profile-entry-published" checked> 프로필에 공개</label></div>
+                </div>
+                <button type="submit" id="profile-entry-submit" class="btn-solid btn-small">이력 등록</button>
+                <button type="button" id="profile-entry-cancel" class="btn-outline btn-small" style="display:none;margin-left:10px;">취소</button>
+            </form>
+            <div style="overflow-x:auto;margin-top:24px;">
+                <table class="admin-table"><thead><tr><th>종류</th><th>항목</th><th>기관</th><th>기간</th><th>공개</th><th>관리</th></tr></thead>
+                    <tbody id="profile-entry-table"><tr><td colspan="6" style="text-align:center;">불러오는 중...</td></tr></tbody></table>
+            </div>
+        </section>
 
         <!-- 2. 스튜디오 소식 관리 섹션 (신규 추가) -->
         <div class="admin-section">
             <h2 class="headline-m" id="n-form-title" style="font-size: 1.8rem;">스튜디오 소식 등록</h2>
             <form id="notice-form" class="cjenm-form mt-30">
                 <input type="hidden" id="n-id">
-                <div class="input-group"><select id="n-category" required><option value="공지사항">공지사항</option><option value="업데이트">업데이트</option><option value="작업 소식">작업 소식</option><option value="기타">기타</option></select></div>
+                <div class="input-group">
+                    <select id="n-category" aria-label="공지 카테고리">
+                        <option value="공지사항">공지사항</option>
+                        <option value="업데이트">업데이트</option>
+                        <option value="작업 소식">작업 소식</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
                 <div class="input-group"><input type="text" id="n-title" placeholder="소식 제목" required></div>
+                <div class="input-group"><label class="body-text" for="n-published-at">게시 예정 일시</label><input type="datetime-local" id="n-published-at" required><small class="body-text">선택한 시각이 되면 사이트 공지사항에 자동으로 공개됩니다.</small></div>
                 <div class="input-group"><textarea id="n-content" rows="4" placeholder="소식 내용" required></textarea></div>
                 <div class="input-group">
-                    <label class="body-text" for="n-attachments">공지 첨부파일 (최대 5개, 파일당 20MB · PDF, 이미지, 텍스트, Office 문서 · Google Drive 저장)</label>
-                    <input type="file" id="n-attachments" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
-                    <ul id="n-existing-attachments" class="body-text" style="padding-left:20px;margin-top:10px;"></ul>
+                    <label class="body-text" for="n-attachments">파일 첨부 (최대 5개, 파일당 20MB · PDF, 이미지, 문서)</label>
+                    <input type="file" id="n-attachments" multiple accept="application/pdf,image/jpeg,image/png,image/webp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation">
+                    <small class="body-text">Google Drive에 저장되며 공지 게시 시 누구나 열거나 다운로드할 수 있습니다.</small>
                     <small id="n-upload-progress" class="body-text" aria-live="polite"></small>
+                    <ul id="n-existing-attachments" class="admin-attachment-list" aria-label="기존 첨부파일"></ul>
                 </div>
                 <button type="submit" class="btn-solid btn-small" id="n-submit-btn">소식 등록</button>
                 <button type="button" class="btn-outline btn-small" id="n-cancel-btn" style="display:none; margin-left:10px;">취소</button>
+                <aside class="notice-admin-preview" aria-label="공지사항 미리보기">
+                    <div class="notice-admin-preview-head"><span>공지사항 미리보기</span><time id="n-preview-date">미리보기 · 지금</time></div>
+                    <span class="notice-category-badge" id="n-preview-category">공지사항</span>
+                    <h3 id="n-preview-title">[공지] 공지 제목을 입력해 주세요</h3>
+                    <p id="n-preview-content">공지 내용을 입력하면 여기에 미리 표시됩니다.</p>
+                    <div id="n-preview-attachments" class="notice-attachments"></div>
+                </aside>
             </form>
         </div>
 
         <div class="admin-section">
             <h2 class="headline-m" style="font-size: 1.8rem;">스튜디오 소식 목록 관리</h2>
             <div class="admin-table-scroll"><table class="admin-table">
-                <thead><tr><th>작성일시</th><th>분류</th><th>제목</th><th>관리</th></tr></thead>
-                <tbody id="notice-table-body"><tr><td colspan="3" style="text-align:center;">불러오는 중...</td></tr></tbody>
+                <thead><tr><th>게시 예정/게시일시</th><th>카테고리</th><th>제목</th><th>첨부</th><th>관리</th></tr></thead>
+                <tbody id="notice-table-body"><tr><td colspan="5" style="text-align:center;">불러오는 중...</td></tr></tbody>
             </table></div>
         </div>
 
         <!-- 3. 외주 문의 내역 관리 섹션 -->
         <div class="admin-section">
             <h2 class="headline-m" style="font-size: 1.8rem;">접수된 외주 문의 내역</h2>
-            <div style="overflow-x: auto;">
-                <table class="admin-table">
+            <div class="admin-table-scroll"><table class="admin-table">
                     <thead><tr><th>접수일시</th><th>성함</th><th>이메일</th><th>제목</th><th>첨부파일</th><th>진행상태</th><th>답변</th></tr></thead>
                     <tbody id="inquiry-table-body"><tr><td colspan="7" style="text-align: center;">불러오는 중...</td></tr></tbody>
-                </table>
-            </div>
+            </table></div>
         </div>
     </div>
 
@@ -152,57 +227,91 @@
         const supabaseClient = window.getJwbSupabase();
         const SUPABASE_URL = window.JWB_SUPABASE_CONFIG.url;
         const DRIVE_VIDEO_MAX_BYTES = 100 * 1024 * 1024;
-        const DRIVE_THUMBNAIL_MAX_BYTES = 20 * 1024 * 1024;
-        const DRIVE_THUMBNAIL_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+        const DRIVE_THUMB_MAX_BYTES = 20 * 1024 * 1024;
         const NOTICE_ATTACHMENT_MAX_BYTES = 20 * 1024 * 1024;
-        const NOTICE_ATTACHMENT_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']);
+        const NOTICE_ATTACHMENT_LIMIT = 5;
+        const NOTICE_ATTACHMENT_TYPES = new Set([
+            'application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'text/plain', 'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        ]);
 
         const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
         let cachedInquiries = [];
+        let originalNoticeAttachments = [];
         let editingNoticeAttachments = [];
-        let editingNoticeOriginalAttachments = [];
+        let dashboardPortfolioRows = [];
+        let dashboardNoticeRows = [];
+        function renderDashboardSummary() {
+            const rows = dashboardPortfolioRows;
+            document.getElementById('dashboard-portfolio-total').textContent = rows.length.toLocaleString('ko-KR');
+            document.getElementById('dashboard-portfolio-published').textContent = rows.filter(item => item.is_published !== false).length.toLocaleString('ko-KR');
+            document.getElementById('dashboard-portfolio-views').textContent = rows.reduce((sum, item) => sum + Number(item.view_count || 0), 0).toLocaleString('ko-KR');
+            document.getElementById('dashboard-notice-total').textContent = dashboardNoticeRows.length.toLocaleString('ko-KR');
+            document.getElementById('dashboard-notice-scheduled').textContent = dashboardNoticeRows.filter(item => new Date(item.published_at || item.created_at) > new Date()).length.toLocaleString('ko-KR');
+            const list = document.getElementById('dashboard-popular-work');
+            const popular = [...rows].sort((a, b) => Number(b.view_count || 0) - Number(a.view_count || 0)).slice(0, 5);
+            if (!popular.length) { list.replaceChildren(Object.assign(document.createElement('li'), { textContent: '등록된 작품이 없습니다.' })); return; }
+            list.replaceChildren(...popular.map(item => {
+                const row = document.createElement('li'); row.append(document.createTextNode(item.title || '제목 없는 작품'));
+                const count = document.createElement('strong'); count.textContent = `${Number(item.view_count || 0).toLocaleString('ko-KR')}회`; row.append(count); return row;
+            }));
+        }
+        function toLocalDateTimeValue(value = new Date()) {
+            const date = value instanceof Date ? value : new Date(value);
+            if (Number.isNaN(date.getTime())) return '';
+            return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        }
 
+        function renderNoticePreview() {
+            const category = document.getElementById('n-category').value;
+            const title = document.getElementById('n-title').value.trim();
+            const content = document.getElementById('n-content').value.trim();
+            document.getElementById('n-preview-category').textContent = category === '공지사항' ? '[공지]' : `[${category.replace(/\s/g, '')}]`;
+            document.getElementById('n-preview-title').textContent = (title || '공지 제목을 입력해 주세요').replace(/^\[(공지|공지사항|업데이트|작업\s*소식|기타)\]\s*/, '');
+            document.getElementById('n-preview-content').textContent = content || '공지 내용을 입력하면 여기에 미리 표시됩니다.';
+            const publishAt = document.getElementById('n-published-at').value;
+            document.getElementById('n-preview-date').textContent = publishAt ? `게시 예정 · ${new Date(publishAt).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' })}` : '게시 시각을 선택해 주세요';
+            const names = [...editingNoticeAttachments.map(file => file.name), ...Array.from(document.getElementById('n-attachments').files, file => file.name)];
+            const previewFiles = document.getElementById('n-preview-attachments');
+            previewFiles.replaceChildren();
+            if (names.length) {
+                const title = document.createElement('strong'); title.textContent = '첨부파일';
+                const list = document.createElement('ul');
+                names.forEach(name => { const item = document.createElement('li'); item.textContent = `📎 ${name}`; list.append(item); });
+                previewFiles.append(title, list);
+            }
+        }
         function renderExistingNoticeAttachments() {
             const list = document.getElementById('n-existing-attachments');
             list.replaceChildren(...editingNoticeAttachments.map(file => {
                 const item = document.createElement('li');
-                const label = document.createElement('span'); label.textContent = `${file.name} (${Math.ceil((file.size || 0) / 1024)}KB) `;
-                const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn-delete'; remove.textContent = '첨부 해제';
-                remove.addEventListener('click', () => { editingNoticeAttachments = editingNoticeAttachments.filter(current => current.file_id !== file.file_id); renderExistingNoticeAttachments(); });
-                item.append(label, remove); return item;
+                const name = document.createElement('span'); name.textContent = `${file.name} (${Math.ceil((file.size || 0) / 1024)}KB)`;
+                const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '첨부 해제';
+                remove.addEventListener('click', () => {
+                    editingNoticeAttachments = editingNoticeAttachments.filter(current => current.path !== file.path);
+                    renderExistingNoticeAttachments(); renderNoticePreview();
+                });
+                item.append(name, remove); return item;
             }));
         }
-
-        async function uploadNoticeAttachment(file, index, total) {
-            if (!NOTICE_ATTACHMENT_TYPES.has(file.type) || file.size < 1 || file.size > NOTICE_ATTACHMENT_MAX_BYTES) throw new Error('지원 형식과 파일당 20MB 용량 제한을 확인해 주세요.');
-            const noticeTitle = document.getElementById('n-title').value.trim() || '공지사항';
-            const shared = await uploadDriveFile(file, 'attachment', `${noticeTitle}_${file.name}`, percent => {
-                document.getElementById('n-upload-progress').textContent = `첨부파일 ${index}/${total} 업로드 중 ${percent}%`;
-            });
-            return { name: file.name, file_id: shared.id, url: shared.webViewLink, size: file.size, mime_type: file.type, storage: 'google-drive' };
+        async function uploadNoticeAttachment(file) {
+            if (!NOTICE_ATTACHMENT_TYPES.has(file.type) || file.size < 1 || file.size > NOTICE_ATTACHMENT_MAX_BYTES) {
+                throw new Error('지원하는 파일 형식과 파일당 20MB 제한을 확인해 주세요.');
+            }
+            const title = document.getElementById('n-title').value.trim() || '공지사항';
+            const progress = document.getElementById('n-upload-progress');
+            const shared = await uploadDriveFile(file, 'attachment', `${title}_${file.name}`, progress);
+            return { name: file.name, path: shared.id, file_id: shared.id, url: shared.webViewLink, size: file.size, mime_type: file.type, storage: 'google-drive' };
         }
-
-        async function uploadDriveFile(file, kind, name, onProgress) {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) throw new Error('관리자 로그인이 필요합니다.');
-            const query = new URLSearchParams({ action: 'upload', kind, name, mimeType: file.type, size: String(file.size) });
-            return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', `${SUPABASE_URL.replace(/\/$/, '')}/functions/v1/drive-upload?${query}`);
-                xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-                xhr.setRequestHeader('apikey', window.JWB_SUPABASE_CONFIG.anonKey);
-                xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
-                xhr.upload.onprogress = event => { if (event.lengthComputable && onProgress) onProgress(Math.round(event.loaded / event.total * 100)); };
-                xhr.onerror = () => reject(new Error('네트워크 오류로 파일 업로드가 중단됐습니다.'));
-                xhr.onload = () => {
-                    let result = {};
-                    try { result = JSON.parse(xhr.responseText); } catch {}
-                    if (xhr.status < 200 || xhr.status >= 300) return reject(new Error(result.error || `파일 업로드 실패 (${xhr.status}).`));
-                    resolve(result);
-                };
-                xhr.send(file);
-            });
-        }
+        document.getElementById('n-category').addEventListener('change', renderNoticePreview);
+        document.getElementById('n-title').addEventListener('input', renderNoticePreview);
+        document.getElementById('n-published-at').addEventListener('input', renderNoticePreview);
+        document.getElementById('n-content').addEventListener('input', renderNoticePreview);
+        document.getElementById('n-attachments').addEventListener('change', renderNoticePreview);
+        document.getElementById('n-published-at').value = toLocalDateTimeValue();
+        renderNoticePreview();
 
         async function driveFunction(body) {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -217,28 +326,48 @@
             return result;
         }
 
-        async function uploadDriveVideo(file) {
-            if (!['video/mp4', 'video/webm'].includes(file.type) || file.size > DRIVE_VIDEO_MAX_BYTES) {
-                throw new Error('MP4/WebM 동영상만 업로드할 수 있으며, 최대 용량은 100MB입니다.');
+        async function uploadDriveFile(file, kind, fileName, progressElement) {
+            const isThumbnail = kind === 'thumbnail';
+            const isAttachment = kind === 'attachment';
+            const allowed = isAttachment ? NOTICE_ATTACHMENT_TYPES.has(file.type) : isThumbnail ? ['image/jpeg', 'image/png', 'image/webp'].includes(file.type) : ['video/mp4', 'video/webm'].includes(file.type);
+            const maxBytes = isAttachment ? NOTICE_ATTACHMENT_MAX_BYTES : isThumbnail ? DRIVE_THUMB_MAX_BYTES : DRIVE_VIDEO_MAX_BYTES;
+            const statusEl = progressElement || document.getElementById(isThumbnail ? 'p-upload-progress' : 'p-drive-progress');
+            if (!allowed || file.size < 1 || file.size > maxBytes) {
+                throw new Error(isAttachment ? '공지 첨부파일 형식과 파일당 최대 20MB 제한을 확인해 주세요.' : isThumbnail ? 'JPG/PNG/WebP 이미지, 최대 20MB 파일만 업로드할 수 있습니다.' : 'MP4/WebM 동영상, 최대 100MB 파일만 업로드할 수 있습니다.');
             }
             const title = document.getElementById('p-title').value.trim() || file.name;
-            const shared = await uploadDriveFile(file, 'video', `${title}_${file.name}`, percent => {
-                document.getElementById('p-drive-progress').textContent = `Google Drive 업로드 중 ${percent}%`;
+            const query = new URLSearchParams({ action: 'upload', kind, name: fileName || `${title}_${file.name}`, mimeType: file.type, size: String(file.size) });
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) throw new Error('관리자 로그인이 필요합니다.');
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `${SUPABASE_URL.replace(/\/$/, '')}/functions/v1/drive-upload?${query}`);
+                xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+                xhr.setRequestHeader('apikey', window.JWB_SUPABASE_CONFIG.anonKey);
+                xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
+                xhr.upload.onprogress = event => {
+                    if (event.lengthComputable && statusEl) statusEl.textContent = `Google Drive 업로드 중 ${Math.round(event.loaded / event.total * 100)}%`;
+                };
+                xhr.onerror = () => reject(new Error('Supabase 업로드 연결에 실패했습니다. drive-upload 함수를 다시 배포하고 ALLOWED_ORIGINS 사이트 주소 설정을 확인해 주세요.'));
+                xhr.ontimeout = () => reject(new Error('파일 업로드 시간이 초과됐습니다. 파일 크기를 줄여 다시 시도해 주세요.'));
+                xhr.timeout = 150000;
+                xhr.onload = () => {
+                    let result = {};
+                    try { result = JSON.parse(xhr.responseText); } catch {}
+                    if (xhr.status < 200 || xhr.status >= 300) return reject(new Error(result.error || `파일 업로드 실패 (${xhr.status}).`));
+                    if (statusEl) statusEl.textContent = isAttachment ? 'Google Drive 첨부파일 업로드 완료' : isThumbnail ? 'Google Drive 썸네일 업로드 완료' : 'Google Drive 동영상 업로드 및 공개 재생 설정 완료';
+                    resolve(result);
+                };
+                xhr.send(file);
             });
-            document.getElementById('p-drive-progress').textContent = 'Google Drive 업로드 및 공개 재생 설정 완료';
-            return shared;
         }
 
-        async function uploadDriveThumbnail(file) {
-            if (!DRIVE_THUMBNAIL_TYPES.has(file.type) || file.size < 1 || file.size > DRIVE_THUMBNAIL_MAX_BYTES) {
-                throw new Error('JPG/PNG/WebP 이미지 파일만 업로드할 수 있으며, 최대 용량은 20MB입니다.');
-            }
-            const title = document.getElementById('p-title').value.trim() || file.name;
-            const shared = await uploadDriveFile(file, 'thumbnail', `${title}_${file.name}`, percent => {
-                document.getElementById('p-upload-progress').textContent = `Google Drive 썸네일 업로드 중 ${percent}%`;
-            });
-            document.getElementById('p-upload-progress').textContent = 'Google Drive 썸네일 업로드 완료';
-            return shared;
+        const uploadDriveVideo = file => uploadDriveFile(file, 'video', null, document.getElementById('p-drive-progress'));
+        const uploadDriveThumbnail = file => uploadDriveFile(file, 'thumbnail', null, document.getElementById('p-upload-progress'));
+        async function deleteNoticeAttachment(file) {
+            if (file?.file_id) return driveFunction({ action: 'delete', fileId: file.file_id });
+            if (file?.storage === 'google-drive' && /^[A-Za-z0-9_-]{10,}$/.test(file?.path || '')) return driveFunction({ action: 'delete', fileId: file.path });
+            if (file?.path) return supabaseClient.storage.from('notice-files').remove([file.path]);
         }
 
         async function checkSession() {
@@ -250,26 +379,100 @@
                 window.location.href = 'admin-login.html';
             } else {
                 loadPortfolios();
+                loadProfileEntries();
                 loadNotices();
                 loadInquiries();
             }
         }
 
         // 포트폴리오 관리 로직
+        const portfolioCategoryLabels = { typography: '타이포그래픽', '2d': '모션그래픽', motion: '모션그래픽', advertising: '광고영상', 'web-variety': '웹예능', 'youtube-promo': '유튜브 홍보영상', '3d': '3D 비주얼', other: '기타', web: '웹사이트(기존)', bot: '자동화·봇(기존)' };
+        const portfolioCategoryLabel = category => portfolioCategoryLabels[String(category || '').toLowerCase()] || String(category || '기타');
         async function loadPortfolios() {
             const { data } = await supabaseClient.from('portfolios').select('*').order('id', { ascending: false });
             const tbody = document.getElementById('portfolio-table-body');
-            if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">등록된 항목이 없습니다.</td></tr>`; return; }
+            dashboardPortfolioRows = data || [];
+            renderDashboardSummary();
+            if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">등록된 항목이 없습니다.</td></tr>`; return; }
             tbody.replaceChildren(...data.map(item => {
                 const row = document.createElement('tr');
                 const title = document.createElement('td'); title.textContent = item.title;
-                const category = document.createElement('td'); category.textContent = item.category;
+                const category = document.createElement('td'); category.textContent = portfolioCategoryLabel(item.category);
+                const views = document.createElement('td'); views.textContent = Number(item.view_count || 0).toLocaleString('ko-KR');
+                const status = document.createElement('td'); status.textContent = item.is_published === false ? '임시저장' : '공개';
                 const cell = document.createElement('td'); const actions = document.createElement('div'); actions.className = 'admin-action-btns';
                 const edit = document.createElement('button'); edit.className = 'btn-edit'; edit.textContent = '수정'; edit.type = 'button'; edit.addEventListener('click', () => editPortfolio(item));
                 const remove = document.createElement('button'); remove.className = 'btn-delete'; remove.textContent = '삭제'; remove.type = 'button'; remove.addEventListener('click', () => deletePortfolio(item.id));
-                actions.append(edit, remove); cell.append(actions); row.append(title, category, cell); return row;
+                actions.append(edit, remove); cell.append(actions); row.append(title, category, views, status, cell); return row;
             }));
         }
+
+        const profileEntryLabels = { career: '경력', education: '학력', training: '교육' };
+        async function loadProfileEntries() {
+            const tbody = document.getElementById('profile-entry-table');
+            const { data, error } = await supabaseClient.from('profile_entries').select('*').order('sort_order', { ascending: true }).order('id', { ascending: true });
+            if (error) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">이력 목록을 불러오지 못했습니다. 최신 supabase-setup.sql을 실행해 주세요.</td></tr>'; return; }
+            if (!data?.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">등록된 이력이 없습니다.</td></tr>'; return; }
+            tbody.replaceChildren(...data.map(item => {
+                const row = document.createElement('tr');
+                const type = document.createElement('td'); type.textContent = profileEntryLabels[item.entry_type] || item.entry_type;
+                const title = document.createElement('td'); title.textContent = item.title;
+                const organization = document.createElement('td'); organization.textContent = item.organization || '—';
+                const period = document.createElement('td'); period.textContent = item.period || '—';
+                const status = document.createElement('td'); status.textContent = item.is_published === false ? '비공개' : '공개';
+                const cell = document.createElement('td'); const actions = document.createElement('div'); actions.className = 'admin-action-btns';
+                const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'btn-edit'; edit.textContent = '수정'; edit.addEventListener('click', () => editProfileEntry(item));
+                const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn-delete'; remove.textContent = '삭제'; remove.addEventListener('click', () => deleteProfileEntry(item.id));
+                actions.append(edit, remove); cell.append(actions); row.append(type, title, organization, period, status, cell); return row;
+            }));
+        }
+        document.getElementById('profile-entry-form').addEventListener('submit', async event => {
+            event.preventDefault();
+            const id = document.getElementById('profile-entry-id').value;
+            const values = {
+                entry_type: document.getElementById('profile-entry-type').value,
+                title: document.getElementById('profile-entry-title').value.trim(),
+                organization: document.getElementById('profile-entry-organization').value.trim(),
+                period: document.getElementById('profile-entry-period').value.trim(),
+                description: document.getElementById('profile-entry-description').value.trim(),
+                sort_order: Number(document.getElementById('profile-entry-order').value) || 0,
+                is_published: document.getElementById('profile-entry-published').checked,
+                updated_at: new Date().toISOString()
+            };
+            const result = id
+                ? await supabaseClient.from('profile_entries').update(values).eq('id', id)
+                : await supabaseClient.from('profile_entries').insert([values]);
+            if (result.error) { alert(`이력을 저장하지 못했습니다: ${result.error.message}`); return; }
+            resetProfileEntryForm(); loadProfileEntries();
+        });
+        window.editProfileEntry = item => {
+            document.getElementById('profile-entry-id').value = item.id;
+            document.getElementById('profile-entry-type').value = item.entry_type;
+            document.getElementById('profile-entry-title').value = item.title || '';
+            document.getElementById('profile-entry-organization').value = item.organization || '';
+            document.getElementById('profile-entry-period').value = item.period || '';
+            document.getElementById('profile-entry-description').value = item.description || '';
+            document.getElementById('profile-entry-order').value = item.sort_order ?? 0;
+            document.getElementById('profile-entry-published').checked = item.is_published !== false;
+            document.getElementById('profile-entry-submit').textContent = '수정 완료';
+            document.getElementById('profile-entry-cancel').style.display = 'inline-block';
+            document.getElementById('profile-admin-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+        async function deleteProfileEntry(id) {
+            if (!confirm('이 이력 항목을 삭제하시겠습니까?')) return;
+            const { error } = await supabaseClient.from('profile_entries').delete().eq('id', id);
+            if (error) { alert('이력을 삭제하지 못했습니다. 관리자 권한과 Supabase 설정을 확인해 주세요.'); return; }
+            loadProfileEntries();
+        }
+        function resetProfileEntryForm() {
+            document.getElementById('profile-entry-form').reset();
+            document.getElementById('profile-entry-id').value = '';
+            document.getElementById('profile-entry-order').value = '0';
+            document.getElementById('profile-entry-published').checked = true;
+            document.getElementById('profile-entry-submit').textContent = '이력 등록';
+            document.getElementById('profile-entry-cancel').style.display = 'none';
+        }
+        document.getElementById('profile-entry-cancel').addEventListener('click', resetProfileEntryForm);
 
         document.getElementById('portfolio-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -284,6 +487,8 @@
             const objective = document.getElementById('p-objective').value.trim();
             const process = document.getElementById('p-process').value.trim();
             const outcome = document.getElementById('p-outcome').value.trim();
+            const tags = [...new Set(document.getElementById('p-tags').value.split(',').map(tag => tag.trim()).filter(Boolean))];
+            if (tags.length > 10 || tags.some(tag => tag.length > 30)) { alert('태그는 최대 10개, 태그 하나당 30자까지 입력할 수 있습니다.'); return; }
             let mediaPath = document.getElementById('p-media-path').value;
             let mediaType = document.getElementById('p-media-type').value;
             let driveFileId = document.getElementById('p-drive-file-id').value;
@@ -294,19 +499,16 @@
             const oldDriveUrl = driveUrl;
             const oldThumbDriveFileId = thumbDriveFileId;
             const oldThumbDriveUrl = thumbDriveUrl;
-            const oldMediaPath = mediaPath;
-            let uploadedThumbDriveFileId = '';
-            let uploadedDriveFileId = '';
+            let uploadedThumbFileId = '';
+            let uploadedVideoFileId = '';
             const selectedFile = document.getElementById('p-media-file').files[0];
             if (selectedFile) {
                 try {
-                    document.getElementById('p-upload-progress').textContent = 'Google Drive 썸네일 업로드 준비 중…';
+                    document.getElementById('p-upload-progress').textContent = '업로드 준비 중…';
                     const uploaded = await uploadDriveThumbnail(selectedFile);
                     thumbDriveFileId = uploaded.id;
                     thumbDriveUrl = uploaded.webViewLink || `https://drive.google.com/file/d/${uploaded.id}/view`;
-                    uploadedThumbDriveFileId = uploaded.id;
-                    mediaPath = '';
-                    mediaType = 'image';
+                    uploadedThumbFileId = uploaded.id;
                     document.getElementById('p-thumb-drive-file-id').value = thumbDriveFileId;
                     document.getElementById('p-thumb-drive-url').value = thumbDriveUrl;
                 } catch (error) {
@@ -320,34 +522,34 @@
                     document.getElementById('p-drive-progress').textContent = 'Google Drive 업로드 준비 중…';
                     const uploaded = await uploadDriveVideo(selectedVideo);
                     driveFileId = uploaded.id;
-                    uploadedDriveFileId = uploaded.id;
                     driveUrl = uploaded.webViewLink || `https://drive.google.com/file/d/${uploaded.id}/view`;
+                    uploadedVideoFileId = uploaded.id;
                     document.getElementById('p-drive-file-id').value = driveFileId;
                     document.getElementById('p-drive-url').value = driveUrl;
                 } catch (error) {
+                    if (uploadedThumbFileId) {
+                        await driveFunction({ action: 'delete', fileId: uploadedThumbFileId }).catch(() => {});
+                        document.getElementById('p-thumb-drive-file-id').value = oldThumbDriveFileId;
+                        document.getElementById('p-thumb-drive-url').value = oldThumbDriveUrl;
+                    }
                     document.getElementById('p-drive-progress').textContent = '';
-                    if (uploadedThumbDriveFileId) await driveFunction({ action: 'delete', fileId: uploadedThumbDriveFileId }).catch(() => {});
-                    document.getElementById('p-thumb-drive-file-id').value = oldThumbDriveFileId;
-                    document.getElementById('p-thumb-drive-url').value = oldThumbDriveUrl;
-                    document.getElementById('p-upload-progress').textContent = oldThumbDriveFileId ? '기존 Google Drive 썸네일 사용 중' : (oldMediaPath ? '기존 Supabase 썸네일 사용 중' : '');
                     alert(`Google Drive 업로드에 실패했습니다: ${error.message}`); return;
                 }
             }
-            const values = { title, category, youtube, description, period, role, tools, objective, process, outcome, media_path: mediaPath, media_type: mediaType, drive_file_id: driveFileId, drive_url: driveUrl, thumb_drive_file_id: thumbDriveFileId, thumb_drive_url: thumbDriveUrl };
+            const values = { title, category, youtube, description, period, role, tools, objective, process, outcome, tags, media_path: mediaPath, media_type: mediaType, drive_file_id: driveFileId, drive_url: driveUrl, thumb_drive_file_id: thumbDriveFileId, thumb_drive_url: thumbDriveUrl, is_published: document.getElementById('p-published').checked };
 
             const result = id ? await supabaseClient.from('portfolios').update(values).eq('id', id) : await supabaseClient.from('portfolios').insert([values]);
             if (result.error) {
-                if (uploadedThumbDriveFileId) await driveFunction({ action: 'delete', fileId: uploadedThumbDriveFileId }).catch(() => {});
-                if (uploadedDriveFileId) await driveFunction({ action: 'delete', fileId: uploadedDriveFileId }).catch(() => {});
+                if (uploadedThumbFileId) await driveFunction({ action: 'delete', fileId: uploadedThumbFileId }).catch(() => {});
+                if (uploadedVideoFileId) await driveFunction({ action: 'delete', fileId: uploadedVideoFileId }).catch(() => {});
                 document.getElementById('p-thumb-drive-file-id').value = oldThumbDriveFileId;
                 document.getElementById('p-thumb-drive-url').value = oldThumbDriveUrl;
                 document.getElementById('p-drive-file-id').value = oldDriveFileId;
                 document.getElementById('p-drive-url').value = oldDriveUrl;
                 alert('저장하지 못했습니다. Supabase 설정을 확인해 주세요.'); return;
             }
-            if (oldMediaPath && uploadedThumbDriveFileId) await supabaseClient.storage.from('portfolio-assets').remove([oldMediaPath]);
-            if (oldDriveFileId && uploadedDriveFileId && oldDriveFileId !== uploadedDriveFileId) await driveFunction({ action: 'delete', fileId: oldDriveFileId }).catch(() => {});
-            if (oldThumbDriveFileId && uploadedThumbDriveFileId && oldThumbDriveFileId !== thumbDriveFileId) await driveFunction({ action: 'delete', fileId: oldThumbDriveFileId }).catch(() => {});
+            if (oldThumbDriveFileId && uploadedThumbFileId && oldThumbDriveFileId !== uploadedThumbFileId) await driveFunction({ action: 'delete', fileId: oldThumbDriveFileId }).catch(() => {});
+            if (oldDriveFileId && selectedVideo && oldDriveFileId !== driveFileId) await driveFunction({ action: 'delete', fileId: oldDriveFileId }).catch(() => {});
             alert(id ? '수정되었습니다.' : '등록되었습니다.');
             resetPortfolioForm();
             loadPortfolios();
@@ -356,7 +558,14 @@
         window.editPortfolio = item => {
             document.getElementById('p-id').value = item.id;
             document.getElementById('p-title').value = item.title || '';
-            document.getElementById('p-category').value = item.category || '';
+            const categorySelect = document.getElementById('p-category');
+            const storedCategory = String(item.category || '').toLowerCase();
+            const categoryValue = storedCategory === 'motion' ? '2d' : storedCategory;
+            if (categoryValue && ![...categorySelect.options].some(option => option.value === categoryValue)) {
+                categorySelect.add(new Option(portfolioCategoryLabel(categoryValue), categoryValue));
+            }
+            categorySelect.value = categoryValue;
+            document.getElementById('p-published').checked = item.is_published !== false;
             document.getElementById('p-youtube').value = item.youtube || '';
             document.getElementById('p-media-path').value = item.media_path || '';
             document.getElementById('p-media-type').value = item.media_type || '';
@@ -364,12 +573,13 @@
             document.getElementById('p-drive-url').value = item.drive_url || '';
             document.getElementById('p-thumb-drive-file-id').value = item.thumb_drive_file_id || '';
             document.getElementById('p-thumb-drive-url').value = item.thumb_drive_url || '';
-            document.getElementById('p-upload-progress').textContent = item.thumb_drive_file_id ? '기존 Google Drive 썸네일 사용 중 (새 파일 선택 시 교체)' : (item.media_path ? '기존 Supabase 썸네일 사용 중 (새 파일 선택 시 Drive로 교체)' : '');
+            document.getElementById('p-upload-progress').textContent = item.thumb_drive_file_id ? '기존 Google Drive 썸네일 사용 중 (새 파일 선택 시 교체)' : (item.media_path ? '기존 Supabase 썸네일 사용 중' : '');
             document.getElementById('p-drive-progress').textContent = item.drive_file_id ? '기존 Google Drive 동영상 사용 중 (새 파일 선택 시 교체)' : '';
             document.getElementById('p-desc').value = item.description || '';
             document.getElementById('p-period').value = item.period || '';
             document.getElementById('p-role').value = item.role || '';
             document.getElementById('p-tools').value = item.tools || '';
+            document.getElementById('p-tags').value = Array.isArray(item.tags) ? item.tags.join(', ') : '';
             document.getElementById('p-objective').value = item.objective || '';
             document.getElementById('p-process').value = item.process || '';
             document.getElementById('p-outcome').value = item.outcome || '';
@@ -382,6 +592,7 @@
         function resetPortfolioForm() {
             document.getElementById('portfolio-form').reset();
             document.getElementById('p-id').value = '';
+            document.getElementById('p-published').checked = true;
             document.getElementById('p-media-path').value = '';
             document.getElementById('p-media-type').value = '';
             document.getElementById('p-drive-file-id').value = '';
@@ -397,33 +608,39 @@
 
         window.deletePortfolio = async (id) => {
             if (confirm('삭제하시겠습니까?')) {
-                const { data } = await supabaseClient.from('portfolios').select('media_path, drive_file_id, thumb_drive_file_id').eq('id', id).maybeSingle();
-                await supabaseClient.from('portfolios').delete().eq('id', id);
+                const { data } = await supabaseClient.from('portfolios').select('media_path,drive_file_id,thumb_drive_file_id').eq('id', id).maybeSingle();
+                const { error } = await supabaseClient.from('portfolios').delete().eq('id', id);
+                if (error) { alert('삭제하지 못했습니다. 관리자 권한을 확인해 주세요.'); return; }
                 if (data?.media_path) await supabaseClient.storage.from('portfolio-assets').remove([data.media_path]);
-                if (data?.drive_file_id) await driveFunction({ action: 'delete', fileId: data.drive_file_id }).catch(() => {});
                 if (data?.thumb_drive_file_id) await driveFunction({ action: 'delete', fileId: data.thumb_drive_file_id }).catch(() => {});
+                if (data?.drive_file_id) await driveFunction({ action: 'delete', fileId: data.drive_file_id }).catch(() => {});
                 loadPortfolios();
             }
         };
 
         // 스튜디오 소식 관리 로직 (신규 추가)
         async function loadNotices() {
-            const { data, error } = await supabaseClient.from('notices').select('*').order('created_at', { ascending: false });
+            const { data, error } = await supabaseClient.from('notices').select('*').order('published_at', { ascending: false });
             const tbody = document.getElementById('notice-table-body');
-            if (error) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">공지 목록을 불러오지 못했습니다. Supabase 테이블과 권한 설정을 확인해 주세요.</td></tr>`; return; }
-            if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">등록된 소식이 없습니다.</td></tr>`; return; }
+            dashboardNoticeRows = data || [];
+            renderDashboardSummary();
+            if (error) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">공지 목록을 불러오지 못했습니다. Supabase 테이블과 권한 설정을 확인해 주세요.</td></tr>`; return; }
+            if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">등록된 소식이 없습니다.</td></tr>`; return; }
             tbody.replaceChildren(...data.map(item => {
                 const row = document.createElement('tr');
-                const date = document.createElement('td'); date.textContent = new Date(item.created_at).toLocaleString('ko-KR');
+                const date = document.createElement('td');
+                const publishDate = new Date(item.published_at || item.created_at);
+                date.textContent = `${publishDate > new Date() ? '예약 · ' : '게시 · '}${publishDate.toLocaleString('ko-KR')}`;
                 const category = document.createElement('td'); category.textContent = item.category || '공지사항';
                 const title = document.createElement('td'); title.textContent = item.title;
+                const attachmentCount = document.createElement('td'); attachmentCount.textContent = String(Array.isArray(item.attachments) ? item.attachments.length : 0);
                 const actionsCell = document.createElement('td');
                 const actions = document.createElement('div'); actions.className = 'admin-action-btns';
                 const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'btn-edit'; edit.textContent = '수정';
                 edit.addEventListener('click', () => editNotice(item));
                 const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn-delete'; remove.textContent = '삭제';
                 remove.addEventListener('click', () => deleteNotice(item.id));
-                actions.append(edit, remove); actionsCell.append(actions); row.append(date, category, title, actionsCell); return row;
+                actions.append(edit, remove); actionsCell.append(actions); row.append(date, category, title, attachmentCount, actionsCell); return row;
             }));
         }
 
@@ -431,62 +648,69 @@
             e.preventDefault();
             const id = document.getElementById('n-id').value;
             const title = document.getElementById('n-title').value.trim();
-            const content = document.getElementById('n-content').value.trim();
             const category = document.getElementById('n-category').value;
+            const content = document.getElementById('n-content').value.trim();
+            const publishAtValue = document.getElementById('n-published-at').value;
+            if (!publishAtValue || Number.isNaN(new Date(publishAtValue).getTime())) { alert('공지 게시 예정 일시를 선택해 주세요.'); return; }
+            const publishedAt = new Date(publishAtValue).toISOString();
             const selectedFiles = Array.from(document.getElementById('n-attachments').files);
-            const previousAttachments = [...editingNoticeOriginalAttachments];
-            if (editingNoticeAttachments.length + selectedFiles.length > 5) { alert('공지사항 하나에는 첨부파일을 최대 5개까지 등록할 수 있습니다.'); return; }
-            if (selectedFiles.some(file => !NOTICE_ATTACHMENT_TYPES.has(file.type) || file.size < 1 || file.size > NOTICE_ATTACHMENT_MAX_BYTES)) { alert('PDF·이미지·텍스트·Office 문서만 가능하며 파일당 20MB까지 첨부할 수 있습니다.'); return; }
-            const submitButton = document.getElementById('n-submit-btn'); submitButton.disabled = true;
-            const uploadedAttachments = [];
-            let result;
-            try {
-                for (let index = 0; index < selectedFiles.length; index++) uploadedAttachments.push(await uploadNoticeAttachment(selectedFiles[index], index + 1, selectedFiles.length));
-                const attachments = [...editingNoticeAttachments, ...uploadedAttachments];
-                const values = { title, content, category, attachments, updated_at: new Date().toISOString() };
-                result = id
-                    ? await supabaseClient.from('notices').update(values).eq('id', id)
-                    : await supabaseClient.from('notices').insert([values]);
-            } catch (error) {
-                await Promise.all(uploadedAttachments.map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
-                alert(`공지사항을 저장하지 못했습니다: ${error.message}`); return;
-            } finally { submitButton.disabled = false; }
-            if (result.error) {
-                await Promise.all(uploadedAttachments.map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
-                alert('저장하지 못했습니다. Supabase에 공지 카테고리·첨부파일 열을 추가했는지 확인해 주세요.'); return;
+            if (editingNoticeAttachments.length + selectedFiles.length > NOTICE_ATTACHMENT_LIMIT) {
+                alert(`첨부파일은 공지 하나당 최대 ${NOTICE_ATTACHMENT_LIMIT}개까지 등록할 수 있습니다.`); return;
             }
-            const retainedIds = new Set([...editingNoticeAttachments, ...uploadedAttachments].map(file => file.file_id));
-            await Promise.all(previousAttachments.filter(file => !retainedIds.has(file.file_id)).map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
+
+            const uploadedAttachments = [];
+            try {
+                for (const file of selectedFiles) uploadedAttachments.push(await uploadNoticeAttachment(file));
+            } catch (error) {
+                await Promise.all(uploadedAttachments.map(file => deleteNoticeAttachment(file).catch(() => {})));
+                alert(`첨부파일 업로드에 실패했습니다: ${error.message}`); return;
+            }
+
+            const attachments = [...editingNoticeAttachments, ...uploadedAttachments];
+            const values = { title, category, content, attachments, published_at: publishedAt, updated_at: new Date().toISOString() };
+            const result = id
+                ? await supabaseClient.from('notices').update(values).eq('id', id)
+                : await supabaseClient.from('notices').insert([{ ...values, created_at: new Date().toISOString() }]);
+            if (result.error) {
+                await Promise.all(uploadedAttachments.map(file => deleteNoticeAttachment(file).catch(() => {})));
+                alert('저장하지 못했습니다. Supabase 권한과 설정을 확인해 주세요.'); return;
+            }
+            const retainedPaths = new Set(attachments.map(file => file.path));
+            const removedFiles = originalNoticeAttachments.filter(file => !retainedPaths.has(file.path));
+            await Promise.all(removedFiles.map(file => deleteNoticeAttachment(file).catch(() => {})));
+            document.getElementById('n-upload-progress').textContent = '';
             alert(id ? '소식이 수정되었습니다.' : '소식이 등록되었습니다.');
             resetNoticeForm();
             loadNotices();
         });
 
-        window.editNotice = (notice) => {
-            document.getElementById('n-id').value = notice.id;
-            document.getElementById('n-category').value = notice.category || '공지사항';
-            document.getElementById('n-title').value = notice.title || '';
-            document.getElementById('n-content').value = notice.content || '';
-            editingNoticeAttachments = Array.isArray(notice.attachments) ? notice.attachments : [];
-            editingNoticeOriginalAttachments = [...editingNoticeAttachments];
+        window.editNotice = item => {
+            document.getElementById('n-id').value = item.id;
+            document.getElementById('n-category').value = item.category || '공지사항';
+            document.getElementById('n-title').value = item.title || '';
+            document.getElementById('n-published-at').value = toLocalDateTimeValue(item.published_at || item.created_at);
+            document.getElementById('n-content').value = item.content || '';
+            originalNoticeAttachments = Array.isArray(item.attachments) ? item.attachments.filter(file => file?.path && file?.name) : [];
+            editingNoticeAttachments = [...originalNoticeAttachments];
             renderExistingNoticeAttachments();
             document.getElementById('n-form-title').textContent = '스튜디오 소식 수정';
             document.getElementById('n-submit-btn').textContent = '수정 완료';
             document.getElementById('n-cancel-btn').style.display = 'inline-block';
+            renderNoticePreview();
         };
 
         document.getElementById('n-cancel-btn').addEventListener('click', resetNoticeForm);
         function resetNoticeForm() {
             document.getElementById('notice-form').reset();
             document.getElementById('n-id').value = '';
+            document.getElementById('n-published-at').value = toLocalDateTimeValue();
+            originalNoticeAttachments = [];
             editingNoticeAttachments = [];
-            editingNoticeOriginalAttachments = [];
             renderExistingNoticeAttachments();
-            document.getElementById('n-upload-progress').textContent = '';
-            document.getElementById('n-category').value = '공지사항';
             document.getElementById('n-form-title').textContent = '스튜디오 소식 등록';
             document.getElementById('n-submit-btn').textContent = '소식 등록';
             document.getElementById('n-cancel-btn').style.display = 'none';
+            renderNoticePreview();
         }
 
         window.deleteNotice = async (id) => {
@@ -494,7 +718,8 @@
                 const { data: notice } = await supabaseClient.from('notices').select('attachments').eq('id', id).maybeSingle();
                 const { error } = await supabaseClient.from('notices').delete().eq('id', id);
                 if (error) { alert('삭제하지 못했습니다. Supabase 권한을 확인해 주세요.'); return; }
-                await Promise.all((notice?.attachments || []).map(file => driveFunction({ action: 'delete', fileId: file.file_id }).catch(() => {})));
+                const files = Array.isArray(notice?.attachments) ? notice.attachments : [];
+                await Promise.all(files.map(file => deleteNoticeAttachment(file).catch(() => {})));
                 loadNotices();
             }
         };
@@ -559,4 +784,3 @@
     </script>
 </body>
 </html>
-

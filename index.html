@@ -27,12 +27,13 @@
     {"@context":"https://schema.org","@type":"Person","name":"정원복","alternateName":"Jeong Won-bok","url":"https://www.wonbok.kr/","jobTitle":"Motion Graphics and Web Creator","worksFor":{"@type":"Organization","name":"JWB STUDIO"},"knowsAbout":["Motion Graphics","3D Visual","Video Editing","Web Development"]}
     </script>
 </head>
-<body>
+<body class="kmong-page">
     <!-- 네비게이션 -->
     <nav class="navbar" id="navbar">
         <div class="nav-inner">
             <a href="index.html#home" class="brand">JWB STUDIO</a>
-            <ul class="nav-menu">
+            <button type="button" class="menu-toggle" id="mobile-menu-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav-menu"><span></span><span></span><span></span></button>
+            <ul class="nav-menu" id="site-nav-menu">
                 <li><a href="index.html#home">HOME</a></li>
                 <li><a href="index.html#about">ABOUT</a></li>
                 <li><a href="index.html#works">PORTFOLIO</a></li>
@@ -62,6 +63,22 @@
         </div>
     </section>
 
+    <!-- 작업 분야 롤링 배너 -->
+    <section class="studio-ticker" id="studio-ticker" aria-label="JWB STUDIO 작업 분야">
+        <span class="sr-only">주요 분야: 모션 그래픽, 3D 비주얼, 영상 편집, 디지털 콘텐츠, 시각 디자인, 브랜드 콘텐츠</span>
+        <div class="ticker-window" aria-hidden="true">
+            <div class="ticker-track">
+                <div class="ticker-group">
+                    <span>MOTION GRAPHICS</span><i></i><span>3D VISUAL</span><i></i><span>VIDEO EDITING</span><i></i><span>DIGITAL CONTENT</span><i></i><span>VISUAL DESIGN</span><i></i><span>BRAND CONTENT</span><i></i>
+                </div>
+                <div class="ticker-group">
+                    <span>MOTION GRAPHICS</span><i></i><span>3D VISUAL</span><i></i><span>VIDEO EDITING</span><i></i><span>DIGITAL CONTENT</span><i></i><span>VISUAL DESIGN</span><i></i><span>BRAND CONTENT</span><i></i>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="ticker-toggle" id="ticker-toggle" aria-label="롤링 배너 일시 정지" aria-pressed="false"><span aria-hidden="true">Ⅱ</span></button>
+    </section>
+
     <!-- 소개 섹션 -->
     <section class="section" id="about">
         <div class="container layout-split">
@@ -85,12 +102,14 @@
                     </div>
                 </div>
 
-                <div class="history-wrap mt-50">
+                <div class="history-wrap mt-50" id="profile-history" aria-live="polite">
                     <div class="history-item">
                         <h4>EDUCATION</h4>
-                        <ul>
-                            <li>구미대학교 경영학 전문학사 졸업 (2023.02)</li>
-                        </ul>
+                        <ul><li>구미대학교 경영학 전문학사 졸업 (2023.02)</li></ul>
+                    </div>
+                    <div class="history-item mt-30">
+                        <h4>국비지원 교육</h4>
+                        <ul><li>(멀티미디어) 디지털 영상편집(프리미어, 애프터이펙트, 블랜더) A · 2025.08.01 ~ 2026.01.20</li></ul>
                     </div>
                     <div class="history-item mt-30">
                         <h4>EXPERIENCE</h4>
@@ -124,7 +143,7 @@
                 <div>
                     <h2 class="headline-l">PORTFOLIO</h2>
                     <div class="work-search-wrap">
-                        <input type="text" id="work-search-input" class="work-search-input" placeholder="프로젝트 키워드 검색 (예: Motion, 3D, Web)...">
+                        <input type="text" id="work-search-input" class="work-search-input" placeholder="프로젝트 검색 (예: 모션그래픽, 웹예능, 유튜브 홍보영상)...">
                     </div>
                 </div>
                 <div class="work-filters" id="work-filters"></div>
@@ -132,6 +151,7 @@
             
             <!-- 포트폴리오 카드 그리드 -->
             <div class="work-grid" id="work-grid"></div>
+            <p class="body-text portfolio-empty" id="portfolio-empty" hidden>검색 결과가 없습니다. 다른 단어로 검색해 보세요.</p>
 
             <!-- 더보기 버튼 영역 (신규 추가) -->
             <div class="load-more-wrap" id="load-more-wrap" style="display: none;">
@@ -151,11 +171,17 @@
                 <p class="modal-date" id="project-meta"></p>
             </div>
             <div class="modal-body" id="project-description"></div>
+            <div class="project-tag-list" id="project-tags" aria-label="작품 태그"></div>
             <div class="project-meta-grid" id="project-extra"></div>
+            <div class="project-navigation" aria-label="작품 이동">
+                <button type="button" class="btn-outline" id="project-prev">← 이전 작품</button>
+                <button type="button" class="btn-outline" id="project-next">다음 작품 →</button>
+            </div>
             <a href="#works" class="btn-outline wide" id="project-youtube" target="_blank" rel="noopener">YouTube에서 보기</a>
             <button type="button" class="btn-outline wide" id="project-share" style="margin-top:12px;">프로젝트 공유 링크 복사</button>
         </div>
     </div>
+    <a class="mobile-kmong-cta" id="mobile-kmong-cta" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">크몽에서 의뢰·문의하기</a>
 
     <!-- 스킬 섹션 -->
     <section class="section" id="skills">
@@ -185,14 +211,6 @@
                 <div class="skill-row fade-up">
                     <div class="skill-name">Cinema 4D</div>
                     <div class="skill-desc">하이엔드 3D 모션그래픽, 타이틀 디자인 및 전문 렌더링 작업</div>
-                </div>
-                <div class="skill-row fade-up">
-                    <div class="skill-name">Web Development</div>
-                    <div class="skill-desc">HTML/CSS/JS 기반 UI 구현 및 인터랙티브 포트폴리오 웹 제작</div>
-                </div>
-                <div class="skill-row fade-up">
-                    <div class="skill-name">Python & Bot Dev</div>
-                    <div class="skill-desc">discord.py 기반 자동화 봇 및 서버 관리 시스템 구축</div>
                 </div>
             </div>
         </div>
@@ -235,24 +253,13 @@
     <section class="section" id="notices">
         <div class="container" style="max-width: 1000px;">
             <h2 class="headline-l fade-up" style="margin-bottom: 50px;">STUDIO NOTICES</h2>
+            <div class="notice-tabs fade-up" id="notice-filters" role="tablist" aria-label="공지사항 카테고리">
+            </div>
             <div id="notice-list" class="fade-up">
                 <p style="color: var(--color-text-dim);">소식 불러오는 중...</p>
             </div>
         </div>
     </section>
-
-    <div id="notice-detail-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notice-detail-title">
-        <div class="modal-content notice-modal-content">
-            <button type="button" class="modal-close" id="notice-modal-close" aria-label="공지 닫기">&times;</button>
-            <div class="modal-header">
-                <span class="badge" id="notice-detail-category"></span>
-                <h3 id="notice-detail-title"></h3>
-                <p class="modal-date" id="notice-detail-date"></p>
-            </div>
-            <div class="notice-modal-body" id="notice-detail-content"></div>
-            <div id="notice-detail-files"></div>
-        </div>
-    </div>
 
     <!-- FAQ 섹션 -->
     <section class="section bg-black" id="faq">
@@ -265,7 +272,7 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer" id="faq-answer-1">
-                        <p>외주 서비스 페이지의 '외주 및 프로젝트 문의하기' 양식이나 카카오 오픈채팅을 통해 프로젝트 개요, 예산, 마감일을 남겨주시면 검토 후 상세 상담과 견적을 안내해 드립니다.</p>
+                        <p>외주 서비스 페이지의 '크몽에서 의뢰·문의하기'를 눌러 크몽에서 프로젝트 개요, 예산, 마감일을 남겨주시면 상담과 견적을 안내해 드립니다.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -274,7 +281,7 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer" id="faq-answer-2">
-                        <p>영상 편집, 2D·3D 모션그래픽, 포토샵·일러스트 디자인, 반응형 웹사이트 구축, 디스코드 봇 개발까지 폭넓게 대응하고 있습니다.</p>
+                        <p>주요 분야는 영상 편집, 2D·3D 모션그래픽 및 3D 비주얼 제작입니다. 진행 가능한 작업 범위와 조건은 크몽 서비스 페이지에서 확인해 주세요.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -288,11 +295,11 @@
                 </div>
                 <div class="faq-item">
                     <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
-                        <span>Q. 이력서 및 개인 경력 관련 문서는 어디서 확인할 수 있나요?</span>
+                        <span>Q. 서비스 비용과 예상 작업 기간은 어떻게 확인하나요?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer" id="faq-answer-4">
-                        <p>메인 페이지 ABOUT 섹션 하단의 '이력서 다운로드 (PDF)' 버튼을 클릭하시면 상세한 학력, 보유 자격 및 실무 역량이 담긴 이력서 파일을 다운로드하실 수 있습니다.</p>
+                        <p>영상·모션그래픽과 3D 비주얼 서비스의 가격과 예상 기간은 작업 범위, 결과물 규격, 일정에 따라 달라집니다. 외주서비스 페이지에서 크몽 상품의 최신 가격과 구성을 확인하고, 세부 범위를 정한 뒤 확정 견적과 일정을 안내받으실 수 있습니다.</p>
                     </div>
                 </div>
             </div>
@@ -307,91 +314,40 @@
                 <div class="footer-policies">
                     <a href="terms.html">이용약관</a>
                     <a href="privacy.html">개인정보처리방침</a>
+                    <a href="email-policy.html">이메일무단수집거부</a>
+                    <a href="charter.html">이용자권리헌장</a>
                 </div>
             </div>
             <div class="footer-bottom mt-30">
                 <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
+                <p class="copyright">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
             </div>
         </div>
     </footer>
 
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/profile.js"></script>
     <script src="js/portfolio.js"></script>
+    <script src="js/notices.js"></script>
     <script src="js/script.js"></script>
     <script>
-        async function loadNotices() {
-            const list = document.getElementById('notice-list');
-            const client = window.getJwbSupabase();
-            if (!client) { list.textContent = '공지 게시판을 준비 중입니다.'; return; }
-            const { data, error } = await client.from('notices').select('id,title,content,category,attachments,created_at').order('created_at', { ascending: false });
-            if (error) { list.textContent = '공지사항을 불러오지 못했습니다. 잠시 후 다시 방문해 주세요.'; return; }
-            if (!data?.length) { list.textContent = '등록된 공지사항이 없습니다.'; return; }
-            const board = document.createElement('div'); board.className = 'notice-board-wrap';
-            const header = document.createElement('div'); header.className = 'notice-board-header';
-            header.innerHTML = '<div style="text-align:center">번호</div><div>제목</div><div style="text-align:right">작성일</div>';
-            board.append(header);
-            data.forEach((notice, index) => {
-                const row = document.createElement('button'); row.type = 'button'; row.className = 'notice-board-row';
-                row.setAttribute('aria-haspopup', 'dialog');
-                row.setAttribute('aria-label', `${notice.category || '공지사항'}: ${notice.title} 상세 보기`);
-                const number = document.createElement('div'); number.className = 'notice-col-num'; number.textContent = String(data.length - index);
-                const title = document.createElement('div'); title.className = 'notice-col-title';
-                const category = document.createElement('span'); category.className = 'notice-category'; category.textContent = notice.category || '공지사항';
-                const titleText = document.createElement('span'); titleText.textContent = notice.title; title.append(category, titleText);
-                const date = document.createElement('div'); date.className = 'notice-col-date'; date.textContent = new Date(notice.created_at).toLocaleDateString('ko-KR');
-                row.append(number, title, date);
-                row.addEventListener('click', () => openNoticeDetail(notice, row));
-                board.append(row);
-            });
-            list.replaceChildren(board);
-        }
-        const noticeModal = document.getElementById('notice-detail-modal');
-        let noticeReturnFocus = null;
-        function openNoticeDetail(notice, trigger) {
-            noticeReturnFocus = trigger;
-            document.getElementById('notice-detail-category').textContent = notice.category || '공지사항';
-            document.getElementById('notice-detail-title').textContent = notice.title || '';
-            document.getElementById('notice-detail-date').textContent = new Date(notice.created_at).toLocaleString('ko-KR');
-            document.getElementById('notice-detail-content').textContent = notice.content || '';
-            const filesWrap = document.getElementById('notice-detail-files');
-            filesWrap.replaceChildren();
-            const attachments = Array.isArray(notice.attachments) ? notice.attachments : [];
-            const validFiles = attachments.filter(file => /^[A-Za-z0-9_-]{10,}$/.test(String(file.file_id || '')));
-            if (validFiles.length) {
-                const heading = document.createElement('strong'); heading.className = 'notice-files-title'; heading.textContent = '첨부파일';
-                const files = document.createElement('ul'); files.className = 'notice-files';
-                validFiles.forEach(file => {
-                    const item = document.createElement('li');
-                    const link = document.createElement('a'); link.href = `https://drive.google.com/file/d/${encodeURIComponent(file.file_id)}/view`; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = `📎 ${file.name || '첨부파일'}`;
-                    item.append(link); files.append(item);
-                });
-                filesWrap.append(heading, files);
-            }
-            noticeModal.classList.add('active');
-            document.getElementById('notice-modal-close').focus();
-        }
-        function closeNoticeDetail() {
-            noticeModal.classList.remove('active');
-            noticeReturnFocus?.focus();
-        }
-        document.getElementById('notice-modal-close').addEventListener('click', closeNoticeDetail);
-        noticeModal.addEventListener('click', event => { if (event.target === noticeModal) closeNoticeDetail(); });
-        document.addEventListener('keydown', event => { if (event.key === 'Escape' && noticeModal.classList.contains('active')) closeNoticeDetail(); });
-        loadNotices();
         const contact = window.JWB_CONTACT || {};
         if (contact.email) { const a = document.getElementById('contact-email'); a.href = `mailto:${contact.email}`; a.hidden = false; }
         if (contact.kakaoUrl) { const a = document.getElementById('contact-kakao'); a.href = contact.kakaoUrl; a.hidden = false; }
-        // 포트폴리오 실시간 검색
-        const searchInput = document.getElementById('work-search-input');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const keyword = e.target.value.toLowerCase().trim();
-                document.querySelectorAll('.work-card').forEach(card => {
-                    const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
-                    const category = card.querySelector('.category')?.textContent.toLowerCase() || '';
-                    card.style.display = (title.includes(keyword) || category.includes(keyword)) ? 'block' : 'none';
-                });
-            });
-        }
+        const ticker = document.getElementById('studio-ticker');
+        const tickerToggle = document.getElementById('ticker-toggle');
+        tickerToggle?.addEventListener('click', () => {
+            const paused = ticker.dataset.paused !== 'true';
+            ticker.dataset.paused = String(paused);
+            tickerToggle.setAttribute('aria-pressed', String(paused));
+            tickerToggle.setAttribute('aria-label', paused ? '롤링 배너 재생' : '롤링 배너 일시 정지');
+            tickerToggle.querySelector('span').textContent = paused ? '▶' : 'Ⅱ';
+        });
+        const kmongUrl = contact.kmongUrl || 'https://kmong.com/';
+        ['mobile-kmong-cta'].forEach(id => {
+            const link = document.getElementById(id);
+            if (link) link.href = kmongUrl;
+        });
     </script>
 </body>
 </html>
