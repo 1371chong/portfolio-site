@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeProject = () => {
     if (!projectModal) return;
     projectModal.classList.remove('active');
+    projectModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
     const video = document.getElementById('project-video-wrap');
     if (video) video.innerHTML = '';
     const url = new URL(window.location.href);
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', '모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오');
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', 'https://www.wonbok.kr/img/logo/logo.png');
     document.querySelector('link[rel="canonical"]')?.setAttribute('href', 'https://www.wonbok.kr/');
+    window.jwbLastProjectTrigger?.focus?.();
   };
   document.getElementById('project-modal-close')?.addEventListener('click', closeProject);
   window.addEventListener('click', e => {
@@ -37,7 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeProject();
+    if (!projectModal?.classList.contains('active') || e.key !== 'Tab') return;
+    const focusable = [...projectModal.querySelectorAll('a[href]:not([hidden]),button:not([disabled]):not([hidden]),iframe,video')].filter(el => el.offsetParent !== null);
+    if (!focusable.length) return;
+    const first = focusable[0]; const last = focusable[focusable.length - 1];
+    if (!projectModal.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
+
+  const syncPrintMode = () => document.body.classList.toggle('printing-project', Boolean(projectModal?.classList.contains('active')));
+  window.addEventListener('beforeprint', syncPrintMode);
+  window.addEventListener('afterprint', () => document.body.classList.remove('printing-project'));
 });
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 스크롤 진행 바 생성 및 동작

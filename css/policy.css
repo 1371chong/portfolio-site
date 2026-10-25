@@ -1,41 +1,34 @@
-/* =========================================
-   policy.css (약관 및 정책 페이지 전용 스타일)
-========================================= */
-.policy-section { 
-    padding-top: 160px; 
-    padding-bottom: 100px; 
-    min-height: 80vh; 
+/* Policy and legal documents */
+.policy-section { min-height:80vh; padding:150px 0 100px; background:radial-gradient(ellipse at 90% 5%,rgba(255,255,255,.045),transparent 32%),#090909; }
+.policy-box { width:min(92%,940px); max-width:940px; margin:0 auto; padding:clamp(25px,5.5vw,58px); border:1px solid #303030; border-radius:16px; background:linear-gradient(145deg,rgba(24,24,24,.96),rgba(14,14,14,.98)); box-shadow:0 25px 80px rgba(0,0,0,.24); }
+.policy-eyebrow { margin:0 0 13px; color:#858585; font-size:.68rem; font-weight:800; letter-spacing:.2em; }
+.policy-eyebrow span { padding:0 4px; color:#ddd; }
+.policy-box h2 { margin:0; padding:0; border:0; color:#f5f5f5; font-size:clamp(2rem,5vw,3.2rem); font-weight:800; letter-spacing:-.065em; line-height:1.12; }
+.policy-lead { margin:13px 0 27px; color:#999; font-size:.92rem; line-height:1.7; }
+.policy-nav { display:flex; flex-wrap:wrap; gap:8px; padding:15px 0 21px; margin-bottom:25px; border-top:1px solid #292929; border-bottom:1px solid #292929; }
+.policy-nav a { display:inline-flex; align-items:center; min-height:34px; padding:6px 11px; border:1px solid #333; border-radius:7px; color:#999; font-size:.75rem; text-decoration:none; transition:color .2s,border-color .2s,background .2s; }
+.policy-nav a:hover { border-color:#777; color:#fff; }
+.policy-nav a.is-current { border-color:#bbb; background:#eee; color:#111; font-weight:700; }
+.policy-content { color:#aaa; font-size:.96rem; line-height:1.9; overflow-wrap:anywhere; }
+.policy-content p { margin:0 0 14px; padding:17px 19px; border:1px solid #292929; border-radius:9px; background:rgba(255,255,255,.018); }
+.policy-content p:last-child { margin-bottom:0; }
+.policy-content strong { display:inline; margin:0; color:#eee; font-size:1rem; font-weight:750; }
+.policy-content a { color:#e7e7e7; text-decoration-color:#777; text-underline-offset:3px; }
+.policy-content a:hover { color:#fff; text-decoration-color:#fff; }
+.policy-content span { color:#d2b98d; }
+@media(max-width:600px) {
+    .policy-section { padding:112px 0 55px; }
+    .policy-box { width:calc(100% - 28px); padding:22px 16px; border-radius:12px; }
+    .policy-lead { font-size:.84rem; }
+    .policy-nav { gap:6px; padding:13px 0 17px; }
+    .policy-nav a { min-height:32px; padding:5px 8px; font-size:.68rem; }
+    .policy-content { font-size:.88rem; line-height:1.82; }
+    .policy-content p { padding:14px; margin-bottom:10px; }
 }
-.policy-box { 
-    background: rgba(255, 255, 255, 0.03); 
-    border: 1px solid var(--color-border); 
-    border-radius: 16px; 
-    padding: 50px; 
-    max-width: 800px; 
-    margin: 0 auto; 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-}
-.policy-box h2 { 
-    font-size: 2.2rem; 
-    margin-bottom: 30px; 
-    padding-bottom: 20px; 
-    border-bottom: 1px solid var(--color-border); 
-    color: var(--color-text);
-    letter-spacing: -0.5px;
-}
-.policy-content { 
-    color: var(--color-text-dim); 
-    line-height: 1.8; 
-    font-size: 1.05rem; 
-}
-.policy-content p { 
-    margin-bottom: 20px; 
-}
-.policy-content strong { 
-    color: var(--color-text); 
-    font-weight: 600; 
-    font-size: 1.1rem; 
-    display: inline-block; 
-    margin-bottom: 5px; 
+@media print {
+    .policy-section { min-height:0; padding:20px 0; background:#fff; }
+    .policy-box { width:100%; max-width:none; padding:0; border:0; border-radius:0; background:#fff; box-shadow:none; }
+    .policy-box h2,.policy-content,.policy-content strong,.policy-content a { color:#111; }
+    .policy-eyebrow,.policy-lead,.policy-nav { display:none; }
+    .policy-content p { break-inside:avoid; border:0; background:none; }
 }

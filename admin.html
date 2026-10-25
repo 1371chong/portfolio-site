@@ -59,6 +59,8 @@
             .brand{font-size:.9rem;}
         }
     </style>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="css/color-theme.css">
 </head>
 <body>
     <nav class="navbar scrolled" id="navbar">
@@ -69,6 +71,12 @@
             </ul>
         </div>
     </nav>
+
+    <aside class="admin-login-notice" id="admin-login-notice" role="status" aria-live="polite" hidden>
+        <span class="admin-login-notice-icon" aria-hidden="true">✓</span>
+        <span class="admin-login-notice-copy"><strong>관리자 로그인 알림</strong><small>인증이 완료되어 관리자 화면에 접속했습니다.</small></span>
+        <button type="button" class="admin-login-notice-close" aria-label="알림 닫기">×</button>
+    </aside>
 
     <div class="admin-container">
         <section class="admin-section" aria-labelledby="dashboard-title">
@@ -203,24 +211,6 @@
             </table></div>
         </div>
 
-        <!-- 3. 외주 문의 내역 관리 섹션 -->
-        <div class="admin-section">
-            <h2 class="headline-m" style="font-size: 1.8rem;">접수된 외주 문의 내역</h2>
-            <div class="admin-table-scroll"><table class="admin-table">
-                    <thead><tr><th>접수일시</th><th>성함</th><th>이메일</th><th>제목</th><th>첨부파일</th><th>진행상태</th><th>답변</th></tr></thead>
-                    <tbody id="inquiry-table-body"><tr><td colspan="7" style="text-align: center;">불러오는 중...</td></tr></tbody>
-            </table></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="quote-modal" role="dialog" aria-modal="true" aria-labelledby="quote-title">
-        <div class="modal-content" style="width:min(760px,94vw); padding:30px;">
-            <button type="button" class="modal-close" id="quote-close" aria-label="닫기">&times;</button>
-            <h2 id="quote-title" class="headline-m">견적 답변 초안</h2>
-            <p class="body-text" style="margin:12px 0 18px;">대괄호 항목을 확인해 수정한 뒤 복사해서 회신하세요.</p>
-            <textarea id="quote-draft" rows="16" style="width:100%;padding:16px;background:var(--color-bg);color:var(--color-text);border:1px solid var(--color-border);"></textarea>
-            <button type="button" id="quote-copy" class="btn-solid btn-small" style="margin-top:14px;">초안 복사</button>
-        </div>
     </div>
 
     <script>
@@ -238,7 +228,6 @@
         ]);
 
         const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-        let cachedInquiries = [];
         let originalNoticeAttachments = [];
         let editingNoticeAttachments = [];
         let dashboardPortfolioRows = [];
@@ -378,10 +367,18 @@
                 if (session) await supabaseClient.auth.signOut();
                 window.location.href = 'admin-login.html';
             } else {
+                if (sessionStorage.getItem('jwb-admin-login-notice') === '1') {
+                    sessionStorage.removeItem('jwb-admin-login-notice');
+                    const notice = document.getElementById('admin-login-notice');
+                    const closeNotice = () => { notice.classList.remove('is-visible'); window.setTimeout(() => { notice.hidden = true; }, 250); };
+                    notice.hidden = false;
+                    requestAnimationFrame(() => notice.classList.add('is-visible'));
+                    notice.querySelector('.admin-login-notice-close').addEventListener('click', closeNotice, { once: true });
+                    window.setTimeout(closeNotice, 6500);
+                }
                 loadPortfolios();
                 loadProfileEntries();
                 loadNotices();
-                loadInquiries();
             }
         }
 
@@ -723,57 +720,6 @@
                 loadNotices();
             }
         };
-
-        // 외주 문의 관리 로직
-        async function loadInquiries() {
-            const { data } = await supabaseClient.from('inquiries').select('*').order('created_at', { ascending: false });
-            const tbody = document.getElementById('inquiry-table-body');
-            if (!data || data.length === 0) { cachedInquiries = []; tbody.innerHTML = `<tr><td colspan="7" style="text-align: center;">접수된 문의가 없습니다.</td></tr>`; return; }
-            cachedInquiries = data;
-            const rows = await Promise.all(data.map(async item => {
-                let fileLink = '없음';
-                if (item.file_url) {
-                    const { data: signed } = await supabaseClient.storage.from('inquiry-files').createSignedUrl(item.file_url, 60);
-                    if (signed?.signedUrl) fileLink = `<a href="${escapeHtml(signed.signedUrl)}" target="_blank" rel="noopener" style="color:#3498db; text-decoration:underline;">다운로드</a>`;
-                }
-                return `
-                    <tr>
-                        <td>${new Date(item.created_at).toLocaleString()}</td>
-                        <td>${escapeHtml(item.name)}</td>
-                        <td>${escapeHtml(item.email)}</td>
-                        <td>${escapeHtml(item.title)}</td>
-                        <td>${fileLink}</td>
-                        <td>
-                            <select onchange="updateInquiryStatus(${item.id}, this.value)" style="background:var(--color-bg); color:var(--color-text); border:1px solid var(--color-border); padding:4px;">
-                                <option value="대기중" ${item.status === '대기중' ? 'selected' : ''}>대기중</option>
-                                <option value="상담진행중" ${item.status === '상담진행중' ? 'selected' : ''}>상담진행중</option>
-                                <option value="작업완료" ${item.status === '작업완료' ? 'selected' : ''}>작업완료</option>
-                            </select>
-                        </td>
-                        <td><button type="button" class="btn-edit" onclick="showQuoteDraft(${Number(item.id)})">초안</button></td>
-                    </tr>
-                `;
-            }));
-            tbody.innerHTML = rows.join('');
-        }
-
-        window.updateInquiryStatus = async (id, status) => {
-            await supabaseClient.from('inquiries').update({ status }).eq('id', id);
-            alert('상태가 변경되었습니다.');
-        };
-
-        window.showQuoteDraft = id => {
-            const item = cachedInquiries.find(row => Number(row.id) === Number(id));
-            if (!item) return;
-            document.getElementById('quote-draft').value = `안녕하세요, ${item.name}님.\n\n${item.title} 문의 주셔서 감사합니다. 보내주신 내용을 확인했습니다.\n\n[작업 범위]\n[제작 항목과 포함 범위를 기재해 주세요]\n\n[예상 일정]\n[착수일과 예상 납기를 기재해 주세요]\n\n[견적]\n[금액과 결제 조건을 기재해 주세요]\n\n[수정 및 납품]\n[수정 횟수·범위, 납품 형식, 원본 파일 제공 여부를 기재해 주세요]\n\n위 내용 확인 후 진행 여부를 회신 부탁드립니다. 추가 질문이 있으시면 편하게 답변해 주세요.\n감사합니다.\nJWB STUDIO`;
-            document.getElementById('quote-modal').classList.add('active');
-            document.getElementById('quote-draft').focus();
-        };
-        document.getElementById('quote-close').addEventListener('click', () => document.getElementById('quote-modal').classList.remove('active'));
-        document.getElementById('quote-copy').addEventListener('click', async () => {
-            await navigator.clipboard.writeText(document.getElementById('quote-draft').value);
-            document.getElementById('quote-copy').textContent = '복사 완료';
-        });
 
         document.getElementById('logout-btn').addEventListener('click', async () => {
             await supabaseClient.auth.signOut();

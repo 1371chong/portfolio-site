@@ -7,30 +7,43 @@
     <title>관리자 로그인 | JWB STUDIO</title>
     <link rel="icon" href="img/logo/logo.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin-login.css">
+    <link rel="stylesheet" href="css/color-theme.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
 </head>
-<body style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--color-bg);">
-    <div class="modal-content auth-content" style="width: 100%; max-width: 400px; padding: 40px; background: var(--color-gray); border: 1px solid var(--color-border);">
-        <div style="text-align: center; margin-bottom: 30px;">
-            <a href="index.html" class="brand" style="font-size: 1.8rem;">JWB STUDIO</a>
-            <p class="body-text" style="font-size: 0.9rem; margin-top: 8px;">ADMINISTRATOR LOGIN</p>
+<body class="admin-login-page">
+    <main class="admin-login-shell">
+      <section class="admin-login-card" aria-labelledby="login-title">
+        <div class="admin-login-brand">
+            <span class="admin-login-mark" aria-hidden="true">J</span>
+            <a href="index.html" class="brand">JWB STUDIO</a>
+            <p class="admin-login-kicker">PRIVATE WORKSPACE <span>·</span> ADMIN</p>
         </div>
 
-        <form id="login-form" class="cjenm-form">
-            <div class="input-group" style="margin-bottom: 15px;">
-                <input type="email" id="admin-email" placeholder="관리자 이메일" required>
+        <div class="admin-login-heading">
+            <p class="admin-login-overline">SECURE ACCESS</p>
+            <h1 id="login-title">관리자 로그인</h1>
+            <p>JWB STUDIO 관리 도구에 접속합니다.</p>
+        </div>
+
+        <form id="login-form" class="cjenm-form admin-login-form">
+            <div class="input-group">
+                <label for="admin-email">이메일</label>
+                <input type="email" id="admin-email" name="email" placeholder="name@example.com" autocomplete="username" required>
             </div>
-            <div class="input-group" style="margin-bottom: 25px;">
-                <input type="password" id="admin-password" placeholder="비밀번호" required>
+            <div class="input-group">
+                <label for="admin-password">비밀번호</label>
+                <input type="password" id="admin-password" name="password" placeholder="비밀번호를 입력해 주세요" autocomplete="current-password" required>
             </div>
-            <button type="submit" class="btn-solid wide">로그인</button>
+            <button type="submit" class="btn-solid wide admin-login-submit"><span>관리자 로그인</span><span aria-hidden="true">→</span></button>
         </form>
 
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="index.html" class="body-text" style="font-size: 0.85rem; text-decoration: underline;">← 메인으로 돌아가기</a>
-        </div>
-    </div>
+        <a href="index.html" class="admin-login-back"><span aria-hidden="true">←</span> 메인 사이트로 돌아가기</a>
+        <p class="admin-login-footnote"><span aria-hidden="true">◈</span> 관리자 권한이 승인된 계정만 이용할 수 있습니다.</p>
+      </section>
+      <p class="admin-login-copyright">© JWB STUDIO · ADMIN CONSOLE</p>
+    </main>
 
     <script>
         const supabaseClient = window.getJwbSupabase();
@@ -49,7 +62,7 @@
                 await supabaseClient.auth.signOut();
                 alert('관리자 권한이 설정된 계정만 로그인할 수 있습니다.');
             } else {
-                alert('관리자 로그인 성공!');
+                sessionStorage.setItem('jwb-admin-login-notice', '1');
                 window.location.href = 'admin.html';
             }
         });

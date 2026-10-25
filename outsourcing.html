@@ -14,6 +14,7 @@
     <title>외주서비스 | JWB STUDIO</title>
     <link rel="icon" href="img/logo/logo.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/color-theme.css">
     <script src="js/contact-config.js"></script>
 </head>
 <body class="kmong-page">
@@ -29,26 +30,29 @@
         </div>
     </nav>
 
-    <section class="section" style="padding-top: 180px;">
-        <div class="container">
-            <div class="section-head fade-up">
-                <h2 class="headline-l">OUTSOURCING SERVICE</h2>
-                <p class="body-text" style="max-width: 600px;">
-                    모션그래픽과 3D 비주얼 제작으로 프로젝트에 어울리는 완성도 높은 결과물을 만듭니다.
-                </p>
-                <p class="body-text" style="max-width: 760px; margin-top: 18px;">견적은 작업 범위, 난이도, 일정, 산출물에 따라 개별 안내합니다. 착수 전 일정, 수정 범위, 납품 형식과 원본 파일 제공 여부를 협의해 확정합니다.</p>
+    <section class="outsourcing-hero">
+        <div class="container outsourcing-hero-inner">
+            <div class="outsourcing-hero-copy">
+                <p class="outsourcing-eyebrow"><span></span> JWB STUDIO · CREATIVE SERVICES</p>
+                <h1>브랜드의 다음 장면을<br><span>완성도 있게 만듭니다.</span></h1>
+                <p class="outsourcing-hero-desc">모션그래픽과 3D 비주얼로 아이디어를 선명한 결과물로 완성합니다. 프로젝트의 목적과 활용 방식에 맞춰 작업 범위부터 함께 정합니다.</p>
+                <div class="outsourcing-hero-actions">
+                    <a class="btn-solid" href="#service-packages">서비스 살펴보기 <span aria-hidden="true">↓</span></a>
+                    <a class="btn-outline" href="#inquiry-preparation">문의 준비하기 <span aria-hidden="true">↗</span></a>
+                </div>
+                <div class="outsourcing-hero-meta">
+                    <span>2D / 3D MOTION</span><i></i><span>VIDEO & VISUAL CONTENT</span>
+                </div>
             </div>
-            <div class="work-grid mt-50" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                <div class="work-card" style="background: var(--bg-secondary); padding: 40px; border: 1px solid var(--border-color);">
-                    <div class="category">01. Motion Graphics</div>
-                    <h3 style="margin-top: 15px; font-size: 1.5rem;">영상 제작 & 모션그래픽</h3>
-                </div>
-                <div class="work-card" style="background: var(--bg-secondary); padding: 40px; border: 1px solid var(--border-color);">
-                    <div class="category">02. 3D Modeling</div>
-                    <h3 style="margin-top: 15px; font-size: 1.5rem;">3D 비주얼라이제이션</h3>
-                </div>
+            <div class="outsourcing-hero-art" aria-hidden="true">
+                <div class="outsourcing-orbit orbit-a"></div>
+                <div class="outsourcing-orbit orbit-b"></div>
+                <div class="outsourcing-orbit orbit-c"></div>
+                <div class="outsourcing-sphere"></div>
+                <span class="outsourcing-art-index">01—02<br>VISUAL<br>STUDIES</span>
             </div>
         </div>
+        <a class="outsourcing-scroll" href="#service-packages"><span>SCROLL TO EXPLORE</span><i></i></a>
     </section>
 
     <section class="section" id="service-packages">
@@ -65,6 +69,7 @@
                     <span class="service-package-number">01 / VIDEO</span>
                     <h3>영상 제작 &amp; 모션그래픽</h3>
                     <p>브랜드·제품·서비스에 어울리는 영상과 모션그래픽 제작을 상담합니다.</p>
+                    <ul class="service-package-features"><li>브랜드·제품 소개 영상</li><li>2D 모션그래픽과 편집</li><li>목적에 맞춘 결과물 규격</li></ul>
                     <div class="service-package-price"><span>시작 가격</span><strong data-kmong-price="motion">크몽에서 확인</strong></div>
                     <div class="service-package-duration"><span>예상 작업 기간</span><strong data-kmong-duration="motion">범위 확정 후 안내</strong></div>
                     <a class="btn-outline" data-kmong-link data-kmong-service="motion" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">서비스 보기</a>
@@ -73,6 +78,7 @@
                     <span class="service-package-number">02 / 3D</span>
                     <h3>3D 비주얼라이제이션</h3>
                     <p>프로젝트 목적과 활용 매체에 맞는 3D 비주얼 작업 범위를 협의합니다.</p>
+                    <ul class="service-package-features"><li>제품·공간 3D 비주얼</li><li>3D 모션그래픽</li><li>온라인·영상용 렌더링</li></ul>
                     <div class="service-package-price"><span>시작 가격</span><strong data-kmong-price="threeD">크몽에서 확인</strong></div>
                     <div class="service-package-duration"><span>예상 작업 기간</span><strong data-kmong-duration="threeD">범위 확정 후 안내</strong></div>
                     <a class="btn-outline" data-kmong-link data-kmong-service="threeD" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">서비스 보기</a>
@@ -141,6 +147,7 @@
     </footer>
 
     <script src="js/mobile-nav.js"></script>
+    <script src="js/service-motion.js" defer></script>
     <script>
         const kmongLinks = ['kmong-link', 'kmong-review-link', 'mobile-kmong-cta', 'prep-kmong-link'];
         const configuredKmongUrl = window.JWB_CONTACT?.kmongUrl;
