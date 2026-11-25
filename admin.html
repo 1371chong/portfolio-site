@@ -40,6 +40,10 @@
         .admin-attachment-list { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
         .admin-attachment-list li { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--color-border); color:var(--color-text-dim); font-size:.9rem; }
         .admin-attachment-list button { flex:0 0 auto; padding:5px 8px; border:1px solid var(--color-border); background:transparent; color:var(--color-text); cursor:pointer; }
+        .campaign-admin-form input:not([type="checkbox"]):not([type="file"]),.campaign-admin-form textarea,.campaign-admin-form select { background:#fff!important; color:#193b31!important; border:1px solid #cfdad1!important; }
+        .campaign-image-preview { display:grid; place-items:center; width:min(100%,460px); min-height:100px; margin-top:12px; overflow:hidden; border:1px dashed #738178; border-radius:12px; background:#f5f7f3; color:#617168; }
+        .campaign-image-preview img { display:block; max-width:100%; max-height:240px; object-fit:contain; }
+        .campaign-table-thumb { width:92px; height:58px; object-fit:cover; border-radius:7px; }
         @media(max-width:600px){.notice-admin-preview-head{gap:10px;flex-wrap:wrap}.notice-admin-preview-head time{margin-left:0;width:100%}}
         @media(max-width:800px){.admin-dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:640px){
@@ -61,6 +65,9 @@
     </style>
     <link rel="stylesheet" href="css/admin-dashboard.css">
     <link rel="stylesheet" href="css/color-theme.css">
+    <link rel="stylesheet" href="css/redesign.css">
+    <link rel="stylesheet" href="css/reference-style.css">
+    <link rel="stylesheet" href="css/complete-redesign.css">
 </head>
 <body>
     <nav class="navbar scrolled" id="navbar">
@@ -79,6 +86,10 @@
     </aside>
 
     <div class="admin-container">
+        <header class="admin-page-heading">
+            <div><p>JWB STUDIO <span>·</span> CONTROL ROOM</p><h1>관리자 대시보드</h1><small>프로젝트와 스튜디오 정보를 한곳에서 관리합니다.</small></div>
+            <a href="index.html" target="_blank" rel="noopener">사이트 미리보기 <span aria-hidden="true">↗</span></a>
+        </header>
         <section class="admin-section" aria-labelledby="dashboard-title">
             <h2 class="headline-m" id="dashboard-title" style="font-size:1.8rem;">관리자 대시보드</h2>
             <div class="admin-dashboard-grid">
@@ -99,9 +110,9 @@
                 <input type="hidden" id="p-id">
                 <div class="admin-form-grid">
                     <div class="input-group"><input type="text" id="p-title" placeholder="프로젝트 제목" required></div>
-                    <div class="input-group"><select id="p-category" required><option value="">카테고리 선택</option><option value="typography">타이포그래픽</option><option value="2d">모션그래픽</option><option value="advertising">광고영상</option><option value="web-variety">웹예능</option><option value="youtube-promo">유튜브 홍보영상</option><option value="3d">3D 비주얼</option><option value="other">기타</option></select></div>
+                    <div class="input-group"><select id="p-category" required><option value="">카테고리 선택</option><option value="typography">타이포그래픽</option><option value="poster">포스터 디자인</option><option value="variety-poster">예능 포스터</option><option value="2d">모션그래픽</option><option value="advertising">광고영상</option><option value="web-variety">웹예능</option><option value="youtube-promo">유튜브 홍보영상</option><option value="3d">3D 비주얼</option><option value="other">기타</option></select></div>
                 </div>
-                <div class="input-group"><label class="body-text"><input type="checkbox" id="p-published" checked> 사이트에 공개 (체크 해제하면 임시저장)</label></div>
+                <div class="input-group"><label class="body-text"><input type="checkbox" id="p-published" checked> 사이트에 공개 (기본값: 등록 즉시 공개 · 체크 해제 시 임시저장)</label></div>
                 <div class="input-group"><input type="url" id="p-youtube" placeholder="YouTube 영상 링크 (선택, 기존 항목 호환)"></div>
                 <input type="hidden" id="p-media-path">
                 <input type="hidden" id="p-media-type">
@@ -110,8 +121,9 @@
                 <input type="hidden" id="p-thumb-drive-file-id">
                 <input type="hidden" id="p-thumb-drive-url">
                 <div class="input-group">
-                    <label class="body-text" for="p-media-file">썸네일 이미지 업로드 (JPG/PNG/WebP · 최대 20MB, Google Drive 저장)</label>
+                    <label class="body-text" for="p-media-file">작품 이미지 또는 포스터 업로드 (JPG/PNG/WebP · 최대 20MB, Google Drive 저장)</label>
                     <input type="file" id="p-media-file" accept="image/jpeg,image/png,image/webp">
+                    <small class="body-text">세로형 포스터도 등록할 수 있습니다. 포트폴리오 카드에서는 포스터 전체가 보이고, 상세 보기에서 큰 이미지로 확인할 수 있습니다.</small>
                     <small id="p-upload-progress" class="body-text" aria-live="polite"></small>
                 </div>
                 <div class="input-group">
@@ -143,11 +155,11 @@
         </div>
 
         <section class="admin-section" aria-labelledby="profile-admin-title">
-            <h2 class="headline-m" id="profile-admin-title" style="font-size:1.8rem;">경력·학력·교육 이력 관리</h2>
+            <h2 class="headline-m" id="profile-admin-title" style="font-size:1.8rem;">경력·학력·교육·자격증 이력 관리</h2>
             <form id="profile-entry-form" class="cjenm-form mt-30">
                 <input type="hidden" id="profile-entry-id">
                 <div class="admin-form-grid">
-                    <div class="input-group"><select id="profile-entry-type" required aria-label="이력 종류"><option value="career">경력</option><option value="education">학력</option><option value="training">교육</option></select></div>
+                    <div class="input-group"><select id="profile-entry-type" required aria-label="이력 종류"><option value="career">경력</option><option value="education">학력</option><option value="training">교육</option><option value="certification">자격증</option></select></div>
                     <div class="input-group"><input type="text" id="profile-entry-title" maxlength="180" placeholder="항목 이름 / 학위 / 직무" required></div>
                 </div>
                 <div class="admin-form-grid">
@@ -178,6 +190,8 @@
                         <option value="공지사항">공지사항</option>
                         <option value="업데이트">업데이트</option>
                         <option value="작업 소식">작업 소식</option>
+                        <option value="이벤트">이벤트</option>
+                        <option value="점검 안내">점검 안내</option>
                         <option value="기타">기타</option>
                     </select>
                 </div>
@@ -210,6 +224,94 @@
                 <tbody id="notice-table-body"><tr><td colspan="5" style="text-align:center;">불러오는 중...</td></tr></tbody>
             </table></div>
         </div>
+
+        <section class="admin-section" aria-labelledby="campaign-admin-title">
+            <h2 class="headline-m" id="campaign-admin-title" style="font-size:1.8rem;">히어로·팝업·이벤트 배너 관리</h2>
+            <p class="body-text">홈페이지 메인 히어로 슬라이드, 팝업 모달, 이벤트 배너를 등록하고 게시 기간을 설정합니다. 이미지는 JPG, PNG, WebP 형식으로 최대 20MB까지 업로드할 수 있습니다.</p>
+            <form id="site-campaign-form" class="cjenm-form campaign-admin-form mt-30">
+                <input type="hidden" id="c-id">
+                <input type="hidden" id="c-image-path">
+                <div class="admin-form-grid">
+                    <div class="input-group"><label for="c-type">표시 형태</label><select id="c-type"><option value="hero">메인 히어로</option><option value="modal">팝업 모달</option><option value="banner">이벤트 배너</option></select></div>
+                    <div class="input-group"><label for="c-title">제목</label><input type="text" id="c-title" maxlength="160" required placeholder="이벤트 또는 안내 제목"></div>
+                </div>
+                <div class="input-group"><label for="c-description">설명</label><textarea id="c-description" rows="4" maxlength="2000" placeholder="방문자에게 표시할 내용"></textarea></div>
+                <div class="admin-form-grid">
+                    <div class="input-group"><label for="c-image-file">배너 이미지 (JPG/PNG/WebP · 최대 20MB)</label><input type="file" id="c-image-file" accept="image/jpeg,image/png,image/webp"><label class="body-text"><input type="checkbox" id="c-image-remove"> 기존 이미지 제거</label><div class="campaign-image-preview" id="c-image-preview">이미지 미리보기</div></div>
+                    <div class="input-group"><label for="c-image-alt">이미지 대체 텍스트</label><input type="text" id="c-image-alt" maxlength="240" placeholder="이미지 내용을 간단히 설명해 주세요"><label for="c-button-label" style="margin-top:16px;">버튼 문구 (선택)</label><input type="text" id="c-button-label" maxlength="80" placeholder="자세히 보기"><label for="c-button-url" style="margin-top:16px;">버튼 링크 (선택)</label><input type="url" id="c-button-url" maxlength="1000" placeholder="https://..."></div>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="input-group"><label for="c-start-at">게시 시작</label><input type="datetime-local" id="c-start-at" required></div>
+                    <div class="input-group"><label for="c-end-at">게시 종료 (선택)</label><input type="datetime-local" id="c-end-at"></div>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="input-group"><label for="c-sort-order">우선순위 (숫자가 낮을수록 먼저 표시)</label><input type="number" id="c-sort-order" min="0" max="9999" value="0"></div>
+                    <div class="input-group"><label class="body-text"><input type="checkbox" id="c-published" checked> 게시</label><label class="body-text"><input type="checkbox" id="c-dismissible" checked> 배너 닫기 및 팝업 하루 숨김 옵션 제공</label></div>
+                </div>
+                <button type="submit" class="btn-solid btn-small" id="c-submit">팝업·배너 등록</button>
+                <button type="button" class="btn-outline btn-small" id="c-cancel" hidden style="margin-left:10px;">취소</button>
+                <small id="c-status" class="body-text" role="status" aria-live="polite"></small>
+            </form>
+            <div class="admin-table-scroll" style="margin-top:24px;"><table class="admin-table"><thead><tr><th>이미지</th><th>종류</th><th>제목</th><th>게시 기간</th><th>상태</th><th>관리</th></tr></thead><tbody id="site-campaign-table"><tr><td colspan="6" style="text-align:center;">불러오는 중...</td></tr></tbody></table></div>
+        </section>
+
+        <section class="admin-section" aria-labelledby="updates-admin-title">
+            <h2 class="headline-m" id="updates-admin-title" style="font-size:1.8rem;">웹사이트 업데이트 내역 관리</h2>
+            <form id="website-update-form" class="cjenm-form mt-30">
+                <input type="hidden" id="u-id">
+                <div class="admin-form-grid">
+                    <div class="input-group"><input type="text" id="u-title" maxlength="160" placeholder="업데이트 제목" required></div>
+                    <div class="input-group"><select id="u-category" aria-label="업데이트 분류"><option value="기능 추가">기능 추가</option><option value="디자인 변경">디자인 변경</option><option value="수정">수정</option><option value="운영">운영</option></select></div>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="input-group"><input type="text" id="u-version" maxlength="40" placeholder="버전 또는 날짜 표기 (선택)"></div>
+                    <div class="input-group"><label class="body-text" for="u-published-at">게시 일시</label><input type="datetime-local" id="u-published-at" required></div>
+                </div>
+                <div class="input-group"><textarea id="u-summary" rows="2" maxlength="500" placeholder="목록에 표시할 짧은 설명"></textarea></div>
+                <div class="input-group"><textarea id="u-content" rows="4" maxlength="10000" placeholder="업데이트 상세 내용" required></textarea></div>
+                <div class="input-group"><label class="body-text"><input type="checkbox" id="u-published" checked> 웹사이트 연혁 페이지에 공개</label></div>
+                <button type="submit" class="btn-solid btn-small" id="u-submit">업데이트 등록</button>
+                <button type="button" class="btn-outline btn-small" id="u-cancel" style="display:none;margin-left:10px;">취소</button>
+            </form>
+            <div class="admin-table-scroll" style="margin-top:24px;"><table class="admin-table"><thead><tr><th>게시일</th><th>분류</th><th>제목</th><th>공개</th><th>관리</th></tr></thead><tbody id="website-update-table"><tr><td colspan="5" style="text-align:center;">불러오는 중...</td></tr></tbody></table></div>
+        </section>
+
+        <section class="admin-section" aria-labelledby="inquiry-progress-admin-title">
+            <h2 class="headline-m" id="inquiry-progress-admin-title" style="font-size:1.8rem;">프로젝트 문의 진행 상태 관리</h2>
+            <p class="body-text">문의 상세 내용이나 연락처는 저장하지 않습니다. 진행 건을 등록하면 조회 코드와 12자리 발급번호가 생성됩니다. 두 값을 모두 크몽 대화에 전달해 주세요. 원문은 생성 직후 한 번만 표시되며, 재발급하면 이전 두 값은 즉시 무효가 됩니다.</p>
+            <form id="inquiry-progress-form" class="cjenm-form mt-30">
+                <input type="hidden" id="ip-id">
+                <input type="hidden" id="ip-code-hash">
+                <input type="hidden" id="ip-issue-hash">
+                <div class="admin-form-grid">
+                    <div class="input-group"><label for="ip-label">프로젝트 표시 이름 (선택)</label><input type="text" id="ip-label" maxlength="160" placeholder="예: 브랜드 소개 영상"></div>
+                    <div class="input-group"><label for="ip-status">진행 상태</label><select id="ip-status"><option value="received">문의 접수</option><option value="consulting">상담 중</option><option value="in_progress">작업 중</option><option value="review">검토·피드백</option><option value="completed">완료</option><option value="on_hold">보류</option></select></div>
+                </div>
+                <div class="input-group"><label for="ip-note">의뢰인에게 표시할 진행 안내 (선택)</label><textarea id="ip-note" rows="3" maxlength="1000" placeholder="개인정보를 제외한 간단한 진행 안내"></textarea></div>
+                <button type="submit" class="btn-solid btn-small" id="ip-submit">조회 코드 생성 및 등록</button>
+                <button type="button" class="btn-outline btn-small" id="ip-cancel" style="display:none;margin-left:10px;">취소</button>
+                <aside id="ip-code-result" class="admin-inquiry-code-notice" hidden><span class="admin-login-notice-copy"><strong>조회 코드와 발급번호를 모두 크몽 대화로 전달해 주세요.</strong><span>조회 코드 <code id="ip-code-display"></code></span><span>발급번호 <code id="ip-issue-display"></code></span></span><button type="button" id="ip-code-copy" class="btn-outline btn-small">모두 복사</button></aside>
+            </form>
+            <div class="admin-table-scroll" style="margin-top:24px;"><table class="admin-table"><thead><tr><th>프로젝트</th><th>상태</th><th>최근 변경</th><th>관리</th></tr></thead><tbody id="inquiry-progress-table"><tr><td colspan="4" style="text-align:center;">불러오는 중...</td></tr></tbody></table></div>
+        </section>
+
+        <section class="admin-section" id="admin-accounts-section" aria-labelledby="admin-accounts-title" hidden>
+            <h2 class="headline-m" id="admin-accounts-title" style="font-size:1.8rem;">메인·부관리자 계정 관리</h2>
+            <p class="body-text">관리자 아이디는 이메일 주소로 사용합니다. 초기 비밀번호는 Supabase Auth에서 안전하게 해시 처리되며, 이 사이트 데이터베이스에는 비밀번호를 저장하지 않습니다.</p>
+            <form id="admin-account-form" class="cjenm-form mt-30">
+                <div class="admin-form-grid">
+                    <div class="input-group"><label for="a-email">관리자 이메일 아이디</label><input type="email" id="a-email" autocomplete="off" required></div>
+                    <div class="input-group"><label for="a-name">표시 이름</label><input type="text" id="a-name" maxlength="80" autocomplete="off"></div>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="input-group"><label for="a-role">권한 유형</label><select id="a-role"><option value="sub_admin">부관리자</option><option value="admin">메인 관리자</option></select></div>
+                    <div class="input-group"><label for="a-password">초기 비밀번호 (12자 이상)</label><input type="password" id="a-password" minlength="12" autocomplete="new-password" required></div>
+                </div>
+                <button type="submit" class="btn-solid btn-small" id="a-submit">관리자 계정 생성</button>
+                <small id="admin-account-status" class="body-text" aria-live="polite"></small>
+            </form>
+            <div class="admin-table-scroll" style="margin-top:24px;"><table class="admin-table"><thead><tr><th>이름</th><th>이메일 아이디</th><th>권한</th><th>생성일</th><th>관리</th></tr></thead><tbody id="admin-account-table"><tr><td colspan="5" style="text-align:center;">불러오는 중...</td></tr></tbody></table></div>
+        </section>
 
     </div>
 
@@ -258,7 +360,7 @@
             const title = document.getElementById('n-title').value.trim();
             const content = document.getElementById('n-content').value.trim();
             document.getElementById('n-preview-category').textContent = category === '공지사항' ? '[공지]' : `[${category.replace(/\s/g, '')}]`;
-            document.getElementById('n-preview-title').textContent = (title || '공지 제목을 입력해 주세요').replace(/^\[(공지|공지사항|업데이트|작업\s*소식|기타)\]\s*/, '');
+            document.getElementById('n-preview-title').textContent = (title || '공지 제목을 입력해 주세요').replace(/^\[(공지|공지사항|업데이트|작업\s*소식|이벤트|점검\s*안내|기타)\]\s*/, '');
             document.getElementById('n-preview-content').textContent = content || '공지 내용을 입력하면 여기에 미리 표시됩니다.';
             const publishAt = document.getElementById('n-published-at').value;
             document.getElementById('n-preview-date').textContent = publishAt ? `게시 예정 · ${new Date(publishAt).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' })}` : '게시 시각을 선택해 주세요';
@@ -362,7 +464,7 @@
         async function checkSession() {
             if (!supabaseClient) { alert('Supabase 설정이 필요합니다. js/supabase-config.js를 확인해 주세요.'); return; }
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session || session.user?.app_metadata?.role !== 'admin') {
+            if (!session || !['admin', 'sub_admin'].includes(session.user?.app_metadata?.role)) {
                 alert('관리자 로그인이 필요합니다.');
                 if (session) await supabaseClient.auth.signOut();
                 window.location.href = 'admin-login.html';
@@ -383,7 +485,7 @@
         }
 
         // 포트폴리오 관리 로직
-        const portfolioCategoryLabels = { typography: '타이포그래픽', '2d': '모션그래픽', motion: '모션그래픽', advertising: '광고영상', 'web-variety': '웹예능', 'youtube-promo': '유튜브 홍보영상', '3d': '3D 비주얼', other: '기타', web: '웹사이트(기존)', bot: '자동화·봇(기존)' };
+        const portfolioCategoryLabels = { typography: '타이포그래픽', poster: '포스터 디자인', 'variety-poster': '예능 포스터', '2d': '모션그래픽', motion: '모션그래픽', advertising: '광고영상', 'web-variety': '웹예능', 'youtube-promo': '유튜브 홍보영상', '3d': '3D 비주얼', other: '기타', web: '웹사이트(기존)', bot: '자동화·봇(기존)' };
         const portfolioCategoryLabel = category => portfolioCategoryLabels[String(category || '').toLowerCase()] || String(category || '기타');
         async function loadPortfolios() {
             const { data } = await supabaseClient.from('portfolios').select('*').order('id', { ascending: false });
@@ -404,7 +506,7 @@
             }));
         }
 
-        const profileEntryLabels = { career: '경력', education: '학력', training: '교육' };
+        const profileEntryLabels = { career: '경력', education: '학력', training: '교육', certification: '자격증' };
         async function loadProfileEntries() {
             const tbody = document.getElementById('profile-entry-table');
             const { data, error } = await supabaseClient.from('profile_entries').select('*').order('sort_order', { ascending: true }).order('id', { ascending: true });
@@ -499,6 +601,9 @@
             let uploadedThumbFileId = '';
             let uploadedVideoFileId = '';
             const selectedFile = document.getElementById('p-media-file').files[0];
+            if (['poster', 'variety-poster'].includes(category) && !selectedFile && !thumbDriveFileId && !(mediaPath && mediaType === 'image')) {
+                alert('포스터 분야는 포스터 이미지 업로드가 필요합니다.'); return;
+            }
             if (selectedFile) {
                 try {
                     document.getElementById('p-upload-progress').textContent = '업로드 준비 중…';
@@ -728,5 +833,9 @@
 
         checkSession();
     </script>
+    <script src="js/admin-updates.js"></script>
+    <script src="js/admin-campaigns.js"></script>
 </body>
 </html>
+
+

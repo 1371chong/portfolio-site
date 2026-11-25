@@ -1,15 +1,30 @@
 /* JWB STUDIO - Supabase portfolio records */
 let portfolioData = [];
-let activePortfolioCategory = 'all';
+let activePortfolioCategory = new URLSearchParams(window.location.search).get('category') || document.body.dataset.portfolioCategory || 'all';
 let activePortfolioKeyword = '';
 let activePortfolioSort = 'newest';
+let activePortfolioYear = 'all';
+let activeFavoritesOnly = false;
+const PORTFOLIO_FAVORITES_KEY = 'jwb-portfolio-favorites';
+const portfolioFavorites = new Set((() => {
+  try { return JSON.parse(localStorage.getItem(PORTFOLIO_FAVORITES_KEY) || '[]').map(String); }
+  catch { return []; }
+})());
 const categoryLabels = {
   '2d': '모션그래픽', motion: '모션그래픽', '3d': '3D 비주얼',
-  typography: '타이포그래픽', advertising: '광고영상', 'web-variety': '웹예능',
+  typography: '타이포그래픽', poster: '포스터 디자인', 'variety-poster': '예능 포스터',
+  advertising: '광고영상', 'web-variety': '웹예능',
   'youtube-promo': '유튜브 홍보영상', other: '기타', web: '웹사이트', bot: '자동화·봇'
+};
+const categoryDatabaseValues = {
+  '모션그래픽': ['2d', 'motion'], '3D 비주얼': ['3d'], '타이포그래픽': ['typography'],
+  '포스터 디자인': ['poster'], '예능 포스터': ['variety-poster'], '광고영상': ['advertising'],
+  '웹예능': ['web-variety'], '유튜브 홍보영상': ['youtube-promo'], '웹사이트': ['web'],
+  '자동화·봇': ['bot'], '기타': ['other']
 };
 const englishCategoryLabels = {
   '모션그래픽':'Motion Graphics', '3D 비주얼':'3D Visual', '타이포그래픽':'Typography',
+  '포스터 디자인':'Poster Design', '예능 포스터':'Entertainment Poster',
   '광고영상':'Advertising', '웹예능':'Web Variety', '유튜브 홍보영상':'YouTube Promo',
   '기타':'Other', '웹사이트':'Web', '자동화·봇':'Automation'
 };
@@ -18,6 +33,8 @@ const normalizeSearch = value => String(value || '').normalize('NFD').replace(/[
 function categoryTone(label) {
   const value = String(label || '').toLocaleLowerCase();
   if (value.includes('3d')) return 'three-d';
+  if (value.includes('예능') && value.includes('포스터')) return 'variety-poster';
+  if (value.includes('포스터')) return 'poster';
   if (value.includes('광고') || value.includes('ad') || value.includes('promo')) return 'campaign';
   if (value.includes('모션') || value.includes('motion') || value.includes('video') || value.includes('영상')) return 'motion';
   if (value.includes('타이포') || value.includes('type')) return 'type';
@@ -35,6 +52,41 @@ function sortedPortfolioItems() {
     const bDate = new Date(b.created_at || b.published_at || 0).getTime() || Number(b.id) || 0;
     return bDate - aDate;
   });
+}
+function portfolioYear(item) {
+  const explicitYear = String(item?.year || item?.project_year || '');
+  const period = String(item?.period || '');
+  const years = `${explicitYear} ${period}`.match(/(?:19|20)\d{2}/g);
+  if (years?.length) return years[years.length - 1];
+  const date = new Date(item?.published_at || item?.created_at || '');
+  return Number.isNaN(date.getTime()) ? '' : String(date.getFullYear());
+}
+
+function syncPortfolioYearFilter() {
+  const wrap = document.querySelector('.portfolio-section-head .work-search-wrap');
+  if (!wrap) return;
+  let select = document.getElementById('portfolio-year');
+  if (!select) {
+    const label = document.createElement('label');
+    label.className = 'sr-only'; label.htmlFor = 'portfolio-year';
+    label.textContent = window.JWB_I18N?.t('portfolioYearLabel') || '작업 연도';
+    select = document.createElement('select'); select.id = 'portfolio-year'; select.className = 'portfolio-year-select';
+    select.setAttribute('aria-label', label.textContent);
+    wrap.append(label, select);
+    select.addEventListener('change', () => {
+      activePortfolioYear = select.value;
+      applyPortfolioFilters();
+    });
+  }
+  const allLabel = window.JWB_I18N?.t('yearAll') || '전체 연도';
+  const labelText = window.JWB_I18N?.t('portfolioYearLabel') || '작업 연도';
+  const years = [...new Set(portfolioData.map(portfolioYear).filter(Boolean))].sort((a, b) => Number(b) - Number(a));
+  select.replaceChildren(new Option(allLabel, 'all'), ...years.map(year => new Option(year, year)));
+  if (activePortfolioYear !== 'all' && !years.includes(activePortfolioYear)) activePortfolioYear = 'all';
+  select.value = activePortfolioYear;
+  const label = wrap.querySelector('label[for="portfolio-year"]');
+  if (label) label.textContent = labelText;
+  select.setAttribute('aria-label', labelText);
 }
 const localizedPortfolioValue = (item, field) => {
   const language = window.JWB_I18N?.language || 'ko';
@@ -72,12 +124,18 @@ function applyPortfolioFilters() {
   cards.forEach(card => {
     const matchesCategory = activePortfolioCategory === 'all' || card.dataset.category === activePortfolioCategory;
     const matchesKeyword = !activePortfolioKeyword || normalizeSearch(card.dataset.search).includes(normalizeSearch(activePortfolioKeyword));
-    const visible = matchesCategory && matchesKeyword;
+    const matchesYear = activePortfolioYear === 'all' || card.dataset.year === activePortfolioYear;
+    const matchesFavorite = !activeFavoritesOnly || portfolioFavorites.has(String(card.dataset.id));
+    const visible = matchesCategory && matchesKeyword && matchesYear && matchesFavorite;
     card.style.display = visible ? '' : 'none';
     if (visible) visibleCount++;
   });
   const empty = document.getElementById('portfolio-empty');
-  if (empty) empty.hidden = visibleCount > 0 || cards.length === 0;
+  if (empty) {
+    empty.hidden = visibleCount > 0 || cards.length === 0;
+    if (visibleCount === 0 && activeFavoritesOnly) empty.textContent = window.JWB_I18N?.t('favoritesEmpty') || '저장한 즐겨찾기가 없습니다.';
+    else if (window.JWB_I18N) empty.textContent = window.JWB_I18N.t('emptySearch');
+  }
   const summary = document.getElementById('portfolio-result-summary');
   if (summary) {
     const language = window.JWB_I18N?.language || 'ko';
@@ -105,14 +163,34 @@ function renderPortfolio() {
       key: label, label, count: portfolioData.filter(item => item.categoryLabel === label).length
     }))
   ];
+  syncPortfolioYearFilter();
+  if (!categories.some(category => category.key === activePortfolioCategory) && !document.body.dataset.portfolioCategory) activePortfolioCategory = 'all';
 
   filters.innerHTML = categories.map((c,i) =>
-    `<button type="button" class="filter-btn" data-category-tone="${categoryTone(c.label)}" data-filter="${escapeHtml(c.key)}" aria-pressed="${c.key === activePortfolioCategory}"><span class="filter-label">${escapeHtml(window.JWB_I18N?.category(c.label) || c.label)}</span><span class="filter-count">${c.count}</span></button>`
+    `<button type="button" class="filter-btn${c.key === activePortfolioCategory ? ' active' : ''}" data-category-tone="${categoryTone(c.label)}" data-filter="${escapeHtml(c.key)}" aria-pressed="${c.key === activePortfolioCategory}"><span class="filter-label">${escapeHtml(window.JWB_I18N?.category(c.label) || c.label)}</span><span class="filter-count counter" data-target="${c.count}" aria-label="${c.count}">0</span></button>`
   ).join('');
+  const favoritesFilter = document.createElement('button');
+  favoritesFilter.type = 'button'; favoritesFilter.className = `favorites-filter-btn${activeFavoritesOnly ? ' active' : ''}`;
+  favoritesFilter.setAttribute('aria-pressed', String(activeFavoritesOnly));
+  favoritesFilter.innerHTML = `<span aria-hidden="true">♥</span> <span class="favorites-filter-label"></span><span class="filter-count">${portfolioFavorites.size}</span>`;
+  filters.append(favoritesFilter);
+  const updateFavoritesFilterLabel = () => {
+    const label = favoritesFilter.querySelector('.favorites-filter-label');
+    if (label) label.textContent = window.JWB_I18N?.t(activeFavoritesOnly ? 'favoritesOnlyOn' : 'favoritesOnly') || '즐겨찾기만';
+  };
+  updateFavoritesFilterLabel();
+  favoritesFilter.addEventListener('click', () => {
+    activeFavoritesOnly = !activeFavoritesOnly;
+    favoritesFilter.classList.toggle('active', activeFavoritesOnly);
+    favoritesFilter.setAttribute('aria-pressed', String(activeFavoritesOnly));
+    updateFavoritesFilterLabel();
+    applyPortfolioFilters();
+  });
 
   grid.innerHTML = sortedPortfolioItems().map(p => {
     const tags = Array.isArray(localizedPortfolioValue(p, 'tags')) ? localizedPortfolioValue(p, 'tags').filter(tag => typeof tag === 'string' && tag.trim()) : [];
     const title = localizedPortfolioValue(p, 'title');
+    const year = portfolioYear(p);
     const description = localizedPortfolioValue(p, 'description');
     const tagMarkup = tags.map(tag => `<span class="portfolio-tag">${escapeHtml(tag)}</span>`).join('');
     const imageUrl = driveThumbnailUrl(p.thumb_drive_file_id)
@@ -120,20 +198,24 @@ function renderPortfolio() {
       || youtubeThumb(p.youtube)
       || (p.drive_file_id ? `https://drive.google.com/thumbnail?id=${encodeURIComponent(p.drive_file_id)}&sz=w640` : '');
     const hasVideo = Boolean(p.drive_file_id || (p.media_type === 'video' && p.media_path) || getYouTubeId(p.youtube));
+    const posterWork = categoryTone(p.categoryLabel).includes('poster');
     return `
-      <a href="?work=${encodeURIComponent(p.id)}#works" class="work-card fade-up" data-category="${escapeHtml(p.categoryLabel)}" data-search="${escapeHtml(`${p.title} ${p.title_en || ''} ${p.title_ja || ''} ${p.categoryLabel} ${englishCategoryLabels[p.categoryLabel] || ''} ${tags.join(' ')} ${(p.tags_en || []).join?.(' ') || ''} ${(p.tags_ja || []).join?.(' ') || ''} ${p.description || ''} ${p.description_en || ''} ${p.description_ja || ''} ${p.period || ''} ${localizedPortfolioValue(p, 'role')} ${p.role_en || ''} ${p.role_ja || ''} ${p.tools || ''} ${p.tools_en || ''} ${p.tools_ja || ''} ${p.objective || ''} ${p.objective_en || ''} ${p.objective_ja || ''} ${p.process || ''} ${p.process_en || ''} ${p.process_ja || ''} ${p.outcome || ''} ${p.outcome_en || ''} ${p.outcome_ja || ''}`)}" data-id="${Number(p.id)}" aria-label="${escapeHtml(title)} ${window.JWB_I18N?.t('projectLink') || '상세 보기'}">
+      <article class="work-card fade-up${posterWork ? ' is-poster-work' : ''}" data-category-tone="${categoryTone(p.categoryLabel)}" data-category="${escapeHtml(p.categoryLabel)}" data-year="${escapeHtml(year)}" data-search="${escapeHtml(`${p.title} ${p.title_en || ''} ${p.title_ja || ''} ${p.categoryLabel} ${englishCategoryLabels[p.categoryLabel] || ''} ${tags.join(' ')} ${(p.tags_en || []).join?.(' ') || ''} ${(p.tags_ja || []).join?.(' ') || ''} ${p.description || ''} ${p.description_en || ''} ${p.description_ja || ''} ${p.period || ''} ${localizedPortfolioValue(p, 'role')} ${p.role_en || ''} ${p.role_ja || ''} ${p.tools || ''} ${p.tools_en || ''} ${p.tools_ja || ''} ${p.objective || ''} ${p.objective_en || ''} ${p.objective_ja || ''} ${p.process || ''} ${p.process_en || ''} ${p.process_ja || ''} ${p.outcome || ''} ${p.outcome_en || ''} ${p.outcome_ja || ''}`)}" data-id="${Number(p.id)}">
+      <a href="?work=${encodeURIComponent(p.id)}#works" class="work-card-link" aria-label="${escapeHtml(title)} ${window.JWB_I18N?.t('projectLink') || '상세 보기'}">
         <div class="thumb youtube-thumb ${hasVideo ? 'video-card-thumb' : ''}">
-          ${imageUrl ? `<img class="portfolio-image-thumb" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)} ${hasVideo ? 'video' : 'work'} thumbnail" loading="lazy" decoding="async">` : '<span class="portfolio-thumb-fallback" aria-hidden="true">JWB<br>STUDIO</span>'}
+          ${imageUrl ? `<img class="portfolio-image-thumb" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)} ${posterWork ? 'poster' : hasVideo ? 'video' : 'work'} image" loading="lazy" decoding="async">` : '<span class="portfolio-thumb-fallback" aria-hidden="true">JWB<br>STUDIO</span>'}
           <span class="youtube-play" aria-hidden="true">${hasVideo ? '▶' : '↗'}</span>
         </div>
         <div class="info">
-          <span class="category" data-category-tone="${categoryTone(p.categoryLabel)}">${escapeHtml(window.JWB_I18N?.category(p.categoryLabel) || p.categoryLabel)}</span>
+          <div class="work-card-meta"><span class="category" data-category-tone="${categoryTone(p.categoryLabel)}">${escapeHtml(window.JWB_I18N?.category(p.categoryLabel) || p.categoryLabel)}</span>${year ? `<span class="portfolio-year-badge">${escapeHtml(year)}</span>` : ''}</div>
           <h3>${escapeHtml(title)}</h3>
           ${tagMarkup ? `<span class="portfolio-tags">${tagMarkup}</span>` : ''}
           <span class="portfolio-view-count">${window.JWB_I18N?.t('views') || '조회수'} ${Number(p.view_count || 0).toLocaleString('ko-KR')}</span>
           <span class="portfolio-view-link">${window.JWB_I18N?.t('projectLink') || '프로젝트 상세 보기'} <span aria-hidden="true">→</span></span>
         </div>
-      </a>`;
+      </a>
+      <button type="button" class="portfolio-favorite-toggle${portfolioFavorites.has(String(p.id)) ? ' is-favorite' : ''}" aria-pressed="${portfolioFavorites.has(String(p.id))}" aria-label="${window.JWB_I18N?.t(portfolioFavorites.has(String(p.id)) ? 'favoriteRemove' : 'favoriteAdd') || (portfolioFavorites.has(String(p.id)) ? '즐겨찾기 해제' : '즐겨찾기 추가')}"><span aria-hidden="true">${portfolioFavorites.has(String(p.id)) ? '♥' : '♡'}</span></button>
+      </article>`;
   }).join('');
 
   document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -148,8 +230,52 @@ function renderPortfolio() {
   applyPortfolioFilters();
 
   document.querySelectorAll('.work-card').forEach(card => {
-    card.addEventListener('click', event => { event.preventDefault(); openProject(Number(card.dataset.id)); });
+    card.addEventListener('click', event => {
+      if (event.target.closest('.portfolio-favorite-toggle')) return;
+      event.preventDefault(); openProject(Number(card.dataset.id));
+    });
+    card.querySelector('.portfolio-favorite-toggle')?.addEventListener('click', event => {
+      event.preventDefault(); event.stopPropagation();
+      const button = event.currentTarget;
+      const id = String(card.dataset.id);
+      const isFavorite = portfolioFavorites.has(id);
+      if (isFavorite) portfolioFavorites.delete(id); else portfolioFavorites.add(id);
+      try { localStorage.setItem(PORTFOLIO_FAVORITES_KEY, JSON.stringify([...portfolioFavorites])); } catch {}
+      button.classList.toggle('is-favorite', !isFavorite);
+      button.setAttribute('aria-pressed', String(!isFavorite));
+      button.setAttribute('aria-label', window.JWB_I18N?.t(!isFavorite ? 'favoriteRemove' : 'favoriteAdd') || (!isFavorite ? '즐겨찾기 해제' : '즐겨찾기 추가'));
+      button.querySelector('span').textContent = !isFavorite ? '♥' : '♡';
+      const favoritesFilter = document.querySelector('.favorites-filter-btn .filter-count');
+      if (favoritesFilter) favoritesFilter.textContent = portfolioFavorites.size;
+      applyPortfolioFilters();
+    });
   });
+
+  const canParallax = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canParallax) {
+    document.querySelectorAll('#work-grid .work-card').forEach(card => {
+      let frame = 0;
+      card.addEventListener('pointermove', event => {
+        if (event.pointerType === 'touch') return;
+        const bounds = card.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width - .5) * -7;
+        const y = ((event.clientY - bounds.top) / bounds.height - .5) * -7;
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          card.style.setProperty('--parallax-x', `${x.toFixed(1)}px`);
+          card.style.setProperty('--parallax-y', `${y.toFixed(1)}px`);
+          card.classList.add('is-parallax-active');
+        });
+      }, { passive: true });
+      card.addEventListener('pointerleave', () => {
+        cancelAnimationFrame(frame);
+        card.style.removeProperty('--parallax-x');
+        card.style.removeProperty('--parallax-y');
+        card.classList.remove('is-parallax-active');
+      });
+    });
+  }
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
@@ -205,12 +331,17 @@ function openProject(id) {
     if (cardCount) cardCount.textContent = `${window.JWB_I18N?.t('views') || '조회수'} ${p.view_count.toLocaleString('ko-KR')}`;
   }).catch(() => {});
   const modal = document.getElementById('project-modal');
+  const posterProject = categoryTone(p.categoryLabel).includes('poster');
+  modal.classList.toggle('is-poster-project', posterProject);
   if (!modal.classList.contains('active')) window.jwbLastProjectTrigger = document.activeElement;
   const embed = youtubeEmbed(p.youtube);
   const videoWrap = document.getElementById('project-video-wrap');
   videoWrap.replaceChildren();
   const assetUrl = publicMediaUrl(p.media_path);
-  if (p.drive_file_id) {
+  const hasPosterImage = posterProject && (p.thumb_drive_file_id || (assetUrl && p.media_type === 'image'));
+  if (hasPosterImage) {
+    const image = document.createElement('img'); image.src = driveThumbnailUrl(p.thumb_drive_file_id) || assetUrl; image.alt = `${projectTitle} poster`; image.decoding = 'async'; videoWrap.append(image);
+  } else if (p.drive_file_id) {
     const iframe = document.createElement('iframe'); iframe.src = `https://drive.google.com/file/d/${encodeURIComponent(p.drive_file_id)}/preview?autoplay=1`; iframe.title = `${projectTitle} video`;
     iframe.allow = 'autoplay; fullscreen'; iframe.allowFullscreen = true; iframe.loading = 'lazy'; iframe.referrerPolicy = 'strict-origin-when-cross-origin'; videoWrap.append(iframe);
   } else if (assetUrl && p.media_type === 'video') {
@@ -254,11 +385,11 @@ function openProject(id) {
   nextButton.onclick = () => { if (projectIndex >= 0 && projectIndex < navigationIds.length - 1) openProject(navigationIds[projectIndex + 1]); };
   const shareButton = document.getElementById('project-share');
   if (shareButton) shareButton.onclick = async () => {
-    const url = new URL(window.location.href); url.searchParams.set('work', String(p.id)); url.hash = 'works';
+    const url = new URL(window.location.href); url.searchParams.set('work', String(p.id)); url.hash = '';
     try { await navigator.clipboard.writeText(url.toString()); shareButton.textContent = window.JWB_I18N?.t('copied') || '링크 복사 완료'; shareButton.dataset.copied = 'true'; }
     catch { window.prompt('프로젝트 공유 링크', url.toString()); }
   };
-  const currentUrl = new URL(window.location.href); currentUrl.searchParams.set('work', String(p.id)); currentUrl.hash = 'works';
+  const currentUrl = new URL(window.location.href); currentUrl.searchParams.set('work', String(p.id)); currentUrl.hash = '';
   const oldUrl = new URL(window.location.href);
   if (oldUrl.searchParams.get('work') === String(p.id)) window.history.replaceState({}, '', currentUrl);
   else window.history.pushState({ work: p.id }, '', currentUrl);
@@ -281,6 +412,15 @@ function openProject(id) {
 }
 
 window.addEventListener('jwb:languagechange', () => {
+  syncPortfolioYearFilter();
+  const favoritesLabel = document.querySelector('.favorites-filter-label');
+  if (favoritesLabel) favoritesLabel.textContent = window.JWB_I18N?.t(activeFavoritesOnly ? 'favoritesOnlyOn' : 'favoritesOnly') || '즐겨찾기만 보기';
+  document.querySelectorAll('.portfolio-favorite-toggle').forEach(button => {
+    const isFavorite = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-label', window.JWB_I18N?.t(isFavorite ? 'favoriteRemove' : 'favoriteAdd') || (isFavorite ? '즐겨찾기 해제' : '즐겨찾기 추가'));
+  });
+  const empty = document.getElementById('portfolio-empty');
+  if (empty) empty.textContent = window.JWB_I18N?.t(activeFavoritesOnly ? 'favoritesEmpty' : 'emptySearch') || '검색 결과가 없습니다.';
   document.querySelectorAll('.filter-btn').forEach(button => {
     const key = button.dataset.filter;
     const original = key === 'all' ? '전체' : key;
@@ -358,7 +498,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!window.getJwbSupabase) return;
   const client = window.getJwbSupabase();
   if (!client) { renderPortfolio(); return; }
-  const { data, error } = await client.from('portfolios').select('*').eq('is_published', true).order('id', { ascending: false });
+  let query = client.from('portfolios').select('*').eq('is_published', true);
+  const databaseCategories = categoryDatabaseValues[document.body.dataset.portfolioCategory];
+  if (databaseCategories?.length) query = query.in('category', databaseCategories);
+  const { data, error } = await query.order('id', { ascending: false });
   if (error) { renderPortfolio(); return; }
   portfolioData = (data || []).map(item => ({
     ...item,
@@ -377,15 +520,18 @@ window.addEventListener('popstate', () => {
     document.getElementById('project-modal')?.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
     document.getElementById('project-video-wrap')?.replaceChildren();
-    document.title = 'JWB STUDIO | Motion & Interactive';
-    document.querySelector('meta[property="og:title"]')?.setAttribute('content', 'JWB STUDIO | Motion & Interactive');
+    const pageHeading = document.querySelector('.portfolio-section-head h2')?.textContent.trim() || 'Portfolio';
+    const pageTitle = `${pageHeading} | JWB STUDIO`;
+    const pageUrl = new URL(window.location.pathname, window.location.origin).href;
+    document.title = pageTitle;
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', pageTitle);
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', '모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오');
     document.querySelector('meta[property="og:image"]')?.setAttribute('content', 'https://www.wonbok.kr/img/logo/logo.png');
-    document.querySelector('meta[property="og:url"]')?.setAttribute('content', 'https://www.wonbok.kr/');
-    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', 'JWB STUDIO | Motion & Interactive');
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', pageUrl);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', pageTitle);
     document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', '모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오');
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', 'https://www.wonbok.kr/img/logo/logo.png');
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href', 'https://www.wonbok.kr/');
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', pageUrl);
     window.jwbLastProjectTrigger?.focus?.();
   }
 });

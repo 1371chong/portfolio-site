@@ -3,47 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="JWB STUDIO 정원복의 모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오입니다. 작품과 외주 서비스를 확인하고 프로젝트를 문의하세요.">
+    <meta name="description" content="JWB STUDIO 메인 페이지와 모션그래픽·3D·웹 포트폴리오 안내">
     <meta name="robots" content="index,follow,max-image-preview:large">
     <link rel="canonical" href="https://www.wonbok.kr/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="JWB STUDIO">
     <meta property="og:title" content="JWB STUDIO | Motion & Interactive">
-    <meta property="og:description" content="모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오">
+    <meta property="og:description" content="JWB STUDIO 메인 페이지와 모션그래픽·3D·웹 포트폴리오 안내">
     <meta property="og:url" content="https://www.wonbok.kr/">
     <meta property="og:image" content="https://www.wonbok.kr/img/logo/logo.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="JWB STUDIO | Motion & Interactive">
+    <meta name="twitter:title" content="JWB STUDIO | Motion &amp; Interactive">
     <meta name="twitter:description" content="모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오">
     <meta name="twitter:image" content="https://www.wonbok.kr/img/logo/logo.png">
     <title>JWB STUDIO | Motion & Interactive</title>
     <link rel="icon" href="img/logo/logo.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/color-theme.css">
+    <link rel="stylesheet" href="css/redesign.css">
+    <link rel="stylesheet" href="css/reference-style.css">
     <!-- Supabase CDN (소식 목록 불러오기용) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
+    <script src="js/site-campaigns.js" defer></script>
     <script src="js/contact-config.js"></script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Person","name":"정원복","alternateName":"Jeong Won-bok","url":"https://www.wonbok.kr/","jobTitle":"Motion Graphics and Web Creator","worksFor":{"@type":"Organization","name":"JWB STUDIO"},"knowsAbout":["Motion Graphics","3D Visual","Video Editing","Web Development"]}
     </script>
+    <link rel="stylesheet" href="css/complete-redesign.css">
 </head>
-<body class="kmong-page">
-    <!-- 네비게이션 -->
-    <nav class="navbar" id="navbar" aria-label="주요 메뉴">
+<body class="site-page">
+<nav class="navbar" id="navbar" aria-label="주요 메뉴">
         <div class="nav-inner">
-            <a href="index.html#home" class="brand">JWB STUDIO</a>
+            <a href="index.html" class="brand">JWB STUDIO</a>
             <button type="button" class="menu-toggle" id="mobile-menu-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav-menu"><span></span><span></span><span></span></button>
             <ul class="nav-menu" id="site-nav-menu">
-                <li><a href="index.html#home">HOME</a></li>
-                <li><a href="index.html#about">ABOUT</a></li>
-                <li><a href="index.html#works">PORTFOLIO</a></li>
-                <li><a href="index.html#skills">SKILLS</a></li>
-                <li><a href="index.html#workspace">WORKSPACE</a></li>
-                <li><a href="index.html#workflow">WORKFLOW</a></li>
-                <li><a href="index.html#notices">NOTICES</a></li>
-                <li><a href="index.html#faq">FAQ</a></li>
-                <li><a href="outsourcing.html" class="nav-highlight">외주서비스</a></li>
+                <li><a href="index.html" aria-current="page">홈</a></li>
+                <li><a href="about.html">소개</a></li>
+                <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle" id="portfolio-menu-toggle" aria-expanded="false" aria-controls="portfolio-submenu" data-i18n="portfolioMenu">포트폴리오</button><ul class="nav-submenu portfolio-submenu" id="portfolio-submenu" hidden><li><a href="portfolio.html#works" data-portfolio-category="all" data-i18n="portfolioAll">전체 포트폴리오</a></li><li><a href="portfolio-motion.html#works" data-portfolio-category="모션그래픽" data-i18n="catMotion">모션그래픽</a></li><li><a href="portfolio-3d.html#works" data-portfolio-category="3D 비주얼" data-i18n="cat3d">3D 비주얼</a></li><li><a href="portfolio-typography.html#works" data-portfolio-category="타이포그래픽" data-i18n="catTypography">타이포그래픽</a></li><li><a href="portfolio-poster.html#works" data-portfolio-category="포스터 디자인" data-i18n="catPoster">포스터 디자인</a></li><li><a href="portfolio-variety-poster.html#works" data-portfolio-category="예능 포스터" data-i18n="catVarietyPoster">예능 포스터</a></li><li><a href="portfolio-advertising.html#works" data-portfolio-category="광고영상" data-i18n="catAdvertising">광고영상</a></li><li><a href="portfolio-web-variety.html#works" data-portfolio-category="웹예능" data-i18n="catWebVariety">웹예능</a></li><li><a href="portfolio-youtube.html#works" data-portfolio-category="유튜브 홍보영상" data-i18n="catYoutube">유튜브 홍보영상</a></li><li><a href="portfolio-website.html#works" data-portfolio-category="웹사이트" data-i18n="catWebsite">웹사이트</a></li><li><a href="portfolio-automation.html#works" data-portfolio-category="자동화·봇" data-i18n="catAutomation">자동화·봇</a></li><li><a href="portfolio-other.html#works" data-portfolio-category="기타" data-i18n="catOther">기타</a></li></ul></li>
+                <li><a href="skills.html">전문 분야</a></li>
+                <li><a href="workspace.html">작업 환경</a></li>
+                <li><a href="workflow.html" data-i18n="workflowMenu">작업 과정</a></li>
+                <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle" id="notices-menu-toggle" aria-expanded="false" aria-controls="notices-submenu" data-i18n="noticesMenu">공지사항</button><ul class="nav-submenu notices-submenu" id="notices-submenu" hidden><li><a href="notices.html" data-i18n="noticeAll">전체 공지</a></li><li><a href="notices-notice.html" data-i18n="noticeCategoryNotice">공지사항</a></li><li><a href="notices-updates.html" data-i18n="noticeCategoryUpdate">업데이트</a></li><li><a href="notices-work.html" data-i18n="noticeCategoryWork">작업 소식</a></li><li><a href="notices-events.html" data-i18n="noticeCategoryEvent">이벤트</a></li><li><a href="notices-maintenance.html" data-i18n="noticeCategoryMaintenance">점검 안내</a></li><li><a href="notices-other.html" data-i18n="noticeCategoryOther">기타</a></li></ul></li><li><a href="website-history.html" data-i18n="websiteHistoryMenu">웹사이트 연혁</a></li>
+                <li><a href="faq.html">자주 묻는 질문</a></li>
+                <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle" id="outsourcing-menu-toggle" aria-expanded="false" aria-controls="outsourcing-submenu" data-i18n="outsourcingMenu">외주서비스</button><ul class="nav-submenu outsourcing-submenu" id="outsourcing-submenu" hidden><li><a href="outsourcing.html" data-i18n="outsourcingMenu">외주서비스</a></li><li><a href="inquiry-status.html" data-i18n="inquiryStatusMenu">문의 진행 확인</a></li></ul></li>
                 <li><a href="admin-login.html" class="admin-nav-btn">관리자</a></li>
                 <li class="language-control">
                     <button type="button" class="language-toggle" id="language-toggle" aria-label="언어 선택" aria-expanded="false" aria-haspopup="menu">KO</button>
@@ -56,11 +59,12 @@
             </ul>
         </div>
     </nav>
-
-    <!-- 히어로 섹션 -->
-    <section class="hero" id="home">
+    <div id="campaign-hero-root"></div>
+    <div id="campaign-banner-root" class="site-campaign-banners" aria-live="polite"></div>
+    <div id="campaign-modal-root"></div>
+<section class="hero" id="home">
         <div class="hero-bg"></div>
-        <a class="hero-notice-link" id="hero-latest-notice" href="#notices" hidden>
+        <a class="hero-notice-link" id="hero-latest-notice" href="notices.html" hidden>
             <span class="hero-notice-label" data-i18n="latestNotice">최신 공지</span>
             <span class="hero-notice-title" id="hero-latest-notice-title"></span>
             <span aria-hidden="true">↗</span>
@@ -70,7 +74,7 @@
                 <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
                 <div class="hero-content">
                     <p class="hero-kicker">JWB STUDIO · MOTION & INTERACTIVE</p>
-                    <h1 class="headline-xl hero-headline">CRAFTING<br><span class="type-accent">THE FUTURE.</span></h1>
+                    <h1 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">CRAFTING</span><span class="type-accent hero-word-line hero-word-line-second">THE FUTURE.</span></h1>
                     <p class="hero-desc">체계적인 프로세스와 압도적인 모션그래픽·웹 개발로 브랜드의 가치를 높입니다.</p>
                     <div class="hero-sub-badge">✨ Motion Graphics • 3D Visual • Web Development • Python Automation</div>
                 </div>
@@ -79,40 +83,98 @@
                 <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
                 <div class="hero-content">
                     <p class="hero-kicker">MOTION GRAPHICS · 3D VISUAL</p>
-                    <h2 class="headline-xl hero-headline">MAKE IT<br><span class="type-accent">MOVE.</span></h2>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">MAKE IT</span><span class="type-accent hero-word-line hero-word-line-second">MOVE.</span></h2>
                     <p class="hero-desc">움직임과 입체감으로 브랜드의 이야기를 선명하게 전합니다.</p>
-                    <a class="hero-cta" href="#works">포트폴리오 보기 <span aria-hidden="true">↗</span></a>
+                    <a class="hero-cta" href="portfolio.html">포트폴리오 보기 <span aria-hidden="true">↗</span></a>
                 </div>
             </article>
             <article class="hero-slide" aria-hidden="true">
                 <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
                 <div class="hero-content">
                     <p class="hero-kicker">DESIGN · DEVELOPMENT · AUTOMATION</p>
-                    <h2 class="headline-xl hero-headline">IDEAS INTO<br><span class="type-accent">EXPERIENCE.</span></h2>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">IDEAS INTO</span><span class="type-accent hero-word-line hero-word-line-second">EXPERIENCE.</span></h2>
                     <p class="hero-desc">기획부터 구현까지, 브랜드에 필요한 디지털 경험을 만듭니다.</p>
+                    <a class="hero-cta" href="outsourcing.html">프로젝트 문의하기 <span aria-hidden="true">↗</span></a>
+                </div>
+            </article>
+            <article class="hero-slide" aria-hidden="true">
+                <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
+                <div class="hero-content">
+                    <p class="hero-kicker">FROM CONCEPT · TO CREATION</p>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">YOUR IDEA</span><span class="type-accent hero-word-line hero-word-line-second">MADE REAL.</span></h2>
+                    <p class="hero-desc">2D·3D 그래픽과 영상, 웹 구현까지 아이디어를 완성도 높은 결과물로 만듭니다.</p>
+                    <a class="hero-cta" href="workspace.html">작업 환경 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+            </article>
+            <article class="hero-slide" aria-hidden="true">
+                <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
+                <div class="hero-content">
+                    <p class="hero-kicker">BRAND · VISUAL · IDENTITY</p>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">DESIGN WITH</span><span class="type-accent hero-word-line hero-word-line-second">PURPOSE.</span></h2>
+                    <p class="hero-desc">브랜드의 목표와 분위기를 읽고, 목적이 분명한 시각 언어로 완성합니다.</p>
+                    <a class="hero-cta" href="skills.html">전문 분야 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+            </article>
+            <article class="hero-slide" aria-hidden="true">
+                <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
+                <div class="hero-content">
+                    <p class="hero-kicker">MOTION · RHYTHM · IMPACT</p>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">MOTION THAT</span><span class="type-accent hero-word-line hero-word-line-second">MATTERS.</span></h2>
+                    <p class="hero-desc">리듬과 타이밍을 설계해 핵심 메시지가 오래 기억되도록 전달합니다.</p>
+                    <a class="hero-cta" href="portfolio.html">작업물 확인하기 <span aria-hidden="true">↗</span></a>
+                </div>
+            </article>
+            <article class="hero-slide" aria-hidden="true">
+                <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
+                <div class="hero-content">
+                    <p class="hero-kicker">DIGITAL · RESPONSIVE · READY</p>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">BUILT FOR</span><span class="type-accent hero-word-line hero-word-line-second">EVERY SCREEN.</span></h2>
+                    <p class="hero-desc">다양한 화면과 환경에서도 자연스럽게 이어지는 디지털 경험을 만듭니다.</p>
+                    <a class="hero-cta" href="workflow.html">작업 과정 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+            </article>
+            <article class="hero-slide" aria-hidden="true">
+                <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
+                <div class="hero-content">
+                    <p class="hero-kicker">DISCOVERY · PROCESS · DELIVERY</p>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">A CLEAR</span><span class="type-accent hero-word-line hero-word-line-second">CREATIVE FLOW.</span></h2>
+                    <p class="hero-desc">처음 상담부터 최종 전달까지, 단계별 소통으로 방향을 함께 맞춥니다.</p>
+                    <a class="hero-cta" href="workflow.html">작업 과정 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+            </article>
+            <article class="hero-slide" aria-hidden="true">
+                <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
+                <div class="hero-content">
+                    <p class="hero-kicker">DETAIL · CRAFT · QUALITY</p>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">DETAILS THAT</span><span class="type-accent hero-word-line hero-word-line-second">FEEL RIGHT.</span></h2>
+                    <p class="hero-desc">작은 디테일까지 세심하게 다듬어 결과물의 완성도를 높입니다.</p>
+                    <a class="hero-cta" href="workspace.html">작업 환경 보기 <span aria-hidden="true">↗</span></a>
+                </div>
+            </article>
+            <article class="hero-slide" aria-hidden="true">
+                <div class="hero-3d-scene" aria-hidden="true"><div class="hero-3d-orbit orbit-one"></div><div class="hero-3d-orbit orbit-two"></div><div class="hero-3d-orbit orbit-three"></div><div class="hero-3d-core"></div></div>
+                <div class="hero-content">
+                    <p class="hero-kicker">YOUR NEXT PROJECT · STARTS HERE</p>
+                    <h2 class="headline-xl hero-headline"><span class="hero-word-line hero-word-line-first">LET'S BUILD</span><span class="type-accent hero-word-line hero-word-line-second">WHAT'S NEXT.</span></h2>
+                    <p class="hero-desc">함께 만들고 싶은 아이디어가 있다면 프로젝트 이야기를 들려주세요.</p>
                     <a class="hero-cta" href="outsourcing.html">프로젝트 문의하기 <span aria-hidden="true">↗</span></a>
                 </div>
             </article>
         </div>
         <div class="hero-controls" aria-label="메인 배너 슬라이드">
             <button type="button" class="hero-arrow" data-hero-direction="prev" aria-label="이전 슬라이드">←</button>
-            <div class="hero-pagination" role="group" aria-label="슬라이드 선택">
-                <button type="button" class="hero-dot is-active" aria-label="1번 슬라이드" aria-current="true"></button>
-                <button type="button" class="hero-dot" aria-label="2번 슬라이드" aria-current="false"></button>
-                <button type="button" class="hero-dot" aria-label="3번 슬라이드" aria-current="false"></button>
-            </div>
-            <span class="hero-count"><span id="hero-current">01</span> / 03</span>
+            <div class="hero-pagination" role="group" aria-label="슬라이드 선택"></div>
+            <span class="hero-count"><span id="hero-current">01</span> / <span id="hero-total">10</span></span>
             <button type="button" class="hero-arrow" data-hero-direction="next" aria-label="다음 슬라이드">→</button>
         </div>
+        <div class="hero-progress" aria-hidden="true"><span class="hero-progress-fill" id="hero-progress-fill"></span></div>
         <button type="button" class="hero-autoplay" aria-label="자동 재생 일시 정지" aria-pressed="false">Ⅱ</button>
         <div class="scroll-indicator">
             <span>SCROLL</span>
             <div class="line"></div>
         </div>
     </section>
-
-    <!-- 작업 분야 롤링 배너 -->
-    <section class="studio-ticker" id="studio-ticker" aria-label="JWB STUDIO 작업 분야">
+<section class="studio-ticker" id="studio-ticker" aria-label="JWB STUDIO 작업 분야">
         <span class="sr-only">주요 분야: 모션 그래픽, 3D 비주얼, 영상 편집, 디지털 콘텐츠, 시각 디자인, 브랜드 콘텐츠</span>
         <div class="ticker-window" aria-hidden="true">
             <div class="ticker-track">
@@ -126,352 +188,7 @@
         </div>
         <button type="button" class="ticker-toggle" id="ticker-toggle" aria-label="롤링 배너 일시 정지" aria-pressed="false"><span aria-hidden="true">Ⅱ</span></button>
     </section>
-
-    <!-- 소개 섹션 -->
-    <section class="section has-3d-art" id="about">
-        <div class="container layout-split">
-            <div class="split-left about-creative-heading fade-up">
-                <p class="about-creative-kicker">JWB STUDIO <span>·</span> ABOUT</p>
-                <h2 class="headline-l">CREATIVE<br><span>& DETAIL.</span></h2>
-                <p class="about-creative-note">IDEAS WITH INTENTION.<br>CRAFTED DOWN TO THE LAST DETAIL.</p>
-                <span class="about-creative-index" aria-hidden="true">01</span>
-            </div>
-            <div class="split-right fade-up" style="transition-delay: 0.2s;">
-                <div class="profile-wrap">
-                    <div class="profile-img">
-                        <img src="img/profile/IMG_3015.jpg" alt="정원복 프로필" loading="lazy" decoding="async">
-                    </div>
-                    <div class="profile-info">
-                        <h3 class="sub-headline">정원복 (Jeong Won-bok)</h3>
-                        <p class="body-text">
-                          꼼꼼한 프로세스와, 2D·3D 모션그래픽 및 웹 개발을 아우르는 창의적 시각 예술을 결합하여 최상의 결과물을 도출합니다.
-                        </p>
-                        <div class="profile-contact" aria-label="연락처">
-                            <a href="#" id="contact-email" class="profile-contact-link contact-email" hidden><span class="contact-link-icon" aria-hidden="true">✉</span><span>이메일 보내기</span></a>
-                            <a href="#" id="contact-kakao" class="profile-contact-link contact-kakao" target="_blank" rel="noopener" hidden><span class="contact-link-icon" aria-hidden="true">●</span><span>카카오 오픈채팅</span></a>
-                            <a href="#" id="contact-instagram" class="profile-contact-link contact-instagram is-unconfigured" aria-disabled="true" title="Instagram 프로필 주소 설정 후 활성화됩니다."><span class="contact-link-icon" aria-hidden="true">◎</span><span>Instagram</span></a>
-                            <a href="#" id="contact-youtube" class="profile-contact-link contact-youtube is-unconfigured" aria-disabled="true" title="YouTube 채널 주소 설정 후 활성화됩니다."><span class="contact-link-icon" aria-hidden="true">▶</span><span>YouTube</span></a>
-                            <small class="profile-contact-note" id="profile-contact-note">SNS 버튼은 프로필 링크를 설정하면 연결됩니다.</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="history-wrap mt-50" id="profile-history" aria-live="polite">
-                    <div class="history-item">
-                        <h4>학력</h4>
-                        <ul><li>구미대학교 경영학 전문학사 졸업 (2023.02)</li></ul>
-                    </div>
-                    <div class="history-item mt-30">
-                        <h4>국비지원 교육</h4>
-                        <ul><li>(멀티미디어) 디지털 영상편집(프리미어, 애프터이펙트, 블랜더) A · 2025.08.01 ~ 2026.01.20</li></ul>
-                    </div>
-                    <div class="history-item mt-30">
-                        <h4>EXPERIENCE</h4>
-                        <ul>
-                            <li>JWB STUDIO 웹사이트 기획 및 영상 제작 아트 디렉팅 (현재)</li>
-                            <li>행정 사무 및 프로젝트 매니지먼트</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="btn-group mt-30" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <a href="PDF/resume.pdf" download class="btn-outline">이력서 다운로드 (PDF)</a>
-                    <a href="outsourcing.html" class="btn btn-outline inquiry-btn">외주서비스</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-   <!-- 포트폴리오 섹션 -->
-    <section class="section bg-black has-3d-art" id="works">
-        <div class="container">
-            <div class="portfolio-section-head fade-up">
-                <div class="portfolio-heading-copy">
-                    <p class="portfolio-eyebrow">SELECTED WORKS · 2020—2026</p>
-                    <h2 class="headline-l" data-i18n="portfolioHeading">PORTFOLIO</h2>
-                    <p class="portfolio-intro" data-i18n="portfolioIntro">브랜드와 아이디어를 시각적인 결과물로 완성한 작업을 소개합니다.</p>
-                    <div class="work-search-wrap">
-                        <label class="sr-only" for="work-search-input" data-i18n="searchLabel">프로젝트 검색</label>
-                        <input type="search" id="work-search-input" class="work-search-input" data-i18n-placeholder="searchPlaceholder" placeholder="프로젝트 검색 (예: 모션그래픽, 웹예능, 유튜브 홍보영상)..." autocomplete="off">
-                        <label class="sr-only" for="portfolio-sort" data-i18n="portfolioSortLabel">작품 정렬</label>
-                        <select id="portfolio-sort" class="portfolio-sort">
-                            <option value="newest" data-i18n="sortNewest">최신순</option>
-                            <option value="views" data-i18n="sortViews">조회순</option>
-                            <option value="title" data-i18n="sortTitle">제목순</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="portfolio-filter-bar fade-up">
-                <div class="portfolio-filter-caption"><span></span> EXPLORE BY CATEGORY</div>
-                <div class="work-filters" id="work-filters"></div>
-                <p class="portfolio-result-summary" id="portfolio-result-summary" role="status" aria-live="polite"></p>
-            </div>
-            
-            <!-- 포트폴리오 카드 그리드 -->
-            <div class="work-grid" id="work-grid"></div>
-            <p class="body-text portfolio-empty" id="portfolio-empty" data-i18n="emptySearch" hidden>검색 결과가 없습니다. 다른 단어로 검색해 보세요.</p>
-
-            <!-- 더보기 버튼 영역 (신규 추가) -->
-            <div class="load-more-wrap" id="load-more-wrap" style="display: none;">
-                <button type="button" class="btn-load-more" id="btn-load-more">더보기 (+)</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- 프로젝트 상세 모달 -->
-    <div id="project-modal" class="modal-overlay" aria-hidden="true">
-        <div class="modal-content project-modal-content" role="dialog" aria-modal="true" aria-labelledby="project-title">
-            <button type="button" class="modal-close" id="project-modal-close" aria-label="Close project details">&times;</button>
-            <div class="project-video-wrap" id="project-video-wrap"></div>
-            <div class="modal-header">
-                <span class="badge" id="project-category"></span>
-                <h3 id="project-title"></h3>
-                <p class="modal-date" id="project-meta"></p>
-            </div>
-            <div class="modal-body" id="project-description"></div>
-            <div class="project-tag-list" id="project-tags" aria-label="작품 태그"></div>
-            <section class="project-info-panel" id="project-info-panel" aria-labelledby="project-overview-heading" hidden>
-                <p class="project-info-kicker">PROJECT SNAPSHOT</p>
-                <h4 class="project-details-heading" id="project-overview-heading" data-i18n="projectOverview">프로젝트 개요</h4>
-                <div class="project-brief-grid" id="project-brief"></div>
-            </section>
-            <h4 class="project-details-heading project-story-heading" id="project-story-heading" data-i18n="projectStory">제작 과정과 결과</h4>
-            <div class="project-story-grid" id="project-story"></div>
-            <div class="project-navigation" aria-label="작품 이동">
-                <button type="button" class="btn-outline" id="project-prev">← 이전 작품</button>
-                <button type="button" class="btn-outline" id="project-next">다음 작품 →</button>
-            </div>
-            <a href="#works" class="btn-outline wide" id="project-youtube" target="_blank" rel="noopener">YouTube에서 보기</a>
-            <button type="button" class="btn-outline wide" id="project-share" style="margin-top:12px;">프로젝트 공유 링크 복사</button>
-        </div>
-    </div>
-    <a class="mobile-kmong-cta" id="mobile-kmong-cta" href="https://kmong.com/" target="_blank" rel="noopener noreferrer">크몽에서 의뢰·문의하기</a>
-
-    <!-- 스킬 섹션 -->
-    <section class="section has-3d-art" id="skills">
-        <div class="container">
-            <div class="expertise-heading fade-up">
-                <p class="expertise-kicker">CREATIVE TOOLKIT</p>
-                <h2 class="headline-l">EXPERTISE</h2>
-                <p class="expertise-intro" data-i18n="expertiseIntro">모션그래픽부터 3D 비주얼까지, 프로젝트에 맞는 도구로 아이디어를 결과물로 만듭니다.</p>
-            </div>
-            <div class="skill-list expertise-grid mt-50">
-                <div class="skill-row fade-up" data-skill-tone="motion">
-                    <div class="skill-card-head"><span class="skill-family">MOTION</span><span class="skill-mark" aria-hidden="true">AE</span></div>
-                    <div class="skill-name">After Effects</div>
-                    <div class="skill-desc">2D 키프레임 애니메이션, 타이포그래피, 모션그래픽 기획 및 시각 효과 제작</div>
-                </div>
-                <div class="skill-row fade-up" data-skill-tone="video">
-                    <div class="skill-card-head"><span class="skill-family">VIDEO</span><span class="skill-mark" aria-hidden="true">Pr</span></div>
-                    <div class="skill-name">Premiere Pro</div>
-                    <div class="skill-desc">유튜브 콘텐츠 편집, 트렌디한 컷 편집, 오디오 믹싱 및 종합 영상 편집</div>
-                </div>
-                <div class="skill-row fade-up" data-skill-tone="design">
-                    <div class="skill-card-head"><span class="skill-family">DESIGN</span><span class="skill-mark" aria-hidden="true">Ps</span></div>
-                    <div class="skill-name">Photoshop</div>
-                    <div class="skill-desc">이미지 리터칭, 합성, 그래픽 소스 보정 및 웹/디자인 비주얼 에셋 제작</div>
-                </div>
-                <div class="skill-row fade-up" data-skill-tone="design">
-                    <div class="skill-card-head"><span class="skill-family">DESIGN</span><span class="skill-mark" aria-hidden="true">Ai</span></div>
-                    <div class="skill-name">Illustrator</div>
-                    <div class="skill-desc">벡터 드로잉, 로고 디자인, 아이콘 및 인포그래픽 등 브랜드 에셋 제작</div>
-                </div>
-                <div class="skill-row fade-up" data-skill-tone="three-d">
-                    <div class="skill-card-head"><span class="skill-family">3D VISUAL</span><span class="skill-mark" aria-hidden="true">B3D</span></div>
-                    <div class="skill-name">Blender</div>
-                    <div class="skill-desc">3D 모델링, 텍스처링, 조명 및 에셋 제작 기반의 3D 그래픽 작업</div>
-                </div>
-                <div class="skill-row fade-up" data-skill-tone="three-d">
-                    <div class="skill-card-head"><span class="skill-family">3D MOTION</span><span class="skill-mark" aria-hidden="true">C4D</span></div>
-                    <div class="skill-name">Cinema 4D</div>
-                    <div class="skill-desc">하이엔드 3D 모션그래픽, 타이틀 디자인 및 전문 렌더링 작업</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 작업 환경 섹션 -->
-    <section class="section workstation-section has-3d-art" id="workspace">
-        <div class="container">
-            <div class="workstation-heading fade-up">
-                <div>
-                    <p class="workstation-kicker">CREATIVE WORKSTATION · 02</p>
-                    <h2 class="headline-l" data-i18n="workspaceHeading">WORK ENVIRONMENT</h2>
-                    <p class="workstation-intro" data-i18n="workspaceIntro">영상 편집과 모션그래픽, 3D 제작에 사용하는 작업 환경을 소개합니다.</p>
-                </div>
-                <span class="workstation-status"><i></i><span data-i18n="workspaceStatus">현재 작업 환경</span></span>
-            </div>
-            <div class="workstation-layout">
-                <div class="workstation-spec-card fade-up">
-                    <div class="workstation-card-head"><span class="workstation-card-icon" aria-hidden="true">⌘</span><div><p>HARDWARE</p><h3 data-i18n="workspaceHardware">작업용 PC 사양</h3></div></div>
-                    <p class="workstation-spec-note" data-i18n="workspaceHardwareNote">영상 편집·모션그래픽·3D 비주얼 제작에 사용하는 작업용 PC 구성입니다.</p>
-                    <dl class="workstation-spec-list">
-                        <div><dt>CPU</dt><dd data-i18n="workspaceCpu">Intel Core i7-8700K</dd></div>
-                        <div><dt>GPU</dt><dd data-i18n="workspaceGpu">NVIDIA GeForce RTX 3060 · 12GB</dd></div>
-                        <div><dt>MEMORY</dt><dd data-i18n="workspaceMemory">32GB</dd></div>
-                        <div><dt>POWER</dt><dd data-i18n="workspacePower">마이크로닉스 700W</dd></div>
-                        <div><dt>OS</dt><dd data-i18n="workspaceOs">Windows 11 Pro 정품</dd></div>
-                    </dl>
-                </div>
-                <div class="workstation-software-card fade-up">
-                    <div class="workstation-card-head"><span class="workstation-card-icon" aria-hidden="true">✳</span><div><p>SOFTWARE</p><h3 data-i18n="workspaceSoftware">주요 제작 소프트웨어</h3></div></div>
-                    <div class="workstation-software-grid">
-                        <span><b>AE</b>After Effects</span><span><b>Pr</b>Premiere Pro</span>
-                        <span><b>Ps</b>Photoshop</span><span><b>Ai</b>Illustrator</span>
-                        <span><b>Bl</b>Blender</span><span><b>C4D</b>Cinema 4D</span>
-                    </div>
-                    <p class="workstation-software-note" data-i18n="workspaceSoftwareNote">프로젝트 성격과 결과물에 맞춰 적합한 도구를 선택합니다.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 작업 프로세스 섹션 -->
-    <section class="section bg-black has-3d-art" id="workflow">
-        <div class="container">
-            <h2 class="headline-l fade-up">WORKFLOW</h2>
-            <div class="workflow-grid workflow-timeline fade-up">
-                <div class="workflow-card">
-                    <div class="workflow-step" data-number="01">DISCOVERY</div>
-                    <h3>문의 및 기획 상담</h3>
-                    <p>프로젝트 개요, 예산, 일정 및 참고 레퍼런스를 분석하여 최적의 방향성을 설정합니다.</p>
-                </div>
-                <div class="workflow-card">
-                    <div class="workflow-step" data-number="02">DIRECTION</div>
-                    <h3>콘티 및 시안 제작</h3>
-                    <p>상세 기획을 바탕으로 2D/3D 콘티 및 디자인 시안을 도출하여 세부 조율을 거칩니다.</p>
-                </div>
-                <div class="workflow-card">
-                    <div class="workflow-step" data-number="03">PRODUCTION</div>
-                    <h3>본 작업 및 렌더링</h3>
-                    <p>모션그래픽 애니메이션, 3D 렌더링 및 웹 인터랙션 구현 등 전문적인 본 제작을 진행합니다.</p>
-                </div>
-                <div class="workflow-card">
-                    <div class="workflow-step" data-number="04">DELIVERY</div>
-                    <h3>피드백 및 최종 전달</h3>
-                    <p>클라이언트 피드백을 신속하게 반영한 후 고화질 최종 결과물과 소스를 안전하게 전달합니다.</p>
-                </div>
-            </div>
-            <div class="workflow-note fade-up">
-                <h3>견적·수정·납품 안내</h3>
-                <p>견적은 작업 범위, 난이도, 일정과 필요한 산출물을 확인한 뒤 안내합니다. 작업 시작 전 수정 범위, 일정, 납품 형식과 원본 파일 제공 여부를 서면으로 확정합니다.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 스튜디오 소식 섹션 (신규 추가) -->
-    <section class="section has-3d-art" id="notices">
-        <div class="container" style="max-width: 1000px;">
-            <div class="notice-section-head fade-up">
-                <div>
-                    <p class="notice-section-kicker">JWB STUDIO · JOURNAL</p>
-                    <h2 class="headline-l">STUDIO NOTICES</h2>
-                    <p class="notice-section-intro" data-i18n="noticeIntro">작업 소식과 스튜디오의 새로운 소식을 확인하세요.</p>
-                </div>
-                <span class="notice-section-index" aria-hidden="true">UPDATES<br>01—∞</span>
-            </div>
-            <label class="sr-only" for="notice-search" data-i18n="noticeSearchLabel">공지사항 검색</label>
-            <div class="notice-search-wrap">
-                <input type="search" id="notice-search" class="notice-search-input" data-i18n-placeholder="noticeSearchPlaceholder" placeholder="공지 제목이나 내용 검색" autocomplete="off">
-                <span class="notice-search-count" id="notice-search-count" role="status" aria-live="polite"></span>
-            </div>
-            <div class="notice-tabs fade-up" id="notice-filters" role="tablist" aria-label="공지사항 카테고리">
-            </div>
-            <div id="notice-list" class="fade-up">
-                <p style="color: var(--color-text-dim);">소식 불러오는 중...</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ 섹션 -->
-    <section class="section bg-black has-3d-art" id="faq">
-        <div class="container faq-container">
-            <div class="faq-heading fade-up">
-                <div>
-                    <p class="faq-kicker">GOOD TO KNOW <span>·</span> FAQ</p>
-                    <h2 class="headline-l">FREQUENTLY<br><span>ASKED.</span></h2>
-                </div>
-                <p class="faq-heading-note" data-i18n="faqIntro">프로젝트 의뢰 전, 자주 궁금해하시는 내용을 확인해 보세요.</p>
-            </div>
-            <div class="faq-list fade-up">
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
-                        <span data-i18n="faqProcessQ">Q. 외주 작업 의뢰는 어떤 절차로 진행되나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-1">
-                        <p data-i18n="faqProcessA">외주 서비스 페이지의 '크몽에서 의뢰·문의하기'를 눌러 크몽에서 프로젝트 개요, 예산, 마감일을 남겨주시면 상담과 견적을 안내해 드립니다.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
-                        <span data-i18n="faqScopeQ">Q. 제작 가능한 프로젝트의 전문 분야 범위는 어떻게 되나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-2">
-                        <p data-i18n="faqScopeA">주요 분야는 영상 편집, 2D·3D 모션그래픽 및 3D 비주얼 제작입니다. 진행 가능한 작업 범위와 조건은 크몽 서비스 페이지에서 확인해 주세요.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
-                        <span data-i18n="faqTimelineQ">Q. 작업 기간과 수정(피드백) 반영은 어떻게 이루어지나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-3">
-                        <p data-i18n="faqTimelineA">프로젝트 규모와 난이도에 따라 일정을 조율하며, 기획 단계에서 충분한 협의를 거친 뒤 본 작업에 착수합니다. 수정 요청은 사전 협의된 범위 내에서 신속하게 반영해 드립니다.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
-                        <span data-i18n="faqPriceQ">Q. 서비스 비용과 예상 작업 기간은 어떻게 확인하나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-4">
-                        <p data-i18n="faqPriceA">영상·모션그래픽과 3D 비주얼 서비스의 가격과 예상 기간은 작업 범위, 결과물 규격, 일정에 따라 달라집니다. 외주서비스 페이지에서 크몽 상품의 최신 가격과 구성을 확인하고, 세부 범위를 정한 뒤 확정 견적과 일정을 안내받으실 수 있습니다.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
-                        <span data-i18n="faqMaterialsQ">Q. 의뢰 전에 어떤 자료를 준비하면 되나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-5">
-                        <p data-i18n="faqMaterialsA">프로젝트 목적, 결과물 길이와 화면 비율, 참고 자료, 희망 일정과 예산을 준비해 크몽 문의에 남겨 주세요. 제공 자료의 사용 권한이나 라이선스 제한이 있다면 함께 알려 주세요.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-6">
-                        <span data-i18n="faqSourceQ">Q. 작업 원본 파일도 받을 수 있나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-6">
-                        <p data-i18n="faqSourceA">납품 형식과 원본 파일 제공 여부는 프로젝트마다 다릅니다. 필요한 파일 형식을 주문 전에 알려 주시면 제공 가능 여부와 범위, 비용을 함께 확인해 드립니다.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-7">
-                        <span data-i18n="faqUsageQ">Q. 완성된 결과물을 상업적으로 사용할 수 있나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-7">
-                        <p data-i18n="faqUsageA">결과물의 사용 목적과 범위는 주문별 합의에 따라 정합니다. 광고, SNS, 방송 등 사용할 매체와 활용 범위를 주문 전에 알려 주시면 계약 내용에 반영해 안내해 드립니다.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-8">
-                        <span data-i18n="faqShowcaseQ">Q. 작업물이나 제작 과정을 포트폴리오에 공개하나요?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-8">
-                        <p data-i18n="faqShowcaseA">공개 여부와 시점은 의뢰인과 사전에 협의합니다. 별도 공개 동의나 합의가 없는 작업물, 의뢰인의 식별 정보와 비공개 자료는 포트폴리오에 게시하지 않습니다.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 푸터 -->
-    <footer class="footer">
+<footer class="footer">
         <div class="container">
             <div class="footer-top">
                 <div class="footer-brand">JWB STUDIO</div>
@@ -486,20 +203,23 @@
                 <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
                 <p class="copyright">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
             </div>
+            <div class="footer-3d-orbit" aria-hidden="true">
+                <span class="footer-3d-orbit-ring footer-3d-orbit-ring-a"></span>
+                <span class="footer-3d-orbit-ring footer-3d-orbit-ring-b"></span>
+                <span class="footer-3d-orbit-core"></span>
+                <span class="footer-3d-orbit-satellite"></span>
+            </div>
         </div>
     </footer>
-
     <script src="js/mobile-nav.js"></script>
-    <script src="js/profile.js"></script>
-    <script src="js/portfolio.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/notices.js"></script>
     <script src="js/hero-slider.js"></script>
-    <script src="js/i18n.js"></script>
     <script src="js/script.js"></script>
     <script>
         const contact = window.JWB_CONTACT || {};
         if (contact.email) { const a = document.getElementById('contact-email'); a.href = `mailto:${contact.email}`; a.hidden = false; }
-        if (contact.kakaoUrl) { const a = document.getElementById('contact-kakao'); a.href = contact.kakaoUrl; a.hidden = false; }
+        if (contact.kakaoUrl) { const a = document.getElementById('contact-kakao'); if (a) { a.href = contact.kakaoUrl; a.hidden = false; } }
         const configureSocialLink = (id, value, hostPattern) => {
             const link = document.getElementById(id);
             if (!link) return;
@@ -517,7 +237,7 @@
         };
         const instagramReady = configureSocialLink('contact-instagram', contact.instagramUrl, /(^|\.)instagram\.com$/i);
         const youtubeReady = configureSocialLink('contact-youtube', contact.youtubeUrl, /(^|\.)(youtube\.com|youtu\.be)$/i);
-        if (instagramReady && youtubeReady) document.getElementById('profile-contact-note').hidden = true;
+        if (instagramReady && youtubeReady) { const note = document.getElementById('profile-contact-note'); if (note) note.hidden = true; }
         const ticker = document.getElementById('studio-ticker');
         const tickerToggle = document.getElementById('ticker-toggle');
         tickerToggle?.addEventListener('click', () => {
@@ -527,11 +247,11 @@
             tickerToggle.setAttribute('aria-label', paused ? '롤링 배너 재생' : '롤링 배너 일시 정지');
             tickerToggle.querySelector('span').textContent = paused ? '▶' : 'Ⅱ';
         });
-        const kmongUrl = contact.kmongUrl || 'https://kmong.com/';
-        ['mobile-kmong-cta'].forEach(id => {
-            const link = document.getElementById(id);
-            if (link) link.href = kmongUrl;
-        });
     </script>
 </body>
 </html>
+
+
+
+
+

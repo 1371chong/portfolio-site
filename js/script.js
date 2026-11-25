@@ -3,15 +3,36 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navbar) {
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 50);
-    });
+    }, { passive: true });
   }
+
+  const revealTargets = [...document.querySelectorAll('.fade-up')];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion || !('IntersectionObserver' in window)) {
+    revealTargets.forEach(el => el.classList.add('visible'));
+  } else {
+    // Follow the reading order with a short, capped stagger so long grids do not feel delayed.
+    const siblingGroups = new Map();
+    revealTargets.forEach(el => {
+      const parent = el.parentElement;
+      if (!parent) return;
+      if (!siblingGroups.has(parent)) siblingGroups.set(parent, []);
+      siblingGroups.get(parent).push(el);
+    });
+    siblingGroups.forEach(group => group.forEach((el, index) => {
+      el.style.setProperty('--stagger-delay', `${Math.min(index * 55, 220)}ms`);
+    }));
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  revealTargets.forEach(el => observer.observe(el));
+  }
 
   const projectModal = document.getElementById('project-modal');
   const closeProject = () => {
@@ -23,15 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (video) video.innerHTML = '';
     const url = new URL(window.location.href);
     if (url.searchParams.has('work')) { url.searchParams.delete('work'); window.history.replaceState({}, '', url); }
-    document.title = 'JWB STUDIO | Motion & Interactive';
-    document.querySelector('meta[property="og:title"]')?.setAttribute('content', 'JWB STUDIO | Motion & Interactive');
+    const pageHeading = document.querySelector('.portfolio-section-head h2')?.textContent.trim() || 'Portfolio';
+    const pageTitle = `${pageHeading} | JWB STUDIO`;
+    const pageUrl = new URL(window.location.pathname, window.location.origin).href;
+    document.title = pageTitle;
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', pageTitle);
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', '모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오');
     document.querySelector('meta[property="og:image"]')?.setAttribute('content', 'https://www.wonbok.kr/img/logo/logo.png');
-    document.querySelector('meta[property="og:url"]')?.setAttribute('content', 'https://www.wonbok.kr/');
-    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', 'JWB STUDIO | Motion & Interactive');
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', pageUrl);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', pageTitle);
     document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', '모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오');
     document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', 'https://www.wonbok.kr/img/logo/logo.png');
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href', 'https://www.wonbok.kr/');
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', pageUrl);
     window.jwbLastProjectTrigger?.focus?.();
   };
   document.getElementById('project-modal-close')?.addEventListener('click', closeProject);
@@ -85,36 +109,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 3. 숫자 카운팅 애니메이션 (대상 요소에 클래스 및 data-target 속성 활용 시)
-    const counters = document.querySelectorAll('.counter');
-    const speed = 200;
-
-    const runCounter = (counter) => {
-        const target = +counter.getAttribute('data-target');
-        let count = 0;
-        const updateCount = () => {
-            const inc = target / speed;
-            if (count < target) {
-                count += inc;
-                counter.innerText = Math.ceil(count);
-                setTimeout(updateCount, 15);
-            } else {
-                counter.innerText = target;
-            }
-        };
-        updateCount();
-    };
-
-    // IntersectionObserver로 화면에 보일 때 카운팅 시작
-    const counterObserver = new IntersectionObserver((entries, observer) => {
+    const counterNodes = new WeakSet();
+    const reducedCounterMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const counterObserver = 'IntersectionObserver' in window ? new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                runCounter(entry.target);
-                observer.unobserve(entry.target);
-            }
+            if (!entry.isIntersecting) return;
+            runCounter(entry.target);
+            observer.unobserve(entry.target);
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.35 }) : null;
 
-    counters.forEach(counter => counterObserver.observe(counter));
+    function runCounter(counter) {
+        const target = Math.max(0, Number(counter.getAttribute('data-target')) || 0);
+        const formatter = new Intl.NumberFormat(document.documentElement.lang || 'ko-KR');
+        if (reducedCounterMotion || !target) { counter.textContent = formatter.format(target); return; }
+        const duration = 900;
+        let startTime = 0;
+        const frame = time => {
+            if (!startTime) startTime = time;
+            const progress = Math.min(1, (time - startTime) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            counter.textContent = formatter.format(Math.round(target * eased));
+            if (progress < 1) requestAnimationFrame(frame);
+            else counter.textContent = formatter.format(target);
+        };
+        requestAnimationFrame(frame);
+    }
+
+    function observeCounters(root = document) {
+        root.querySelectorAll?.('.counter[data-target]').forEach(counter => {
+            if (counterNodes.has(counter)) return;
+            counterNodes.add(counter);
+            if (counterObserver) counterObserver.observe(counter);
+            else runCounter(counter);
+        });
+    }
+    observeCounters();
+    window.addEventListener('portfolio:ready', () => observeCounters());
 });
 document.addEventListener('DOMContentLoaded', () => {
     const faqQuestions = document.querySelectorAll('.faq-question');

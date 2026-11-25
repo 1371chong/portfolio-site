@@ -1,11 +1,11 @@
-const NOTICE_CATEGORIES = ['공지사항', '업데이트', '작업 소식', '기타'];
+const NOTICE_CATEGORIES = ['공지사항', '업데이트', '작업 소식', '이벤트', '점검 안내', '기타'];
 
 function noticeLabel(category) {
   return NOTICE_CATEGORIES.includes(category) ? category : '기타';
 }
 
 function noticeTone(category) {
-  return ({ '공지사항':'notice', '업데이트':'update', '작업 소식':'work', '기타':'other' })[category] || 'other';
+  return ({ '공지사항':'notice', '업데이트':'update', '작업 소식':'work', '이벤트':'event', '점검 안내':'maintenance', '기타':'other' })[category] || 'other';
 }
 
 function getNoticeAttachmentUrl(client, attachment) {
@@ -43,10 +43,11 @@ function renderNoticeFilters(filterRoot, applyCategory) {
   const categories = ['전체', ...NOTICE_CATEGORIES];
   filterRoot.replaceChildren(...categories.map((category, index) => {
     const button = document.createElement('button');
-    button.type = 'button'; button.className = `notice-tab${index === 0 ? ' active' : ''}`;
+    const initialCategory = document.body.dataset.noticeCategory || '전체';
+    button.type = 'button'; button.className = `notice-tab${category === initialCategory ? ' active' : ''}`;
     button.dataset.category = category;
     button.dataset.categoryTone = noticeTone(category);
-    button.setAttribute('role', 'tab'); button.setAttribute('aria-selected', String(index === 0));
+    button.setAttribute('role', 'tab'); button.setAttribute('aria-selected', String(category === initialCategory));
     button.textContent = localizedNoticeCategory(category);
     button.addEventListener('click', () => {
       filterRoot.querySelectorAll('.notice-tab').forEach(tab => {
@@ -61,7 +62,7 @@ function renderNoticeFilters(filterRoot, applyCategory) {
 }
 
 function localizedNoticeCategory(category) {
-  const key = category === '전체' ? 'all' : ({ '공지사항':'notice', '업데이트':'update', '작업 소식':'work', '기타':'other' })[category] || 'other';
+  const key = category === '전체' ? 'all' : ({ '공지사항':'notice', '업데이트':'update', '작업 소식':'work', '이벤트':'event', '점검 안내':'maintenance', '기타':'other' })[category] || 'other';
   const labels = window.JWB_I18N?.t('noticeCategories');
   return labels?.[key] || category;
 }
@@ -77,15 +78,23 @@ function refreshNoticeCategoryLabels() {
 async function loadNotices() {
   const list = document.getElementById('notice-list');
   const filters = document.getElementById('notice-filters');
-  if (!list || !filters) return;
   const client = window.getJwbSupabase?.();
-  if (!client) { list.textContent = '공지사항을 불러올 수 없습니다.'; return; }
+  if (!client) { if (list) list.textContent = '공지사항을 불러올 수 없습니다.'; return; }
 
   const { data, error } = await client.from('notices')
     .select('id,title,content,category,attachments,created_at,published_at')
     .lte('published_at', new Date().toISOString())
     .order('created_at', { ascending: false });
-  if (error) { list.textContent = '공지사항을 불러오지 못했습니다. 잠시 후 다시 방문해 주세요.'; return; }
+  if (error) { if (list) list.textContent = '공지사항을 불러오지 못했습니다. 잠시 후 다시 방문해 주세요.'; return; }
+  const latestNotice = data?.[0];
+  if (latestNotice) {
+    window.JWB_LATEST_NOTICE = {
+      id: String(latestNotice.id),
+      title: String(latestNotice.title || '').replace(/^\[(공지|공지사항|업데이트|작업\s*소식|이벤트|점검\s*안내|기타)\]\s*/, '')
+    };
+    window.dispatchEvent(new CustomEvent('jwb:noticesready', { detail: window.JWB_LATEST_NOTICE }));
+  }
+  if (!list || !filters) return;
   if (!data?.length) {
     const emptyBoard = document.createElement('div'); emptyBoard.className = 'notice-board-wrap';
     const empty = document.createElement('p'); empty.className = 'notice-empty'; empty.textContent = '등록된 공지사항이 없습니다.';
@@ -97,11 +106,11 @@ async function loadNotices() {
   const board = document.createElement('div'); board.className = 'notice-board-wrap';
   const rows = new Map();
   let openId = null;
-  let activeCategory = '전체';
+  let activeCategory = document.body.dataset.noticeCategory || '전체';
   let searchTerm = '';
   const updateUrl = (id, push = false) => {
     const url = new URL(window.location.href);
-    if (id) { url.searchParams.set('notice', String(id)); url.hash = 'notices'; }
+    if (id) { url.searchParams.set('notice', String(id)); url.hash = ''; }
     else url.searchParams.delete('notice');
     if (push) window.history.pushState({ notice: id }, '', url);
     else window.history.replaceState(window.history.state, '', url);
@@ -139,7 +148,7 @@ async function loadNotices() {
     const categoryBadge = document.createElement('span'); categoryBadge.className = 'notice-category-badge';
     categoryBadge.textContent = category === '공지사항' ? '[공지]' : `[${category.replace(/\s/g, '')}]`;
     const titleText = document.createElement('span');
-    titleText.textContent = String(notice.title || '').replace(/^\[(공지|공지사항|업데이트|작업\s*소식|기타)\]\s*/, '');
+    titleText.textContent = String(notice.title || '').replace(/^\[(공지|공지사항|업데이트|작업\s*소식|이벤트|점검\s*안내|기타)\]\s*/, '');
     const folder = document.createElement('span'); folder.className = 'notice-folder'; folder.textContent = '＋'; folder.setAttribute('aria-hidden', 'true');
     title.append(categoryBadge, titleText, folder);
 
@@ -162,7 +171,7 @@ async function loadNotices() {
     shareButton.setAttribute('aria-label', `${titleText.textContent} 공지 링크 복사`);
     shareButton.addEventListener('click', async event => {
       event.stopPropagation();
-      const url = new URL(window.location.href); url.searchParams.set('notice', id); url.hash = 'notices';
+      const url = new URL(window.location.href); url.searchParams.set('notice', id); url.hash = '';
       try { await navigator.clipboard.writeText(url.toString()); shareButton.textContent = '복사 완료'; shareButton.classList.add('is-copied'); shareButton.setAttribute('aria-label', '공지 링크 복사 완료'); }
       catch { window.prompt('공지사항 공유 링크', url.toString()); }
     });
@@ -215,12 +224,6 @@ async function loadNotices() {
   list.replaceChildren(board);
   refreshNoticeCategoryLabels();
   applyNoticeFilters();
-  const latestNotice = data[0];
-  window.JWB_LATEST_NOTICE = {
-    id: String(latestNotice.id),
-    title: String(latestNotice.title || '').replace(/^\[(공지|공지사항|업데이트|작업\s*소식|기타)\]\s*/, '')
-  };
-  window.dispatchEvent(new CustomEvent('jwb:noticesready', { detail: window.JWB_LATEST_NOTICE }));
   window.addEventListener('popstate', () => {
     const requestedId = new URLSearchParams(window.location.search).get('notice');
     board.querySelectorAll('.notice-board-row.active').forEach(row => closeNotice(row, false));

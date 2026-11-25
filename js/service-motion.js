@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     element.classList.add('service-reveal');
     const siblings = element.parentElement ? [...element.parentElement.children].filter(child => targets.includes(child)) : [];
     const position = siblings.length > 1 ? siblings.indexOf(element) : 0;
-    element.style.setProperty('--service-reveal-delay', `${Math.min(position * 90, 360)}ms`);
+    element.style.setProperty('--service-reveal-delay', `${Math.min(position * 60, 240)}ms`);
   });
 
   const observer = new IntersectionObserver(entries => {

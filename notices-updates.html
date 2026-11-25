@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="JWB STUDIO 공지사항과 작업 소식">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <link rel="canonical" href="https://www.wonbok.kr/notices-updates.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="JWB STUDIO">
+    <meta property="og:title" content="업데이트 | JWB STUDIO">
+    <meta property="og:description" content="JWB STUDIO 공지사항과 작업 소식">
+    <meta property="og:url" content="https://www.wonbok.kr/notices-updates.html">
+    <meta property="og:image" content="https://www.wonbok.kr/img/logo/logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="업데이트 | JWB STUDIO">
+    <meta name="twitter:description" content="모션그래픽, 3D 비주얼, 영상 제작과 인터랙티브 웹 포트폴리오">
+    <meta name="twitter:image" content="https://www.wonbok.kr/img/logo/logo.png">
+    <title>업데이트 | JWB STUDIO</title>
+    <link rel="icon" href="img/logo/logo.png" type="image/png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/color-theme.css">
+    <link rel="stylesheet" href="css/redesign.css">
+    <link rel="stylesheet" href="css/reference-style.css">
+    <!-- Supabase CDN (소식 목록 불러오기용) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/contact-config.js"></script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Person","name":"정원복","alternateName":"Jeong Won-bok","url":"https://www.wonbok.kr/","jobTitle":"Motion Graphics and Web Creator","worksFor":{"@type":"Organization","name":"JWB STUDIO"},"knowsAbout":["Motion Graphics","3D Visual","Video Editing","Web Development"]}
+    </script>
+    <link rel="stylesheet" href="css/complete-redesign.css">
+</head>
+<body class="site-page" data-notice-category="업데이트">
+<nav class="navbar" id="navbar" aria-label="주요 메뉴">
+        <div class="nav-inner">
+            <a href="index.html" class="brand">JWB STUDIO</a>
+            <button type="button" class="menu-toggle" id="mobile-menu-toggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="site-nav-menu"><span></span><span></span><span></span></button>
+            <ul class="nav-menu" id="site-nav-menu">
+                <li><a href="index.html">홈</a></li>
+                <li><a href="about.html">소개</a></li>
+                <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle" id="portfolio-menu-toggle" aria-expanded="false" aria-controls="portfolio-submenu" data-i18n="portfolioMenu">포트폴리오</button><ul class="nav-submenu portfolio-submenu" id="portfolio-submenu" hidden><li><a href="portfolio.html#works" data-portfolio-category="all" data-i18n="portfolioAll">전체 포트폴리오</a></li><li><a href="portfolio-motion.html#works" data-portfolio-category="모션그래픽" data-i18n="catMotion">모션그래픽</a></li><li><a href="portfolio-3d.html#works" data-portfolio-category="3D 비주얼" data-i18n="cat3d">3D 비주얼</a></li><li><a href="portfolio-typography.html#works" data-portfolio-category="타이포그래픽" data-i18n="catTypography">타이포그래픽</a></li><li><a href="portfolio-poster.html#works" data-portfolio-category="포스터 디자인" data-i18n="catPoster">포스터 디자인</a></li><li><a href="portfolio-variety-poster.html#works" data-portfolio-category="예능 포스터" data-i18n="catVarietyPoster">예능 포스터</a></li><li><a href="portfolio-advertising.html#works" data-portfolio-category="광고영상" data-i18n="catAdvertising">광고영상</a></li><li><a href="portfolio-web-variety.html#works" data-portfolio-category="웹예능" data-i18n="catWebVariety">웹예능</a></li><li><a href="portfolio-youtube.html#works" data-portfolio-category="유튜브 홍보영상" data-i18n="catYoutube">유튜브 홍보영상</a></li><li><a href="portfolio-website.html#works" data-portfolio-category="웹사이트" data-i18n="catWebsite">웹사이트</a></li><li><a href="portfolio-automation.html#works" data-portfolio-category="자동화·봇" data-i18n="catAutomation">자동화·봇</a></li><li><a href="portfolio-other.html#works" data-portfolio-category="기타" data-i18n="catOther">기타</a></li></ul></li>
+                <li><a href="skills.html">전문 분야</a></li>
+                <li><a href="workspace.html">작업 환경</a></li>
+                <li><a href="workflow.html" data-i18n="workflowMenu">작업 과정</a></li>
+                <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle" id="notices-menu-toggle" aria-expanded="false" aria-controls="notices-submenu" aria-current="page" data-i18n="noticesMenu">공지사항</button><ul class="nav-submenu notices-submenu" id="notices-submenu" hidden><li><a href="notices.html" data-i18n="noticeAll">전체 공지</a></li><li><a href="notices-notice.html" data-i18n="noticeCategoryNotice">공지사항</a></li><li><a href="notices-updates.html" data-i18n="noticeCategoryUpdate">업데이트</a></li><li><a href="notices-work.html" data-i18n="noticeCategoryWork">작업 소식</a></li><li><a href="notices-events.html" data-i18n="noticeCategoryEvent">이벤트</a></li><li><a href="notices-maintenance.html" data-i18n="noticeCategoryMaintenance">점검 안내</a></li><li><a href="notices-other.html" data-i18n="noticeCategoryOther">기타</a></li></ul></li><li><a href="website-history.html" data-i18n="websiteHistoryMenu">웹사이트 연혁</a></li>
+                <li><a href="faq.html">자주 묻는 질문</a></li>
+                <li class="nav-dropdown"><button type="button" class="nav-dropdown-toggle" id="outsourcing-menu-toggle" aria-expanded="false" aria-controls="outsourcing-submenu" data-i18n="outsourcingMenu">외주서비스</button><ul class="nav-submenu outsourcing-submenu" id="outsourcing-submenu" hidden><li><a href="outsourcing.html" data-i18n="outsourcingMenu">외주서비스</a></li><li><a href="inquiry-status.html" data-i18n="inquiryStatusMenu">문의 진행 확인</a></li></ul></li>
+                <li><a href="admin-login.html" class="admin-nav-btn">관리자</a></li>
+                <li class="language-control">
+                    <button type="button" class="language-toggle" id="language-toggle" aria-label="언어 선택" aria-expanded="false" aria-haspopup="menu">KO</button>
+                    <div class="language-menu" id="language-menu" role="group" aria-label="언어 선택" hidden>
+                        <button type="button" data-language="ko" aria-pressed="true"><span>한국어</span><small>KO</small></button>
+                        <button type="button" data-language="en" aria-pressed="false"><span>English</span><small>EN</small></button>
+                        <button type="button" data-language="ja" aria-pressed="false"><span>日本語</span><small>JA</small></button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+<section class="section has-3d-art" id="notices">
+        <div class="container" style="max-width: 1000px;">
+            <div class="notice-section-head fade-up">
+                <div>
+                    <p class="notice-section-kicker">JWB STUDIO · JOURNAL</p>
+                    <h2 class="headline-l">STUDIO NOTICES</h2>
+                    <p class="notice-section-intro" data-i18n="noticeIntro">작업 소식과 스튜디오의 새로운 소식을 확인하세요.</p>
+                </div>
+                <span class="notice-section-index" aria-hidden="true">UPDATES<br>01—∞</span>
+            </div>
+            <label class="sr-only" for="notice-search" data-i18n="noticeSearchLabel">공지사항 검색</label>
+            <div class="notice-search-wrap">
+                <input type="search" id="notice-search" class="notice-search-input" data-i18n-placeholder="noticeSearchPlaceholder" placeholder="공지 제목이나 내용 검색" autocomplete="off">
+                <span class="notice-search-count" id="notice-search-count" role="status" aria-live="polite"></span>
+            </div>
+            <div class="notice-tabs fade-up" id="notice-filters" role="tablist" aria-label="공지사항 카테고리">
+            </div>
+            <div id="notice-list" class="fade-up">
+                <p style="color: var(--color-text-dim);">소식 불러오는 중...</p>
+            </div>
+        </div>
+    </section>
+<footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">JWB STUDIO</div>
+                <div class="footer-policies">
+                    <a href="terms.html">이용약관</a>
+                    <a href="privacy.html">개인정보처리방침</a>
+                    <a href="email-policy.html">이메일무단수집거부</a>
+                    <a href="charter.html">이용자권리헌장</a>
+                </div>
+            </div>
+            <div class="footer-bottom mt-30">
+                <p class="copyright">© 2026 JWB STUDIO. All rights reserved.</p>
+                <p class="copyright">본 사이트는 상업적 목적이 아닌 개인 포트폴리오 사이트로 제작되었습니다.</p>
+            </div>
+            <div class="footer-3d-orbit" aria-hidden="true">
+                <span class="footer-3d-orbit-ring footer-3d-orbit-ring-a"></span>
+                <span class="footer-3d-orbit-ring footer-3d-orbit-ring-b"></span>
+                <span class="footer-3d-orbit-core"></span>
+                <span class="footer-3d-orbit-satellite"></span>
+            </div>
+        </div>
+    </footer>
+    <script src="js/mobile-nav.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/notices.js"></script>
+    <script src="js/script.js"></script>
+    
+</body>
+</html>
+
+
+
+
+

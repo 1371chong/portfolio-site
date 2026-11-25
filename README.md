@@ -9,7 +9,7 @@ JWB STUDIO의 포트폴리오와 공지사항을 소개하는 정적 웹사이�
 - 작품별 쉼표 구분 태그(최대 10개), 태그 검색 및 상세·카드 표시
 - 작품 상세 조회수 집계 및 관리자 목록 조회수 표시
 - 관리자 대시보드: 작품·공지 수, 공개 작품, 누적 조회수, 예약 공지, 인기 작품 요약
-- 관리자에서 경력·학력·교육 이력 등록·수정·삭제 및 공개 여부·순서 관리
+- 관리자에서 경력·학력·교육·자격증 이력 등록·수정·삭제 및 공개 여부·순서 관리
 - 썸네일 이미지(Google Drive, JPG/PNG/WebP, 파일당 최대 20MB)와 작품 영상(Google Drive, MP4/WebM, 파일당 최대 100MB) 업로드
 - 공지 카테고리, 예약 게시, 미리보기, 수정·삭제
 - 공지 첨부파일(Google Drive, PDF·이미지·텍스트·Office 문서, 파일당 최대 20MB, 공지당 최대 5개)
@@ -23,7 +23,8 @@ JWB STUDIO의 포트폴리오와 공지사항을 소개하는 정적 웹사이�
 
 | 경로 | 용도 |
 |---|---|
-| `index.html` | 메인 페이지, 포트폴리오와 공지사항 |
+| `index.html` | 메인 배너와 소개 페이지 진입점 |
+| `about.html`, `portfolio.html`, `portfolio-*.html`, `skills.html`, `workspace.html`, `workflow.html`, `notices.html`, `faq.html` | 상단 메뉴별 독립 페이지와 포트폴리오 카테고리별 페이지 |
 | `outsourcing.html` | 외주 서비스 안내와 크몽 연결 |
 | `admin-login.html` | 관리자 로그인 |
 | `admin.html` | 포트폴리오·공지 관리 및 기존 문의 기록 확인 |
@@ -52,7 +53,7 @@ JWB STUDIO의 포트폴리오와 공지사항을 소개하는 정적 웹사이�
 ### 프로젝트와 데이터베이스
 
 1. Supabase 대시보드에서 프로젝트를 생성합니다.
-2. 프로젝트의 **SQL Editor**에서 이 폴더의 `supabase-setup.sql` 전체 내용을 실행합니다. 이 스크립트는 필요한 테이블, RLS 권한, Storage 버킷, 경력·학력·교육 이력 테이블과 초기 프로필 항목, 포트폴리오 태그 열, 예약 게시 열과 조회수 증가 함수를 설정합니다. 재실행할 수 있도록 작성되어 있습니다.
+2. 프로젝트의 **SQL Editor**에서 이 폴더의 `supabase-setup.sql` 전체 내용을 실행합니다. 이 스크립트는 필요한 테이블, RLS 권한, Storage 버킷, 경력·학력·교육·자격증 이력 테이블과 초기 프로필 항목, 포트폴리오 태그 열, 예약 게시 열과 조회수 증가 함수를 설정합니다. 재실행할 수 있도록 작성되어 있습니다.
 3. SQL 실행이 완료됐는지 확인합니다. 이전 버전을 사용하다 업데이트하는 경우에도 최신 SQL을 다시 실행해야 예약 게시와 조회수가 동작합니다.
 
 ### 관리자 계정
@@ -147,9 +148,9 @@ npx.cmd --yes supabase@latest functions deploy drive-upload --project-ref <PROJE
 3. **사이트에 공개**를 선택하면 공개 포트폴리오에 나타납니다. 체크를 끄면 관리자만 볼 수 있는 임시저장 상태입니다.
 4. 작품 상세를 열면 조회수가 증가합니다. 조회수는 포트폴리오 카드와 관리자 목록에 표시됩니다.
 
-### 경력·학력·교육 이력
+### 경력·학력·교육·자격증 이력
 
-관리자 페이지의 **경력·학력·교육 이력 관리**에서 종류, 항목명, 학교·회사·교육기관, 기간, 설명을 등록합니다. 공개 체크를 끄면 관리자 목록에는 남고 메인 프로필에서는 숨겨집니다. 표시 순서 숫자가 낮은 항목부터 각 이력 그룹 안에 나타납니다. 데이터베이스가 비어 있을 때 현재 메인 페이지에 표시 중인 학력·국비 교육·경력 항목이 초기 데이터로 등록됩니다.
+관리자 페이지의 **경력·학력·교육·자격증 이력 관리**에서 종류, 항목명, 학교·회사·교육기관, 기간, 설명을 등록합니다. 자격증은 항목명에 자격증명, 기관에는 발급 기관, 기간에는 취득일이나 유효기간을 입력할 수 있습니다. 공개 체크를 끄면 관리자 목록에는 남고 메인 프로필에서는 숨겨집니다. 표시 순서 숫자가 낮은 항목부터 각 이력 그룹 안에 나타납니다. 기존 Supabase를 사용하는 경우에도 최신 `supabase-setup.sql`을 다시 실행하면 자격증 항목 유형을 사용할 수 있습니다.
 
 ### 공지사항
 
@@ -186,3 +187,4 @@ npx.cmd --yes supabase@latest functions deploy drive-upload --project-ref <PROJE
 - [Google Drive 업로드](https://developers.google.com/workspace/drive/api/guides/manage-uploads)
 - [Google Drive 파일 권한](https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions/create)
 - [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2)
+

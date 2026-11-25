@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
 
     const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
     const { data: { user }, error: authError } = await supabase.auth.getUser(jwt);
-    if (authError || user?.app_metadata?.role !== 'admin') return json({ error: '관리자 권한이 필요합니다.' }, 403);
+    if (authError || !['admin', 'sub_admin'].includes(String(user?.app_metadata?.role || ''))) return json({ error: '관리자 권한이 필요합니다.' }, 403);
 
     const appScriptUrl = Deno.env.get('APPS_SCRIPT_WEB_APP_URL');
     const appScriptSecret = Deno.env.get('APPS_SCRIPT_SHARED_SECRET');

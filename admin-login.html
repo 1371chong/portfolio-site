@@ -7,42 +7,52 @@
     <title>관리자 로그인 | JWB STUDIO</title>
     <link rel="icon" href="img/logo/logo.png" type="image/png">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/admin-login.css">
     <link rel="stylesheet" href="css/color-theme.css">
+    <link rel="stylesheet" href="css/redesign.css">
+    <link rel="stylesheet" href="css/admin-login.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-config.js"></script>
+    <link rel="stylesheet" href="css/complete-redesign.css">
 </head>
 <body class="admin-login-page">
-    <main class="admin-login-shell">
-      <section class="admin-login-card" aria-labelledby="login-title">
-        <div class="admin-login-brand">
-            <span class="admin-login-mark" aria-hidden="true">J</span>
-            <a href="index.html" class="brand">JWB STUDIO</a>
-            <p class="admin-login-kicker">PRIVATE WORKSPACE <span>·</span> ADMIN</p>
-        </div>
+    <main class="admin-auth-shell">
+      <a href="index.html" class="admin-auth-back"><span aria-hidden="true">←</span> 메인 사이트</a>
+      <section class="admin-auth-card" aria-labelledby="login-title">
+        <aside class="admin-auth-aside" aria-label="JWB STUDIO 관리자 공간 안내">
+          <a href="index.html" class="admin-auth-brand"><span class="admin-auth-mark" aria-hidden="true">J</span><span>JWB STUDIO</span></a>
+          <div class="admin-auth-aside-copy">
+            <p class="admin-auth-kicker"><span></span> STUDIO CONTROL / 01</p>
+            <h1>작업을 관리하는<br>공간입니다.</h1>
+            <p>프로젝트와 스튜디오 소식을 한곳에서 관리하세요.</p>
+          </div>
+          <div class="admin-auth-art" aria-hidden="true"><span class="admin-auth-art-ring"></span><span class="admin-auth-art-core">J</span><span class="admin-auth-art-caption">IDEAS INTO<br>EXPERIENCES</span></div>
+          <p class="admin-auth-aside-foot">PRIVATE WORKSPACE <span>·</span> ADMIN</p>
+        </aside>
 
-        <div class="admin-login-heading">
-            <p class="admin-login-overline">SECURE ACCESS</p>
-            <h1 id="login-title">관리자 로그인</h1>
-            <p>JWB STUDIO 관리 도구에 접속합니다.</p>
-        </div>
+        <div class="admin-auth-panel">
+          <div class="admin-auth-panel-top"><span class="admin-auth-status"><i></i> SECURE SIGN IN</span><span class="admin-auth-index">01 — 01</span></div>
+          <div class="admin-login-heading">
+            <p class="admin-login-overline">관리자 전용</p>
+            <h2 id="login-title">다시 만나 반갑습니다.</h2>
+            <p>계정 정보를 입력해 관리 화면으로 이동하세요.</p>
+          </div>
 
-        <form id="login-form" class="cjenm-form admin-login-form">
+          <form id="login-form" class="cjenm-form admin-login-form">
             <div class="input-group">
-                <label for="admin-email">이메일</label>
-                <input type="email" id="admin-email" name="email" placeholder="name@example.com" autocomplete="username" required>
+              <label for="admin-email">이메일 주소</label>
+              <input type="email" id="admin-email" name="email" placeholder="name@example.com" autocomplete="username" required>
             </div>
             <div class="input-group">
-                <label for="admin-password">비밀번호</label>
-                <input type="password" id="admin-password" name="password" placeholder="비밀번호를 입력해 주세요" autocomplete="current-password" required>
+              <label for="admin-password">비밀번호</label>
+              <input type="password" id="admin-password" name="password" placeholder="비밀번호를 입력해 주세요" autocomplete="current-password" required>
             </div>
-            <button type="submit" class="btn-solid wide admin-login-submit"><span>관리자 로그인</span><span aria-hidden="true">→</span></button>
-        </form>
+            <button type="submit" class="btn-solid wide admin-login-submit"><span>관리자 로그인</span><span aria-hidden="true">↗</span></button>
+          </form>
 
-        <a href="index.html" class="admin-login-back"><span aria-hidden="true">←</span> 메인 사이트로 돌아가기</a>
-        <p class="admin-login-footnote"><span aria-hidden="true">◈</span> 관리자 권한이 승인된 계정만 이용할 수 있습니다.</p>
+          <div class="admin-auth-security"><span aria-hidden="true">◇</span><p>관리자 권한이 승인된 계정만 로그인할 수 있습니다.</p></div>
+          <p class="admin-auth-copyright">© 2026 JWB STUDIO <span>·</span> ADMIN CONSOLE</p>
+        </div>
       </section>
-      <p class="admin-login-copyright">© JWB STUDIO · ADMIN CONSOLE</p>
     </main>
 
     <script>
@@ -58,7 +68,7 @@
 
             if (error) {
                 alert('로그인 실패: ' + error.message);
-            } else if (data.user?.app_metadata?.role !== 'admin') {
+            } else if (!['admin', 'sub_admin'].includes(data.user?.app_metadata?.role)) {
                 await supabaseClient.auth.signOut();
                 alert('관리자 권한이 설정된 계정만 로그인할 수 있습니다.');
             } else {
@@ -69,3 +79,5 @@
     </script>
 </body>
 </html>
+
+
